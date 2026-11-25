@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>airflow 2.9.3 — STAGS NextStack</title><meta name="description" content="scheduled_duration and queued_duration metrics are now emitted in milliseconds instead of seconds."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/airflow/2.9.3/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/airflow/2.9.3/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/airflow/2.9.3/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/airflow/2.9.3/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="airflow 2.9.3 — STAGS NextStack"><meta property="og:description" content="scheduled_duration and queued_duration metrics are now emitted in milliseconds instead of seconds."><meta property="og:url" content="https://www.stags.cn/fr/releases/airflow/2.9.3/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/airflow/2.9.3/#article","headline":"airflow 2.9.3 release notes","datePublished":"2024-07-16","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/airflow"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/airflow/2.9.3/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/airflow/airflow_2.9.3" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/airflow/2.9.3/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/airflow/2.9.3/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/airflow/2.9.3/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/airflow/2.9.3/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/airflow/2.9.3/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/airflow">airflow</a> </nav> <h1 class="detail-title"> <span class="p">airflow</span> 2.9.3 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>16 juil. 2024</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/airflow" target="_blank" rel="noopener"> <span class="k">Source</span>apache/airflow </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/airflow/2.9.3/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/airflow/2.9.3/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>débit d'air 2.9.3</h1>
+<h2>Changements importants</h2>
+<h3>L'unité de temps pour <code>scheduled_duration</code> and <code>queued_duration</code> a été modifiée (#37936)</h3>
+<p>Les métriques <code>scheduled_duration</code> and <code>queued_duration</code> sont désormais émises en millisecondes au lieu de secondes.
+Par convention, toutes les métriques statsd doivent être émises en millisecondes, cela est attendu plus tard, par ex. Exportateur de statistiques <code>prometheus</code>.</p>
+<h3>La prise en charge des métriques OpenTelemetry n'est plus « expérimentale » (#40286)</h3>
+<p>Un support expérimental pour OpenTelemetry a été ajouté dans 2.7.0 depuis lors, des correctifs et des améliorations ont été ajoutés et nous annonçons maintenant la fonctionnalité comme stable.</p>
+<h2>Corrections de bugs</h2>
+<ul>
+<li>Correction du défilement de la vue du calendrier (#40458)</li>
+<li>Validation de la description du fournisseur pour les URL dans la vue liste des fournisseurs (#40475)</li>
+<li>Correction de la compatibilité avec l'ancien MySQL 8.0 (#40314)</li>
+<li>Correction de la (dé)pause du dag ne fonctionnera pas dans les environnements où les fichiers dag sont manquants (#40345)</li>
+<li>Extra en cours de transmission à SQLalchemy (#40391)</li>
+<li>Gérer l'opérande int + str non pris en charge lorsque la valeur de la balise est int (job_id) (#40407)</li>
+<li>Correction du lien déclenché par TriggeredDagRunOperator (#40336)</li>
+<li>Ajouter <code>[webserver]update_fab_perms</code> aux configurations obsolètes (#40317)</li>
+<li>Échanger le lien d'exécution quotidienne du graphique existant vers la grille avec l'onglet graphique (#40241)</li>
+<li>Modifier <code>httpx</code> to <code>requests</code> in <code>file_task_handler</code> (#39799)</li>
+<li>Correction de l'importation des futures annotations dans le modèle Venv Jinja (#40208)</li>
+<li>Assure l'ordre des paramètres DAG quel que soit le backend (#40156)</li>
+<li>Utiliser une jointure pour les notes TI dans le point de terminaison du lot TI API (#40028)</li>
+<li>Améliorer l'interface utilisateur du déclencheur pour la validation du format de tableau de chaînes (#39993)</li>
+<li>Désactiver le rendu jinja2 pour doc_md (#40522)</li>
+<li>Ignorer la vérification de la liste des sous-jours si l'état de l'instance de tâche est ignoré (#40578)</li>
+<li>Reconnaître les guillemets lors de l'analyse des URL dans les journaux (#40508)</li>
+</ul>
+<h2>Modifications apportées au document uniquement</h2>
+<ul>
+<li>Ajouter des notes sur la transmission de secrets via des variables d'environnement (#40519)</li>
+<li>Réorganisation de certains messages de journal déroutants (#40334)</li>
+<li>Ajout d'une description plus précise du masquage des noms de champs sensibles (#40512)</li>
+<li>Ajout de conseils légèrement plus détaillés sur la mise à niveau vers la documentation (#40227)</li>
+<li>Exemple complet de liste d'autorisation de métriques (#40120)</li>
+<li>Ajout d'un avertissement aux documents api obsolètes indiquant que le contrôle d'accès n'est pas appliqué (#40129)</li>
+<li>Commande plus simple pour vérifier que le planificateur local est actif (#40074)</li>
+<li>Ajouter une note et un exemple clarifiant l'utilisation des paramètres au niveau du DAG (#40541)</li>
+<li>Correction de la surbrillance de l'exemple de code dans dags.rst (#40114)</li>
+<li>Ajout d'un avertissement concernant la dépréciation de PostgresOperator (#40662)</li>
+<li>Mise à jour des liens de téléchargement du flux d'air vers des liens basés sur CDN (#40618)</li>
+<li>Correction de l'instruction d'importation pour l'exemple DatasetOrTimetable (#40601)</li>
+<li>Clarifier davantage le processus de triage (#40536)</li>
+<li>Correction de l'ordre des paramètres dans la docstring PythonOperator (#40122)</li>
+<li>Mettez à jour serializers.rst pour mentionner que les octets ne sont pas pris en charge (#40597)</li>
+</ul>
+<h2>Divers</h2>
+<ul>
+<li>Mettre à niveau les installateurs et les dépendances de build (#40177)</li>
+<li>Renforts de protection de 3.0.2 à 3.0.3 dans /airflow/www (#40180)</li>
+<li>Mise à niveau vers une autre version de trove-classifier (nouveaux classificateurs CUDA) (#40564)</li>
+<li>Renommer les incréments &quot;try_number&quot; qui ne sont pas liés au concept de flux d'air (#39317)</li>
+<li>Mettre à jour les classificateurs Trove vers la dernière version en tant que dépendance de build (#40542)</li>
+<li>Mise à niveau vers la dernière version de Hatchling en tant que dépendance de build (#40387)</li>
+<li>Correction d'un bug dans <code>SchedulerJobRunner._process_executor_events</code> (#40563)</li>
+<li>Supprimer la journalisation des événements &quot;bloqués&quot; (#40446)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/airflow">apache/airflow</a> · <code>2.9.3</code> · 2024-07-16 · <a href="https://github.com/apache/airflow/releases/tag/2.9.3">version en amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>airflow 2.9.3</h1>
+<h2>Highlights</h2>
+<ul>
+<li>
+<p><strong>Duration metrics switch to milliseconds</strong> — <code>scheduled_duration</code> and <code>queued_duration</code> are now emitted in milliseconds rather than seconds (#37936). This aligns with the statsd convention expected by the Prometheus statsd-exporter, but it's a silent 1000× shift: rescale any dashboards, alerts, or PromQL queries keyed on these metrics before upgrading, or you'll misinterpret scheduling latency.</p>
+</li>
+<li>
+<p><strong>OpenTelemetry metrics graduate to stable</strong> — After landing as experimental in 2.7.0 and accumulating fixes, OTel metrics support is officially declared production-ready (#40286). Teams that held off because of the &quot;experimental&quot; label can now adopt it without that caveat; no migration step is required for existing users beyond dropping any experimental-gating assumptions.</p>
+</li>
+<li>
+<p><strong>Jinja rendering disabled for <code>doc_md</code></strong> — DAG documentation strings are no longer passed through the Jinja templating engine (#40522). This closes a template-injection surface but is a visible behavior change: DAGs whose <code>doc_md</code> relied on templated values will now render those expressions literally, so audit any generated docs.</p>
+</li>
+<li>
+<p><strong>Scheduler and ORM reliability fixes</strong> — #40563 corrects a bug in <code>SchedulerJobRunner._process_executor_events</code>, #40345 restores DAG pause/unpause on deployments where DAG files are missing, and #40314 fixes compatibility with older MySQL 8.0 while #40391 stops an <code>Extra</code> value leaking into SQLAlchemy. Collectively these reduce scheduler exceptions and prevent state corruption on edge-case backends — worth taking note of if you run a mixed or legacy MySQL environment.</p>
+</li>
+<li>
+<p><strong>Deprecation signals to plan around</strong> — The docs now warn that <code>PostgresOperator</code> is deprecated (#40662), <code>[webserver]update_fab_perms</code> joins the deprecated-config list (#40317), and the deprecated API docs explicitly note that access control is not applied (#40129). Don't build new integrations on those APIs/operator; treat the access-control note as a security caveat for anything still calling the legacy API.</p>
+</li>
+<li>
+<p><strong>Operational guidance worth reading</strong> — New docs cover passing secrets via environment variables (#40519) and clarify that serializers do not support <code>bytes</code> (#40597). If you serialize DAG state or inject credentials at runtime, these two notes will save you debugging time — especially the <code>bytes</code> limitation, which is easy to trip over in custom serializers.</p>
+</li>
+</ul>
+<h2>Significant Changes</h2>
+<h3>Time unit for <code>scheduled_duration</code> and <code>queued_duration</code> changed (#37936)</h3>
+<p><code>scheduled_duration</code> and <code>queued_duration</code> metrics are now emitted in milliseconds instead of seconds.</p>
+<p>By convention all statsd metrics should be emitted in milliseconds, this is later expected in e.g. <code>prometheus</code> statsd-exporter.</p>
+<h3>Support for OpenTelemetry Metrics is no longer &quot;Experimental&quot; (#40286)</h3>
+<p>Experimental support for OpenTelemetry was added in 2.7.0 since then fixes and improvements were added and now we announce the feature as stable.</p>
+<h2>Bug Fixes</h2>
+<ul>
+<li>Fix calendar view scroll (#40458)</li>
+<li>Validating provider description for urls in provider list view (#40475)</li>
+<li>Fix compatibility with old MySQL 8.0 (#40314)</li>
+<li>Fix dag (un)pausing won't work on environment where dag files are missing (#40345)</li>
+<li>Extra being passed to SQLalchemy (#40391)</li>
+<li>Handle unsupported operand int + str when value of tag is int (job_id) (#40407)</li>
+<li>Fix TriggeredDagRunOperator triggered link (#40336)</li>
+<li>Add <code>[webserver]update_fab_perms</code> to deprecated configs (#40317)</li>
+<li>Swap dag run link from legacy graph to grid with graph tab (#40241)</li>
+<li>Change <code>httpx</code> to <code>requests</code> in <code>file_task_handler</code> (#39799)</li>
+<li>Fix import future annotations in venv jinja template (#40208)</li>
+<li>Ensures DAG params order regardless of backend (#40156)</li>
+<li>Use a join for TI notes in TI batch API endpoint (#40028)</li>
+<li>Improve trigger UI for string array format validation (#39993)</li>
+<li>Disable jinja2 rendering for doc_md (#40522)</li>
+<li>Skip checking sub dags list if taskinstance state is skipped (#40578)</li>
+<li>Recognize quotes when parsing urls in logs (#40508)</li>
+</ul>
+<h2>Doc Only Changes</h2>
+<ul>
+<li>Add notes about passing secrets via environment variables (#40519)</li>
+<li>Revamp some confusing log messages (#40334)</li>
+<li>Add more precise description of masking sensitive field names (#40512)</li>
+<li>Add slightly more detailed guidance about upgrading to the docs (#40227)</li>
+<li>Metrics allow_list complete example (#40120)</li>
+<li>Add warning to deprecated api docs that access control isn't applied (#40129)</li>
+<li>Simpler command to check local scheduler is alive (#40074)</li>
+<li>Add a note and an example clarifying the usage of DAG-level params (#40541)</li>
+<li>Fix highlight of example code in dags.rst (#40114)</li>
+<li>Add warning about the PostgresOperator being deprecated (#40662)</li>
+<li>Updating airflow download links to CDN based links (#40618)</li>
+<li>Fix import statement for DatasetOrTimetable example (#40601)</li>
+<li>Further clarify triage process (#40536)</li>
+<li>Fix param order in PythonOperator docstring (#40122)</li>
+<li>Update serializers.rst to mention that bytes are not supported (#40597)</li>
+</ul>
+<h2>Miscellaneous</h2>
+<ul>
+<li>Upgrade build installers and dependencies (#40177)</li>
+<li>Bump braces from 3.0.2 to 3.0.3 in /airflow/www (#40180)</li>
+<li>Upgrade to another version of trove-classifier (new CUDA classifiers) (#40564)</li>
+<li>Rename &quot;try_number&quot; increments that are unrelated to the airflow concept (#39317)</li>
+<li>Update trove classifiers to the latest version as build dependency (#40542)</li>
+<li>Upgrade to latest version of hatchling as build dependency (#40387)</li>
+<li>Fix bug in <code>SchedulerJobRunner._process_executor_events</code> (#40563)</li>
+<li>Remove logging for &quot;blocked&quot; events (#40446)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/airflow">apache/airflow</a> · <code>2.9.3</code> · 2024-07-16 · <a href="https://github.com/apache/airflow/releases/tag/2.9.3">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/airflow/1.15.0"> <span class="k">← Suivant</span> <span class="t">1.15.0</span> </a> <a href="/releases/airflow/1.14.0"> <span class="k">Précédent →</span> <span class="t">1.14.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/airflow/releases/tag/2.9.3" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/airflow" target="_blank" rel="noopener"> <span>apache/airflow</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Changements importants</a><a href="#" class="lv3">L&#39;unité de temps pour scheduledduration and queuedduration a été modifiée (#37936)</a><a href="#" class="lv3">La prise en charge des métriques OpenTelemetry n&#39;est plus « expérimentale » (#40286)</a><a href="#" class>Corrections de bugs</a><a href="#" class>Modifications apportées au document uniquement</a><a href="#" class>Divers</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/airflow/1.0.0"> <span class="v">v1.0.0</span> <span class="d">26-11-13</span> </a> </li><li> <a href="/releases/airflow/3.4.0"> <span class="v">3.4.0</span> <span class="d">26-11-06</span> </a> </li><li> <a href="/releases/airflow/3.3.2"> <span class="v">3.3.2</span> <span class="d">26-09-17</span> </a> </li><li> <a href="/releases/airflow/3.3.1"> <span class="v">3.3.1</span> <span class="d">26-08-12</span> </a> </li><li> <a href="/releases/airflow/3.3.0"> <span class="v">3.3.0</span> <span class="d">26-07-06</span> </a> </li><li> <a href="/releases/airflow/1.22.0"> <span class="v">1.22.0</span> <span class="d">26-06-13</span> </a> </li><li> <a href="/releases/airflow/0.1.5"> <span class="v">0.1.5</span> <span class="d">26-06-03</span> </a> </li><li> <a href="/releases/airflow/3.2.2"> <span class="v">3.2.2</span> <span class="d">26-05-29</span> </a> </li> </ul> <a href="/fr/releases/airflow" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 59 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

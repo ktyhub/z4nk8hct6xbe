@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>druid 0.11.0 — STAGS NextStack</title><meta name="description" content="Druid 0.11.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/druid/0.11.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/druid/0.11.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/druid/0.11.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/druid/0.11.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="druid 0.11.0 — STAGS NextStack"><meta property="og:description" content="Druid 0.11.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors."><meta property="og:url" content="https://www.stags.cn/fr/releases/druid/0.11.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/druid/0.11.0/#article","headline":"druid 0.11.0 release notes","datePublished":"2017-12-05","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/druid"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/druid/0.11.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/druid/druid_druid-0.11.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/druid/0.11.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/druid/0.11.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/druid/0.11.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/druid/0.11.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/druid/0.11.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/druid">druid</a> </nav> <h1 class="detail-title"> <span class="p">druid</span> 0.11.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>5 déc. 2017</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span class="k">Source</span>apache/druid </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/druid/0.11.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/druid/0.11.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>druide druide-0.11.0</h1>
+<p>Druid 0.11.0 contient plus d'une centaine d'améliorations de performances, de stabilité et de corrections de bugs provenant de près de 40 contributeurs. Cette version ajoute deux fonctionnalités de sécurité majeures, la prise en charge TLS et des points d'extension pour l'authentification et l'autorisation.
+Les principales nouvelles fonctionnalités incluent :</p>
+<ul>
+<li>Prise en charge de TLS (alias SSL)</li>
+<li>Points d'extension pour l'authentification et l'autorisation</li>
+<li>Prise en charge des doubles colonnes</li>
+<li>Stratégie d'équilibrage des coûts de mise en cache</li>
+<li>Prise en charge de l'expression jq dans l'analyseur JSON
+-Extension de cache Redis</li>
+<li>Améliorations des performances de GroupBy</li>
+<li>Diverses améliorations de Druid SQL
+La liste complète des changements est ici : https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.11.0
+La documentation pour cette version se trouve à l'adresse suivante : http://druid.io/docs/0.11.0/</li>
+</ul>
+<h2>Faits saillants</h2>
+<h3>Prise en charge de TLS</h3>
+<p>Druid prend désormais en charge TLS, permettant les communications client et inter-nœuds cryptées. Veuillez consulter http://druid.io/docs/0.11.0/operations/tls-support.html pour plus de détails sur la configuration et les extensions associées.
+Ajouté par @pjain1 dans https://github.com/druid-io/druid/pull/4270.</p>
+<h3>Points d'extension d'authentification/autorisation</h3>
+<p>Des points d'extension pour authentifier et autoriser les demandes ont été ajoutés à Druid. Veuillez consulter http://druid.io/docs/0.11.0/configuration/auth.html pour plus d'informations sur la configuration et la mise en œuvre de l'extension.
+L'extension d'authentification Kerberos existante a été mise à jour pour implémenter la nouvelle interface Authenticator. Veuillez consulter la section « Modifications de la configuration Kerberos » sous « Mise à jour à partir de 0.10.1 et versions antérieures » pour plus d'informations si vous utilisez l'extension Kerberos.
+Ajouté par @jon-wei dans https://github.com/druid-io/druid/pull/4271</p>
+<h3>Prise en charge des colonnes doubles</h3>
+<p>Druid prend désormais en charge les colonnes d'agrégation de type double. Veuillez consulter http://druid.io/docs/0.11.0/querying/aggregations.html pour la documentation sur les nouveaux agrégateurs doubles.
+Ajouté par @b-slim dans https://github.com/druid-io/druid/pull/4491.
+###cachingStratégie d'équilibrage des coûts
+Les utilisateurs effectuant une mise à niveau vers 0.11.0 sont encouragés à essayer la nouvelle stratégie d'équilibrage de segment <code>cachingCost</code> sur leurs coordinateurs. Cette stratégie offre d'importantes améliorations de performances par rapport à la stratégie d'équilibrage des coûts existante et il est prévu qu'elle devienne la stratégie par défaut dans la version suivant 0.11.0.
+Cette stratégie peut être sélectionnée en définissant la propriété suivante sur les coordinateurs :</p>
+<pre><code>druid.coordinator.balancer.strategy=cachingCost
+</code></pre>
+<p>Ajouté par @dgolitsyn dans https://github.com/druid-io/druid/pull/4731</p>
+<h3>Prise en charge des expressions jq dans l'analyseur JSON</h3>
+<p>L'analyseur d'entrée JSON de Druid prend désormais en charge les expressions jq utilisant <a href="https://github.com/eiiches/jackson-jq">jackson-jq</a>, permettant davantage de transformations d'entrée avant l'ingestion. Veuillez consulter http://druid.io/docs/0.11.0/ingestion/flatten-json.html pour plus de détails.
+Ajouté par @knoguchi dans https://github.com/druid-io/druid/pull/4171.</p>
+<h3>Extension de cache Redis</h3>
+<p>Une nouvelle implémentation de cache utilisant Redis a été ajoutée dans une extension, ajoutée par @QiuMM dans https://github.com/druid-io/druid/pull/4615.. Veuillez vous référer à la demande d'extraction précédente pour plus de détails.</p>
+<h3>Améliorations des performances de GroupBy</h3>
+<p>Plusieurs nouvelles optimisations de performances ont été ajoutées à la requête GroupBy par @jihoonson dans les PR suivants :
+https://github.com/druid-io/druid/pull/4660 Tri parallèle pour ConcurrentGrouper
+https://github.com/druid-io/druid/pull/4576 Agrégation basée sur un tableau pour la requête groupBy
+https://github.com/druid-io/druid/pull/4668 Ajoutez IntGrouper pour éviter le boxing/unboxing inutile dans l'agrégation basée sur un tableau
+PR #4660 offre une amélioration générale en parallélisant le tri partiel des résultats, tandis que PR #4576 et #4668 offrent des améliorations significatives lors du regroupement sur une seule colonne String.</p>
+<h3>Améliorations SQL</h3>
+<p>Diverses améliorations et fonctionnalités ont été ajoutées à Druid SQL, par @gianm dans les PR suivants :
+https://github.com/druid-io/druid/pull/4750 - Prise en charge du TRIM
+https://github.com/druid-io/druid/pull/4720 - Arrondi pour compte distinct
+https://github.com/druid-io/druid/pull/4561 - Métriques pour les requêtes SQL
+https://github.com/druid-io/druid/pull/4360 - Prise en charge des expressions SQL</p>
+<h3>Et bien plus encore !</h3>
+<p>La liste complète des changements est ici : https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.11.0</p>
+<h2>Mise à jour depuis 0.10.1 et versions antérieures</h2>
+<p>Veuillez consulter ci-dessous les modifications entre 0.10.1 et 0.11.0 dont vous devez être conscient avant la mise à niveau. Si vous effectuez une mise à jour à partir d'une version antérieure à 0.10.1, veuillez consulter les release note des versions intermédiaires concernées pour des notes supplémentaires.</p>
+<h3>Amélioration des coordinateurs et des suzerains</h3>
+<p>Le correctif suivant modifie la façon dont les redirections coordinateur-&gt;overlord sont gérées :
+https://github.com/druid-io/druid/pull/5037
+L'algorithme d'élection du chef du suzerain a changé dans 0.11.0 : https://github.com/druid-io/druid/pull/4699.
+En raison des deux correctifs ci-dessus, une attention particulière est nécessaire lors de la mise à niveau de Coordinateur ou Overlord vers 0.11.0. Tous les coordinateurs et suzerains doivent être fermés et mis à niveau ensemble.
+Par exemple, pour mettre à niveau les coordinateurs, vous devez arrêter tous les coordinateurs, les mettre à niveau vers 0.11.0, puis les démarrer. Les suzerains devraient être améliorés de la même manière.
+Pendant le processus de mise à niveau, il ne doit y avoir aucune période pendant laquelle un coordinateur ou un suzerain non 0.11.0 s'exécute simultanément avec un coordinateur ou un suzerain 0.11.0.
+Notez qu'au moins un suzerain doit être évoqué le plus rapidement possible après les avoir tous arrêtés afin que les péons, la tranquillité, etc. continuent de fonctionner après quelques tentatives.
+Notez également que la propriété <code>druid.zk.paths.indexer.leaderLatchPath</code> n'est plus utilisée désormais.</p>
+<h3>Modifications du nom du service</h3>
+<p>Dans les versions antérieures de Druid, les caractères <code>/</code> dans les noms de service définis par <code>druid.service</code> étaient remplacés par des caractères <code>:</code> car ces noms de service étaient utilisés dans les chemins Zookeeper. Le Druide 0.11.0 n'effectue plus ces remplacements de personnages.
+Exemple : 1 - si l'ancienne configuration avait un courtier avec le nom de service <code>test/broker</code> :
+<code>druid.service=test/broker</code>
+et un routeur a été configuré en supposant que <code>/</code> sera remplacé par <code>:</code> dans le nom du service de courtier,
+<code>druid.router.tierToBrokerMap={&quot;hot&quot;:&quot;test:broker&quot;,&quot;_default_tier&quot;:&quot;test:broker&quot;}</code>
+la configuration du routeur doit être mise à jour pour supprimer cette hypothèse :
+<code>druid.router.tierToBrokerMap={&quot;hot&quot;:&quot;test/broker&quot;,&quot;_default_tier&quot;:&quot;test/broker&quot;}</code>
+Exemple : 2 - Si l'ancienne configuration avait un seigneur avec le nom de service <code>test/overlord</code>, alors la valeur de <code>druid.coordinator.asOverlord.overlordService</code> ou <code>druid.selectors.indexing.serviceName</code> doit être <code>test/overlord</code> et non <code>test:overlord</code>.
+Exemple : 3 - Si l'ancienne configuration avait un seigneur avec le nom de service <code>test:overlord</code>, alors la valeur de <code>druid.coordinator.asOverlord.overlordService</code> ou <code>druid.selectors.indexing.serviceName</code> devrait être <code>test:overlord</code> et non <code>test/overlord</code>.
+Les configurations suivantes liées au nom de service sont également affectées et doivent être mises à jour pour correspondre exactement à la valeur de la propriété <code>druid.service</code> sur un autre nœud découvert.
+<code>druid.coordinator.asOverlord.overlordService</code>
+<code>druid.selectors.coordinator.serviceName</code>
+<code>druid.selectors.indexing.serviceName</code>
+<code>druid.router.defaultBrokerServiceName</code>
+<code>druid.router.coordinatorServiceName</code>
+<code>druid.router.tierToBrokerMap</code>
+Veuillez consulter https://github.com/druid-io/druid/issues/4992 pour plus de détails.</p>
+<h3>Modifications de la configuration de Kerberos</h3>
+<p>Le format de configuration de l'authentification Kerberos a changé suite aux nouvelles interfaces introduites par #4271. Veuillez vous référer à http://druid.io/docs/0.11.0/development/extensions-core/druid-kerberos.html pour les nouvelles propriétés de configuration.
+Les utilisateurs peuvent pointer le nom d'autorisation de l'authentificateur Kerberos vers une instance d'un mécanisme d'autorisation « allowAll » pour reproduire le comportement pré-0.11.0 d'un cluster utilisant l'authentification Kerberos sans autorisation.</p>
+<h3>Recherches Modifications du chemin API</h3>
+<p>Les chemins pour la configuration de recherche API ont changé en raison du #5058.
+Les chemins de configuration qui avaient la forme <code>/druid/coordinator/v1/lookups</code> ont désormais la forme <code>/druid/coordinator/v1/lookups/config</code>.
+Veuillez consulter http://druid.io/docs/0.11.0/querying/lookups.html pour le API actuel.</p>
+<h3>Migration vers les colonnes doubles</h3>
+<p>Avant 0.11.0, les agrégateurs Double* stockaient les valeurs de colonne sur le disque sous forme de Float tout en effectuant des agrégations à l'aide de représentations Double.
+Le PR #4491 permet aux agrégateurs Double de stocker les valeurs des colonnes sur le disque en tant que Doubles. En raison de problèmes liés aux mises à jour progressives et aux rétrogradations de version, ce comportement est désactivé par défaut et Druid continuera à stocker les agrégateurs doubles sur le disque sous forme de flotteurs.
+Pour activer le stockage sur deux colonnes, définissez la propriété suivante dans les propriétés d'exécution communes :</p>
+<pre><code>druid.indexing.doubleStorage=double
+</code></pre>
+<p>Les utilisateurs ne doivent pas définir cette propriété lors d'une mise à niveau continue initiale vers 0.11.0, car les nœuds exécutant Druid avant 0.11.0 ne seront pas en mesure de gérer les colonnes doubles créées pendant la période de mise à niveau. Les utilisateurs devront également réindexer tous les segments avec des colonnes doubles s'ils passent de 0.11.0 à une ancienne version. Veuillez consulter les numéros 4944 et 4605 pour plus d'informations.</p>
+<h3>Analyser les modifications de la requête</h3>
+<p>La requête Scan a été déplacée de extensions-contrib vers Core Druid. Dans le cadre de cette migration : https://github.com/druid-io/druid/pull/4751,, la gestion de la colonne de temps par la requête d'analyse a été modifiée.
+La colonne d'heure est maintenant renvoyée sous la forme &quot;__time&quot; plutôt que &quot;horodatage&quot;, elle n'est plus incluse si vous ne la demandez pas spécifiquement dans vos &quot;colonnes&quot;, et elle est renvoyée sous forme de chaîne longue plutôt que de chaîne.
+Les utilisateurs peuvent rétablir le traitement du temps de la requête Scan au comportement d'extension hérité en définissant <code>&quot;legacy&quot; : true</code> dans leurs requêtes ou en définissant la propriété <code>druid.query.scan.legacy = true</code>. Ceci est destiné à fournir un chemin de migration pour les utilisateurs qui utilisaient auparavant l'extension contrib.</p>
+<h3>Modifications de l'interface des extensions</h3>
+<h4>Prise en charge de l'agrégateur à double colonne</h4>
+<p>L'interface Aggregator a acquis une méthode <code>getDouble()</code>, qui convertit par défaut le résultat de <code>getFloat()</code>. La méthode <code>getDouble()</code> doit être réimplémentée pour tous les agrégateurs personnalisés pouvant prendre en charge les doubles.
+Voir https://github.com/druid-io/druid/pull/4595 pour plus de détails.</p>
+<h4>Modification de l'interface de QueryRunner</h4>
+<p>L'interface QueryRunner a changé et l'ancienne méthode run() a été supprimée, remplacée par une nouvelle méthode qui accepte un objet QueryPlus.
+Les extensions de requête personnalisées devront implémenter la nouvelle interface.
+Veuillez consulter https://github.com/druid-io/druid/pull/4184 et https://github.com/druid-io/druid/pull/4482 pour plus de détails.</p>
+<h4>Modification de l'interface du filtre</h4>
+<p>La méthode Filter.getBitmapResult() n'a plus d'implémentation par défaut : https://github.com/druid-io/druid/pull/4481
+Les extensions de filtres personnalisés devront maintenant fournir une implémentation pour getBitmapResult().</p>
+<h3>Autres remarques</h3>
+<h4>jvm/gc/time métrique</h4>
+<p>La métrique <code>jvm/gc/time</code> n'est plus émise, remplacée par une nouvelle métrique nommée <code>jvm/gc/cpu</code> pour les raisons décrites ici : https://github.com/druid-io/druid/pull/4480</p>
+<h4>Stratégie de sélection des travailleurs par défaut</h4>
+<p>Veuillez noter que la stratégie de sélection des travailleurs par défaut est passée de <code>fillCapacity</code> à <code>equalDistribution</code>. Ce changement a été introduit dans 0.10.1, la version précédente, mais n'a pas été mentionné dans les 0.10.1 release note, il est donc à nouveau rappelé ici.</p>
+<h4>Création de segments V8 supprimée</h4>
+<p>Druid construira désormais toujours des segments V9, la création de segments V8 n'est plus prise en charge et la propriété <code>buildV9Directly</code> pour les tâches d'ingestion a été supprimée.
+Veuillez consulter https://github.com/druid-io/druid/pull/4420 pour plus de détails.</p>
+<h4>LogLevelAdjuster supprimé</h4>
+<p>Veuillez noter que le LogLevelAdjuster a été supprimé : https://github.com/druid-io/druid/pull/4236
+Tout utilisateur utilisant des mbeans pour configurer les niveaux de journalisation doit plutôt configurer log4j2 à l'aide de jmx.</p>
+<h2>Crédits</h2>
+<h2>Merci à tous ceux qui ont contribué à cette version !
+@a2l007
+@akashdw
+@andy256
+@asifmansoora
+@b-slim
+@benvogan
+@blugowski
+@chrisgavin
+@dclim
+@dgolitsyn
+@drcrallen
+@egor-ryashin
+@erikdubbelboer
+@Fokko
+@fuji-151a
+@gaodayue
+@gianm
+@ginoledesma
+@himanshug
+@hzy001
+@jihoonson
+@jon-wei
+@kevinconaway
+@knoguchi
+@leiwangx
+@leventov
+@michalmisiewicz
+@niketh
+@pjain1
+@praveev
+@QiMM
+@scan-l'automate
+@solimant
+@SpotXPeterCunningham
+@tkyaw
+@wywlds
+@xanec
+@yuusaku-t
+@zhangxinyu1</h2>
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.11.0</code> · 05/12/2017 · <a href="https://github.com/apache/druid/releases/tag/druid-0.11.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>druid druid-0.11.0</h1>
+<p>Druid 0.11.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors. This release adds two major security features, TLS support and extension points for authentication and authorization.</p>
+<p>Major new features include:</p>
+<ul>
+<li>TLS (a.k.a. SSL) support</li>
+<li>Extension points for authentication and authorization</li>
+<li>Double columns support</li>
+<li>cachingCost Balancer Strategy</li>
+<li>jq expression support in JSON parser</li>
+<li>Redis cache extension</li>
+<li>GroupBy performance improvements</li>
+<li>Various improvements to Druid SQL</li>
+</ul>
+<p>The full list of changes is here: https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.11.0</p>
+<p>Documentation for this release is at: http://druid.io/docs/0.11.0/</p>
+<h2>Highlights</h2>
+<h3>TLS support</h3>
+<p>Druid now supports TLS, enabling encrypted client and inter-node communications. Please see http://druid.io/docs/0.11.0/operations/tls-support.html for details on configuration and related extensions.</p>
+<p>Added by @pjain1 in https://github.com/druid-io/druid/pull/4270.</p>
+<h3>Authentication/authorization extension points</h3>
+<p>Extension points for authenticating and authorizing requests have been added to Druid. Please see http://druid.io/docs/0.11.0/configuration/auth.html for information on configuration and extension implementation.</p>
+<p>The existing Kerberos authentication extension has been updated to implement the new Authenticator interface, please see the &quot;Kerberos configuration changes&quot; section under &quot;Updating from 0.10.1 and earlier&quot; for more information if you are using the Kerberos extension.</p>
+<p>Added by @jon-wei in https://github.com/druid-io/druid/pull/4271</p>
+<h3>Double columns support</h3>
+<p>Druid now supports Double type aggregator columns. Please see http://druid.io/docs/0.11.0/querying/aggregations.html for documentation on the new Double aggregators.</p>
+<p>Added by @b-slim in https://github.com/druid-io/druid/pull/4491.</p>
+<h3>cachingCost Balancer Strategy</h3>
+<p>Users upgrading to 0.11.0 are encouraged to try the new <code>cachingCost</code> segment balancing strategy on their coordinators. This strategy offers large performance improvements over the existing cost balancer strategy, and it is planned to become the default strategy in the release following 0.11.0.</p>
+<p>This strategy can be selected by setting the following property on coordinators:</p>
+<pre><code>druid.coordinator.balancer.strategy=cachingCost
+</code></pre>
+<p>Added by @dgolitsyn in https://github.com/druid-io/druid/pull/4731</p>
+<h3>jq expression support in JSON parser</h3>
+<p>Druid's JSON input parser now supports jq expressions using <a href="https://github.com/eiiches/jackson-jq">jackson-jq</a>, enabling more input transforms before ingestion. Please see http://druid.io/docs/0.11.0/ingestion/flatten-json.html for more details.</p>
+<p>Added by @knoguchi  in https://github.com/druid-io/druid/pull/4171.</p>
+<h3>Redis cache extension</h3>
+<p>A new cache implementation using Redis has been added in an extension, added by @QiuMM in https://github.com/druid-io/druid/pull/4615. Please refer to the preceding pull request for more details.</p>
+<h3>GroupBy performance improvements</h3>
+<p>Several new performance optimizations have been added to the GroupBy query by @jihoonson in the following PRs:</p>
+<p>https://github.com/druid-io/druid/pull/4660 Parallel sort for ConcurrentGrouper
+https://github.com/druid-io/druid/pull/4576 Array-based aggregation for groupBy query
+https://github.com/druid-io/druid/pull/4668 Add IntGrouper to avoid unnecessary boxing/unboxing in array-based aggregation</p>
+<p>PR #4660 offers a general improvement by parallelizing partial result sorting, while PR #4576 and #4668 offer significant improvements when grouping on a single String column.</p>
+<h3>SQL improvements</h3>
+<p>Various improvements and features have been added to Druid SQL, by @gianm in the following PRs:</p>
+<p>https://github.com/druid-io/druid/pull/4750 - TRIM support
+https://github.com/druid-io/druid/pull/4720 - Rounding for count distinct
+https://github.com/druid-io/druid/pull/4561 - Metrics for SQL queries
+https://github.com/druid-io/druid/pull/4360 - SQL expressions support</p>
+<h3>And much more!</h3>
+<p>The full list of changes is here: https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.11.0</p>
+<h2>Updating from 0.10.1 and earlier</h2>
+<p>Please see below for changes between 0.10.1 and 0.11.0 that you should be aware of before upgrading. If you're updating from an earlier version than 0.10.1, please see release notes of the relevant intermediate versions for additional notes.</p>
+<h3>Upgrading coordinators and overlords</h3>
+<p>The following patch changes the way coordinator-&gt;overlord redirects are handled:
+https://github.com/druid-io/druid/pull/5037</p>
+<p>The overlord leader election algorithm has changed in 0.11.0: https://github.com/druid-io/druid/pull/4699.</p>
+<p>As a result of the two patches above, special care is needed when upgrading Coordinator or Overlord to 0.11.0. All coordinators and overlords must be shut down and upgraded together.</p>
+<p>For example, to upgrade Coordinators, you would shutdown all coordinators, upgrade them to 0.11.0 and then start them. Overlords should be upgraded in a similar way.</p>
+<p>During the upgrade process, there must not be any time period where a non-0.11.0 coordinator or overlord is running simultaneously with an 0.11.0 coordinator or overlord.</p>
+<p>Note that at least one overlord should be brought up as quickly as possible after shutting them all down so that peons, tranquility etc continue to work after some retries.</p>
+<p>Also note that the <code>druid.zk.paths.indexer.leaderLatchPath</code> property is no longer used now.</p>
+<h3>Service name changes</h3>
+<p>In earlier versions of Druid, <code>/</code> characters in service names defined by <code>druid.service</code> would be replaced by <code>:</code> characters because these service names were used in Zookeeper paths. Druid 0.11.0 no longer performs these character replacements.</p>
+<p>Example:1 - if the old configuration had a broker with service name <code>test/broker</code>:
+<code>druid.service=test/broker</code></p>
+<p>and a Router was configured assuming that <code>/</code> will be replaced with <code>:</code> in the broker service name,
+<code>druid.router.tierToBrokerMap={&quot;hot&quot;:&quot;test:broker&quot;,&quot;_default_tier&quot;:&quot;test:broker&quot;}</code></p>
+<p>the Router configuration should be updated to remove that assumption:
+<code>druid.router.tierToBrokerMap={&quot;hot&quot;:&quot;test/broker&quot;,&quot;_default_tier&quot;:&quot;test/broker&quot;}</code></p>
+<p>Example:2 - If the old configuration had overlord with service Name <code>test/overlord</code> then value of <code>druid.coordinator.asOverlord.overlordService</code> or <code>druid.selectors.indexing.serviceName</code> should be <code>test/overlord</code> and not <code>test:overlord</code></p>
+<p>Example:3 - If the old configuration had overlord with service Name <code>test:overlord</code> then value of <code>druid.coordinator.asOverlord.overlordService</code> or <code>druid.selectors.indexing.serviceName</code> should be <code>test:overlord</code> and not <code>test/overlord</code></p>
+<p>Following service name-related configurations are also affected and should be updated to exactly match the value of <code>druid.service</code> property on other node being discovered.</p>
+<p><code>druid.coordinator.asOverlord.overlordService</code>
+<code>druid.selectors.coordinator.serviceName</code>
+<code>druid.selectors.indexing.serviceName</code>
+<code>druid.router.defaultBrokerServiceName</code>
+<code>druid.router.coordinatorServiceName</code>
+<code>druid.router.tierToBrokerMap</code></p>
+<p>Please see https://github.com/druid-io/druid/issues/4992 for more details.</p>
+<h3>Kerberos configuration changes</h3>
+<p>The Kerberos authentication configuration format has changed as a result of the new interfaces introduced by #4271. Please refer to http://druid.io/docs/0.11.0/development/extensions-core/druid-kerberos.html for the new configuration properties.</p>
+<p>Users can point the Kerberos authenticator's authorizerName to an instance of an &quot;allowAll&quot; authorizer to replicate the pre-0.11.0 behavior of a cluster using Kerberos authentication with no authorization.</p>
+<h3>Lookups API path changes</h3>
+<p>The paths for the lookups configuration API have changed due to #5058.</p>
+<p>Configuration paths that had the form <code>/druid/coordinator/v1/lookups</code> now have the form <code>/druid/coordinator/v1/lookups/config</code>.</p>
+<p>Please see http://druid.io/docs/0.11.0/querying/lookups.html for the current API.</p>
+<h3>Migrating to Double columns</h3>
+<p>Prior to 0.11.0, the Double* aggregators would store column values on disk as Float while performing aggregations using Double representations.</p>
+<p>PR #4491 allows the Double aggregators to store column values on disk as Doubles. Due to concerns related to rolling updates and version downgrades, this behavior is disabled by default and Druid will continue to store Double aggregators on disk as floats.</p>
+<p>To enable Double column storage, set the following property in the common runtime properties:</p>
+<pre><code>druid.indexing.doubleStorage=double
+</code></pre>
+<p>Users should not set this property during an initial rolling upgrade to 0.11.0, as any nodes running pre-0.11.0 Druid will not be able to handle Double columns created during the upgrade period. Users will also need to reindex any segments with Double columns if downgrading from 0.11.0 to an older version. Please see #4944 and #4605 for more information.</p>
+<h3>Scan query changes</h3>
+<p>The Scan query has been moved from extensions-contrib to core Druid. As part of this migration: https://github.com/druid-io/druid/pull/4751, the scan query's handling of the time column has changed.</p>
+<p>The time column is now is returned as &quot;__time&quot; rather than &quot;timestamp&quot;, it is no longer included if you do not specifically ask for it in your &quot;columns&quot;, and it is returned as a long rather than a string.</p>
+<p>Users can revert the Scan query's time handling to the legacy extension behavior by setting <code>&quot;legacy&quot; : true</code> in their queries, or setting the property <code>druid.query.scan.legacy = true</code>. This is meant to provide a migration path for users that were formerly using the contrib extension.</p>
+<h3>Extension Interface Changes</h3>
+<h4>Aggregator double column support</h4>
+<p>The Aggregator interface has gained a <code>getDouble()</code> method, which defaults to casting the result of <code>getFloat()</code>. The <code>getDouble()</code> method should be re-implemented for any custom aggregators that can support doubles.</p>
+<p>See https://github.com/druid-io/druid/pull/4595 for more details.</p>
+<h4>QueryRunner interface change</h4>
+<p>The QueryRunner interface has changed and the old run() method has been removed, replaced by a new method that accepts a QueryPlus object.</p>
+<p>Custom query extensions will need to implement the new interface.</p>
+<p>Please see https://github.com/druid-io/druid/pull/4184 and https://github.com/druid-io/druid/pull/4482 for more details.</p>
+<h4>Filter interface change</h4>
+<p>The Filter.getBitmapResult() method no longer has a default implementation: https://github.com/druid-io/druid/pull/4481</p>
+<p>Custom filter extensions will need to provide an implementation for getBitmapResult() now.</p>
+<h3>Other Notes</h3>
+<h4>jvm/gc/time metric</h4>
+<p>The <code>jvm/gc/time</code> metric is no longer emitted, replaced by a new metric named <code>jvm/gc/cpu</code> for the reasons described here: https://github.com/druid-io/druid/pull/4480</p>
+<h4>Default worker select strategy</h4>
+<p>Please note that the default worker select strategy has changed from <code>fillCapacity</code> to <code>equalDistribution</code>. This change was introduced in 0.10.1, the previous release, but was not mentioned in the 0.10.1 release notes, so it is called out again here.</p>
+<h4>V8 segment creation removed</h4>
+<p>Druid will now always build V9 segments, creating V8 segments is no longer supported and the <code>buildV9Directly</code> property for ingestion tasks has been removed.</p>
+<p>Please see https://github.com/druid-io/druid/pull/4420 for more details.</p>
+<h4>LogLevelAdjuster removed</h4>
+<p>Please note that the LogLevelAdjuster has been removed: https://github.com/druid-io/druid/pull/4236</p>
+<p>Any user using mbeans to configure log levels should configure log4j2 using jmx instead.</p>
+<h2>Credits</h2>
+<p>Thanks to everyone who contributed to this release!</p>
+<p>@a2l007
+@akashdw
+@andy256
+@asifmansoora
+@b-slim
+@benvogan
+@blugowski
+@chrisgavin
+@dclim
+@dgolitsyn
+@drcrallen
+@egor-ryashin
+@erikdubbelboer
+@Fokko
+@fuji-151a
+@gaodayue
+@gianm
+@ginoledesma
+@himanshug
+@hzy001
+@jihoonson
+@jon-wei
+@kevinconaway
+@knoguchi
+@leiwangx
+@leventov
+@michalmisiewicz
+@niketh
+@pjain1
+@praveev
+@QiuMM
+@scan-the-automator
+@solimant
+@SpotXPeterCunningham
+@tkyaw
+@wywlds
+@xanec
+@yuusaku-t
+@zhangxinyu1</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.11.0</code> · 2017-12-05 · <a href="https://github.com/apache/druid/releases/tag/druid-0.11.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/druid/0.12.0"> <span class="k">← Suivant</span> <span class="t">0.12.0</span> </a> <a href="/releases/druid/0.10.1"> <span class="k">Précédent →</span> <span class="t">0.10.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/druid/releases/tag/0.11.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span>apache/druid</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Faits saillants</a><a href="#" class="lv3">Prise en charge de TLS</a><a href="#" class="lv3">Points d&#39;extension d&#39;authentification/autorisation</a><a href="#" class="lv3">Prise en charge des colonnes doubles</a><a href="#" class="lv3">Prise en charge des expressions jq dans l&#39;analyseur JSON</a><a href="#" class="lv3">Extension de cache Redis</a><a href="#" class="lv3">Améliorations des performances de GroupBy</a><a href="#" class="lv3">Améliorations SQL</a><a href="#" class="lv3">Et bien plus encore !</a><a href="#" class>Mise à jour depuis 0.10.1 et versions antérieures</a><a href="#" class="lv3">Amélioration des coordinateurs et des suzerains</a><a href="#" class="lv3">Modifications du nom du service</a><a href="#" class="lv3">Modifications de la configuration de Kerberos</a><a href="#" class="lv3">Recherches Modifications du chemin API</a><a href="#" class="lv3">Migration vers les colonnes doubles</a><a href="#" class="lv3">Analyser les modifications de la requête</a><a href="#" class="lv3">Modifications de l&#39;interface des extensions</a><a href="#" class="lv3">Autres remarques</a><a href="#" class>Crédits</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/druid/39.0.0"> <span class="v">39.0.0</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/druid/38.0.0"> <span class="v">38.0.0</span> <span class="d">26-10-01</span> </a> </li><li> <a href="/releases/druid/37.0.0"> <span class="v">37.0.0</span> <span class="d">26-05-08</span> </a> </li><li> <a href="/releases/druid/36.0.0"> <span class="v">36.0.0</span> <span class="d">26-02-09</span> </a> </li><li> <a href="/releases/druid/35.0.1"> <span class="v">35.0.1</span> <span class="d">25-12-15</span> </a> </li><li> <a href="/releases/druid/35.0.0"> <span class="v">35.0.0</span> <span class="d">25-11-18</span> </a> </li><li> <a href="/releases/druid/34.0.0"> <span class="v">34.0.0</span> <span class="d">25-08-11</span> </a> </li><li> <a href="/releases/druid/33.0.0"> <span class="v">33.0.0</span> <span class="d">25-04-29</span> </a> </li> </ul> <a href="/fr/releases/druid" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 71 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

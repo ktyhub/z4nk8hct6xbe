@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WeKnora v0.7.2 — STAGS NextStack</title><meta name="description" content="refactor(agent): consolidate model-handle codecs into internal/modelcontext · refactor(auth,router): unify auth session context and split router by domain · fix(knowledge): clean bound vector stores in batch delete"><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/weknora/0.7.2/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/weknora/0.7.2/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/weknora/0.7.2/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/weknora/0.7.2/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="WeKnora v0.7.2 — STAGS NextStack"><meta property="og:description" content="refactor(agent): consolidate model-handle codecs into internal/modelcontext · refactor(auth,router): unify auth session context and split router by domain · fix(knowledge): clean bound vector stores in batch delete"><meta property="og:url" content="https://www.stags.cn/pt/releases/weknora/0.7.2/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/weknora/0.7.2/#article","headline":"WeKnora v0.7.2 release notes","datePublished":"2026-08-07","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/Tencent/WeKnora"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/weknora/0.7.2/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/WeKnora/WeKnora_v0.7.2" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/weknora/0.7.2/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/weknora/0.7.2/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/weknora/0.7.2/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/weknora/0.7.2/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/weknora/0.7.2/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/weknora">WeKnora</a> </nav> <h1 class="detail-title"> <span class="p">WeKnora</span> v0.7.2 </h1> <div class="detail-meta"> <span class="chip chip--patch">Patch</span> <span><span class="k">Publicado</span>7 de ago. de 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/Tencent/WeKnora" target="_blank" rel="noopener"> <span class="k">Fonte</span>Tencent/WeKnora </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/weknora/0.7.2/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/weknora/0.7.2/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><p>#WeKnora v0.7.2</p>
+<h2>O que mudou</h2>
+<ul>
+<li>refatorar (agente): consolida codecs de manipulação de modelo em internal/modelcontext por @lyingbug em https://github.com/Tencent/WeKnora/pull/2330</li>
+<li>refatorar (auth, roteador): unificar o contexto da sessão de autenticação e dividir o roteador por domínio por @lyingbug em https://github.com/Tencent/WeKnora/pull/2331</li>
+<li>correção (conhecimento): armazenamento de vetor vinculado limpo em exclusão de lote por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2329</li>
+<li>correção: suporte a argumentos de string para execução de script de habilidade por @ koishi514-Z em https://github.com/Tencent/WeKnora/pull/2318</li>
+<li>correção (agente): mantenha os resultados em lote da wiki_read_page dentro do orçamento de produção por @lyingbug em https://github.com/Tencent/WeKnora/pull/2333</li>
+<li>fix(pipeline): corrige a incerteza na ordem de saída do estágio de mesclagem por @mdrkrg em https://github.com/Tencent/WeKnora/pull/2319</li>
+<li>correção (conhecimento): reconcilia o estado do wiki ao mover documentos entre KBs por @lyingbug em https://github.com/Tencent/WeKnora/pull/2335</li>
+<li>feat(wiki): histórico de revisão de página com comparação, reversão e edição manual por @lyingbug em https://github.com/Tencent/WeKnora/pull/2336</li>
+<li>estilo (wiki): aprimorar a gaveta de revisão e a barra lateral para corresponder à UX da lista de sessões por @lyingbug em https://github.com/Tencent/WeKnora/pull/2338</li>
+<li>feat(feishu): sincronizar docx via blocos API com downdrill por tipo por @voidkey em https://github.com/Tencent/WeKnora/pull/2334</li>
+<li>correção (i18n): remova a chave de 'membros' duplicada nos objetos de localidade da organização por @hiasky em https://github.com/Tencent/WeKnora/pull/2305</li>
+<li>correção (migrações): renumerar a migração do índice de metadados de conhecimento para 000076 por @lyingbug em https://github.com/Tencent/WeKnora/pull/2340</li>
+<li>fix(im): fortalece o ciclo de vida da conexão entre réplicas por @lyingbug em https://github.com/Tencent/WeKnora/pull/2349</li>
+<li>Refinar o menu de configurações do usuário e acessar atalhos por @lyingbug em https://github.com/Tencent/WeKnora/pull/2368</li>
+<li>Remova o log de operação redundante do Wiki por @lyingbug em https://github.com/Tencent/WeKnora/pull/2367</li>
+<li>feat(conhecimento): configure tags de upload e opções de processamento por @lyingbug em https://github.com/Tencent/WeKnora/pull/2369</li>
+<li>correção: remover SanitizeForDisplay das respostas do manipulador de blocos por @mdrkrg em https://github.com/Tencent/WeKnora/pull/2323</li>
+<li>feat(knowledge): suporta pedaços editáveis e metadados de recuperação por @lyingbug em https://github.com/Tencent/WeKnora/pull/2370</li>
+<li>fix(mcp-server): rota correta da mensagem SSE para evitar inicialização… por @FincherYuan em https://github.com/Tencent/WeKnora/pull/2375</li>
+<li>fix(im): recupera canais após perda de bloqueio do líder em @março-77 em https://github.com/Tencent/WeKnora/pull/2365</li>
+<li>correção (conhecimento): limpar erros obsoletos quando a nova análise começar em @ março de 77 em https://github.com/Tencent/WeKnora/pull/2363</li>
+<li>documentos: esclareça a validação do contribuidor com reconhecimento de escopo até @ março de 77 em https://github.com/Tencent/WeKnora/pull/2366</li>
+<li>correção (frontend): distinguir os estágios principais das tarefas de pós-processamento em @ March-77 em https://github.com/Tencent/WeKnora/pull/2364</li>
+<li>correção (wiki): evita travamentos de finalização em caso de falha de enfileiramento por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2362</li>
+<li>fix(docparser): resolve imagens remotas referenciadas por tags HTML img por @ochanism em https://github.com/Tencent/WeKnora/pull/2355</li>
+<li>fix(mcp-server): rotear diagnóstico para stderr para corrigir falha do protocolo stdio por @annopick em https://github.com/Tencent/WeKnora/pull/2371</li>
+<li>fix(im): renderiza imagens resource:// em canais de IM (nginx /r/ + config guards) por @voidkey em https://github.com/Tencent/WeKnora/pull/2352</li>
+<li>correção (chat): evita eventos duplicados de resposta de terminal por @ koishi514-Z em https://github.com/Tencent/WeKnora/pull/2353</li>
+<li>correção (docreader): restaura o contexto do cabeçalho XLSX opcional por @ WHUTcjh-2024 em https://github.com/Tencent/WeKnora/pull/2314</li>
+<li>correção: preserve limites semânticos mais precisos na sobreposição de blocos por @ttommybot em https://github.com/Tencent/WeKnora/pull/2342</li>
+<li>[Bug] preserva evidências da web quando as buscas de páginas falham por @langcaiye em https://github.com/Tencent/WeKnora/pull/2309</li>
+<li>correção (conhecimento): metadados personalizados padrão criados por @lyingbug em https://github.com/Tencent/WeKnora/pull/2379</li>
+<li>correção(conhecimento): distinguir arquivos duplicados por tipo por @koishi514-Z em https://github.com/Tencent/WeKnora/pull/2384</li>
+<li>correção (armazenamento): permite que uploads de imagens usem fallback de serviço de arquivo por @lyingbug em https://github.com/Tencent/WeKnora/pull/2389</li>
+<li>fix(retriever): reconstrua um mecanismo de armazenamento de vetores ausente sob demanda por @ochanism em https://github.com/Tencent/WeKnora/pull/2357</li>
+<li>correção (agente): exclui entradas de FAQ desativadas por @lyingbug em https://github.com/Tencent/WeKnora/pull/2392</li>
+<li>correção (servidor mcp): fixe MCP Python SDK em v1.x por @lyingbug em https://github.com/Tencent/WeKnora/pull/2395</li>
+<li>Redesenhe a caixa de diálogo de confirmação de upload por @lyingbug em https://github.com/Tencent/WeKnora/pull/2397</li>
+<li>ci(mcp-server): remova workflow.yml duplicado (substituído por mcp-server.yml) por @annopick em https://github.com/Tencent/WeKnora/pull/2398</li>
+<li>correção (conhecimento): suporte a uploads de arquivos HTML locais por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2393</li>
+<li>correção (sessão): inclui usuários externos no grupo de sessão API por @lyingbug em https://github.com/Tencent/WeKnora/pull/2405</li>
+<li>correção(organização): passe avatar ao criar espaço compartilhado por @hiasky em https://github.com/Tencent/WeKnora/pull/2408</li>
+<li>feat(knowledge): adicionar diálogo de tag em lote para documentos selecionados por @hiasky em https://github.com/Tencent/WeKnora/pull/2406</li>
+<li>correção: fortalecer as permissões de origem do agente compartilhado por @lyingbug em https://github.com/Tencent/WeKnora/pull/2417</li>
+<li>ci: adicione verificações de PR para aplicativo, frontend e DocReader por @lyingbug em https://github.com/Tencent/WeKnora/pull/2416</li>
+<li>correção (mcp-server): migre para MCPServer API de alto nível (mcp 2.x) [v1.1.0] por @annopick em https://github.com/Tencent/WeKnora/pull/2420</li>
+<li>correção (docparser): normaliza tabelas PaddleOCR-VL Cloud HTML por @zldkr em https://github.com/Tencent/WeKnora/pull/2419</li>
+<li>test(ci): estabiliza o teste da sessão MCP e desacopla as verificações de frontend por @lyingbug em https://github.com/Tencent/WeKnora/pull/2424</li>
+<li>fix(mcp): 修复非 UUID Agent ID 无法解析的问题 por @ZhuangShiHao1207 em https://github.com/Tencent/WeKnora/pull/2422</li>
+<li>correção (sessões): Permitir que o incorporado leia sua própria sessão durante a execução, corrija o problema de pedir sugestões 500 e perder o diálogo na atualização por @ asmh1989 em https://github.com/Tencent/WeKnora/pull/2421</li>
+<li>correção (frontend): resolve erros de sintaxe i18n @ e avisos de gaveta TDesign por @lyingbug em https://github.com/Tencent/WeKnora/pull/2426</li>
+<li>correção: preserva o caminho da pasta wiki após a criação por @ttommybot em https://github.com/Tencent/WeKnora/pull/2429</li>
+<li>fix(sqlite): filtra os candidatos do vetor antes do top-k por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2440</li>
+<li>correção: 修复 SQLite 下删除 DataSource 失败 por @yuefanxiao em https://github.com/Tencent/WeKnora/pull/2435</li>
+<li>correção (avaliação): use a indexação de passagem de sincronização para corrigir métricas de recuperação sempre zero por @lazyayuan em https://github.com/Tencent/WeKnora/pull/2359</li>
+<li>fix(frontend): Fecha automaticamente o editor após editar e salvar, e inicializa para continuar a configuração após a criação por @lyingbug em https://github.com/Tencent/WeKnora/pull/2448</li>
+<li>correção (frontend): restauração de auditoria e atividade KB i18n após remoção de localidade por @lyingbug em https://github.com/Tencent/WeKnora/pull/2449</li>
+<li>correção (frontend): encaminha imagens protegidas incorporadas por meio de proxy de arquivo de canal por @lyingbug em https://github.com/Tencent/WeKnora/pull/2454</li>
+<li>correção (conhecimento): permitir xlsx na importação de URL (#2447) por @lyingbug em https://github.com/Tencent/WeKnora/pull/2452</li>
+<li>correção (chat): segmenta expansões de consulta chinesa com jieba por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2463</li>
+<li>correção (conhecimento): falhas de nova análise de lote de superfície por @ Myyang-print em https://github.com/Tencent/WeKnora/pull/2453</li>
+<li>correção (reclassificação): solicitações LKEAP em lote dentro dos limites API por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2501</li>
+<li>correção(chat): manter status de upload de anexo reativo por @jacentsao em https://github.com/Tencent/WeKnora/pull/2498</li>
+<li>correção (reclassificação): normaliza as pontuações logit da NVIDIA por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2496</li>
+<li>correção (reclassificação): preserva passagens de código e matemática de @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2495</li>
+<li>correção: contagem de etapas ignoradas no progresso da análise por @ttommybot em https://github.com/Tencent/WeKnora/pull/2500</li>
+<li>correção (docparser): preserva a análise automática de PDF do MinerU por @oscarlius em https://github.com/Tencent/WeKnora/pull/2493</li>
+<li>feat(mcp-server): adicionar ferramenta list_shared_knowledge_bases por @FincherYuan em https://github.com/Tencent/WeKnora/pull/2497</li>
+<li>correção: exclui páginas wiki arquivadas do cursor lint por @quan020406 em https://github.com/Tencent/WeKnora/pull/2503</li>
+<li>correção (conhecimento): limpar mensagem de erro obsoleta no reprocessamento e finalizar por @oscarlius em https://github.com/Tencent/WeKnora/pull/2488</li>
+<li>correção (conhecimento): limpe mensagem de erro obsoleta nos caminhos de reprocessamento restantes por @lyingbug em https://github.com/Tencent/WeKnora/pull/2506</li>
+<li>correção: unifique a rolagem modal das configurações da organização por @ttommybot em https://github.com/Tencent/WeKnora/pull/2508</li>
+<li>correção: mostra o status de geração de resposta após recuperação por @ttommybot em https://github.com/Tencent/WeKnora/pull/2514</li>
+<li>correção (incorporação): evita o pânico do trabalhador das formigas e o impasse mutex em resultados vazios/incompatíveis por @qfzc em https://github.com/Tencent/WeKnora/pull/2520</li>
+<li>talento (conhecimento): barra lateral da árvore de pastas, armazenamento do caminho da pasta e arquivamento de documentos por @lyingbug em https://github.com/Tencent/WeKnora/pull/2528</li>
+<li>correção (frontend): restaure a fila de tempo de execução i18n e proteja-se contra podar por @lyingbug em https://github.com/Tencent/WeKnora/pull/2529</li>
+<li>correção (chat): preserva os resultados da recuperação durante falhas de incorporação por @KKtwo em https://github.com/Tencent/WeKnora/pull/2525</li>
+<li>perf(container): pesquisa de alias de armazenamento legado em lote na inicialização por @lyingbug em https://github.com/Tencent/WeKnora/pull/2530</li>
+<li>talento (armazenamento): suporte a credenciais padrão AWS S3 NoAk por @qilifan em https://github.com/Tencent/WeKnora/pull/2008</li>
+<li>correção (resumo): preserva linhas em pedaços da tabela por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2538</li>
+<li>feat(api): resource_urls=public para URLs de arquivos diretamente carregáveis por @lyingbug em https://github.com/Tencent/WeKnora/pull/2531</li>
+<li>correção (fragmentação): alinha a visualização com a divisão pai-filho por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2539</li>
+<li>fix(wiki): garante que o idioma do prompt seja sempre resolvido por @lyingbug em https://github.com/Tencent/WeKnora/pull/2543</li>
+<li>correção (chunking): sincronize o swagger de visualização e normalize a configuração do divisor por @lyingbug em https://github.com/Tencent/WeKnora/pull/2541</li>
+<li>fix(faq): evita entradas duplicadas quando uma criação é tentada novamente por @lyingbug em https://github.com/Tencent/WeKnora/pull/2544</li>
+<li>Melhore o layout do leitor Wiki e o histórico de revisão UX por @lyingbug em https://github.com/Tencent/WeKnora/pull/2547</li>
+<li>correção (chunking): normaliza os finais de linha antes de dividir por @BigFishDreamWater em https://github.com/Tencent/WeKnora/pull/2546</li>
+<li>feat(mcp-server): adicione a ferramenta create_knowledge_from_text de @01luyicheng em https://github.com/Tencent/WeKnora/pull/2532</li>
+<li>correção: tente novamente os resumos dos documentos antes do fallback por @ttommybot no https://github.com/Tencent/WeKnora/pull/2505</li>
+<li>correção: substitua todas as correspondências exatas de texto do wiki por @quan020406 em https://github.com/Tencent/WeKnora/pull/2516</li>
+<li>feat(im): adicionar respostas de redução para QQBot #2461 por @YS-zdck em https://github.com/Tencent/WeKnora/pull/2483</li>
+<li>chore(deps): supere o grupo cli-deps em /cli com 3 atualizações por @dependabot[bot] em https://github.com/Tencent/WeKnora/pull/2481</li>
+<li>façanha(feishu-driver): 新增飞书云盘数据源 por @Greenplumwine em https://github.com/Tencent/WeKnora/pull/2466</li>
+<li>correção (wiki): exclui páginas arquivadas de consultas de estatísticas por @pengpengyi92 em https://github.com/Tencent/WeKnora/pull/2549</li>
+<li>correção (im/wecom): resolve o impasse longconn entre closeConn e heartbeatLoop por @yangcongcong-coding em https://github.com/Tencent/WeKnora/pull/2551</li>
+<li>fix(chunks): restaura a fusão por posição de pedaços não editados por @mdrkrg em https://github.com/Tencent/WeKnora/pull/2555</li>
+<li>fix(im/wecom): conexão de escopo próxima à sua própria geração por @lyingbug em https://github.com/Tencent/WeKnora/pull/2557</li>
+<li>correção (pedaços): sobreposição de clipes de pedaços confiáveis ​​de acordo com a posição precisa por @lyingbug em https://github.com/Tencent/WeKnora/pull/2556</li>
+<li>correção (docs): corrija as anotações do caminho @Router para chat de agente e chat de conhecimento por @qfzc em https://github.com/Tencent/WeKnora/pull/2561</li>
+<li>fix(chunks): Os resultados da pesquisa após a reescrita do pipeline não usam correspondência de posição por @mdrkrg em https://github.com/Tencent/WeKnora/pull/2558</li>
+<li>documentos: adicione documentação abrangente do WeKnora por @lyingbug em https://github.com/Tencent/WeKnora/pull/2350</li>
+<li>documentos: Adicione o pull de composição docker à etapa de implantação para evitar a reutilização de imagens antigas em cache por @ WHUTcjh-2024 em https://github.com/Tencent/WeKnora/pull/2567</li>
+<li>documentos: 补全 docker compose pull 部署与升级说明 por @lyingbug em https://github.com/Tencent/WeKnora/pull/2570</li>
+<li>Reverter &quot;docs: 补全 docker compose pull 部署与升级说明&quot; por @lyingbug em https://github.com/Tencent/WeKnora/pull/2571</li>
+<li>Reverter &quot;documentos: adicionar documentação abrangente do WeKnora&quot; por @lyingbug em https://github.com/Tencent/WeKnora/pull/2572</li>
+<li>atualizar documentos do site por @lyingbug em https://github.com/Tencent/WeKnora/pull/2573</li>
+<li>documentos: orientação completa de composição de docker em documentos de implantação por @lyingbug em https://github.com/Tencent/WeKnora/pull/2574</li>
+<li>docs(website): adicione o link do site oficial e injete VERSION em tempo de construção por @lyingbug em https://github.com/Tencent/WeKnora/pull/2576</li>
+<li>correção (auth): não higienize a senha de registro antes de fazer o hash por @jiahao6635 em https://github.com/Tencent/WeKnora/pull/2568</li>
+<li>documentos (lançamento): prepare v0.7.2 release notes e versão aumentada por @lyingbug em https://github.com/Tencent/WeKnora/pull/2585</li>
+</ul>
+<h2>Novos colaboradores</h2>
+<ul>
+<li>@BigFishDreamWater fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2329</li>
+<li>@koishi514-Z fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2318</li>
+<li>@mdrkrg fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2319</li>
+<li>@FincherYuan fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2375</li>
+<li>@annopick fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2371</li>
+<li>@WHUTcjh-2024 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2314</li>
+<li>@zldkr fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2419</li>
+<li>@ZhuangShiHao1207 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2422</li>
+<li>@asmh1989 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2421</li>
+<li>@lazyayuan fez sua primeira contribuição no https://github.com/Tencent/WeKnora/pull/2359</li>
+<li>@Myyang-print fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2453</li>
+<li>@oscarlius fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2493</li>
+<li>@quan020406 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2503</li>
+<li>@qfzc fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2520</li>
+<li>@01luyicheng fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2532</li>
+<li>@pengpengyi92 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2549</li>
+<li>@jiahao6635 fez sua primeira contribuição em https://github.com/Tencent/WeKnora/pull/2568</li>
+</ul>
+<p><strong>Changelog completo</strong>: https://github.com/Tencent/WeKnora/compare/v0.7.1...v0.7.2</p>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/Tencent/WeKnora">Tencent/WeKnora</a> · <code>v0.7.2</code> · 2026-08-07 · <a href="https://github.com/Tencent/WeKnora/releases/tag/v0.7.2">lançamento upstream</a></p>
+</blockquote>
+<p><em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>WeKnora v0.7.2</h1>
+<h2>Highlights</h2>
+<ul>
+<li><strong>MCP server rebuilt on the 2.x high-level API</strong> — #2420 migrates the server onto MCP's high-level <code>MCPServer</code> API (v1.1.0), while #2395 separately pins the Python SDK to 1.x — two different version lines, so check which one governs your client before upgrading. Protocol-level fixes are the real adoption blockers: #2375 corrects the SSE message route that broke initialization, #2371 moves diagnostics to stderr so stdio transport stops crashing, and #2422 accepts non-UUID Agent IDs. New tools: <code>list_shared_knowledge_bases</code> (#2497) and <code>create_knowledge_from_text</code> (#2532). Watch for startup regressions if you depended on the old low-level server wiring.</li>
+<li><strong>Wiki becomes editable and versioned</strong> — #2336 adds page revision history with diff, revert, and manual editing, with the revision drawer and reader layout polished in #2338/#2547. Archived pages are now excluded from lint cursors and stats (#2503, #2549), and folder paths survive page creation (#2429). Why it matters: wiki shifts from append-only notes to governable content — but reverts rewrite content, so treat revision history as a new audit surface.</li>
+<li><strong>Chunking and retrieval correctness sweep</strong> — A broad cluster changes what the retriever actually sees: deterministic merge order (#2319), overlap trimming that respects positions after pipeline rewrites (#2555, #2556, #2558), editable chunks with retrieval metadata (#2370), and preview/splitter alignment including normalized line endings (#2539, #2541, #2546). Storage hygiene matters too: batch delete now cleans bound vector stores (#2329), missing vector engines rebuild on demand (#2357), and SQLite filters vector candidates before top-k (#2440) — if SQLite results shifted, that's the cause. Also fixed: always-zero evaluation metrics from async passage indexing (#2359).</li>
+<li><strong>IM stability for multi-replica deployments</strong> — #2349 and #2365 harden connection lifecycle and recover channels after leader-lock loss; #2551 and #2557 fix a WeCom longconn deadlock and scope connection closes to their own generation. If you run more than one replica, these are the fixes that stop flapping channels. Integrations expand with Feishu docx sync via the blocks API and per-type downdrill (#2334), a Feishu Drive datasource (#2466), and QQBot markdown replies (#2483).</li>
+<li><strong>Auth and permission behavior changes</strong> — #2568 stops sanitizing registration passwords before hashing, so new accounts with special characters now hash exactly what was typed (existing hashes are untouched); worth flagging if your signup flow strips or transforms input. Internals were reorganized into domain-split routers with a unified auth session context (#2331), shared-agent source permissions were hardened (#2417), and #2421 lets the embed runtime read its own session — fixing 500s and lost conversations on refresh.</li>
+<li><strong>Storage, API, and upgrade notes</strong> — S3 users can rely on AWS &quot;NoAk&quot; default credentials such as IRSA/instance roles (#2008), and <code>resource_urls=public</code> returns directly loadable file URLs (#2531) — convenient for embeds, but check the exposure implications. Migration <code>000076</code> was renumbered (#2340), and deployment docs converged on <code>docker compose pull</code> guidance (#2574, #2576) after the earlier doc additions were reverted (#2571, #2572): on upgrade, pull fresh images instead of reusing cached tags, or you may run a stale schema.</li>
+</ul>
+<p>No breaking changes.</p>
+<h2>What's Changed</h2>
+<ul>
+<li>refactor(agent): consolidate model-handle codecs into internal/modelcontext by @lyingbug in https://github.com/Tencent/WeKnora/pull/2330</li>
+<li>refactor(auth,router): unify auth session context and split router by domain by @lyingbug in https://github.com/Tencent/WeKnora/pull/2331</li>
+<li>fix(knowledge): clean bound vector stores in batch delete by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2329</li>
+<li>fix: support string args for skill script execution by @koishi514-Z in https://github.com/Tencent/WeKnora/pull/2318</li>
+<li>fix(agent): keep batched wiki_read_page results within output budget by @lyingbug in https://github.com/Tencent/WeKnora/pull/2333</li>
+<li>fix(pipeline): 修复合并阶段输出顺序的不确定性 by @mdrkrg in https://github.com/Tencent/WeKnora/pull/2319</li>
+<li>fix(knowledge): reconcile wiki state when moving documents across KBs by @lyingbug in https://github.com/Tencent/WeKnora/pull/2335</li>
+<li>feat(wiki): page revision history with diff, revert, and manual editing by @lyingbug in https://github.com/Tencent/WeKnora/pull/2336</li>
+<li>style(wiki): polish revision drawer and sidebar to match session list UX by @lyingbug in https://github.com/Tencent/WeKnora/pull/2338</li>
+<li>feat(feishu): sync docx via blocks API with per-type downdrill by @voidkey in https://github.com/Tencent/WeKnora/pull/2334</li>
+<li>fix(i18n): remove duplicate 'members' key in organization locale objects by @hiasky in https://github.com/Tencent/WeKnora/pull/2305</li>
+<li>fix(migrations): renumber knowledge metadata index migration to 000076 by @lyingbug in https://github.com/Tencent/WeKnora/pull/2340</li>
+<li>fix(im): harden connection lifecycle across replicas by @lyingbug in https://github.com/Tencent/WeKnora/pull/2349</li>
+<li>Refine user settings menu and access shortcuts by @lyingbug in https://github.com/Tencent/WeKnora/pull/2368</li>
+<li>Remove redundant Wiki operation log by @lyingbug in https://github.com/Tencent/WeKnora/pull/2367</li>
+<li>feat(knowledge): configure upload tags and processing options by @lyingbug in https://github.com/Tencent/WeKnora/pull/2369</li>
+<li>fix: Remove SanitizeForDisplay from chunk handler responses by @mdrkrg in https://github.com/Tencent/WeKnora/pull/2323</li>
+<li>feat(knowledge): support editable chunks and retrieval metadata by @lyingbug in https://github.com/Tencent/WeKnora/pull/2370</li>
+<li>fix(mcp-server): correct SSE message route to prevent initialization … by @FincherYuan in https://github.com/Tencent/WeKnora/pull/2375</li>
+<li>fix(im): recover channels after leader lock loss by @March-77 in https://github.com/Tencent/WeKnora/pull/2365</li>
+<li>fix(knowledge): clear stale errors when reparse starts by @March-77 in https://github.com/Tencent/WeKnora/pull/2363</li>
+<li>docs: clarify scope-aware contributor validation by @March-77 in https://github.com/Tencent/WeKnora/pull/2366</li>
+<li>fix(frontend): distinguish main stages from postprocess tasks by @March-77 in https://github.com/Tencent/WeKnora/pull/2364</li>
+<li>fix(wiki): prevent finalizing stalls on enqueue failure by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2362</li>
+<li>fix(docparser): resolve remote images referenced by HTML img tags by @ochanism in https://github.com/Tencent/WeKnora/pull/2355</li>
+<li>fix(mcp-server): route diagnostics to stderr to fix stdio protocol crash by @annopick in https://github.com/Tencent/WeKnora/pull/2371</li>
+<li>fix(im): render resource:// images in IM channels (nginx /r/ + config guards) by @voidkey in https://github.com/Tencent/WeKnora/pull/2352</li>
+<li>fix(chat): prevent duplicate terminal answer events by @koishi514-Z in https://github.com/Tencent/WeKnora/pull/2353</li>
+<li>fix(docreader): restore optional XLSX header context by @WHUTcjh-2024 in https://github.com/Tencent/WeKnora/pull/2314</li>
+<li>fix: 在chunk overlap中保留更细的语义边界 by @ttommybot in https://github.com/Tencent/WeKnora/pull/2342</li>
+<li>[Bug] preserve web evidence when page fetches fail by @langcaiye in https://github.com/Tencent/WeKnora/pull/2309</li>
+<li>fix(knowledge): default custom metadata on create by @lyingbug in https://github.com/Tencent/WeKnora/pull/2379</li>
+<li>fix(knowledge): distinguish duplicate files by type by @koishi514-Z in https://github.com/Tencent/WeKnora/pull/2384</li>
+<li>fix(storage): allow image uploads to use file service fallback by @lyingbug in https://github.com/Tencent/WeKnora/pull/2389</li>
+<li>fix(retriever): rebuild a missing vector store engine on demand by @ochanism in https://github.com/Tencent/WeKnora/pull/2357</li>
+<li>fix(agent): exclude disabled FAQ entries by @lyingbug in https://github.com/Tencent/WeKnora/pull/2392</li>
+<li>fix(mcp-server): pin MCP Python SDK to v1.x by @lyingbug in https://github.com/Tencent/WeKnora/pull/2395</li>
+<li>Redesign upload confirmation dialog by @lyingbug in https://github.com/Tencent/WeKnora/pull/2397</li>
+<li>ci(mcp-server): remove duplicate workflow.yml (superseded by mcp-server.yml) by @annopick in https://github.com/Tencent/WeKnora/pull/2398</li>
+<li>fix(knowledge): support local HTML file uploads by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2393</li>
+<li>fix(session): include external users in API session group by @lyingbug in https://github.com/Tencent/WeKnora/pull/2405</li>
+<li>fix(organization): pass avatar when creating shared space by @hiasky in https://github.com/Tencent/WeKnora/pull/2408</li>
+<li>feat(knowledge): add batch tag dialog for selected documents by @hiasky in https://github.com/Tencent/WeKnora/pull/2406</li>
+<li>fix: harden shared agent source permissions by @lyingbug in https://github.com/Tencent/WeKnora/pull/2417</li>
+<li>ci: add PR checks for app, frontend, and DocReader by @lyingbug in https://github.com/Tencent/WeKnora/pull/2416</li>
+<li>fix(mcp-server): migrate to MCPServer high-level API (mcp 2.x) [v1.1.0] by @annopick in https://github.com/Tencent/WeKnora/pull/2420</li>
+<li>fix(docparser): normalize PaddleOCR-VL Cloud HTML tables by @zldkr in https://github.com/Tencent/WeKnora/pull/2419</li>
+<li>test(ci): stabilize MCP session test and decouple frontend checks by @lyingbug in https://github.com/Tencent/WeKnora/pull/2424</li>
+<li>fix(mcp): 修复非 UUID Agent ID 无法解析的问题 by @ZhuangShiHao1207 in https://github.com/Tencent/WeKnora/pull/2422</li>
+<li>fix(sessions): 放行 embed 运行时读取自身会话，修复追问建议 500 与刷新丢对话 by @asmh1989 in https://github.com/Tencent/WeKnora/pull/2421</li>
+<li>fix(frontend): resolve i18n @ syntax errors and TDesign drawer warnings by @lyingbug in https://github.com/Tencent/WeKnora/pull/2426</li>
+<li>fix: preserve wiki folder path after creation by @ttommybot in https://github.com/Tencent/WeKnora/pull/2429</li>
+<li>fix(sqlite): filter vector candidates before top-k by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2440</li>
+<li>fix: 修复 SQLite 下删除 DataSource 失败 by @yuefanxiao in https://github.com/Tencent/WeKnora/pull/2435</li>
+<li>fix(evaluation): use sync passage indexing to fix always-zero retrieval metrics by @lazyayuan in https://github.com/Tencent/WeKnora/pull/2359</li>
+<li>fix(frontend): 编辑保存后自动关闭编辑器，创建后引导继续配置 by @lyingbug in https://github.com/Tencent/WeKnora/pull/2448</li>
+<li>fix(frontend): restore audit and KB activity i18n after locale prune by @lyingbug in https://github.com/Tencent/WeKnora/pull/2449</li>
+<li>fix(frontend): route embed protected images through channel file proxy by @lyingbug in https://github.com/Tencent/WeKnora/pull/2454</li>
+<li>fix(knowledge): allow xlsx in URL import (#2447) by @lyingbug in https://github.com/Tencent/WeKnora/pull/2452</li>
+<li>fix(chat): segment Chinese query expansions with jieba by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2463</li>
+<li>fix(knowledge): surface batch reparse failures by @Myang-print in https://github.com/Tencent/WeKnora/pull/2453</li>
+<li>fix(rerank): batch LKEAP requests within API limits by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2501</li>
+<li>fix(chat): keep attachment upload status reactive by @jacentsao in https://github.com/Tencent/WeKnora/pull/2498</li>
+<li>fix(rerank): normalize NVIDIA logit scores by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2496</li>
+<li>fix(rerank): preserve code and math passages by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2495</li>
+<li>fix: count skipped stages in parsing progress by @ttommybot in https://github.com/Tencent/WeKnora/pull/2500</li>
+<li>fix(docparser): preserve MinerU automatic PDF parsing by @oscarlius in https://github.com/Tencent/WeKnora/pull/2493</li>
+<li>feat(mcp-server): add list_shared_knowledge_bases tool by @FincherYuan in https://github.com/Tencent/WeKnora/pull/2497</li>
+<li>fix: exclude archived wiki pages from lint cursor by @quan020406 in https://github.com/Tencent/WeKnora/pull/2503</li>
+<li>fix(knowledge): clear stale error_message on reprocessing and finalize by @oscarlius in https://github.com/Tencent/WeKnora/pull/2488</li>
+<li>fix(knowledge): clear stale error_message on the remaining reprocess paths by @lyingbug in https://github.com/Tencent/WeKnora/pull/2506</li>
+<li>fix: unify organization settings modal scrolling by @ttommybot in https://github.com/Tencent/WeKnora/pull/2508</li>
+<li>fix: show answer generation status after retrieval by @ttommybot in https://github.com/Tencent/WeKnora/pull/2514</li>
+<li>fix(embedding): prevent ants worker panic and mutex deadlock on empty/mismatched results by @qfzc in https://github.com/Tencent/WeKnora/pull/2520</li>
+<li>feat(knowledge): folder tree sidebar, folder path storage, and document re-filing by @lyingbug in https://github.com/Tencent/WeKnora/pull/2528</li>
+<li>fix(frontend): restore runtime queue i18n and guard against prune by @lyingbug in https://github.com/Tencent/WeKnora/pull/2529</li>
+<li>fix(chat): preserve retrieval results during embedding failures by @KKtwo in https://github.com/Tencent/WeKnora/pull/2525</li>
+<li>perf(container): batch legacy storage alias lookup at startup by @lyingbug in https://github.com/Tencent/WeKnora/pull/2530</li>
+<li>feat(storage): support AWS S3 NoAk default credentials by @qilifan in https://github.com/Tencent/WeKnora/pull/2008</li>
+<li>fix(summary): preserve rows across table chunks  by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2538</li>
+<li>feat(api): resource_urls=public for directly loadable file URLs by @lyingbug in https://github.com/Tencent/WeKnora/pull/2531</li>
+<li>fix(chunking): align preview with parent-child splitting by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2539</li>
+<li>fix(wiki): ensure prompt language is always resolved by @lyingbug in https://github.com/Tencent/WeKnora/pull/2543</li>
+<li>fix(chunking): sync preview swagger and normalize splitter config by @lyingbug in https://github.com/Tencent/WeKnora/pull/2541</li>
+<li>fix(faq): prevent duplicate entries when a create is retried by @lyingbug in https://github.com/Tencent/WeKnora/pull/2544</li>
+<li>Improve Wiki reader layout and revision history UX by @lyingbug in https://github.com/Tencent/WeKnora/pull/2547</li>
+<li>fix(chunking): normalize line endings before splitting by @BigFishDreamWater in https://github.com/Tencent/WeKnora/pull/2546</li>
+<li>feat(mcp-server): add create_knowledge_from_text tool by @01luyicheng in https://github.com/Tencent/WeKnora/pull/2532</li>
+<li>fix: retry document summaries before fallback by @ttommybot in https://github.com/Tencent/WeKnora/pull/2505</li>
+<li>fix: replace all exact wiki text matches by @quan020406 in https://github.com/Tencent/WeKnora/pull/2516</li>
+<li>feat(im): add markdown replies for QQBot #2461 by @YS-zdck in https://github.com/Tencent/WeKnora/pull/2483</li>
+<li>chore(deps): bump the cli-deps group in /cli with 3 updates by @dependabot[bot] in https://github.com/Tencent/WeKnora/pull/2481</li>
+<li>feat(feishu-driver): 新增飞书云盘数据源 by @Greenplumwine in https://github.com/Tencent/WeKnora/pull/2466</li>
+<li>fix(wiki): exclude archived pages from stats queries by @pengpengyi92 in https://github.com/Tencent/WeKnora/pull/2549</li>
+<li>fix(im/wecom): resolve longconn deadlock between closeConn and heartbeatLoop by @yangcongcong-coding in https://github.com/Tencent/WeKnora/pull/2551</li>
+<li>fix(chunks): 恢复未编辑分块的按位置合并 by @mdrkrg in https://github.com/Tencent/WeKnora/pull/2555</li>
+<li>fix(im/wecom): scope connection close to its own generation by @lyingbug in https://github.com/Tencent/WeKnora/pull/2557</li>
+<li>fix(chunks): 受信任分块按精确位置裁剪重叠 by @lyingbug in https://github.com/Tencent/WeKnora/pull/2556</li>
+<li>fix(docs): correct @Router path annotations for agent-chat and knowledge-chat by @qfzc in https://github.com/Tencent/WeKnora/pull/2561</li>
+<li>fix(chunks): 流水线重写后的检索结果不用位置匹配 by @mdrkrg in https://github.com/Tencent/WeKnora/pull/2558</li>
+<li>docs: add comprehensive WeKnora documentation by @lyingbug in https://github.com/Tencent/WeKnora/pull/2350</li>
+<li>docs: 部署步骤增加 docker compose pull，防止复用缓存的旧镜像 by @WHUTcjh-2024 in https://github.com/Tencent/WeKnora/pull/2567</li>
+<li>docs: 补全 docker compose pull 部署与升级说明 by @lyingbug in https://github.com/Tencent/WeKnora/pull/2570</li>
+<li>Revert &quot;docs: 补全 docker compose pull 部署与升级说明&quot; by @lyingbug in https://github.com/Tencent/WeKnora/pull/2571</li>
+<li>Revert &quot;docs: add comprehensive WeKnora documentation&quot; by @lyingbug in https://github.com/Tencent/WeKnora/pull/2572</li>
+<li>update website docs by @lyingbug in https://github.com/Tencent/WeKnora/pull/2573</li>
+<li>docs: complete docker compose pull guidance across deployment docs by @lyingbug in https://github.com/Tencent/WeKnora/pull/2574</li>
+<li>docs(website): add official site link and inject VERSION at build time by @lyingbug in https://github.com/Tencent/WeKnora/pull/2576</li>
+<li>fix(auth): do not sanitize registration password before hashing by @jiahao6635 in https://github.com/Tencent/WeKnora/pull/2568</li>
+<li>docs(release): prepare v0.7.2 release notes and version bump by @lyingbug in https://github.com/Tencent/WeKnora/pull/2585</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@BigFishDreamWater made their first contribution in https://github.com/Tencent/WeKnora/pull/2329</li>
+<li>@koishi514-Z made their first contribution in https://github.com/Tencent/WeKnora/pull/2318</li>
+<li>@mdrkrg made their first contribution in https://github.com/Tencent/WeKnora/pull/2319</li>
+<li>@FincherYuan made their first contribution in https://github.com/Tencent/WeKnora/pull/2375</li>
+<li>@annopick made their first contribution in https://github.com/Tencent/WeKnora/pull/2371</li>
+<li>@WHUTcjh-2024 made their first contribution in https://github.com/Tencent/WeKnora/pull/2314</li>
+<li>@zldkr made their first contribution in https://github.com/Tencent/WeKnora/pull/2419</li>
+<li>@ZhuangShiHao1207 made their first contribution in https://github.com/Tencent/WeKnora/pull/2422</li>
+<li>@asmh1989 made their first contribution in https://github.com/Tencent/WeKnora/pull/2421</li>
+<li>@lazyayuan made their first contribution in https://github.com/Tencent/WeKnora/pull/2359</li>
+<li>@Myang-print made their first contribution in https://github.com/Tencent/WeKnora/pull/2453</li>
+<li>@oscarlius made their first contribution in https://github.com/Tencent/WeKnora/pull/2493</li>
+<li>@quan020406 made their first contribution in https://github.com/Tencent/WeKnora/pull/2503</li>
+<li>@qfzc made their first contribution in https://github.com/Tencent/WeKnora/pull/2520</li>
+<li>@01luyicheng made their first contribution in https://github.com/Tencent/WeKnora/pull/2532</li>
+<li>@pengpengyi92 made their first contribution in https://github.com/Tencent/WeKnora/pull/2549</li>
+<li>@jiahao6635 made their first contribution in https://github.com/Tencent/WeKnora/pull/2568</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/Tencent/WeKnora/compare/v0.7.1...v0.7.2</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/Tencent/WeKnora">Tencent/WeKnora</a> · <code>v0.7.2</code> · 2026-08-07 · <a href="https://github.com/Tencent/WeKnora/releases/tag/v0.7.2">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/weknora/0.8.0"> <span class="k">← Próximo</span> <span class="t">v0.8.0</span> </a> <a href="/releases/weknora/0.7.1"> <span class="k">Anterior →</span> <span class="t">v0.7.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/Tencent/WeKnora/releases/tag/v0.7.2" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/Tencent/WeKnora" target="_blank" rel="noopener"> <span>Tencent/WeKnora</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/weknora/0.9.0"> <span class="v">v0.9.0</span> <span class="d">26-10-29</span> </a> </li><li> <a href="/releases/weknora/0.8.3"> <span class="v">v0.8.3</span> <span class="d">26-10-14</span> </a> </li><li> <a href="/releases/weknora/0.8.2"> <span class="v">v0.8.2</span> <span class="d">26-09-24</span> </a> </li><li> <a href="/releases/weknora/0.8.0"> <span class="v">v0.8.0</span> <span class="d">26-09-03</span> </a> </li><li> <a href="/releases/weknora/0.7.2" aria-current="true"> <span class="v">v0.7.2</span> <span class="d">26-08-07</span> </a> </li><li> <a href="/releases/weknora/0.7.1"> <span class="v">v0.7.1</span> <span class="d">26-07-24</span> </a> </li><li> <a href="/releases/weknora/0.7.0"> <span class="v">v0.7.0</span> <span class="d">26-07-17</span> </a> </li><li> <a href="/releases/weknora/0.6.3"> <span class="v">v0.6.3</span> <span class="d">26-06-26</span> </a> </li> </ul> <a href="/pt/releases/weknora" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 42 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

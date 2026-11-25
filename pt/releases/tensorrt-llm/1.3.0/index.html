@@ -1,0 +1,532 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TensorRT-LLM v1.3.0 — STAGS NextStack</title><meta name="description" content="Rubin Support (Preview) · Added preview support for NVIDIA Rubin (SM107), validated on Vera Rubin. · Added DeepSeek-V4 and Kimi K3 support on Vera Rubin. · Model Support"><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/tensorrt-llm/1.3.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/tensorrt-llm/1.3.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/tensorrt-llm/1.3.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/tensorrt-llm/1.3.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="TensorRT-LLM v1.3.0 — STAGS NextStack"><meta property="og:description" content="Rubin Support (Preview) · Added preview support for NVIDIA Rubin (SM107), validated on Vera Rubin. · Added DeepSeek-V4 and Kimi K3 support on Vera Rubin. · Model Support"><meta property="og:url" content="https://www.stags.cn/pt/releases/tensorrt-llm/1.3.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/tensorrt-llm/1.3.0/#article","headline":"TensorRT-LLM v1.3.0 release notes","datePublished":"2026-11-20","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/NVIDIA/TensorRT-LLM"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/tensorrt-llm/1.3.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/TensorRT-LLM/TensorRT-LLM_v1.3.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/tensorrt-llm/1.3.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/tensorrt-llm/1.3.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/tensorrt-llm/1.3.0/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/tensorrt-llm/1.3.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/tensorrt-llm/1.3.0/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/tensorrt-llm">TensorRT-LLM</a> </nav> <h1 class="detail-title"> <span class="p">TensorRT-LLM</span> v1.3.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Minor</span> <span><span class="k">Publicado</span>20 de nov. de 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank" rel="noopener"> <span class="k">Fonte</span>NVIDIA/TensorRT-LLM </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/tensorrt-llm/1.3.0/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/tensorrt-llm/1.3.0/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><h1>TensorRT-LLM v1.3.0</h1>
+<h3>Principais recursos e melhorias</h3>
+<ul>
+<li><strong>Suporte Rubin (visualização)</strong>
+<ul>
+<li>Adicionado suporte de visualização para NVIDIA Rubin (SM107), validado em Vera Rubin.</li>
+<li>Adicionado suporte para DeepSeek-V4 e Kimi K3 em Vera Rubin.</li>
+</ul>
+</li>
+<li><strong>Suporte ao modelo</strong>
+<ul>
+<li>Adicionado suporte DeepSeek-V4 em Blackwell e Rubin (pré-visualização).</li>
+<li>Adicionado suporte Kimi K3 em Blackwell e Rubin (pré-visualização), incluindo serviço multimodal e multi-nós. Atenção paralelismo de dados (DEP16) requer memória GPU classe GB300.</li>
+<li>Adicionado suporte Qwen3.5 em Hopper, Blackwell e Rubin (pré-visualização), incluindo MTP e NVFP4 em Blackwell, e suporte Qwen3.6 e Qwen3.8-Flash-Next em Blackwell.</li>
+<li>Adicionado suporte MiniMax-M3 em Blackwell e Rubin (pré-visualização).</li>
+<li>Adicionado suporte para GLM-5, GLM-5.2, Kimi-K2.5 e Step-3.7-Flash na Blackwell.</li>
+<li>Adicionado suporte Nemotron Nano Omni em Hopper e Blackwell.</li>
+<li>Adicionado suporte Gemma 4 na Blackwell, incluindo multimodal.</li>
+<li>Adicionado suporte Laguna em Hopper e Blackwell.</li>
+<li>Adicionado cache de prefixo para modelos híbridos Mamba, como Qwen3.5 e Nemotron Super V3.</li>
+</ul>
+</li>
+<li><strong>Recursos</strong>
+<ul>
+<li><strong>Desempenho:</strong>
+<ul>
+<li>DeepSeek-V4, DeepSeek-V3.2, Qwen3.5, Gemma 4, MiniMax-M3 e Kimi K3 otimizados com fusões de kernel específicas do modelo.</li>
+<li>Adicionada localização de domínio de localidade (uGPU) para NVFP4 MoE em Rubin, que mantém o tráfego de memória local para cada chip de GPU. Está habilitado por padrão; defina <code>DISABLE_LOCALITY_DOMAINS=1</code> para desativá-lo.</li>
+<li>Redução da sobrecarga do host com pré-processamento assíncrono e pesquisa de feixe sem sincronização, e tempo de inicialização reduzido com leitura antecipada de ponto de verificação.</li>
+<li>Adicionada atenção em cascata e despacho low-M BF16 GEMM para SM10x.</li>
+</ul>
+</li>
+<li><strong>Serviço desagregado:</strong>
+<ul>
+<li>Adicionado agendamento gen-first, roteamento de afinidade de conversação, pesquisa de feixe e suporte a modelo híbrido.</li>
+<li>Adicionada veiculação desagregada para Qwen3.8-Flash-Next.</li>
+</ul>
+</li>
+<li><strong>Decodificação Especulativa:</strong>
+<ul>
+<li>Adicionados redatores DSpark, DFlash, Suffix Automaton e PARD.</li>
+<li>Adicionadas árvores dinâmicas EAGLE3, modelos de rascunho Eagle 3.1 e decodificação especulativa com LoRA.</li>
+<li>Adicionada amostragem de rejeição para caminhos de modelo único e desativação automática baseada na taxa de aceitação para especulação dinâmica.</li>
+<li>Adicionado carregamento de pesos MTP de pontos de verificação independentes.</li>
+</ul>
+</li>
+<li><strong>Paralelismo e MoE:</strong>
+<ul>
+<li>Adicionado DWDP (Paralelismo de Dados de Peso Distribuído), paralelismo de contexto Helix estendido e um roteador DP de atenção com reconhecimento de cache KV.</li>
+<li>Adicionados back-ends <code>DENSEGEMM</code>, <code>MEGAMOE_DEEPGEMM</code>, <code>MEGAMOE_CUTEDSL</code>, <code>CUTEDSL_FC12</code> (somente Rubin) e <code>MARLIN</code> MoE.</li>
+<li>Adicionado back-end NCCL-EP e suporte para até 2.048 especialistas.</li>
+<li>Adicionado Router Replay (<code>return_routed_experts</code>) para retornar roteamento MoE por token para treinamento RL.</li>
+</ul>
+</li>
+<li><strong>Cache KV:</strong>
+<ul>
+<li>O KV Cache Manager V2 é selecionado por modelo e ativado por padrão para a maioria das famílias de modelos.</li>
+<li>Adicionada compactação de cache KV (compressão de página fria TriAttention e NVFP4), cache KV NVFP4 e cache de disco.</li>
+<li>Adicionada reutilização de bloco por conversa e hashing de bloco KV multimodal exato.</li>
+<li>Adicionados conectores FlexKV e LMCache.</li>
+</ul>
+</li>
+<li><strong>Quantização:</strong>
+<ul>
+<li>Adicionado suporte linear e MoE MXFP8 (W8A8), incluindo pontos de verificação MXFP8, como MiniMax-M3.</li>
+<li>Adicionada quantização somente de peso W4A16 NVFP4 por meio do Marlin, para que os pontos de verificação NVFP4 sejam executados em Hopper e Ada Lovelace.</li>
+<li>Adicionada quantização NVFP4 ajustável.</li>
+<li>Adicionado suporte para formatos de configuração de quantização legados e ModelOpt 1.x.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Atenção escassa:</strong> Adicionados kernels de decodificação DSA FP4/FP8, GVR Top-K, Skip Softmax Attention (com dispersão de ativação 2:4 opcional no Rubin) e MiniMax-M3 MSA.
+<ul>
+<li><strong>Servindo e APIs:</strong>
+<ul>
+<li>Adicionadas as Mensagens Antrópicas API (<code>/v1/messages</code>) e ampliadas as Respostas API.</li>
+<li>Adicionado um servidor gRPC e frontends HTTP multiprocessos.</li>
+<li>Adicionado <code>priority</code> por solicitação e função nomeada <code>tool_choice</code> aos APIs compatíveis com OpenAI.</li>
+<li>Adicionadas ferramentas <code>auto</code> e seleção de analisador de raciocínio e analisadores de ferramentas GLM-4.7, GLM-5 e Laguna.</li>
+<li>Adicionadas métricas Prometheus e endpoints de perfil <code>/start_profile</code> e <code>/stop_profile</code>.</li>
+<li>Adicionadas opções <code>trtllm-serve</code> <code>--served_model_name</code>, <code>--kv_cache_dtype</code> e <code>--middleware</code>.</li>
+<li>Adicionados logprobs de conclusão API e aceitação de <code>parallel_tool_calls</code>.</li>
+</ul>
+</li>
+<li><strong>Amostragem e LoRA:</strong>
+<ul>
+<li>Adicionados <code>min_p</code>, <code>bad_words</code>, penalidades de repetição/frequência/presença, opções de pesquisa de feixe completo e logprobs processados ao TorchSampler.</li>
+<li>Adicionado um <code>thinking_token_budget</code> experimental para modelos de raciocínio.</li>
+<li>Adicionado serviço multi-LoRA com gráficos CUDA, MoE LoRA por especialista e LoRA FP8 denso.</li>
+</ul>
+</li>
+<li><strong>Outros:</strong>
+<ul>
+<li>Adicionado agendamento com reconhecimento de prefixo, habilitado por padrão, para evitar pré-preenchimento duplicado de prefixos compartilhados.</li>
+<li>Adicionado suporte a gráfico CUDA pré-preenchido e quebrável e máscaras de atenção personalizadas no back-end de atenção TRTLLM.</li>
+<li>Adicionado cache de codificador multimodal e gráficos CUDA para codificadores multimodais.</li>
+<li>Adicionadas atualizações de peso em voo para fluxos de trabalho RL.</li>
+<li>Adicionado <code>/v1/embeddings</code> e um atalho <code>llm.encode()</code> para modelos somente com codificador.</li>
+<li>Adicionado carregamento do ponto de verificação do protótipo ModelExpress.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Documentação</strong>
+<ul>
+<li><strong>Guia de migração:</strong> Adicionado o <a href="legacy/tensorrt-backend-removal.md">guia de migração removido do backend do TensorRT</a>.</li>
+<li><strong>Guias de implantação:</strong> Guias de implantação adicionados para GLM-5, Kimi K3, MiniMax-M3, Nemotron 3, Qwen3.8-Flash-Next e Qwen3.8/Qwen3.5.</li>
+<li><strong>Documentação de recursos:</strong> guias adicionados para compactação de cache KV, embeddings, ModelExpress, roteamento de subagentes e modelos de codificador-decodificador, e reestruturou o guia de instalação.</li>
+<li><strong>Guias do desenvolvedor:</strong> Guias adicionados para atenção escassa, compactação de cache KV, telemetria e kernels personalizados.</li>
+<li><strong>Blogs de tecnologia:</strong> Blogs publicados em:
+<ul>
+<li>&quot;<a href="./blogs/tech_blog/blog16_Accelerating_Long_Context_Inference_with_Skip_Softmax_Attention.md">Acelerando a inferência de contexto longo com Skip Softmax Attention</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog17_Sparse_Attention_in_TensorRT-LLM.md">Atenção escassa no TensorRT LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog18_Optimizing_MoE_Communication_with_One_Sided_AlltoAll_Over_NVLink.md">Otimizando a comunicação MoE com AlltoAll unilateral sobre NVLink</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog19_DWDP_Distributed_Weight_Data_Parallelism_for_High_Performance_LLM_Inference_on_NVL72.md">DWDP: Paralelismo de dados de peso distribuído para inferência LLM de alto desempenho em NVL72</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog20_Tuning_CUDA_Graph_Batch_Sizes_for_Higher_Output_Throughput.md">Ajustando tamanhos de lote de gráfico CUDA para maior rendimento de saída</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog21_Temporal_Correlation_Meets_Sparse_Attention.md">Correlação temporal encontra atenção esparsa: Adivinhe-Verifique-Refina Top-K para Blackwell</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog22_Helix_Parallelism_Scaling_Multi_Million_Token_Decoding_with_KV_Cache_Sharding.md">Paralelismo Helix no TensorRT-LLM: Dimensionando a decodificação de vários milhões de tokens com fragmentação de cache KV</a>&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>&quot;<a href="./blogs/tech_blog/blog23_Joint_Optimization_of_Agent_Applications_and_TensorRT-LLM.md">Otimização conjunta de aplicativos de agente e TensorRT-LLM</a>&quot;
+<ul>
+<li>&quot;<a href="./blogs/tech_blog/blog24_MoE_as_Dense_GEMM.md">MoE as Dense GEMM: Otimizando a inferência MoE de baixa latência no NVIDIA Blackwell</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog26_DeepSeek_V4_on_NVIDIA_Blackwell_Model_Specific_and_Agentic_Workload_Optimizations_in_TensorRT-LLM.md">DeepSeek-V4 em NVIDIA Blackwell: Otimizações específicas do modelo e de carga de trabalho de agente no TensorRT LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog27_Evaluating_Agentic_Serving_with_Trace_Replay_and_Job_Level_Metrics.md">Avaliando a veiculação Agentic com Trace Replay e métricas de nível de trabalho</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog29_GVR_V2_Self_Sampling_Exact_TopK_for_Sparse_Attention.md">GVR V2: Autoamostragem e multilimitação para Top-K exato mais rápido</a>&quot;</li>
+<li>Os blogs técnicos 1–9 foram renomeados para <code>blog01</code>–<code>blog09</code> e os links para os nomes de arquivos antigos foram atualizados.</li>
+</ul>
+</li>
+</ul>
+<h3>VisualGen</h3>
+<p>VisualGen é uma nova solução vertical no TensorRT-LLM para modelos de geração de imagem e vídeo. É servido por meio de <code>trtllm-serve</code> juntamente com inferência LLM. Consulte a <a href="models/visual-generation.md">documentação do VisualGen</a> para obter detalhes.</p>
+<ul>
+<li><strong>Modelos</strong>
+<ul>
+<li>Adicionados modelos de geração de imagens: FLUX.1, FLUX.2, GLM-Image e Qwen-Image, incluindo Qwen-Image-Edit e Qwen-Image-Layered.</li>
+<li>Adicionados modelos de geração de vídeo: Wan 2.2 (incluindo 5B TI2V e FastWan), LTX-2, HunyuanVideo 1.5, Cosmos3 e MiniMax-H3.</li>
+</ul>
+</li>
+<li><strong>Recursos</strong>
+<ul>
+<li>Adicionados endpoints de geração de imagem, edição de imagem e geração de vídeo no <code>trtllm-serve</code>.</li>
+<li>Adicionado tensor, contexto e paralelismo CFG, quantização NVFP4 e FP8, gráficos CUDA e tempo de execução LoRA.</li>
+<li>Adicionado cache TeaCache e Cache-DiT, atenção esparsa e back-ends de atenção FlashAttention 4, FlashInfer e cuDNN.</li>
+<li>Adicionado um pipeline <code>trtllm-eval</code> para modelos VisualGen.</li>
+</ul>
+</li>
+<li><strong>Documentação</strong>
+<ul>
+<li><a href="https://nvidia.github.io/TensorRT-LLM/examples/visual_gen_examples.html">Exemplos do VisualGen</a></li>
+<li>Publicou blogs de tecnologia em:
+<ul>
+<li>&quot;<a href="./blogs/tech_blog/blog25_Scaling_Video_Generation_Across_NVL72_Rack_with_TensorRT-LLM.md">Escalonando a geração de vídeo em rack NVL72 com TensorRT-LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog28_Accelerating_Video_Generation_with_GEMM_Quantization_Attention_Quantization_and_Skip_Softmax_Attention_in_TensorRT-LLM.md">Acelerando a geração de vídeo com quantização GEMM, quantização de atenção e ignorar atenção Softmax no TensorRT-LLM</a>&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Problemas conhecidos</strong>
+<ul>
+<li>Os pontos de verificação FLUX.1 quantizados estaticamente e exportados pelo NVIDIA Model Optimizer podem falhar na inicialização porque a configuração do transformador exportado define <code>out_channels</code> como nulo.</li>
+</ul>
+</li>
+</ul>
+<h3>Mudanças na infraestrutura</h3>
+<ul>
+<li>A imagem base Docker para TensorRT-LLM é atualizada para <code>nvcr.io/nvidia/pytorch:26.09-py3</code>.</li>
+<li>A imagem base Docker para TensorRT-LLM Backend foi atualizada para <code>nvcr.io/nvidia/tritonserver:26.09-py3</code>.</li>
+<li>A versão dependente do CUDA Toolkit foi atualizada para 13.4.1.</li>
+<li>A versão pública dependente do PyTorch foi atualizada para 2.14.0.</li>
+<li>Python 3.10 e 3.12 são suportados.</li>
+<li>TensorRT LLM agora fornece dois conjuntos de rodas Python pré-construídas, cada uma compatível com uma construção PyTorch diferente:
+<ul>
+<li>PyTorch público upstream: as rodas são hospedadas no PyPI.</li>
+<li>Contêiner NGC PyTorch: as rodas são liberadas através do https://pypi.nvidia.com/trtllm_ngcpytorch/.</li>
+</ul>
+</li>
+<li>TensorRT, NVIDIA ModelOpt e ONNX não são mais dependências do TensorRT-LLM.</li>
+<li>A versão dos transformadores dependentes é atualizada para 5.5.4.</li>
+<li>A versão dependente do flashinfer-python foi atualizada para 0.6.18.</li>
+<li>A versão dependente do triton foi atualizada para 3.8.0.</li>
+<li>A versão dependente do NCCL é atualizada para 2.31.2.</li>
+<li>A versão dependente do NIXL foi atualizada para 1.4.0.</li>
+<li>A versão dependente do UCX é atualizada para 1.22.</li>
+<li>A versão dependente do CUTLASS é atualizada para 4.4.2.</li>
+<li>A versão dependente do xgrammar foi atualizada para 0.1.32.</li>
+<li>O padrão C++ foi atualizado para C++20.</li>
+</ul>
+<h3>API Mudanças</h3>
+<ul>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Backend TensorRT removido.</strong>&lt;/span&gt; PyTorch é o único backend. <code>trtllm-build</code>, <code>TrtLlmArgs</code>, <code>BuildConfig</code>, <code>MedusaDecodingConfig</code>, <code>LookaheadDecodingConfig</code>, <code>trtllm-bench build</code> e <code>trtllm-bench --engine_dir</code> são removidos. Consulte o <a href="legacy/tensorrt-backend-removal.md">guia de migração</a>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Executor C++ legado e APIs de tempo de execução removidos.</strong>&lt;/span&gt; O C++ <code>Executor</code> API, o tempo de execução legado e o gerenciador de lote APIs e a opção de construção <code>cpp_only</code> foram removidos.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Modelos de backend Triton com motor TensorRT removidos.</strong>&lt;/span&gt; Somente o modelo <code>llmapi</code> Triton permanece.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] TRTLLMSampler removido.</strong>&lt;/span&gt; <code>TorchSampler</code>, que requer FlashInfer, é o único amostrador. O argumento <code>sampler_type</code> é ignorado com um aviso e <code>disable_flashinfer_sampling</code> é removido.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Decodificação especulativa de dois modelos removida.</strong>&lt;/span&gt; Os campos <code>eagle3_one_model</code> e <code>mtp_eagle_one_model</code> foram removidos; use as implementações de modelo único.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] AutoDeploy, Star Attention e WIDEEP removidos.</strong>&lt;/span&gt; AutoDeploy e Star Attention foram removidos e o back-end WIDEEP MoE não pode mais ser selecionado.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Os sinalizadores CLI substituem a configuração YAML.</strong>&lt;/span&gt; Os sinalizadores explícitos <code>trtllm-serve</code>, <code>trtllm-eval</code> e <code>trtllm-bench</code> agora têm precedência sobre os valores de configuração YAML.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] O tempo limite de transferência do cache KV é padrão para 60 segundos.</strong>&lt;/span&gt; Anteriormente não havia tempo limite; configure-o com <code>cache_transceiver_config.kv_transfer_timeout_ms</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Os modelos de bate-papo por solicitação são opcionais.</strong>&lt;/span&gt; Habilite-os com <code>trtllm-serve --allow_request_chat_template</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Logprobs limitados a 100.</strong>&lt;/span&gt; Valores maiores de <code>logprobs</code> ou <code>prompt_logprobs</code> aumentam um <code>ValueError</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Endpoint <code>/perf_metrics</code> removido.</strong>&lt;/span&gt; Use o cabeçalho de solicitação <code>X-TRTLLM-return-metrics: 1</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Campos de especulação dinâmica renomeados.</strong>&lt;/span&gt; Use <code>acceptance_rate_window_size</code> e <code>acceptance_rate_threshold</code>; o limite agora é uma taxa de aceitação em [0, 1].</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Opções obsoletas removidas.</strong>&lt;/span&gt; Isso inclui Eagle <code>choices</code> e <code>trtllm-serve --fail_fast_on_attention_window_too_large</code>.</li>
+<li>A compactação de página fria NVFP4 permanece ativada e desativada por padrão. Quando habilitado para DeepSeek-V4, o NoPE usa NVFP4 e o RoPE agora tem como padrão 2FP4 (<code>nvfp4_residual_dim=64</code>). Configure <code>skip_rope_quantization=True</code> para manter RoPE em sua precisão original, como antes, ou <code>nvfp4_residual_dim=0</code> para usar NVFP4 único. O tipo de cache KV da GPU ativo permanece inalterado. Consulte o <a href="">exemplo de compactação de página fria NVFP4</a>.</li>
+<li><strong>[DEPRECAÇÃO]</strong> O backend TRITON MoE (<code>TritonFusedMoE</code>, <code>moe_config.backend=&quot;TRITON&quot;</code>) está obsoleto a partir do TensorRT-LLM 1.3 (2026-09) e será removido após o período de migração de 3 meses. Sua única função restante é uma modesta vantagem de desempenho para GPT-OSS no Hopper com <code>W4A16_MXFP4</code> – a configuração única <code>AUTO</code> resolve para TRITON, e o formato que um ponto de verificação MXFP4 GPT-OSS assume no SM90. À medida que o conjunto de modelos e as plataformas suportadas continuam a crescer, um caminho MoE de cenário único já não compensa o seu custo de manutenção. <code>moe_config.backend=&quot;CUTLASS&quot;</code> o substitui funcionalmente no Hopper: ele atende <code>W4A16_MXFP4</code> no SM90 junto com os caminhos por tensor BF16 e FP8 não quantizados, e a resolução de back-end do MoE já é degradada automaticamente quando TRITON declines uma camada. Durante o período de migração, o TRITON continua funcionando e registra um aviso único. Consulte a <a href="https://github.com/NVIDIA/TensorRT-LLM#deprecation-policy">política de descontinuação</a>.</li>
+<li><strong>[DEPRECATION]</strong> As opções <code>trtllm-serve</code> <code>--backend</code>, <code>--moe_cluster_parallel_size</code> e <code>--metrics-log-interval</code>, e a opção <code>trtllm-eval</code> <code>--backend</code>, estão obsoletas.</li>
+<li><strong>[DEPRECAÇÃO]</strong> <code>TorchCompileConfig.enable_piecewise_cuda_graph</code> e <code>capture_num_tokens</code>, <code>MTPDecodingConfig.num_nextn_predict_layers</code> e <code>perf_metrics_max_requests</code> estão obsoletos.</li>
+<li><strong>[DEPRECATION]</strong> A veiculação desagregada sem <code>internal_request_auth_key</code> está obsoleta. Defina a mesma chave na configuração desagregada do servidor e em cada configuração do trabalhador.</li>
+<li>A telemetria de uso está ativada por padrão. Para cancelar, defina <code>TRTLLM_NO_USAGE_STATS=1</code> ou <code>DO_NOT_TRACK=1</code>, passe <code>--no-telemetry</code> para CLI ou defina <code>telemetry_config=TelemetryConfig(disabled=True)</code> no LLM API. Consulte o <a href="developer-guide/telemetry.md">guia de telemetria</a>.</li>
+<li>O padrão GPT-OSS é o backend TRTLLM MoE na Blackwell.</li>
+<li><code>TorchCompileConfig.max_num_streams</code> agora tem como padrão 3 em vez de 1.</li>
+</ul>
+<h3>Problemas corrigidos</h3>
+<ul>
+<li><strong>Serviço desagregado:</strong>
+<ul>
+<li>Corrigido um problema com paralelismo de pipeline de contexto e paralelismo de tensor de geração, um problema conhecido no 1.2.</li>
+<li>Corrigidos travamentos com reutilização de bloco após despejo e transferência KV assíncrona somente de geração.</li>
+<li>Corrigido um erro em um rank que travava todos os ranks de geração.</li>
+</ul>
+</li>
+<li><strong>Atenção:</strong>
+<ul>
+<li>Corrigido um acesso ilegal à memória quando <code>max_seq_len</code> excede <code>max_position_embeddings</code>.</li>
+<li>Corrigida uma condição de corrida XQA, precisão do coletor de atenção e acesso ilegal à memória por janela deslizante.</li>
+<li>Corrigida a precisão do FP8 com Skip Softmax Attention.</li>
+<li>Corrigido um acesso ilegal à memória do DeepSeek-V3.2 com gráficos CUDA e descarregamento de cache KV do host.</li>
+</ul>
+</li>
+<li><strong>Decodificação especulativa:</strong> Corrigidas falhas de EAGLE3 no Qwen3-235B-A22B NVFP4 e falhas de MTP no Nemotron Super no Hopper.</li>
+<li><strong>Cache KV:</strong> Corrigida perda de precisão com VSWA e reutilização de bloco, além de corrupção de contador de bloco livre com descarregamento de host.</li>
+<li><strong>Paralelismo de pipeline:</strong> Corrigidos travamentos com MTP, decodificação guiada e desligamento do executor.</li>
+<li><strong>MoE:</strong> Corrigido um travamento do DeepEP causado pela coleta de lixo não determinística.</li>
+<li><strong>Kernels:</strong> Precisão de precisão mista Qwen2.5 corrigida, precisão AllReduce de dois disparos e saídas GEMM NaN em escala de bloco FP8.</li>
+<li><strong>Amostragem:</strong> Corrigido <code>ignore_eos</code> suprimindo o token errado no TorchSampler, e os parâmetros de amostragem NaN agora são rejeitados.</li>
+<li><strong>Geral:</strong> Corrigida corrupção de pesquisa de feixe do codificador-decodificador e erros de falta de memória com muitos adaptadores LoRA ou durante a pré-busca do ponto de verificação.</li>
+</ul>
+<h3>Problemas conhecidos</h3>
+<ul>
+<li>Kimi-K3 NVFP4 pode falhar ao carregar seu tokenizer com a versão de transformadores incluídos.</li>
+<li>No serviço desagregado com decodificação especulativa DSpark, o rascunho do cache KV não é transferido para o trabalhador de geração, o que reduz a taxa de aceitação. A veiculação agregada não é afetada.</li>
+<li>GLM-5.2 NVFP4 em GB200 (TP = 8, atenção DP desabilitada) pode falhar durante o aquecimento quando <code>max_num_tokens</code> for maior que 4096. Mantenha <code>max_num_tokens</code> em 4096 ou inferior.</li>
+<li>A veiculação desagregada do Nemotron-3-Super-120B-A12B FP8 no B300 pode falhar quando a simultaneidade excede o tamanho máximo do lote.</li>
+<li>A veiculação desagregada de Qwen3-32B-FP8 no B300 pode produzir resultados incorretos.</li>
+<li>O endpoint <code>/v1/responses</code> possui lacunas de compatibilidade com alguns formatos de entrada, eventos de streaming, continuação de conversação e chamadas de ferramentas (Qwen3, GPT-OSS).</li>
+<li>Os modelos codificador-decodificador com cache KV FP8 podem sobrecarregar o pool de cache KV de atenção cruzada, causando acesso ilegal à memória ou saída incorreta.</li>
+<li>Qwen3-32B com TP = 4 no AWS p4d (A100) pode falhar durante o aquecimento do autotuner quando o plugin <code>aws-ofi-nccl</code> está habilitado.</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM">NVIDIA/TensorRT-LLM</a> · <code>v1.3.0</code> · 2026-11-20 · <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.3.0">lançamento upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>TensorRT-LLM v1.3.0</h1>
+<h3>Key Features and Enhancements</h3>
+<ul>
+<li>
+<p><strong>Rubin Support (Preview)</strong></p>
+<ul>
+<li>Added preview support for NVIDIA Rubin (SM107), validated on Vera Rubin.</li>
+<li>Added DeepSeek-V4 and Kimi K3 support on Vera Rubin.</li>
+</ul>
+</li>
+<li>
+<p><strong>Model Support</strong></p>
+<ul>
+<li>Added DeepSeek-V4 support on Blackwell and Rubin (preview).</li>
+<li>Added Kimi K3 support on Blackwell and Rubin (preview), including multimodal and multi-node serving. Attention data parallelism (DEP16) requires GB300-class GPU memory.</li>
+<li>Added Qwen3.5 support on Hopper, Blackwell and Rubin (preview), including MTP and NVFP4 on Blackwell, and Qwen3.6 and Qwen3.8-Flash-Next support on Blackwell.</li>
+<li>Added MiniMax-M3 support on Blackwell and Rubin (preview).</li>
+<li>Added GLM-5, GLM-5.2, Kimi-K2.5 and Step-3.7-Flash support on Blackwell.</li>
+<li>Added Nemotron Nano Omni support on Hopper and Blackwell.</li>
+<li>Added Gemma 4 support on Blackwell, including multimodal.</li>
+<li>Added Laguna support on Hopper and Blackwell.</li>
+<li>Added prefix caching for Mamba hybrid models, such as Qwen3.5 and Nemotron Super V3.</li>
+</ul>
+</li>
+<li>
+<p><strong>Features</strong></p>
+<ul>
+<li><strong>Performance:</strong>
+<ul>
+<li>Optimized DeepSeek-V4, DeepSeek-V3.2, Qwen3.5, Gemma 4, MiniMax-M3 and Kimi K3 with model-specific kernel fusions.</li>
+<li>Added locality domain (uGPU) localization for NVFP4 MoE on Rubin, which keeps memory traffic local to each GPU die. It is enabled by default; set <code>DISABLE_LOCALITY_DOMAINS=1</code> to disable it.</li>
+<li>Reduced host overhead with async preprocessing and sync-free beam search, and reduced startup time with checkpoint read-ahead.</li>
+<li>Added cascade attention and low-M BF16 GEMM dispatch for SM10x.</li>
+</ul>
+</li>
+<li><strong>Disaggregated Serving:</strong>
+<ul>
+<li>Added gen-first scheduling, conversation affinity routing, beam search and hybrid model support.</li>
+<li>Added disaggregated serving for Qwen3.8-Flash-Next.</li>
+</ul>
+</li>
+<li><strong>Speculative Decoding:</strong>
+<ul>
+<li>Added DSpark, DFlash, Suffix Automaton and PARD drafters.</li>
+<li>Added EAGLE3 dynamic trees, Eagle 3.1 draft models and speculative decoding with LoRA.</li>
+<li>Added rejection sampling for one-model paths and acceptance-rate-based auto-disable for dynamic speculation.</li>
+<li>Added loading MTP weights from standalone checkpoints.</li>
+</ul>
+</li>
+<li><strong>Parallelism and MoE:</strong>
+<ul>
+<li>Added DWDP (Distributed Weight Data Parallelism), extended Helix context parallelism, and a KV cache-aware attention-DP router.</li>
+<li>Added the <code>DENSEGEMM</code>, <code>MEGAMOE_DEEPGEMM</code>, <code>MEGAMOE_CUTEDSL</code>, <code>CUTEDSL_FC12</code> (Rubin only) and <code>MARLIN</code> MoE backends.</li>
+<li>Added an NCCL-EP backend and support for up to 2048 experts.</li>
+<li>Added Router Replay (<code>return_routed_experts</code>) to return per-token MoE routing for RL training.</li>
+</ul>
+</li>
+<li><strong>KV Cache:</strong>
+<ul>
+<li>KV Cache Manager V2 is selected per model and enabled by default for most model families.</li>
+<li>Added KV cache compression (TriAttention and NVFP4 cold-page compression), NVFP4 KV cache and disk cache.</li>
+<li>Added per-conversation block reuse and exact multimodal KV block hashing.</li>
+<li>Added FlexKV and LMCache connectors.</li>
+</ul>
+</li>
+<li><strong>Quantization:</strong>
+<ul>
+<li>Added MXFP8 (W8A8) linear and MoE support, including MXFP8 checkpoints such as MiniMax-M3.</li>
+<li>Added W4A16 NVFP4 weight-only quantization through Marlin, so NVFP4 checkpoints run on Hopper and Ada Lovelace.</li>
+<li>Added tunable NVFP4 quantization.</li>
+<li>Added support for both legacy and ModelOpt 1.x quantization config formats.</li>
+</ul>
+</li>
+<li><strong>Sparse Attention:</strong> Added DSA FP4/FP8 decode kernels, GVR Top-K, Skip Softmax Attention (with optional 2:4 activation sparsity on Rubin) and MiniMax-M3 MSA.</li>
+<li><strong>Serving and APIs:</strong>
+<ul>
+<li>Added the Anthropic Messages API (<code>/v1/messages</code>) and extended the Responses API.</li>
+<li>Added a gRPC server and multi-process HTTP frontends.</li>
+<li>Added per-request <code>priority</code> and named-function <code>tool_choice</code> to the OpenAI-compatible APIs.</li>
+<li>Added <code>auto</code> tool and reasoning parser selection, and GLM-4.7, GLM-5 and Laguna tool parsers.</li>
+<li>Added Prometheus metrics and <code>/start_profile</code> and <code>/stop_profile</code> profiling endpoints.</li>
+<li>Added <code>trtllm-serve</code> options <code>--served_model_name</code>, <code>--kv_cache_dtype</code> and <code>--middleware</code>.</li>
+<li>Added Completions API logprobs and acceptance of <code>parallel_tool_calls</code>.</li>
+</ul>
+</li>
+<li><strong>Sampling and LoRA:</strong>
+<ul>
+<li>Added <code>min_p</code>, <code>bad_words</code>, repetition/frequency/presence penalties, full beam search options and processed logprobs to TorchSampler.</li>
+<li>Added an experimental <code>thinking_token_budget</code> for reasoning models.</li>
+<li>Added multi-LoRA serving with CUDA graphs, per-expert MoE LoRA and dense FP8 LoRA.</li>
+</ul>
+</li>
+<li><strong>Others:</strong>
+<ul>
+<li>Added prefix-aware scheduling, enabled by default, to avoid duplicate prefill of shared prefixes.</li>
+<li>Added prefill and breakable CUDA Graph support, and custom attention masks in the TRTLLM attention backend.</li>
+<li>Added a multimodal encoder cache and CUDA graphs for multimodal encoders.</li>
+<li>Added inflight weight updates for RL workflows.</li>
+<li>Added <code>/v1/embeddings</code> and an <code>llm.encode()</code> fast path for encoder-only models.</li>
+<li>Added prototype ModelExpress checkpoint loading.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><strong>Migration Guide:</strong> Added the <a href="legacy/tensorrt-backend-removal.md">TensorRT Backend Removed migration guide</a>.</li>
+<li><strong>Deployment Guides:</strong> Added deployment guides for GLM-5, Kimi K3, MiniMax-M3, Nemotron 3, Qwen3.8-Flash-Next and Qwen3.8/Qwen3.5.</li>
+<li><strong>Feature Documentation:</strong> Added guides for KV cache compression, embeddings, ModelExpress, sub-agent routing and encoder-decoder models, and restructured the installation guide.</li>
+<li><strong>Developer Guides:</strong> Added guides for sparse attention, KV cache compression, telemetry and custom kernels.</li>
+<li><strong>Tech Blogs:</strong> Published blogs on:
+<ul>
+<li>&quot;<a href="./blogs/tech_blog/blog16_Accelerating_Long_Context_Inference_with_Skip_Softmax_Attention.md">Accelerating Long-Context Inference with Skip Softmax Attention</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog17_Sparse_Attention_in_TensorRT-LLM.md">Sparse Attention in TensorRT LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog18_Optimizing_MoE_Communication_with_One_Sided_AlltoAll_Over_NVLink.md">Optimizing MoE Communication with One-Sided AlltoAll Over NVLink</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog19_DWDP_Distributed_Weight_Data_Parallelism_for_High_Performance_LLM_Inference_on_NVL72.md">DWDP: Distributed Weight Data Parallelism for High-Performance LLM Inference on NVL72</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog20_Tuning_CUDA_Graph_Batch_Sizes_for_Higher_Output_Throughput.md">Tuning CUDA Graph Batch Sizes for Higher Output Throughput</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog21_Temporal_Correlation_Meets_Sparse_Attention.md">Temporal Correlation Meets Sparse Attention: Guess-Verify-Refine Top-K for Blackwell</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog22_Helix_Parallelism_Scaling_Multi_Million_Token_Decoding_with_KV_Cache_Sharding.md">Helix Parallelism in TensorRT-LLM: Scaling Multi-Million-Token Decoding with KV Cache Sharding</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog23_Joint_Optimization_of_Agent_Applications_and_TensorRT-LLM.md">Joint Optimization of Agent Applications and TensorRT-LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog24_MoE_as_Dense_GEMM.md">MoE as Dense GEMM: Optimizing Low-Latency MoE Inference on NVIDIA Blackwell</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog26_DeepSeek_V4_on_NVIDIA_Blackwell_Model_Specific_and_Agentic_Workload_Optimizations_in_TensorRT-LLM.md">DeepSeek-V4 on NVIDIA Blackwell: Model-Specific and Agentic-Workload Optimizations in TensorRT LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog27_Evaluating_Agentic_Serving_with_Trace_Replay_and_Job_Level_Metrics.md">Evaluating Agentic Serving with Trace Replay and Job-Level Metrics</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog29_GVR_V2_Self_Sampling_Exact_TopK_for_Sparse_Attention.md">GVR V2: Self-Sampling and Multi-Thresholding for Faster Exact Top-K</a>&quot;</li>
+</ul>
+</li>
+<li>Tech blogs 1–9 were renamed to <code>blog01</code>–<code>blog09</code>, and links to the old file names were updated.</li>
+</ul>
+</li>
+</ul>
+<h3>VisualGen</h3>
+<p>VisualGen is a new vertical solution in TensorRT-LLM for image and video generation models. It is served through <code>trtllm-serve</code> alongside LLM inference. See the <a href="models/visual-generation.md">VisualGen documentation</a> for details.</p>
+<ul>
+<li><strong>Models</strong>
+<ul>
+<li>Added image generation models: FLUX.1, FLUX.2, GLM-Image and Qwen-Image, including Qwen-Image-Edit and Qwen-Image-Layered.</li>
+<li>Added video generation models: Wan 2.2 (including 5B TI2V and FastWan), LTX-2, HunyuanVideo 1.5, Cosmos3 and MiniMax-H3.</li>
+</ul>
+</li>
+<li><strong>Features</strong>
+<ul>
+<li>Added image generation, image editing and video generation endpoints in <code>trtllm-serve</code>.</li>
+<li>Added tensor, context and CFG parallelism, NVFP4 and FP8 quantization, CUDA graphs and runtime LoRA.</li>
+<li>Added TeaCache and Cache-DiT caching, sparse attention, and FlashAttention 4, FlashInfer and cuDNN attention backends.</li>
+<li>Added a <code>trtllm-eval</code> pipeline for VisualGen models.</li>
+</ul>
+</li>
+<li><strong>Documentation</strong>
+<ul>
+<li><a href="https://nvidia.github.io/TensorRT-LLM/examples/visual_gen_examples.html">VisualGen examples</a></li>
+<li>Published tech blogs on:
+<ul>
+<li>&quot;<a href="./blogs/tech_blog/blog25_Scaling_Video_Generation_Across_NVL72_Rack_with_TensorRT-LLM.md">Scaling Video Generation Across NVL72 rack with TensorRT-LLM</a>&quot;</li>
+<li>&quot;<a href="./blogs/tech_blog/blog28_Accelerating_Video_Generation_with_GEMM_Quantization_Attention_Quantization_and_Skip_Softmax_Attention_in_TensorRT-LLM.md">Accelerating Video Generation with GEMM Quantization, Attention Quantization and Skip Softmax Attention in TensorRT-LLM</a>&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Known Issues</strong>
+<ul>
+<li>FLUX.1 checkpoints statically quantized and exported by NVIDIA Model Optimizer may fail to initialize because the exported transformer config sets <code>out_channels</code> to null.</li>
+</ul>
+</li>
+</ul>
+<h3>Infrastructure Changes</h3>
+<ul>
+<li>The base Docker image for TensorRT-LLM is updated to <code>nvcr.io/nvidia/pytorch:26.09-py3</code>.</li>
+<li>The base Docker image for TensorRT-LLM Backend is updated to <code>nvcr.io/nvidia/tritonserver:26.09-py3</code>.</li>
+<li>The dependent CUDA Toolkit version is updated to 13.4.1.</li>
+<li>The dependent public PyTorch version is updated to 2.14.0.</li>
+<li>Python 3.10 and 3.12 are supported.</li>
+<li>TensorRT LLM now provides two sets of pre-built Python wheels, each compatible with a different PyTorch build:
+<ul>
+<li>Upstream public PyTorch: wheels are hosted on PyPI.</li>
+<li>NGC PyTorch container: wheels are released through https://pypi.nvidia.com/trtllm_ngcpytorch/.</li>
+</ul>
+</li>
+<li>TensorRT, NVIDIA ModelOpt and ONNX are no longer dependencies of TensorRT-LLM.</li>
+<li>The dependent transformers version is updated to 5.5.4.</li>
+<li>The dependent flashinfer-python version is updated to 0.6.18.</li>
+<li>The dependent triton version is updated to 3.8.0.</li>
+<li>The dependent NCCL version is updated to 2.31.2.</li>
+<li>The dependent NIXL version is updated to 1.4.0.</li>
+<li>The dependent UCX version is updated to 1.22.</li>
+<li>The dependent CUTLASS version is updated to 4.4.2.</li>
+<li>The dependent xgrammar version is updated to 0.1.32.</li>
+<li>The C++ standard is updated to C++20.</li>
+</ul>
+<h3>API Changes</h3>
+<ul>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] TensorRT backend removed.</strong>&lt;/span&gt; PyTorch is the only backend. <code>trtllm-build</code>, <code>TrtLlmArgs</code>, <code>BuildConfig</code>, <code>MedusaDecodingConfig</code>, <code>LookaheadDecodingConfig</code>, <code>trtllm-bench build</code> and <code>trtllm-bench --engine_dir</code> are removed. See the <a href="legacy/tensorrt-backend-removal.md">migration guide</a>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Legacy C++ Executor and runtime APIs removed.</strong>&lt;/span&gt; The C++ <code>Executor</code> API, the legacy runtime and batch-manager APIs, and the <code>cpp_only</code> build option are removed.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] TensorRT-engine Triton backend models removed.</strong>&lt;/span&gt; Only the <code>llmapi</code> Triton model remains.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] TRTLLMSampler removed.</strong>&lt;/span&gt; <code>TorchSampler</code>, which requires FlashInfer, is the only sampler. The <code>sampler_type</code> argument is ignored with a warning, and <code>disable_flashinfer_sampling</code> is removed.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Two-model speculative decoding removed.</strong>&lt;/span&gt; The <code>eagle3_one_model</code> and <code>mtp_eagle_one_model</code> fields are removed; use the one-model implementations.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] AutoDeploy, Star Attention and WIDEEP removed.</strong>&lt;/span&gt; AutoDeploy and Star Attention are removed, and the WIDEEP MoE backend can no longer be selected.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] CLI flags override YAML config.</strong>&lt;/span&gt; Explicit <code>trtllm-serve</code>, <code>trtllm-eval</code> and <code>trtllm-bench</code> flags now take precedence over YAML config values.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] KV cache transfer timeout defaults to 60 seconds.</strong>&lt;/span&gt; Previously there was no timeout; set it with <code>cache_transceiver_config.kv_transfer_timeout_ms</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Per-request chat templates are opt-in.</strong>&lt;/span&gt; Enable them with <code>trtllm-serve --allow_request_chat_template</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Logprobs capped at 100.</strong>&lt;/span&gt; Larger <code>logprobs</code> or <code>prompt_logprobs</code> values raise a <code>ValueError</code>.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] <code>/perf_metrics</code> endpoint removed.</strong>&lt;/span&gt; Use the <code>X-TRTLLM-return-metrics: 1</code> request header instead.</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Dynamic speculation fields renamed.</strong>&lt;/span&gt; Use <code>acceptance_rate_window_size</code> and <code>acceptance_rate_threshold</code>; the threshold is now an acceptance rate in [0, 1].</li>
+<li>&lt;span style=&quot;color: red&quot;&gt;<strong>[BREAKING CHANGE] Obsolete options removed.</strong>&lt;/span&gt; This includes Eagle <code>choices</code> and <code>trtllm-serve --fail_fast_on_attention_window_too_large</code>.</li>
+<li>NVFP4 cold-page compression remains opt-in and disabled by default. When enabled for DeepSeek-V4, NoPE uses NVFP4 and RoPE now defaults to 2FP4 (<code>nvfp4_residual_dim=64</code>). Set <code>skip_rope_quantization=True</code> to keep RoPE at its original precision, as before, or <code>nvfp4_residual_dim=0</code> to use single NVFP4. The active GPU KV-cache dtype is unchanged. See the <a href="">NVFP4 cold-page compression example</a>.</li>
+<li><strong>[DEPRECATION]</strong> The TRITON MoE backend (<code>TritonFusedMoE</code>, <code>moe_config.backend=&quot;TRITON&quot;</code>) is deprecated as of TensorRT-LLM 1.3 (2026-09) and will be removed after the 3-month migration period. Its only remaining role is a modest performance edge for GPT-OSS on Hopper with <code>W4A16_MXFP4</code> — the single configuration <code>AUTO</code> resolves to TRITON, and the format an MXFP4 GPT-OSS checkpoint takes on SM90. As the model set and the supported platforms keep growing, a single-scenario MoE path is no longer worth its maintenance cost. <code>moe_config.backend=&quot;CUTLASS&quot;</code> replaces it functionally on Hopper: it serves <code>W4A16_MXFP4</code> on SM90 along with the unquantized BF16 and FP8 per-tensor paths, and MoE backend resolution already degrades to it automatically when TRITON declines a layer. During the migration period TRITON keeps working and logs a one-time warning. See the <a href="https://github.com/NVIDIA/TensorRT-LLM#deprecation-policy">deprecation policy</a>.</li>
+<li><strong>[DEPRECATION]</strong> The <code>trtllm-serve</code> options <code>--backend</code>, <code>--moe_cluster_parallel_size</code> and <code>--metrics-log-interval</code>, and the <code>trtllm-eval</code> option <code>--backend</code>, are deprecated.</li>
+<li><strong>[DEPRECATION]</strong> <code>TorchCompileConfig.enable_piecewise_cuda_graph</code> and <code>capture_num_tokens</code>, <code>MTPDecodingConfig.num_nextn_predict_layers</code>, and <code>perf_metrics_max_requests</code> are deprecated.</li>
+<li><strong>[DEPRECATION]</strong> Disaggregated serving without <code>internal_request_auth_key</code> is deprecated. Set the same key in the disaggregated server config and every worker config.</li>
+<li>Usage telemetry is on by default. To opt out, set <code>TRTLLM_NO_USAGE_STATS=1</code> or <code>DO_NOT_TRACK=1</code>, pass <code>--no-telemetry</code> to the CLI, or set <code>telemetry_config=TelemetryConfig(disabled=True)</code> in the LLM API. See the <a href="developer-guide/telemetry.md">telemetry guide</a>.</li>
+<li>GPT-OSS defaults to the TRTLLM MoE backend on Blackwell.</li>
+<li><code>TorchCompileConfig.max_num_streams</code> now defaults to 3 instead of 1.</li>
+</ul>
+<h3>Fixed Issues</h3>
+<ul>
+<li><strong>Disaggregated Serving:</strong>
+<ul>
+<li>Fixed a hang with context pipeline parallelism and generation tensor parallelism, a known issue in 1.2.</li>
+<li>Fixed hangs with block reuse after eviction and gen-only asynchronous KV transfer.</li>
+<li>Fixed an error on one rank crashing all generation ranks.</li>
+</ul>
+</li>
+<li><strong>Attention:</strong>
+<ul>
+<li>Fixed an illegal memory access when <code>max_seq_len</code> exceeds <code>max_position_embeddings</code>.</li>
+<li>Fixed an XQA race condition, attention sink accuracy and a sliding window illegal memory access.</li>
+<li>Fixed FP8 accuracy with Skip Softmax Attention.</li>
+<li>Fixed a DeepSeek-V3.2 illegal memory access with CUDA graphs and host KV cache offload.</li>
+</ul>
+</li>
+<li><strong>Speculative Decoding:</strong> Fixed EAGLE3 crashes on Qwen3-235B-A22B NVFP4 and MTP crashes on Nemotron Super on Hopper.</li>
+<li><strong>KV Cache:</strong> Fixed accuracy loss with VSWA and block reuse, and free-block counter corruption with host offload.</li>
+<li><strong>Pipeline Parallelism:</strong> Fixed hangs with MTP, guided decoding and executor shutdown.</li>
+<li><strong>MoE:</strong> Fixed a DeepEP hang caused by non-deterministic garbage collection.</li>
+<li><strong>Kernels:</strong> Fixed Qwen2.5 mixed-precision accuracy, two-shot AllReduce accuracy and FP8 block-scale GEMM NaN outputs.</li>
+<li><strong>Sampling:</strong> Fixed <code>ignore_eos</code> suppressing the wrong token in TorchSampler, and NaN sampling parameters are now rejected.</li>
+<li><strong>General:</strong> Fixed encoder-decoder beam search corruption and out-of-memory errors with many LoRA adapters or during checkpoint prefetch.</li>
+</ul>
+<h3>Known Issues</h3>
+<ul>
+<li>Kimi-K3 NVFP4 may fail to load its tokenizer with the bundled transformers version.</li>
+<li>In disaggregated serving with DSpark speculative decoding, the draft KV cache is not transferred to the generation worker, which lowers the acceptance rate. Aggregated serving is not affected.</li>
+<li>GLM-5.2 NVFP4 on GB200 (TP=8, attention DP disabled) may segfault during warmup when <code>max_num_tokens</code> is greater than 4096. Keep <code>max_num_tokens</code> at 4096 or lower.</li>
+<li>Disaggregated serving of Nemotron-3-Super-120B-A12B FP8 on B300 may fail when concurrency exceeds the maximum batch size.</li>
+<li>Disaggregated serving of Qwen3-32B-FP8 on B300 may produce incorrect output.</li>
+<li>The <code>/v1/responses</code> endpoint has compatibility gaps with some input formats, streaming events, conversation continuation and tool calls (Qwen3, GPT-OSS).</li>
+<li>Encoder-decoder models with an FP8 KV cache can overrun the cross-attention KV cache pool, causing an illegal memory access or incorrect output.</li>
+<li>Qwen3-32B with TP=4 on AWS p4d (A100) may segfault during autotuner warmup when the <code>aws-ofi-nccl</code> plugin is enabled.</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM">NVIDIA/TensorRT-LLM</a> · <code>v1.3.0</code> · 2026-11-20 · <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.3.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <span></span> <a href="/releases/tensorrt-llm/1.2.1"> <span class="k">Anterior →</span> <span class="t">v1.2.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.3.0" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank" rel="noopener"> <span>NVIDIA/TensorRT-LLM</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Nesta página</div> <nav> <a href="#" class="lv3">Principais recursos e melhorias</a><a href="#" class="lv3">VisualGen</a><a href="#" class="lv3">Mudanças na infraestrutura</a><a href="#" class="lv3">API Mudanças</a><a href="#" class="lv3">Problemas corrigidos</a><a href="#" class="lv3">Problemas conhecidos</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/tensorrt-llm/1.3.0" aria-current="true"> <span class="v">v1.3.0</span> <span class="d">26-11-20</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.2.1"> <span class="v">v1.2.1</span> <span class="d">26-04-20</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.2.0"> <span class="v">v1.2.0</span> <span class="d">26-03-12</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.1.0"> <span class="v">v1.1.0</span> <span class="d">25-12-19</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.0.0"> <span class="v">v1.0.0</span> <span class="d">25-09-24</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.21.0"> <span class="v">v0.21.0</span> <span class="d">25-08-04</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.20.0"> <span class="v">v0.20.0</span> <span class="d">25-06-19</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.19.0"> <span class="v">v0.19.0</span> <span class="d">25-05-09</span> </a> </li> </ul> <a href="/pt/releases/tensorrt-llm" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

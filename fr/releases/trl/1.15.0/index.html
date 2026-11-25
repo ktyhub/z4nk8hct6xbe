@@ -1,0 +1,574 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>trl v1.15.0 — STAGS NextStack</title><meta name="description" content="SFT, DPO, KTO, GRPO, RLOO and Distillation now score tokens with a fused LM head: a Triton kernel projects the hidden states through the LM head in tiles and reduces to per-token log-probs and entropy directly, so the…"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/trl/1.15.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/trl/1.15.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/trl/1.15.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/trl/1.15.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="trl v1.15.0 — STAGS NextStack"><meta property="og:description" content="SFT, DPO, KTO, GRPO, RLOO and Distillation now score tokens with a fused LM head: a Triton kernel projects the hidden states through the LM head in tiles and reduces to per-token log-probs and entropy directly, so the…"><meta property="og:url" content="https://www.stags.cn/fr/releases/trl/1.15.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/trl/1.15.0/#article","headline":"trl v1.15.0 release notes","datePublished":"2026-10-08","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/huggingface/trl"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/trl/1.15.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/trl/trl_v1.15.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/trl/1.15.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/trl/1.15.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/trl/1.15.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/trl/1.15.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/trl/1.15.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/trl">trl</a> </nav> <h1 class="detail-title"> <span class="p">trl</span> v1.15.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>8 oct. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener"> <span class="k">Source</span>huggingface/trl </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/trl/1.15.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/trl/1.15.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>trl v1.15.0</h1>
+&lt;img width=&quot;1672&quot; height=&quot;941&quot; alt=&quot;Vanne industrielle à prise néon&quot; src=&quot;https://github.com/user-attachments/assets/329793d4-cef1-49ae-9ab6-5b1387d13071&quot; /&gt;
+## Fonctionnalités
+### ⚡ Tête LM fusionnée : jusqu'à 6.9 × séquences plus longues sur le même GPU
+SFT, DPO, KTO, GRPO, RLOO et Distillation marquent désormais les jetons avec une **tête LM fusionnée** : un noyau Triton projette les états cachés à travers la tête LM dans des tuiles et les réduit directement aux log-probs et à l'entropie par jeton, de sorte que le tenseur des logits `[batch, seq, vocab]` n'est jamais construit. Il est **activé par défaut**, il n'y a rien à allumer.
+**Longueur maximale de la séquence pouvant être entraînée** (gemma-3-1b, 262 000 mots de vocabulaire, 79 Gio de mémoire GPU, bf16, taille de lot 1, points de contrôle de dégradé, sdpa) :
+| Formateur | v1.14.2 | v1.15.0 | |
+| --- | --- | --- | --- |
+| DPD | 10 240 | **59 392** | **5.80×** |
+| KTO (taille du lot 2) | 9 216 | **63 488** | **6.89×** |
+| GRPO (notation uniquement) | 28 672 | **114 688** | **4.00×** |
+| RLOO (notation uniquement) | 23 552 | **100 352** | **4.26×** |
+| SFT (`loss_type=&quot;nll&quot;`) | 20 480 | **107 520** | **5.25×** |
+| SFT (`chunked_nll` par défaut) | 107 520 | 107 520 | 1.00× |
+**À 8 192 jetons**, la mémoire maximale chute de 52 % à 82 % et les étapes sont de 2.3 % à 10.9 % plus rapides :
+| Formateur | Pic GiB v1.14.2 → v1.15.0 | Jetons/s |
+| --- | --- | --- |
+| DPD | 48.97 → **12.00** (-75.5%) | 1.035× |
+| KTO | 64.91 → **11.98** (-81.5%) | 1.045× |
+| GRPO | 24.15 → **10.30** (-57.4%) | 1.023× |
+| RLOO | 29.28 → **14.02** (-52.1%) | 1.029× |
+| SFT (`nll`) | 30.33 → **8.87** (-70.7%) | 1.029× |
+Le gain est plus important pour les petits modèles dotés de vocabulaires volumineux. La valeur par défaut précédente de SFT (`chunked_nll`) évitait déjà les logits complets, elle reste donc inchangée. La notation nécessite Triton sur un GPU (Linux avec CUDA, ROCm ou XPU).
+**💥 Ce que cela change pour vous.** Le chemin de notation full-logits, le chemin fragmenté `use_liger_kernel` et `_forward_redirection` ont disparu de GRPO, RLOO, DPO et KTO :
+* Un adaptateur PEFT **sur `lm_head`** se lève désormais. Utilisez plutôt `modules_to_save=[&quot;lm_head&quot;]`.
+* `use_liger_kernel=True` est obsolète dans ces quatre formateurs et sera supprimé dans v2.0.0. Les noyaux de couche de Liger s'appliquent toujours, mais `fused_linear_cross_entropy` est forcé à `False` (cela remplacerait la tête fusionnée) et sa configuration augmente explicitement. Utilisez `model_init_kwargs={&quot;use_kernels&quot;: True}`.
+* Dans DPO et KTO, `compute_metrics` et `compute_loss(..., return_outputs=True)` reçoivent toujours les logits complets, d'une passe avant supplémentaire effectuée uniquement lorsqu'ils sont utilisés. Les deux avertissent que ceci est obsolète et sera supprimé dans v2.0.0.
+Rien d'autre que les formateurs ont enregistré n'est perdu : le noyau a gagné `log_sum_sq_probs` (pondération WPO), `mean_logits` (`logits/chosen`, `logits/rejected`) et `is_top1` (`mean_token_accuracy` du DPO) comme sorties opt-in, chacune vérifiée par rapport aux logits complets lors des tests.
+&lt;détails&gt;
+&lt;summary&gt;Détails de l'analyse comparative&lt;/summary&gt;
+1 × B300 avec l'allocateur PyTorch plafonné à 79 Gio (environ la mémoire utilisable d'un H100 de 80 Go), `google/gemma-3-1b-pt` construit à partir de sa configuration avec des poids bf16 aléatoires, lr 1e-6, AdamW, identifiants de jetons synthétiques de longueur exacte. Longueur maximale : un nouveau processus par tentative, 2 étapes de formation, doublant de 8k puis bissection à 1024 jetons, bras entrelacés à tour de rôle dans le même travail. Débit : 12 étapes, les 2 premières supprimées, la médiane de 3 répétitions A/B/A/B dans le même travail. Le bruit de fond (A vs A) est compris entre 0.1 % et 0.8 %, soit en dessous de chaque écart signalé. GRPO/RLOO remplace la génération par des complétions aléatoires fixes, de sorte que seul le score est mesuré.
+Non mesuré : matériel H100 lui-même, attention flash (sdpa uniquement), génération réelle, multi-GPU.
+&lt;/détails&gt;
+* Calculez les log-probabilités fragmentées avec un noyau Triton par @qgallouedec dans https://github.com/huggingface/trl/pull/7386
+* Ajoutez une tête LM fusionnée opt-in au patch patché par @qgallouedec dans https://github.com/huggingface/trl/pull/7387
+* 💥 Marquez les jetons GRPO et RLOO avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7389
+* 💥 Marquez les tokens DPO et KTO avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7390
+* Marquez des jetons SFT avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7466
+* Calculez la divergence de distillation avec un noyau Triton par @qgallouedec dans https://github.com/huggingface/trl/pull/7465
+* Calculez uniquement les sorties de tête LM fusionnées demandées par @qgallouedec dans https://github.com/huggingface/trl/pull/7406
+* Renommez `patch_fused_lm_head` en `add_fused_lm_head` par @qgallouedec dans https://github.com/huggingface/trl/pull/7415
+* Honorez `logits_scaling` et `lm_head_multiplier` dans la tête LM fusionnée par @YaseenBashaT dans https://github.com/huggingface/trl/pull/7439
+* Correction de la tête LM fusionnée pour les modèles répartis sur plusieurs appareils par @albertvillanova dans https://github.com/huggingface/trl/pull/7479
+### Points de contrôle d'activation sélective dans SFT
+Avec les points de contrôle de gradient activés, la sortie d'attention est désormais enregistrée pendant l'avant au lieu d'être recalculée en arrière, récupérant la majeure partie du ralentissement des points de contrôle dans un contexte long pour un tenseur supplémentaire de la taille d'un état caché par couche. Même approche SAC enthousiaste que Torchtitan utilise sous FSDP2, aucun `torch.compile` n'est nécessaire.
+```python
+SFTConfig(
+    gradient_checkpointing=True,
+    gradient_checkpointing_kwargs={&quot;selective&quot;: True},
+)
+```
+PEFT + DeepSpeed ZeRO-3 est rejeté : cette combinaison nécessite un point de contrôle réentrant, que SAC ne peut pas utiliser.
+par @kashif dans https://github.com/huggingface/trl/pull/7194
+### Perte de l'assistant uniquement sur les ensembles de données de vision dans SFT
+`assistant_only_loss=True` fonctionne désormais sur les ensembles de données de vision. `SFTTrainer` le refusait parce que les processeurs ne renvoyaient pas les masques d'assistant utilisables une fois les espaces réservés aux images développés ; [transformers#48793](https://github.com/huggingface/transformers/pull/48793) a corrigé ce problème et il est livré dans `transformers` 5.18.
+```python
+SFTConfig(assistant_only_loss=True)  # now fine with an image dataset
+```
+L'assembleur de vision tokenise les exemples conversationnels via le `apply_chat_template` du processeur et demande aux masques assistants de masquer les jetons non assistants dans les étiquettes. L'ancien `transformers` apparaît toujours, maintenant avec la version requise dans le message.
+par @albertvillanova dans https://github.com/huggingface/trl/pull/7377
+### Conversations dans le tableau des complétions
+Les invites et les achèvements sont enregistrés sous forme de listes de conversations brutes au lieu de chaînes plates de `batch_decode`, de sorte que le tableau s'affiche tour à tour. Beaucoup plus lisible pour les configurations multi-tours et d'appel d'outils, ainsi que pour les VLM.
+&lt;img width=&quot;1627&quot; alt=&quot;Tableau des complétions rendu tour à tour&quot; src=&quot;https://github.com/user-attachments/assets/649cf786-d4e5-4955-b486-ff7cd8d7439b&quot; /&gt;
+L'invite système rendue (y compris les définitions d'outils injectées par le modèle de discussion) n'est plus visible, car les messages d'origine sont affichés plutôt que la chaîne entièrement modélisée.
+par @qgallouedec dans https://github.com/huggingface/trl/pull/5309
+### AsyncGRPO et AsyncDistillation
+* AsyncGRPO : entraînez les harnais OpenEnv à partir de captures de jetons validées par @adithya-s-k dans https://github.com/huggingface/trl/pull/6947
+* Ajout du support PEFT au `AsyncDistillationTrainer` par @kashif dans https://github.com/huggingface/trl/pull/7476
+* Correction des complétions en double dans les groupes AsyncGRPO avec vLLM parallèle aux données par @lewtun dans https://github.com/huggingface/trl/pull/7549
+### Autre
+* Ajoutez un modèle de chat original et de formation SmolVLM avec des marqueurs de génération par @aazizyan dans https://github.com/huggingface/trl/pull/5868
+* Déclarez la mise à l'échelle de la perte d'accumulation de gradient avec `loss_is_scaled_for_ga` par @qgallouedec dans https://github.com/huggingface/trl/pull/7508
+* Gardez la perte MoE aux de SFT indépendante de la taille du monde et de l'accumulation de gradient par @qgallouedec dans https://github.com/huggingface/trl/pull/7570
+* Découvrez les outils d'environnement sur la classe, pas sur l'instance de @Rome-1 dans https://github.com/huggingface/trl/pull/7360
+* Acceptez un IPv6 `base_url` dans `VLLMClient` par @qgallouedec dans https://github.com/huggingface/trl/pull/7462
+* Passer les kwargs du processeur via `processor_kwargs` dans l'assembleur VLM SFT par @qgallouedec dans https://github.com/huggingface/trl/pull/7547
+* Appelez `trainer.end()` à la fin des scripts et exemples par @qgallouedec dans https://github.com/huggingface/trl/pull/7384
+* Installez vLLM dans les images TRL Docker par @qgallouedec dans https://github.com/huggingface/trl/pull/7464
+* Entraînez les harnais via Harbor : déposez l'exemple opencode autonome de @sergiopaniego dans https://github.com/huggingface/trl/pull/7457
+* Ajout du support pour vLLM 0.31.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7567
+## Modifications et suppressions avec rupture
+* **Abandonnez le support Python 3.10** par @qgallouedec dans https://github.com/huggingface/trl/pull/7497
+* **Refusez `nn.DataParallel`** (et abandonnez le travail de test lent multi-GPU) par @qgallouedec dans https://github.com/huggingface/trl/pull/7407
+* **Supprimez l'entraîneur expérimental MiniLLM** par @qgallouedec dans https://github.com/huggingface/trl/pull/7500
+* **`use_liger_kernel` est obsolète** dans `DPOTrainer`, `KTOTrainer`, `GRPOTrainer` et `RLOOTrainer` et sera supprimé dans v2.0.0. Ces entraîneurs utilisent désormais la tête LM fusionnée, donc seuls les noyaux de couche de Liger s'appliquent ; utilisez plutôt `model_init_kwargs={&quot;use_kernels&quot;: True}`. Documents mis à jour par @qgallouedec dans https://github.com/huggingface/trl/pull/7535
+* Supprimez le support de vLLM 0.20.0 / 0.20.1 / 0.20.2 par @qgallouedec dans https://github.com/huggingface/trl/pull/7435, https://github.com/huggingface/trl/pull/7499 et https://github.com/huggingface/trl/pull/7568
+* Supprimez le `prepare_multimodal_messages_vllm` inaccessible par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6946
+## Correctifs
+* **Correction de la dérive des modèles de discussion** : reconnaissez les modèles de discussion LFM2 (#7494) et LFM2.5 (#7493) actuels, les autres révisions de Gemma 4 (#7495), analysez les appels d'outils LFM2 actuels (#7522) et lisez les modèles livrés en tant que variantes nommées par leur variante par défaut (#7530), le tout par @albertvillanova
+* **Correction de `SFTTrainer` n'ajoutant pas EOS lorsque `dataset_text_field` n'est pas `&quot;text&quot;`** par @JoeyTan21 dans https://github.com/huggingface/trl/pull/7446
+* **Fin des complétions sur chaque identifiant eos déclaré par le modèle** dans GRPO, RLOO et Distillation par @albertvillanova dans https://github.com/huggingface/trl/pull/7505, et dans les entraîneurs expérimentaux dans https://github.com/huggingface/trl/pull/7506
+* **Démarrez la complétion là où l'invite tokenisée et l'invite + la complétion divergent** par @qgallouedec dans https://github.com/huggingface/trl/pull/7463
+* **Correction du crash du mode serveur lors de la première synchronisation du poids sur vLLM 0.20 vers 0.25** par @albertvillanova dans https://github.com/huggingface/trl/pull/7410
+* **Générer une complétion par échantillon après les appels d'outils en mode serveur vLLM** par @qgallouedec dans https://github.com/huggingface/trl/pull/7418
+* **Correction de `precompute_ref_log_probs` sous FSDP sans modèle de référence** par @qgallouedec dans https://github.com/huggingface/trl/pull/7507
+* **Gardez la perte DFT limitée sur un lot sans jetons pouvant être entraînés** par @albertvillanova dans https://github.com/huggingface/trl/pull/7471
+* **Gardez les importations `requests` et `urllib3` dans le vLLM client** par @qgallouedec dans https://github.com/huggingface/trl/pull/7545, et dans le vLLM asynchrone expérimental clients par @albertvillanova dans https://github.com/huggingface/trl/pull/7561
+* `fix(cpo, orpo)` : tronquer les réponses indépendamment pour éviter les complétions vides par @RohanMali2003 dans https://github.com/huggingface/trl/pull/6588
+* Correction du surcompte des FLOP pour les modèles avec des intégrations de mots non liées par @jayzuccarelli dans https://github.com/huggingface/trl/pull/7450
+* `[MFU]` Utilisez les flops de pointe de l'appareil au lieu des H100 codés en dur par @dwarez dans https://github.com/huggingface/trl/pull/7197
+* Correction d'un défaut de segmentation sur Apple Silicon lors du chargement de points de contrôle bf16 à partir d'un ID de modèle par @albertvillanova dans https://github.com/huggingface/trl/pull/7455
+* Conservez le vecteur de magnitude DoRA dans float32 sous QLoRA par @qgallouedec dans https://github.com/huggingface/trl/pull/7342
+* Correction des récompenses de résultat OpenReward manquantes par @adithya-s-k dans https://github.com/huggingface/trl/pull/7467
+* Gardez le premier jeton du tour suivant hors du masque d'assistant Llava-Next de @albertvillanova dans https://github.com/huggingface/trl/pull/7375
+* Attachez les poids après avoir chargé les modèles à code distant avec transformateurs 5.3.0 par @albertvillanova dans https://github.com/huggingface/trl/pull/7559
+* Rendre SDFT importable sans peft et aligner SSD par @albertvillanova dans https://github.com/huggingface/trl/pull/7562
+* Préserver `model_init_kwargs` explicite dans les scripts CLI par @DaoyuanLi2816 dans https://github.com/huggingface/trl/pull/7394
+* Honorez `resume_from_checkpoint` dans les scripts CLI par @DaoyuanLi2816 dans https://github.com/huggingface/trl/pull/7391
+* Seed avant de créer le modèle pour que l'initialisation de l'adaptateur PEFT soit reproductible par @qgallouedec dans https://github.com/huggingface/trl/pull/7385, et dans les entraîneurs expérimentaux par @albertvillanova dans https://github.com/huggingface/trl/pull/7401
+* Supprimez la méthode de démarrage d'apparition redondante de `trl vllm-serve` par @albertvillanova dans https://github.com/huggingface/trl/pull/7379
+* `FIX` : `test_offloading_with_peft_models` sur L40, enregistrez les paramètres du modèle dans les tests de déchargement d'activation par @AmineDiro dans https://github.com/huggingface/trl/pull/7380
+* Lâchez la cible LoRA `gate_proj` morte de l'exemple Nemotron 3 SFT par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6866
+* Ciblez le Mamba `in_proj` dans l'exemple Nemotron 3 LoRA par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6870
+* Remplacez la garde d'introspection dans `sft_qwen3_8b_1m_context.py` par une vérification de version par @kumarrah2002 dans https://github.com/huggingface/trl/pull/7537
+##Documents
+* Développez le guide de formation Jobs par @davanstrien dans https://github.com/huggingface/trl/pull/7441
+* Documentez la configuration de l'allocateur `expandable_segments` pour le réglage de la mémoire par @akshansh47 dans https://github.com/huggingface/trl/pull/5794
+* Mise à jour &quot;What's New&quot; pour la tête fusionnée LM par @qgallouedec dans https://github.com/huggingface/trl/pull/7593
+* Documentez chaque modèle de discussion stocké et vérifiez-le dans CI par @albertvillanova dans https://github.com/huggingface/trl/pull/7502
+* Documentez le contenu d'une version de correctif par @albertvillanova dans https://github.com/huggingface/trl/pull/7440
+* Directives de validation des entrées de documents par @albertvillanova dans https://github.com/huggingface/trl/pull/7472
+* Déballez les paragraphes emballés dans la documentation par @qgallouedec dans https://github.com/huggingface/trl/pull/7405
+* Décourager `SimpleNamespace`, `object.__new__` et moqueries dans les tests dans les instructions agent par @qgallouedec dans https://github.com/huggingface/trl/pull/7459
+* Exiger que les nouveaux contributeurs associent un numéro qui leur a été attribué par @qgallouedec dans https://github.com/huggingface/trl/pull/7313
+* Étendre la politique d'utilisation de l'IA aux problèmes de @albertvillanova dans https://github.com/huggingface/trl/pull/7473
+* Exiger que les rapports de bugs indiquent comment le problème a été rencontré par @albertvillanova dans https://github.com/huggingface/trl/pull/7474
+* L'étiquette CONTRIBUTING.md change en tant que documentation par @albertvillanova dans https://github.com/huggingface/trl/pull/7475
+##CI
+**Couverture des modèles de discussion**, pour que la dérive cesse de se reproduire, le tout par @albertvillanova : documentez chaque modèle de discussion stocké et vérifiez-le dans CI (#7502), ajoutez un script vérifiant que les dépôts de référence Hub expédient toujours un modèle de discussion stocké (#7523), vérifiez-le chaque semaine (#7521) et conservez la révision LFM2 précédente sous test (#7527)
+**Alignement de la configuration sur un petit modèle**, poursuivant le balayage, le tout par @albertvillanova : sections mrope DeepSeek-V3 (#7398) et V3-0528 (#7399), GPT-OSS (#7424), Qwen2-VL (#7425) et Qwen2.5-VL (#7426), Nemotron-3-Nano (#7443), Nemotron-3.5-Lightning (#7444), Nemotron-3-Super (#7447), Nemotron-3-Ultra (#7448), LFM2 (#7400), LFM2.5 (#7532)
+**Qualité des tests**, en suivant la règle &quot;objets réels, pas simulés&quot;, le tout par @albertvillanova : créez de vrais entraîneurs au lieu de `object.__new__` dans les tests GRPO et SDFT (#7531), créez de vraies configurations au lieu de `SimpleNamespace` dans les tests GOLD et GKD (#7564), créez les boucles de déploiement asynchrones via `__init__` (#7555), exécutez les tests de boucle de déploiement asynchrone GRPO sur le réel tokenizer et analyseur de réponses (#7556), aligner les tests de perte DFT sur une sortie de modèle réel (#7481)
+**Hygiène de la suite**, le tout par @albertvillanova sauf indication contraire : déplacez les tests de formation vLLM (#7488), de traitement par lots continu (#7487) et de déchargement d'activation SFT (#7477) vers la suite standard, décochez les tests vLLM client/server comme lents (#7490), exécutez-les sur un seul travailleur xdist (#7489), remplacez les tests lents SFT par un test fp16 (#7550), supprimez les tests Gemma 3n toujours ignorés (#7485), supprimez les marqueurs lents et low_priority sans opération (#7486), arrêtez de rediriger la sortie du serveur de test vLLM (#7414), exécutez le serveur de test VLM sur le dernier accélérateur visible (#7412), testez le vLLM client par rapport à la commande `vllm serve` documentée (#7378), injectez `MODEL_REVISIONS` dans les chargeurs automatiques (#7528), mettez en miroir le jeton de pad sur la configuration du modèle dans les tests de rappel (#7383), supprimez le filtre d'avertissement de collecte DataParallel (#7554), associez la suppression du filtre d'avertissement de diffusion automatique mamba-ssm aux transformateurs 5.6 (#7431), supprimez le workflow de nettoyage nocturne du cache (#7395), étendez les autorisations `GITHUB_TOKEN` par tâche en @hf-security-analysis (#7381), suppression de la broche du workflow doc-builder par @paulinebm (#7542), suppression du groupe Dependabot (#7411)
+**Correctifs** : xfail le test de traitement par lots continu GRPO sous DataParallel (#7422), xfail Qwen3.5-MoE VLM teste par rapport à une version de développement de transformateurs cassée (#7437) et revient une fois corrigé (#7460)
+## Nouveaux contributeurs
+* @dwarez a apporté sa première contribution dans https://github.com/huggingface/trl/pull/7197
+* @Rome-1 a apporté sa première contribution dans https://github.com/huggingface/trl/pull/7360
+* @JoeyTan21 a apporté sa première contribution dans https://github.com/huggingface/trl/pull/7446
+* @jayzuccarelli a fait sa première contribution dans https://github.com/huggingface/trl/pull/7450
+* @RohanMali2003 a fait sa première contribution dans https://github.com/huggingface/trl/pull/6588
+* @kumarrah2002 a fait sa première contribution dans https://github.com/huggingface/trl/pull/7537
+## Ce qui a changé
+* ⬆️ Version dev Bump par @albertvillanova dans https://github.com/huggingface/trl/pull/7393
+* Portée des autorisations GITHUB_TOKEN par tâche par @hf-security-analysis[bot] dans https://github.com/huggingface/trl/pull/7381
+* Mettez en miroir le jeton du pad sur la configuration du modèle dans les tests de rappel par @albertvillanova dans https://github.com/huggingface/trl/pull/7383
+* Supprimez la méthode de démarrage d'apparition redondante de `trl vllm-serve` par @albertvillanova dans https://github.com/huggingface/trl/pull/7379
+* Seed avant de créer le modèle pour que l'initialisation de l'adaptateur PEFT soit reproductible par @qgallouedec dans https://github.com/huggingface/trl/pull/7385
+* Calculez les log-probabilités fragmentées avec un noyau Triton par @qgallouedec dans https://github.com/huggingface/trl/pull/7386
+* Ajoutez une tête LM fusionnée opt-in au patch patché par @qgallouedec dans https://github.com/huggingface/trl/pull/7387
+* Déballez les paragraphes emballés dans la documentation par @qgallouedec dans https://github.com/huggingface/trl/pull/7405
+* Marquez les jetons GRPO et RLOO avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7389
+* Correction du crash du mode serveur lors de la première synchronisation du poids sur vLLM 0.20 vers 0.25 par @albertvillanova dans https://github.com/huggingface/trl/pull/7410
+* Bump le groupe &quot;github-actions-and-pre-commit&quot; avec 2 mises à jour sur plusieurs écosystèmes par @dependabot[bot] dans https://github.com/huggingface/trl/pull/7411
+* Seed avant de créer le modèle dans des entraîneurs expérimentaux par @albertvillanova dans https://github.com/huggingface/trl/pull/7401
+* Alignez la petite configuration DeepSeek-V3-0528 avec deepseek-ai/DeepSeek-R1-0528 de @albertvillanova dans https://github.com/huggingface/trl/pull/7399
+* Hotfix CI : échec du test de traitement par lots continu GRPO sous DataParallel par @albertvillanova dans https://github.com/huggingface/trl/pull/7422
+* Alignez la petite configuration DeepSeek-V3 avec deepseek-ai/DeepSeek-R1 par @albertvillanova dans https://github.com/huggingface/trl/pull/7398
+* Supprimez le workflow de nettoyage nocturne du cache par @albertvillanova dans https://github.com/huggingface/trl/pull/7395
+* [Fix] Générer une complétion par échantillon après les appels d'outils en mode serveur vLLM par @qgallouedec dans https://github.com/huggingface/trl/pull/7418
+* Préserver les model_init_kwargs explicites dans les scripts CLI par @DaoyuanLi2816 dans https://github.com/huggingface/trl/pull/7394
+* Honorez CV_from_checkpoint dans les scripts CLI par @DaoyuanLi2816 dans https://github.com/huggingface/trl/pull/7391
+* Appelez trainer.end() à la fin des scripts et exemples de @qgallouedec dans https://github.com/huggingface/trl/pull/7384
+* Renommez `patch_fused_lm_head` en `add_fused_lm_head` par @qgallouedec dans https://github.com/huggingface/trl/pull/7415
+* Correctif CI : Xfail Qwen3.5-MoE VLM teste un développeur de transformateurs cassé construit par @albertvillanova dans https://github.com/huggingface/trl/pull/7437
+* Alignez la petite configuration GPT-OSS avec openai/gpt-oss-20b par @albertvillanova dans https://github.com/huggingface/trl/pull/7424
+* Alignez le petit Qwen2-VL mrope_section avec Qwen/Qwen2-VL-2B-Instruct de @albertvillanova dans https://github.com/huggingface/trl/pull/7425
+* Alignez le petit Qwen2.5-VL mrope_section avec Qwen/Qwen2.5-VL-3B-Instruct de @albertvillanova dans https://github.com/huggingface/trl/pull/7426
+* Développez le guide de formation Jobs par @davanstrien dans https://github.com/huggingface/trl/pull/7441
+* Gardez le premier jeton du tour suivant hors du masque d'assistant Llava-Next de @albertvillanova dans https://github.com/huggingface/trl/pull/7375
+* Attachez la suppression du filtre d'avertissement de diffusion automatique mamba-ssm aux transformateurs 5.6 par @albertvillanova dans https://github.com/huggingface/trl/pull/7431
+* Arrêtez de diffuser la sortie du serveur de test vLLM afin qu'il ne masque plus les erreurs ou ne bloque plus le serveur par @albertvillanova dans https://github.com/huggingface/trl/pull/7414
+* Exécutez le serveur de test VLM sur le dernier accélérateur visible pour qu'il puisse démarrer sur des GPU de 24 Go par @albertvillanova dans https://github.com/huggingface/trl/pull/7412
+* Alignez la petite configuration Nemotron-3-Nano avec nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 par @albertvillanova dans https://github.com/huggingface/trl/pull/7443
+* Alignez la petite configuration Nemotron-3.5-Lightning avec nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 par @albertvillanova dans https://github.com/huggingface/trl/pull/7444
+* Alignez la petite configuration Nemotron-3-Super avec nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 par @albertvillanova dans https://github.com/huggingface/trl/pull/7447
+* Alignez la petite configuration Nemotron-3-Ultra avec nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 par @albertvillanova dans https://github.com/huggingface/trl/pull/7448
+* Correction du surcompte des FLOP pour les modèles avec des intégrations de mots non liées par @jayzuccarelli dans https://github.com/huggingface/trl/pull/7450
+* Ajoutez des points de contrôle d'activation sélectifs (SAC) à SFT par @kashif dans https://github.com/huggingface/trl/pull/7194
+* Correction de SFTTrainer n'ajoutant pas EOS lorsque `dataset_text_field` n'est pas `&quot;text&quot;` par @JoeyTan21 dans https://github.com/huggingface/trl/pull/7446
+* Exiger que les nouveaux contributeurs associent un numéro qui leur a été attribué par @qgallouedec dans https://github.com/huggingface/trl/pull/7313
+* Annulez xfail pour les tests Qwen3.5-MoE VLM maintenant que les transformateurs ont corrigé router_logits par @albertvillanova dans https://github.com/huggingface/trl/pull/7460
+* Supprimez le support de vLLM 0.20.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7435
+* [MFU] Utilisez les flops de pointe de l'appareil au lieu des H100 codés en dur par @dwarez dans https://github.com/huggingface/trl/pull/7197
+* Correction d'un défaut de segmentation sur Apple Silicon lors du chargement de points de contrôle bf16 à partir d'un ID de modèle par @albertvillanova dans https://github.com/huggingface/trl/pull/7455
+* Testez le vLLM client par rapport à la commande `vllm serve` documentée par @albertvillanova dans https://github.com/huggingface/trl/pull/7378
+* Prise en charge de la perte par l'assistant uniquement pour les ensembles de données de vision dans SFT par @albertvillanova dans https://github.com/huggingface/trl/pull/7377
+* AsyncGRPO : entraînez les harnais OpenEnv à partir de captures de jetons validées par @adithya-s-k dans https://github.com/huggingface/trl/pull/6947
+* Décourager SimpleNamespace, object.__new__ et les simulations dans les tests dans les instructions d'agent par @qgallouedec dans https://github.com/huggingface/trl/pull/7459
+* Acceptez une base_url IPv6 dans VLLMClient par @qgallouedec dans https://github.com/huggingface/trl/pull/7462
+* CORRECTIF : test_offloading_with_peft_models sur L40. Enregistrez les paramètres du modèle dans les tests de déchargement d'activation par @AmineDiro dans https://github.com/huggingface/trl/pull/7380
+* Supprimez le Prepare_multimodal_messages_vllm inaccessible par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6946
+* docs : documentez la configuration de l'allocateur expandable_segments pour le réglage de la mémoire par @akshansh47 dans https://github.com/huggingface/trl/pull/5794
+* Directives de validation des entrées de documents par @albertvillanova dans https://github.com/huggingface/trl/pull/7472
+* Étendre la politique d'utilisation de l'IA aux problèmes de @albertvillanova dans https://github.com/huggingface/trl/pull/7473
+* Exiger que les rapports de bugs indiquent comment le problème a été rencontré par @albertvillanova dans https://github.com/huggingface/trl/pull/7474
+* L'étiquette CONTRIBUTING.md change en tant que documentation par @albertvillanova dans https://github.com/huggingface/trl/pull/7475
+* Gardez la perte DFT limitée sur un lot sans jetons pouvant être entraînés par @albertvillanova dans https://github.com/huggingface/trl/pull/7471
+* Déplacer le test de déchargement d'activation SFT vers la suite standard par @albertvillanova dans https://github.com/huggingface/trl/pull/7477
+* Conservez le vecteur de magnitude DoRA dans float32 sous QLoRA par @qgallouedec dans https://github.com/huggingface/trl/pull/7342
+* Documentez le contenu d'une version de correctif par @albertvillanova dans https://github.com/huggingface/trl/pull/7440
+* Installez vLLM dans les images TRL Docker par @qgallouedec dans https://github.com/huggingface/trl/pull/7464
+* Supprimez la cible Dead gate_proj LoRA de l'exemple Nemotron 3 SFT par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6866
+* Ciblez le Mamba in_proj dans l'exemple Nemotron 3 LoRA par @behroozazarkhalili dans https://github.com/huggingface/trl/pull/6870
+* Ajoutez un modèle de chat original et de formation SmolVLM avec des marqueurs de génération par @aazizyan dans https://github.com/huggingface/trl/pull/5868
+* Honorez logits_scaling et lm_head_multiplier dans la tête LM fusionnée par @YaseenBashaT dans https://github.com/huggingface/trl/pull/7439
+* Découvrez les outils d'environnement sur la classe, pas sur l'instance de @Rome-1 dans https://github.com/huggingface/trl/pull/7360
+* correctif (cpo, orpo) : tronquer les réponses indépendamment pour éviter les complétions vides par @RohanMali2003 dans https://github.com/huggingface/trl/pull/6588
+* Reconnaître le modèle de chat LFM2.5 actuel par @albertvillanova dans https://github.com/huggingface/trl/pull/7493
+* Reconnaissez les autres révisions du modèle de discussion Gemma 4 par @albertvillanova dans https://github.com/huggingface/trl/pull/7495
+* Exécutez les tests du serveur vLLM sur un seul travailleur xdist par @albertvillanova dans https://github.com/huggingface/trl/pull/7489
+* Démarquez les tests vLLM client/server comme lents par @albertvillanova dans https://github.com/huggingface/trl/pull/7490
+* Reconnaître le modèle de chat LFM2 actuel pour la perte d'assistant uniquement par @albertvillanova dans https://github.com/huggingface/trl/pull/7494
+* Alignez la petite configuration LFM2 avec LiquidAI/LFM2-1.2B par @albertvillanova dans https://github.com/huggingface/trl/pull/7400
+* Supprimez les tests Gemma 3n toujours ignorés par @albertvillanova dans https://github.com/huggingface/trl/pull/7485
+* Supprimez les marqueurs no-op slow et low_priority des tests expérimentaux de @albertvillanova dans https://github.com/huggingface/trl/pull/7486
+* Déplacez le test de formation vLLM vers la suite standard et ajoutez-le à RLOO par @albertvillanova dans https://github.com/huggingface/trl/pull/7488
+* Supprimez le support Python 3.10 par @qgallouedec dans https://github.com/huggingface/trl/pull/7497
+* Supprimez le support de vLLM 0.20.1 par @qgallouedec dans https://github.com/huggingface/trl/pull/7499
+* Entraînez les harnais via Harbour : déposez l'exemple opencode autonome de @sergiopaniego dans https://github.com/huggingface/trl/pull/7457
+* Correction de `precompute_ref_log_probs` sous FSDP sans modèle de référence par @qgallouedec dans https://github.com/huggingface/trl/pull/7507
+* Correction des récompenses de résultat OpenReward manquantes par @adithya-s-k dans https://github.com/huggingface/trl/pull/7467
+* Correction de la tête LM fusionnée pour les modèles répartis sur plusieurs appareils par @albertvillanova dans https://github.com/huggingface/trl/pull/7479
+* Injectez MODEL_REVISIONS dans le tokenizer automatique et les chargeurs de processeur lors des tests réalisés par @albertvillanova dans https://github.com/huggingface/trl/pull/7528
+* Alignez la petite configuration LFM2.5 avec LiquidAI/LFM2.5-230M par @albertvillanova dans https://github.com/huggingface/trl/pull/7532
+* Ajoutez un script vérifiant que les dépôts de référence du Hub expédient toujours un modèle de discussion stocké par @albertvillanova dans https://github.com/huggingface/trl/pull/7523
+* Vérifiez chaque semaine que les dépôts de référence du Hub expédient toujours un modèle de discussion stocké par @albertvillanova dans https://github.com/huggingface/trl/pull/7521
+* Alignez les tests de perte DFT sur un modèle réel sorti par @albertvillanova dans https://github.com/huggingface/trl/pull/7481
+* Documentez chaque modèle de discussion stocké et vérifiez-le dans CI par @albertvillanova dans https://github.com/huggingface/trl/pull/7502
+* Bump doc-builder workflow pin par @paulinebm dans https://github.com/huggingface/trl/pull/7542
+* Supprimez l'entraîneur expérimental MiniLLM de @qgallouedec dans https://github.com/huggingface/trl/pull/7500
+* Refusez nn.DataParallel et abandonnez le travail de test lent multi-GPU par @qgallouedec dans https://github.com/huggingface/trl/pull/7407
+* Remplacez la garde d'introspection dans sft_qwen3_8b_1m_context.py par une vérification de version par @kumarrah2002 dans https://github.com/huggingface/trl/pull/7537
+* Correction : démarrez la complétion là où l'invite tokenisée et l'invite + la complétion divergent par @qgallouedec dans https://github.com/huggingface/trl/pull/7463
+* Afficher les conversations au lieu du texte décodé dans le tableau des complétions par @qgallouedec dans https://github.com/huggingface/trl/pull/5309
+* Terminer les complétions sur chaque identifiant eos déclaré par le modèle dans GRPO, RLOO et Distillation par @albertvillanova dans https://github.com/huggingface/trl/pull/7505
+* Garder les requêtes et importations urllib3 dans le vLLM client par @qgallouedec dans https://github.com/huggingface/trl/pull/7545
+* Ajout du support PEFT à AsyncDistillationTrainer par @kashif dans https://github.com/huggingface/trl/pull/7476
+* Correction des complétions en double dans les groupes AsyncGRPO avec vLLM parallèle aux données par @lewtun dans https://github.com/huggingface/trl/pull/7549
+* Terminer les complétions sur chaque identifiant eos déclaré par le modèle dans les entraîneurs expérimentaux par @albertvillanova dans https://github.com/huggingface/trl/pull/7506
+* Construisez de vrais formateurs au lieu d'object.__new__ dans les tests GRPO et SDFT par @albertvillanova dans https://github.com/huggingface/trl/pull/7531
+* Déplacez le test par lots continu vers la suite standard et ajoutez-le à RLOO par @albertvillanova dans https://github.com/huggingface/trl/pull/7487
+* Transmettez les kwargs du processeur via processeur_kwargs dans l'assembleur VLM SFT par @qgallouedec dans https://github.com/huggingface/trl/pull/7547
+* Calculez uniquement les sorties de tête LM fusionnées demandées par @qgallouedec dans https://github.com/huggingface/trl/pull/7406
+* Marquez les jetons DPO et KTO avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7390
+* Ajout du support pour vLLM 0.31.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7567
+* Supprimez le support de vLLM 0.20.2 par @qgallouedec dans https://github.com/huggingface/trl/pull/7568
+* Marquez des jetons SFT avec la tête LM fusionnée par @qgallouedec dans https://github.com/huggingface/trl/pull/7466
+* Analyser les appels d'outils du modèle de chat LFM2 actuel par @albertvillanova dans https://github.com/huggingface/trl/pull/7522
+* Gardez la révision précédente du modèle de discussion LFM2 sous test par @albertvillanova dans https://github.com/huggingface/trl/pull/7527
+* Lisez les modèles de discussion expédiés sous forme de variantes nommées par leur variante par défaut par @albertvillanova dans https://github.com/huggingface/trl/pull/7530
+* Remplacez les tests lents SFT par un test fp16 par @albertvillanova dans https://github.com/huggingface/trl/pull/7550
+* Supprimez le filtre d'avertissement de collecte DataParallel par @albertvillanova dans https://github.com/huggingface/trl/pull/7554
+* Attachez les poids après avoir chargé les modèles à code distant avec transformateurs 5.3.0 par @albertvillanova dans https://github.com/huggingface/trl/pull/7559
+* Protégez l'importation des requêtes dans le vLLM asynchrone expérimental clients par @albertvillanova dans https://github.com/huggingface/trl/pull/7561
+* Rendre SDFT importable sans peft et aligner SSD par @albertvillanova dans https://github.com/huggingface/trl/pull/7562
+* Créez de vraies configurations au lieu de SimpleNamespace dans les tests GOLD et GKD par @albertvillanova dans https://github.com/huggingface/trl/pull/7564
+* Gardez la perte MoE aux de SFT indépendante de la taille du monde et de l'accumulation de gradient par @qgallouedec dans https://github.com/huggingface/trl/pull/7570
+* Créez les boucles de déploiement asynchrones dans les tests via __init__ par @albertvillanova dans https://github.com/huggingface/trl/pull/7555
+* Exécutez les tests de boucle de déploiement asynchrone GRPO sur le véritable tokenizer et l'analyseur de réponses par @albertvillanova dans https://github.com/huggingface/trl/pull/7556
+* Calculez la divergence de distillation avec un noyau Triton par @qgallouedec dans https://github.com/huggingface/trl/pull/7465
+* Supprimez le `use_liger_kernel` obsolète de la documentation par @qgallouedec dans https://github.com/huggingface/trl/pull/7535
+* Déclarez la mise à l'échelle de la perte d'accumulation de gradient avec `loss_is_scaled_for_ga` par @qgallouedec dans https://github.com/huggingface/trl/pull/7508
+* Mise à jour &quot;What's New&quot; pour la tête fusionnée LM par @qgallouedec dans https://github.com/huggingface/trl/pull/7593
+* Sortie : v1.15 par @qgallouedec dans https://github.com/huggingface/trl/pull/7594
+**Changelog complet** : https://github.com/huggingface/trl/compare/v1.14.0...v1.15.0
+---
+&gt; **Source** [huggingface/trl](https://github.com/huggingface/trl) · `v1.15.0` · 2026-10-08 · [version en amont](https://github.com/huggingface/trl/releases/tag/v1.15.0)
+*Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.*</div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>trl v1.15.0</h1>
+&lt;img width=&quot;1672&quot; height=&quot;941&quot; alt=&quot;Neon-Gripped Industrial Valve&quot; src=&quot;https://github.com/user-attachments/assets/329793d4-cef1-49ae-9ab6-5b1387d13071&quot; /&gt;
+<h2>Features</h2>
+<h3>⚡ Fused LM head: up to 6.9× longer sequences on the same GPU</h3>
+<p>SFT, DPO, KTO, GRPO, RLOO and Distillation now score tokens with a <strong>fused LM head</strong>: a Triton kernel projects the hidden states through the LM head in tiles and reduces to per-token log-probs and entropy directly, so the <code>[batch, seq, vocab]</code> logits tensor is never built. It is <strong>on by default</strong>, there is nothing to turn on.</p>
+<p><strong>Max trainable sequence length</strong> (gemma-3-1b, 262k vocabulary, 79 GiB of GPU memory, bf16, batch size 1, gradient checkpointing, sdpa):</p>
+<p>| Trainer | v1.14.2 | v1.15.0 | |
+| --- | --- | --- | --- |
+| DPO | 10,240 | <strong>59,392</strong> | <strong>5.80×</strong> |
+| KTO (batch size 2) | 9,216 | <strong>63,488</strong> | <strong>6.89×</strong> |
+| GRPO (scoring only) | 28,672 | <strong>114,688</strong> | <strong>4.00×</strong> |
+| RLOO (scoring only) | 23,552 | <strong>100,352</strong> | <strong>4.26×</strong> |
+| SFT (<code>loss_type=&quot;nll&quot;</code>) | 20,480 | <strong>107,520</strong> | <strong>5.25×</strong> |
+| SFT (default <code>chunked_nll</code>) | 107,520 | 107,520 | 1.00× |</p>
+<p><strong>At 8,192 tokens</strong>, peak memory drops 52% to 82% and steps are 2.3% to 10.9% faster:</p>
+<p>| Trainer | Peak GiB v1.14.2 → v1.15.0 | Tokens/s |
+| --- | --- | --- |
+| DPO | 48.97 → <strong>12.00</strong> (-75.5%) | 1.035× |
+| KTO | 64.91 → <strong>11.98</strong> (-81.5%) | 1.045× |
+| GRPO | 24.15 → <strong>10.30</strong> (-57.4%) | 1.023× |
+| RLOO | 29.28 → <strong>14.02</strong> (-52.1%) | 1.029× |
+| SFT (<code>nll</code>) | 30.33 → <strong>8.87</strong> (-70.7%) | 1.029× |</p>
+<p>The gain is largest for small models with large vocabularies. SFT's previous default (<code>chunked_nll</code>) already avoided full logits, so it is unchanged. Scoring needs Triton on a GPU (Linux with CUDA, ROCm or XPU).</p>
+<p><strong>💥 What this changes for you.</strong> The full-logits scoring path, the <code>use_liger_kernel</code> chunked path and <code>_forward_redirection</code> are gone from GRPO, RLOO, DPO and KTO:</p>
+<ul>
+<li>A PEFT adapter <strong>on <code>lm_head</code></strong> now raises. Use <code>modules_to_save=[&quot;lm_head&quot;]</code> instead.</li>
+<li><code>use_liger_kernel=True</code> is deprecated in these four trainers and will be removed in v2.0.0. Liger's layer kernels still apply, but <code>fused_linear_cross_entropy</code> is forced to <code>False</code> (it would replace the fused head) and setting it explicitly raises. Use <code>model_init_kwargs={&quot;use_kernels&quot;: True}</code>.</li>
+<li>In DPO and KTO, <code>compute_metrics</code> and <code>compute_loss(..., return_outputs=True)</code> still receive the full logits, from an extra forward pass taken only when they are used. Both warn that this is deprecated and will be removed in v2.0.0.</li>
+</ul>
+<p>Nothing else the trainers logged is lost: the kernel gained <code>log_sum_sq_probs</code> (WPO weighting), <code>mean_logits</code> (<code>logits/chosen</code>, <code>logits/rejected</code>) and <code>is_top1</code> (DPO's <code>mean_token_accuracy</code>) as opt-in outputs, each checked against the full logits in tests.</p>
+&lt;details&gt;
+&lt;summary&gt;Benchmark details&lt;/summary&gt;
+<p>1× B300 with the PyTorch allocator capped at 79 GiB (about an H100 80GB's usable memory), <code>google/gemma-3-1b-pt</code> built from its config with random bf16 weights, lr 1e-6, AdamW, synthetic token ids at exact length. Max length: one fresh process per attempt, 2 training steps, doubling from 8k then bisection to 1024 tokens, arms interleaved round-robin in the same job. Throughput: 12 steps, first 2 discarded, median of 3 A/B/A/B repeats in the same job. Noise floor (A vs A) is 0.1% to 0.8%, below every gap reported. GRPO/RLOO replace generation with fixed random completions, so only scoring is measured.</p>
+<p>Not measured: H100 hardware itself, flash-attention (sdpa only), real generation, multi-GPU.</p>
+&lt;/details&gt;
+<ul>
+<li>Compute the chunked log-probabilities with a Triton kernel by @qgallouedec in https://github.com/huggingface/trl/pull/7386</li>
+<li>Add an opt-in fused LM head to the patched forward by @qgallouedec in https://github.com/huggingface/trl/pull/7387</li>
+<li>💥 Score GRPO and RLOO tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7389</li>
+<li>💥 Score DPO and KTO tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7390</li>
+<li>Score SFT tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7466</li>
+<li>Compute the distillation divergence with a Triton kernel by @qgallouedec in https://github.com/huggingface/trl/pull/7465</li>
+<li>Compute only the requested fused LM head outputs by @qgallouedec in https://github.com/huggingface/trl/pull/7406</li>
+<li>Rename <code>patch_fused_lm_head</code> to <code>add_fused_lm_head</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7415</li>
+<li>Honor <code>logits_scaling</code> and <code>lm_head_multiplier</code> in the fused LM head by @YaseenBashaT in https://github.com/huggingface/trl/pull/7439</li>
+<li>Fix the fused LM head for models split across devices by @albertvillanova in https://github.com/huggingface/trl/pull/7479</li>
+</ul>
+<h3>Selective activation checkpointing in SFT</h3>
+<p>With gradient checkpointing on, the attention output is now saved during the forward instead of being recomputed in the backward, recovering most of the checkpointing slowdown at long context for one extra hidden-state-sized tensor per layer. Same eager SAC approach torchtitan uses under FSDP2, no <code>torch.compile</code> needed.</p>
+<pre><code class="language-python">SFTConfig(
+    gradient_checkpointing=True,
+    gradient_checkpointing_kwargs={&quot;selective&quot;: True},
+)
+</code></pre>
+<p>PEFT + DeepSpeed ZeRO-3 is rejected: that combination needs reentrant checkpointing, which SAC cannot use.</p>
+<p>by @kashif in https://github.com/huggingface/trl/pull/7194</p>
+<h3>Assistant-only loss on vision datasets in SFT</h3>
+<p><code>assistant_only_loss=True</code> now works on vision datasets. <code>SFTTrainer</code> used to refuse it because processors did not return usable assistant masks once image placeholders were expanded; <a href="https://github.com/huggingface/transformers/pull/48793">transformers#48793</a> fixed that, and it ships in <code>transformers</code> 5.18.</p>
+<pre><code class="language-python">SFTConfig(assistant_only_loss=True)  # now fine with an image dataset
+</code></pre>
+<p>The vision collator tokenizes conversational examples through the processor's <code>apply_chat_template</code> and requests the assistant masks to mask non-assistant tokens in the labels. Older <code>transformers</code> still raises, now with the required version in the message.</p>
+<p>by @albertvillanova in https://github.com/huggingface/trl/pull/7377</p>
+<h3>Conversations in the completions table</h3>
+<p>Prompts and completions are logged as raw conversation lists instead of <code>batch_decode</code>'d flat strings, so the table renders turn by turn. Much more readable for multi-turn and tool-calling setups, and for VLMs.</p>
+&lt;img width=&quot;1627&quot; alt=&quot;Completions table rendered turn by turn&quot; src=&quot;https://github.com/user-attachments/assets/649cf786-d4e5-4955-b486-ff7cd8d7439b&quot; /&gt;
+<p>The rendered system prompt (including tool definitions injected by the chat template) is no longer visible, since the original messages are shown rather than the fully-templated string.</p>
+<p>by @qgallouedec in https://github.com/huggingface/trl/pull/5309</p>
+<h3>AsyncGRPO and AsyncDistillation</h3>
+<ul>
+<li>AsyncGRPO: train OpenEnv harnesses from validated token captures by @adithya-s-k in https://github.com/huggingface/trl/pull/6947</li>
+<li>Add PEFT support to <code>AsyncDistillationTrainer</code> by @kashif in https://github.com/huggingface/trl/pull/7476</li>
+<li>Fix duplicate completions in AsyncGRPO groups with data-parallel vLLM by @lewtun in https://github.com/huggingface/trl/pull/7549</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Add SmolVLM original and training chat template with generation markers by @aazizyan in https://github.com/huggingface/trl/pull/5868</li>
+<li>Declare gradient accumulation loss scaling with <code>loss_is_scaled_for_ga</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7508</li>
+<li>Keep SFT's MoE aux loss independent of world size and gradient accumulation by @qgallouedec in https://github.com/huggingface/trl/pull/7570</li>
+<li>Discover environment tools on the class, not the instance by @Rome-1 in https://github.com/huggingface/trl/pull/7360</li>
+<li>Accept an IPv6 <code>base_url</code> in <code>VLLMClient</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7462</li>
+<li>Pass processor kwargs via <code>processor_kwargs</code> in the VLM SFT collator by @qgallouedec in https://github.com/huggingface/trl/pull/7547</li>
+<li>Call <code>trainer.end()</code> at the end of the scripts and examples by @qgallouedec in https://github.com/huggingface/trl/pull/7384</li>
+<li>Install vLLM in the TRL Docker images by @qgallouedec in https://github.com/huggingface/trl/pull/7464</li>
+<li>Train harnesses through Harbor: drop the standalone opencode example by @sergiopaniego in https://github.com/huggingface/trl/pull/7457</li>
+<li>Add support for vLLM 0.31.0 by @qgallouedec in https://github.com/huggingface/trl/pull/7567</li>
+</ul>
+<h2>Breaking changes and removals</h2>
+<ul>
+<li><strong>Drop Python 3.10 support</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7497</li>
+<li><strong>Refuse <code>nn.DataParallel</code></strong> (and drop the multi-GPU slow test job) by @qgallouedec in https://github.com/huggingface/trl/pull/7407</li>
+<li><strong>Remove the experimental MiniLLM trainer</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7500</li>
+<li><strong><code>use_liger_kernel</code> is deprecated</strong> in <code>DPOTrainer</code>, <code>KTOTrainer</code>, <code>GRPOTrainer</code> and <code>RLOOTrainer</code> and will be removed in v2.0.0. These trainers now use the fused LM head, so only Liger's layer kernels apply; use <code>model_init_kwargs={&quot;use_kernels&quot;: True}</code> instead. Docs updated by @qgallouedec in https://github.com/huggingface/trl/pull/7535</li>
+<li>Drop vLLM 0.20.0 / 0.20.1 / 0.20.2 support by @qgallouedec in https://github.com/huggingface/trl/pull/7435, https://github.com/huggingface/trl/pull/7499 and https://github.com/huggingface/trl/pull/7568</li>
+<li>Remove the unreachable <code>prepare_multimodal_messages_vllm</code> by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6946</li>
+</ul>
+<h2>Fixes</h2>
+<ul>
+<li><strong>Fix chat template drift</strong>: recognize the current LFM2 (#7494) and LFM2.5 (#7493) chat templates, the other Gemma 4 revisions (#7495), parse the current LFM2 tool calls (#7522), and read templates shipped as named variants by their default variant (#7530), all by @albertvillanova</li>
+<li><strong>Fix <code>SFTTrainer</code> not appending EOS when <code>dataset_text_field</code> is not <code>&quot;text&quot;</code></strong> by @JoeyTan21 in https://github.com/huggingface/trl/pull/7446</li>
+<li><strong>End completions on every eos id the model declares</strong> in GRPO, RLOO and Distillation by @albertvillanova in https://github.com/huggingface/trl/pull/7505, and in the experimental trainers in https://github.com/huggingface/trl/pull/7506</li>
+<li><strong>Start the completion where the tokenized prompt and prompt+completion diverge</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7463</li>
+<li><strong>Fix the server-mode crash at the first weight sync on vLLM 0.20 to 0.25</strong> by @albertvillanova in https://github.com/huggingface/trl/pull/7410</li>
+<li><strong>Generate one completion per sample after tool calls in vLLM server mode</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7418</li>
+<li><strong>Fix <code>precompute_ref_log_probs</code> under FSDP with no reference model</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7507</li>
+<li><strong>Keep the DFT loss finite on a batch with no trainable tokens</strong> by @albertvillanova in https://github.com/huggingface/trl/pull/7471</li>
+<li><strong>Guard the <code>requests</code> and <code>urllib3</code> imports in the vLLM client</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7545, and in the experimental async vLLM clients by @albertvillanova in https://github.com/huggingface/trl/pull/7561</li>
+<li><code>fix(cpo, orpo)</code>: truncate responses independently to prevent empty completions by @RohanMali2003 in https://github.com/huggingface/trl/pull/6588</li>
+<li>Fix FLOPs overcount for models with untied word embeddings by @jayzuccarelli in https://github.com/huggingface/trl/pull/7450</li>
+<li><code>[MFU]</code> Use device peak flops instead of hardcoded H100's by @dwarez in https://github.com/huggingface/trl/pull/7197</li>
+<li>Fix segfault on Apple Silicon when loading bf16 checkpoints from a model ID by @albertvillanova in https://github.com/huggingface/trl/pull/7455</li>
+<li>Keep the DoRA magnitude vector in float32 under QLoRA by @qgallouedec in https://github.com/huggingface/trl/pull/7342</li>
+<li>Fix missing OpenReward outcome rewards by @adithya-s-k in https://github.com/huggingface/trl/pull/7467</li>
+<li>Keep the next turn's first token out of the Llava-Next assistant mask by @albertvillanova in https://github.com/huggingface/trl/pull/7375</li>
+<li>Tie weights after loading remote-code models with transformers 5.3.0 by @albertvillanova in https://github.com/huggingface/trl/pull/7559</li>
+<li>Make SDFT importable without peft and align SSD by @albertvillanova in https://github.com/huggingface/trl/pull/7562</li>
+<li>Preserve explicit <code>model_init_kwargs</code> in CLI scripts by @DaoyuanLi2816 in https://github.com/huggingface/trl/pull/7394</li>
+<li>Honor <code>resume_from_checkpoint</code> in CLI scripts by @DaoyuanLi2816 in https://github.com/huggingface/trl/pull/7391</li>
+<li>Seed before creating the model so the PEFT adapter init is reproducible by @qgallouedec in https://github.com/huggingface/trl/pull/7385, and in experimental trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7401</li>
+<li>Drop the redundant spawn start method from <code>trl vllm-serve</code> by @albertvillanova in https://github.com/huggingface/trl/pull/7379</li>
+<li><code>FIX</code>: <code>test_offloading_with_peft_models</code> on L40, register model params in activation offloading tests by @AmineDiro in https://github.com/huggingface/trl/pull/7380</li>
+<li>Drop the dead <code>gate_proj</code> LoRA target from the Nemotron 3 SFT example by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6866</li>
+<li>Target the Mamba <code>in_proj</code> in the Nemotron 3 LoRA example by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6870</li>
+<li>Replace the introspection guard in <code>sft_qwen3_8b_1m_context.py</code> with a version check by @kumarrah2002 in https://github.com/huggingface/trl/pull/7537</li>
+</ul>
+<h2>Documentation</h2>
+<ul>
+<li>Expand the Jobs training guide by @davanstrien in https://github.com/huggingface/trl/pull/7441</li>
+<li>Document <code>expandable_segments</code> allocator config for memory tuning by @akshansh47 in https://github.com/huggingface/trl/pull/5794</li>
+<li>Update &quot;What's New&quot; for the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7593</li>
+<li>Document every stored chat template and check it in CI by @albertvillanova in https://github.com/huggingface/trl/pull/7502</li>
+<li>Document what goes into a patch release by @albertvillanova in https://github.com/huggingface/trl/pull/7440</li>
+<li>Document input validation guidelines by @albertvillanova in https://github.com/huggingface/trl/pull/7472</li>
+<li>Unwrap hard-wrapped paragraphs in the docs by @qgallouedec in https://github.com/huggingface/trl/pull/7405</li>
+<li>Discourage <code>SimpleNamespace</code>, <code>object.__new__</code> and mocks in tests in the agent instructions by @qgallouedec in https://github.com/huggingface/trl/pull/7459</li>
+<li>Require first-time contributors to link an issue assigned to them by @qgallouedec in https://github.com/huggingface/trl/pull/7313</li>
+<li>Extend the AI usage policy to issues by @albertvillanova in https://github.com/huggingface/trl/pull/7473</li>
+<li>Require bug reports to state how the problem was hit by @albertvillanova in https://github.com/huggingface/trl/pull/7474</li>
+<li>Label CONTRIBUTING.md changes as documentation by @albertvillanova in https://github.com/huggingface/trl/pull/7475</li>
+</ul>
+<h2>CI</h2>
+<p><strong>Chat template coverage</strong>, so drift stops recurring, all by @albertvillanova: document every stored chat template and check it in CI (#7502), add a script checking that reference Hub repos still ship a stored chat template (#7523), check it weekly (#7521), and keep the earlier LFM2 revision under test (#7527)</p>
+<p><strong>Tiny-model config alignment</strong>, continuing the sweep, all by @albertvillanova: DeepSeek-V3 (#7398) and V3-0528 (#7399), GPT-OSS (#7424), Qwen2-VL (#7425) and Qwen2.5-VL (#7426) mrope sections, Nemotron-3-Nano (#7443), Nemotron-3.5-Lightning (#7444), Nemotron-3-Super (#7447), Nemotron-3-Ultra (#7448), LFM2 (#7400), LFM2.5 (#7532)</p>
+<p><strong>Test quality</strong>, following the &quot;real objects, not mocks&quot; rule, all by @albertvillanova: build real trainers instead of <code>object.__new__</code> in the GRPO and SDFT tests (#7531), build real configs instead of <code>SimpleNamespace</code> in the GOLD and GKD tests (#7564), build the async rollout loops through <code>__init__</code> (#7555), run the async GRPO rollout loop tests on the real tokenizer and response parser (#7556), align the DFT loss tests on a real model output (#7481)</p>
+<p><strong>Suite hygiene</strong>, all by @albertvillanova unless noted: move the vLLM training (#7488), continuous batching (#7487) and SFT activation offloading (#7477) tests to the regular suite, unmark the vLLM client/server tests as slow (#7490), run them on a single xdist worker (#7489), replace the SFT slow tests with an fp16 test (#7550), remove the always-skipped Gemma 3n tests (#7485), drop the no-op slow and low_priority markers (#7486), stop piping the vLLM test server output (#7414), run the VLM test server on the last visible accelerator (#7412), test the vLLM client against the documented <code>vllm serve</code> command (#7378), inject <code>MODEL_REVISIONS</code> into the Auto loaders (#7528), mirror the pad token onto the model config in the callback tests (#7383), remove the DataParallel gather warning filter (#7554), tie the mamba-ssm autocast warning filter removal to transformers 5.6 (#7431), remove the nightly cache cleanup workflow (#7395), scope <code>GITHUB_TOKEN</code> permissions per job by @hf-security-analysis (#7381), bump the doc-builder workflow pin by @paulinebm (#7542), Dependabot group bump (#7411)</p>
+<p><strong>Hotfixes</strong>: xfail the GRPO continuous batching test under DataParallel (#7422), xfail Qwen3.5-MoE VLM tests against a broken transformers dev build (#7437) and revert once fixed (#7460)</p>
+<h2>New Contributors</h2>
+<ul>
+<li>@dwarez made their first contribution in https://github.com/huggingface/trl/pull/7197</li>
+<li>@Rome-1 made their first contribution in https://github.com/huggingface/trl/pull/7360</li>
+<li>@JoeyTan21 made their first contribution in https://github.com/huggingface/trl/pull/7446</li>
+<li>@jayzuccarelli made their first contribution in https://github.com/huggingface/trl/pull/7450</li>
+<li>@RohanMali2003 made their first contribution in https://github.com/huggingface/trl/pull/6588</li>
+<li>@kumarrah2002 made their first contribution in https://github.com/huggingface/trl/pull/7537</li>
+</ul>
+<h2>What's Changed</h2>
+<ul>
+<li>⬆️ Bump dev version by @albertvillanova in https://github.com/huggingface/trl/pull/7393</li>
+<li>Scope GITHUB_TOKEN permissions per job by @hf-security-analysis[bot] in https://github.com/huggingface/trl/pull/7381</li>
+<li>Mirror the pad token onto the model config in the callback tests by @albertvillanova in https://github.com/huggingface/trl/pull/7383</li>
+<li>Drop the redundant spawn start method from <code>trl vllm-serve</code> by @albertvillanova in https://github.com/huggingface/trl/pull/7379</li>
+<li>Seed before creating the model so the PEFT adapter init is reproducible by @qgallouedec in https://github.com/huggingface/trl/pull/7385</li>
+<li>Compute the chunked log-probabilities with a Triton kernel by @qgallouedec in https://github.com/huggingface/trl/pull/7386</li>
+<li>Add an opt-in fused LM head to the patched forward by @qgallouedec in https://github.com/huggingface/trl/pull/7387</li>
+<li>Unwrap hard-wrapped paragraphs in the docs by @qgallouedec in https://github.com/huggingface/trl/pull/7405</li>
+<li>Score GRPO and RLOO tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7389</li>
+<li>Fix the server-mode crash at the first weight sync on vLLM 0.20 to 0.25 by @albertvillanova in https://github.com/huggingface/trl/pull/7410</li>
+<li>Bump the &quot;github-actions-and-pre-commit&quot; group with 2 updates across multiple ecosystems by @dependabot[bot] in https://github.com/huggingface/trl/pull/7411</li>
+<li>Seed before creating the model in experimental trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7401</li>
+<li>Align tiny DeepSeek-V3-0528 config with deepseek-ai/DeepSeek-R1-0528 by @albertvillanova in https://github.com/huggingface/trl/pull/7399</li>
+<li>Hotfix CI: xfail the GRPO continuous batching test under DataParallel by @albertvillanova in https://github.com/huggingface/trl/pull/7422</li>
+<li>Align tiny DeepSeek-V3 config with deepseek-ai/DeepSeek-R1 by @albertvillanova in https://github.com/huggingface/trl/pull/7398</li>
+<li>Remove the nightly cache cleanup workflow by @albertvillanova in https://github.com/huggingface/trl/pull/7395</li>
+<li>[Fix] Generate one completion per sample after tool calls in vLLM server mode by @qgallouedec in https://github.com/huggingface/trl/pull/7418</li>
+<li>Preserve explicit model_init_kwargs in CLI scripts by @DaoyuanLi2816 in https://github.com/huggingface/trl/pull/7394</li>
+<li>Honor resume_from_checkpoint in CLI scripts by @DaoyuanLi2816 in https://github.com/huggingface/trl/pull/7391</li>
+<li>Call trainer.end() at the end of the scripts and examples by @qgallouedec in https://github.com/huggingface/trl/pull/7384</li>
+<li>Rename <code>patch_fused_lm_head</code> to <code>add_fused_lm_head</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7415</li>
+<li>Hotfix CI: Xfail Qwen3.5-MoE VLM tests against a broken transformers dev build by @albertvillanova in https://github.com/huggingface/trl/pull/7437</li>
+<li>Align tiny GPT-OSS config with openai/gpt-oss-20b by @albertvillanova in https://github.com/huggingface/trl/pull/7424</li>
+<li>Align tiny Qwen2-VL mrope_section with Qwen/Qwen2-VL-2B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7425</li>
+<li>Align tiny Qwen2.5-VL mrope_section with Qwen/Qwen2.5-VL-3B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7426</li>
+<li>Expand the Jobs training guide by @davanstrien in https://github.com/huggingface/trl/pull/7441</li>
+<li>Keep the next turn's first token out of the Llava-Next assistant mask by @albertvillanova in https://github.com/huggingface/trl/pull/7375</li>
+<li>Tie the mamba-ssm autocast warning filter removal to transformers 5.6 by @albertvillanova in https://github.com/huggingface/trl/pull/7431</li>
+<li>Stop piping the vLLM test server output so it no longer hides errors or blocks the server by @albertvillanova in https://github.com/huggingface/trl/pull/7414</li>
+<li>Run the VLM test server on the last visible accelerator so it can start on 24 GB GPUs by @albertvillanova in https://github.com/huggingface/trl/pull/7412</li>
+<li>Align tiny Nemotron-3-Nano config with nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 by @albertvillanova in https://github.com/huggingface/trl/pull/7443</li>
+<li>Align tiny Nemotron-3.5-Lightning config with nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16 by @albertvillanova in https://github.com/huggingface/trl/pull/7444</li>
+<li>Align tiny Nemotron-3-Super config with nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 by @albertvillanova in https://github.com/huggingface/trl/pull/7447</li>
+<li>Align tiny Nemotron-3-Ultra config with nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 by @albertvillanova in https://github.com/huggingface/trl/pull/7448</li>
+<li>Fix FLOPs overcount for models with untied word embeddings by @jayzuccarelli in https://github.com/huggingface/trl/pull/7450</li>
+<li>Add selective activation checkpointing (SAC) to SFT by @kashif in https://github.com/huggingface/trl/pull/7194</li>
+<li>Fix SFTTrainer not appending EOS when <code>dataset_text_field</code> is not <code>&quot;text&quot;</code> by @JoeyTan21 in https://github.com/huggingface/trl/pull/7446</li>
+<li>Require first-time contributors to link an issue assigned to them by @qgallouedec in https://github.com/huggingface/trl/pull/7313</li>
+<li>Revert xfail for Qwen3.5-MoE VLM tests now that transformers fixed router_logits by @albertvillanova in https://github.com/huggingface/trl/pull/7460</li>
+<li>Drop vLLM 0.20.0 support by @qgallouedec in https://github.com/huggingface/trl/pull/7435</li>
+<li>[MFU] Use device peak flops instead of hardcoded H100's by @dwarez in https://github.com/huggingface/trl/pull/7197</li>
+<li>Fix segfault on Apple Silicon when loading bf16 checkpoints from a model ID by @albertvillanova in https://github.com/huggingface/trl/pull/7455</li>
+<li>Test the vLLM client against the documented <code>vllm serve</code> command by @albertvillanova in https://github.com/huggingface/trl/pull/7378</li>
+<li>Support assistant-only loss for vision datasets in SFT by @albertvillanova in https://github.com/huggingface/trl/pull/7377</li>
+<li>AsyncGRPO: train OpenEnv harnesses from validated token captures by @adithya-s-k in https://github.com/huggingface/trl/pull/6947</li>
+<li>Discourage SimpleNamespace, object.<strong>new</strong> and mocks in tests in agent instructions by @qgallouedec in https://github.com/huggingface/trl/pull/7459</li>
+<li>Accept an IPv6 base_url in VLLMClient by @qgallouedec in https://github.com/huggingface/trl/pull/7462</li>
+<li>FIX:  test_offloading_with_peft_models on L40. Register model params in activation offloading tests by @AmineDiro in https://github.com/huggingface/trl/pull/7380</li>
+<li>Remove the unreachable prepare_multimodal_messages_vllm by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6946</li>
+<li>docs: document expandable_segments allocator config for memory tuning by @akshansh47 in https://github.com/huggingface/trl/pull/5794</li>
+<li>Document input validation guidelines by @albertvillanova in https://github.com/huggingface/trl/pull/7472</li>
+<li>Extend the AI usage policy to issues by @albertvillanova in https://github.com/huggingface/trl/pull/7473</li>
+<li>Require bug reports to state how the problem was hit by @albertvillanova in https://github.com/huggingface/trl/pull/7474</li>
+<li>Label CONTRIBUTING.md changes as documentation by @albertvillanova in https://github.com/huggingface/trl/pull/7475</li>
+<li>Keep the DFT loss finite on a batch with no trainable tokens by @albertvillanova in https://github.com/huggingface/trl/pull/7471</li>
+<li>Move SFT activation offloading test to the regular suite by @albertvillanova in https://github.com/huggingface/trl/pull/7477</li>
+<li>Keep the DoRA magnitude vector in float32 under QLoRA by @qgallouedec in https://github.com/huggingface/trl/pull/7342</li>
+<li>Document what goes into a patch release by @albertvillanova in https://github.com/huggingface/trl/pull/7440</li>
+<li>Install vLLM in the TRL Docker images by @qgallouedec in https://github.com/huggingface/trl/pull/7464</li>
+<li>Drop the dead gate_proj LoRA target from the Nemotron 3 SFT example by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6866</li>
+<li>Target the Mamba in_proj in the Nemotron 3 LoRA example by @behroozazarkhalili in https://github.com/huggingface/trl/pull/6870</li>
+<li>Add SmolVLM original and training chat template with generation markers by @aazizyan in https://github.com/huggingface/trl/pull/5868</li>
+<li>Honor logits_scaling and lm_head_multiplier in the fused LM head by @YaseenBashaT in https://github.com/huggingface/trl/pull/7439</li>
+<li>Discover environment tools on the class, not the instance by @Rome-1 in https://github.com/huggingface/trl/pull/7360</li>
+<li>fix(cpo, orpo): truncate responses independently to prevent empty completions by @RohanMali2003 in https://github.com/huggingface/trl/pull/6588</li>
+<li>Recognize the current LFM2.5 chat template by @albertvillanova in https://github.com/huggingface/trl/pull/7493</li>
+<li>Recognize the other Gemma 4 chat template revisions by @albertvillanova in https://github.com/huggingface/trl/pull/7495</li>
+<li>Run the vLLM server tests on a single xdist worker by @albertvillanova in https://github.com/huggingface/trl/pull/7489</li>
+<li>Unmark the vLLM client/server tests as slow by @albertvillanova in https://github.com/huggingface/trl/pull/7490</li>
+<li>Recognize the current LFM2 chat template for assistant-only loss by @albertvillanova in https://github.com/huggingface/trl/pull/7494</li>
+<li>Align tiny LFM2 config with LiquidAI/LFM2-1.2B by @albertvillanova in https://github.com/huggingface/trl/pull/7400</li>
+<li>Remove the always-skipped Gemma 3n tests by @albertvillanova in https://github.com/huggingface/trl/pull/7485</li>
+<li>Drop the no-op slow and low_priority markers from the experimental tests by @albertvillanova in https://github.com/huggingface/trl/pull/7486</li>
+<li>Move the vLLM training test to the regular suite and add it to RLOO by @albertvillanova in https://github.com/huggingface/trl/pull/7488</li>
+<li>Drop Python 3.10 support by @qgallouedec in https://github.com/huggingface/trl/pull/7497</li>
+<li>Drop vLLM 0.20.1 support by @qgallouedec in https://github.com/huggingface/trl/pull/7499</li>
+<li>Train harnesses through Harbor: drop the standalone opencode example by @sergiopaniego in https://github.com/huggingface/trl/pull/7457</li>
+<li>Fix <code>precompute_ref_log_probs</code> under FSDP with no reference model by @qgallouedec in https://github.com/huggingface/trl/pull/7507</li>
+<li>Fix missing OpenReward outcome rewards by @adithya-s-k in https://github.com/huggingface/trl/pull/7467</li>
+<li>Fix the fused LM head for models split across devices by @albertvillanova in https://github.com/huggingface/trl/pull/7479</li>
+<li>Inject MODEL_REVISIONS into the Auto tokenizer and processor loaders in tests by @albertvillanova in https://github.com/huggingface/trl/pull/7528</li>
+<li>Align tiny LFM2.5 config with LiquidAI/LFM2.5-230M by @albertvillanova in https://github.com/huggingface/trl/pull/7532</li>
+<li>Add a script checking that reference Hub repos still ship a stored chat template by @albertvillanova in https://github.com/huggingface/trl/pull/7523</li>
+<li>Check weekly that reference Hub repos still ship a stored chat template by @albertvillanova in https://github.com/huggingface/trl/pull/7521</li>
+<li>Align the DFT loss tests on a real model output by @albertvillanova in https://github.com/huggingface/trl/pull/7481</li>
+<li>Document every stored chat template and check it in CI by @albertvillanova in https://github.com/huggingface/trl/pull/7502</li>
+<li>Bump doc-builder workflow pin by @paulinebm in https://github.com/huggingface/trl/pull/7542</li>
+<li>Remove the experimental MiniLLM trainer by @qgallouedec in https://github.com/huggingface/trl/pull/7500</li>
+<li>Refuse nn.DataParallel and drop the multi-GPU slow test job by @qgallouedec in https://github.com/huggingface/trl/pull/7407</li>
+<li>Replace the introspection guard in sft_qwen3_8b_1m_context.py with a version check by @kumarrah2002 in https://github.com/huggingface/trl/pull/7537</li>
+<li>Fix: Start the completion where the tokenized prompt and prompt+completion diverge by @qgallouedec in https://github.com/huggingface/trl/pull/7463</li>
+<li>Show conversations instead of decoded text in the completions table by @qgallouedec in https://github.com/huggingface/trl/pull/5309</li>
+<li>End completions on every eos id the model declares in GRPO, RLOO and Distillation by @albertvillanova in https://github.com/huggingface/trl/pull/7505</li>
+<li>Guard the requests and urllib3 imports in the vLLM client by @qgallouedec in https://github.com/huggingface/trl/pull/7545</li>
+<li>Add PEFT support to AsyncDistillationTrainer by @kashif in https://github.com/huggingface/trl/pull/7476</li>
+<li>Fix duplicate completions in AsyncGRPO groups with data-parallel vLLM by @lewtun in https://github.com/huggingface/trl/pull/7549</li>
+<li>End completions on every eos id the model declares in the experimental trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7506</li>
+<li>Build real trainers instead of object.<strong>new</strong> in the GRPO and SDFT tests by @albertvillanova in https://github.com/huggingface/trl/pull/7531</li>
+<li>Move the continuous batching test to the regular suite and add it to RLOO by @albertvillanova in https://github.com/huggingface/trl/pull/7487</li>
+<li>Pass processor kwargs via processor_kwargs in the VLM SFT collator by @qgallouedec in https://github.com/huggingface/trl/pull/7547</li>
+<li>Compute only the requested fused LM head outputs by @qgallouedec in https://github.com/huggingface/trl/pull/7406</li>
+<li>Score DPO and KTO tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7390</li>
+<li>Add support for vLLM 0.31.0 by @qgallouedec in https://github.com/huggingface/trl/pull/7567</li>
+<li>Drop vLLM 0.20.2 support by @qgallouedec in https://github.com/huggingface/trl/pull/7568</li>
+<li>Score SFT tokens with the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7466</li>
+<li>Parse the tool calls of the current LFM2 chat template by @albertvillanova in https://github.com/huggingface/trl/pull/7522</li>
+<li>Keep the earlier LFM2 chat template revision under test by @albertvillanova in https://github.com/huggingface/trl/pull/7527</li>
+<li>Read chat templates shipped as named variants by their default variant by @albertvillanova in https://github.com/huggingface/trl/pull/7530</li>
+<li>Replace the SFT slow tests with an fp16 test by @albertvillanova in https://github.com/huggingface/trl/pull/7550</li>
+<li>Remove the DataParallel gather warning filter by @albertvillanova in https://github.com/huggingface/trl/pull/7554</li>
+<li>Tie weights after loading remote-code models with transformers 5.3.0 by @albertvillanova in https://github.com/huggingface/trl/pull/7559</li>
+<li>Guard the requests import in the experimental async vLLM clients by @albertvillanova in https://github.com/huggingface/trl/pull/7561</li>
+<li>Make SDFT importable without peft and align SSD by @albertvillanova in https://github.com/huggingface/trl/pull/7562</li>
+<li>Build real configs instead of SimpleNamespace in the GOLD and GKD tests by @albertvillanova in https://github.com/huggingface/trl/pull/7564</li>
+<li>Keep SFT's MoE aux loss independent of world size and gradient accumulation by @qgallouedec in https://github.com/huggingface/trl/pull/7570</li>
+<li>Build the async rollout loops in tests through <strong>init</strong> by @albertvillanova in https://github.com/huggingface/trl/pull/7555</li>
+<li>Run the async GRPO rollout loop tests on the real tokenizer and response parser by @albertvillanova in https://github.com/huggingface/trl/pull/7556</li>
+<li>Compute the distillation divergence with a Triton kernel by @qgallouedec in https://github.com/huggingface/trl/pull/7465</li>
+<li>Drop the deprecated <code>use_liger_kernel</code> from the docs by @qgallouedec in https://github.com/huggingface/trl/pull/7535</li>
+<li>Declare gradient accumulation loss scaling with <code>loss_is_scaled_for_ga</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7508</li>
+<li>Update &quot;What's New&quot; for the fused LM head by @qgallouedec in https://github.com/huggingface/trl/pull/7593</li>
+<li>Release: v1.15 by @qgallouedec in https://github.com/huggingface/trl/pull/7594</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/trl/compare/v1.14.0...v1.15.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/huggingface/trl">huggingface/trl</a> · <code>v1.15.0</code> · 2026-10-08 · <a href="https://github.com/huggingface/trl/releases/tag/v1.15.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/trl/1.16.0"> <span class="k">← Suivant</span> <span class="t">v1.16.0</span> </a> <a href="/releases/trl/1.14.2"> <span class="k">Précédent →</span> <span class="t">v1.14.2</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/huggingface/trl/releases/tag/v1.15.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener"> <span>huggingface/trl</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Fonctionnalités</a><a href="#" class="lv3">⚡ Tête LM fusionnée : jusqu&#39;à 6.9 × séquences plus longues sur le même GPU</a><a href="#" class="lv3">Points de contrôle d&#39;activation sélective dans SFT</a><a href="#" class="lv3">Perte de l&#39;assistant uniquement sur les ensembles de données de vision dans SFT</a><a href="#" class="lv3">Conversations dans le tableau des complétions</a><a href="#" class="lv3">AsyncGRPO et AsyncDistillation</a><a href="#" class="lv3">Autre</a><a href="#" class>Modifications et suppressions avec rupture</a><a href="#" class>Correctifs</a><a href="#" class>Nouveaux contributeurs</a><a href="#" class>Ce qui a changé</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/trl/1.18.2"> <span class="v">v1.18.2</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/trl/1.18.1"> <span class="v">v1.18.1</span> <span class="d">26-11-17</span> </a> </li><li> <a href="/releases/trl/1.18.0"> <span class="v">v1.18.0</span> <span class="d">26-11-13</span> </a> </li><li> <a href="/releases/trl/1.17.1"> <span class="v">v1.17.1</span> <span class="d">26-10-30</span> </a> </li><li> <a href="/releases/trl/1.17.0"> <span class="v">v1.17.0</span> <span class="d">26-10-29</span> </a> </li><li> <a href="/releases/trl/1.16.0"> <span class="v">v1.16.0</span> <span class="d">26-10-15</span> </a> </li><li> <a href="/releases/trl/1.15.0" aria-current="true"> <span class="v">v1.15.0</span> <span class="d">26-10-08</span> </a> </li><li> <a href="/releases/trl/1.14.2"> <span class="v">v1.14.2</span> <span class="d">26-10-06</span> </a> </li> </ul> <a href="/fr/releases/trl" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

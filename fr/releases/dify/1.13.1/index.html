@@ -1,0 +1,1368 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>dify 1.13.1 — STAGS NextStack</title><meta name="description" content="Added Hologres as a supported backend option for both vector retrieval and full-text search. · Added Service API endpoints for dataset document downloads · Batch ZIP download for selected documents."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/dify/1.13.1/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/dify/1.13.1/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/dify/1.13.1/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/dify/1.13.1/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="dify 1.13.1 — STAGS NextStack"><meta property="og:description" content="Added Hologres as a supported backend option for both vector retrieval and full-text search. · Added Service API endpoints for dataset document downloads · Batch ZIP download for selected documents."><meta property="og:url" content="https://www.stags.cn/fr/releases/dify/1.13.1/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/dify/1.13.1/#article","headline":"dify 1.13.1 release notes","datePublished":"2026-03-17","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/langgenius/dify"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/dify/1.13.1/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/dify/dify_1.13.1" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/dify/1.13.1/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/dify/1.13.1/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/dify/1.13.1/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/dify/1.13.1/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/dify/1.13.1/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/dify">dify</a> </nav> <h1 class="detail-title"> <span class="p">dify</span> 1.13.1 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>17 mars 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/langgenius/dify" target="_blank" rel="noopener"> <span class="k">Source</span>langgenius/dify </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/dify/1.13.1/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/dify/1.13.1/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>modifier 1.13.1</h1>
+<h2>🚀 Changements fonctionnels majeurs</h2>
+<h3>Opérations sur la plateforme de données et les ensembles de données</h3>
+<ul>
+<li>Ajout de <strong>Hologres</strong> en tant qu'option backend prise en charge pour la récupération vectorielle et la recherche en texte intégral.</li>
+<li>Ajout des points de terminaison du service API pour les téléchargements de documents d'ensemble de données :
+<ul>
+<li>Téléchargement ZIP par lots pour les documents sélectionnés.</li>
+<li>Téléchargement d'URL signée pour les fichiers originaux d'un seul document.</li>
+</ul>
+</li>
+</ul>
+<h3>Améliorations du workflow et de l'expérience de chat</h3>
+<ul>
+<li><strong>Modification radicale :</strong> Le contenu des e-mails HITL utilise désormais le rendu markdown avant la livraison.
+Les modèles d'e-mails existants qui reposaient sur un comportement brut/simple peuvent s'afficher différemment après la mise à niveau.</li>
+<li>Les variables de brouillon sont désormais limitées à l'utilisateur au lieu de l'application. Les variables de brouillon historiques ne seront pas disponibles après la mise à niveau.</li>
+<li>Ajout de la prise en charge du menu contextuel des bords dans le canevas de flux de travail, y compris la suppression directe des bords.</li>
+<li>Connexions existantes préservées lors de la modification des types de nœuds dans l'édition du flux de travail.</li>
+<li>Ajout d'un comportement de clé d'envoi configurable (<code>Enter</code> vs <code>Shift+Enter</code>) pour la saisie de chat intégrée.</li>
+<li>Ajout de charges utiles de fichiers dans les réponses du flux de fin de message.</li>
+<li>Suppression du comportement codé en dur spécifique à GPT-4 de la logique de sélection de modèle par défaut.</li>
+<li>Ajout d'une nouvelle commande <code>export-app-messages</code> CLI pour exporter les messages d'application et les commentaires associés vers <code>JSONL.GZ</code> (stockage local ou cloud).</li>
+</ul>
+<h2>🔐 Mises à jour de sécurité</h2>
+<ul>
+<li>Prévention des risques d'injection SQL dans les chemins de requête du magasin vectoriel en passant au SQL paramétré dans les implémentations concernées.</li>
+<li>Envoi d'e-mails HITL renforcé :
+<ul>
+<li>Désinfecter le sujet et le contenu du corps.</li>
+<li>Supprimez les CR/LF des sujets pour empêcher les vecteurs d'injection d'en-tête SMTP.</li>
+</ul>
+</li>
+<li>Vérifications de propriété forcées pour la suppression des conversations API.</li>
+<li>Suppression des informations d'identification obsolètes du fournisseur lors de la désinstallation du plugin afin de réduire le risque résiduel lié aux informations d'identification.</li>
+<li>Amélioration de la gestion des erreurs API d'entreprise et du comportement d'application des licences pour les états de licence invalides/expirés.</li>
+</ul>
+<h2>🏗️ Mises à jour de configuration, d'architecture et de déploiement</h2>
+<h3>Déploiement et opérations</h3>
+<ul>
+<li>Ajout d'une file d'attente Celery dédiée : <code>dataset_summary</code> pour les tâches de génération de résumés lourdes en LLM.
+<ul>
+<li>Assurez-vous que les travailleurs s'abonnent à cette file d'attente pour éviter le retard dans les travaux de synthèse.</li>
+</ul>
+</li>
+<li>Ajout de métriques de télémétrie pour les tâches de nettoyage de rétention (messages/exécutions de flux de travail), ainsi que d'un comportement de vidage pour les tâches de commande de courte durée.</li>
+</ul>
+<h3>Modifications de la configuration</h3>
+<ul>
+<li>Ajout de <code>REDIS_MAX_CONNECTIONS</code>.</li>
+<li>Paramètres de bus d'événements <code>PUBSUB_*</code> obsolètes au profit des paramètres <code>EVENT_BUS_*</code>.</li>
+</ul>
+<h2>🛠 Autres changements notables</h2>
+<ul>
+<li>Correction de <code>workflow_runs.started_at</code> écrasé lors de la reprise.</li>
+<li>Correction des échecs silencieux de modification par lots de métadonnées causés par des cas extrêmes de transactions fractionnées.</li>
+<li>Correction de problèmes d'extraction de filtre de métadonnées lors de la récupération de connaissances (conditions <code>{{...}}</code>).</li>
+<li>Visibilité des citations restaurée dans les applications de chat avancées.</li>
+<li>Correction du comportement de réinitialisation des variables de conversation après les nœuds HITL.</li>
+<li>Correction d'un crash de page dans le flux de configuration du nœud de récupération de connaissances.</li>
+<li>Correction de l'assistant de chat bloquant le comportement du mode réponse.</li>
+<li>Ajout de la gestion <code>doc_type</code> dans les attributs vectoriels Weaviate pour une meilleure compatibilité.</li>
+<li>Dépendances OpenTelemetry mises à niveau pour résoudre les erreurs de détachement de contexte.</li>
+</ul>
+<hr />
+<h2>Guide de mise à niveau</h2>
+<blockquote>
+<p>[!IMPORTANT]
+Si vous utilisez un <code>CELERY_QUEUES</code> personnalisé, assurez-vous que <code>workflow_based_app_execution</code> est inclus.<br />
+Si <code>ENABLE_API_TOKEN_LAST_USED_UPDATE_TASK=true</code>, incluez également <code>api_token</code>.</p>
+<p>Pour plus d'informations et de détails, consultez <strong>⚠️ Note de mise à niveau importante</strong> et <strong>🔧 Note opérationnelle</strong> ci-dessus.</p>
+</blockquote>
+<h3>Docker Composer Déploiements</h3>
+<ol>
+<li>
+<p>Sauvegardez votre fichier docker-compose YAML personnalisé (facultatif)</p>
+<pre><code class="language-bash">cd docker
+cp docker-compose.yaml docker-compose.yaml.$(date +%s).bak
+</code></pre>
+</li>
+<li>
+<p>Obtenez le dernier code de la branche principale</p>
+<pre><code class="language-bash">git checkout main
+git pull origin main
+</code></pre>
+</li>
+<li>
+<p>Arrêtez le service. Veuillez exécuter dans le répertoire docker</p>
+<pre><code class="language-bash">docker compose down
+</code></pre>
+</li>
+<li>
+<p>Sauvegarder les données</p>
+<pre><code class="language-bash">tar -cvf volumes-$(date +%s).tgz volumes
+</code></pre>
+</li>
+<li>
+<p>Services de mise à niveau</p>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+</li>
+</ol>
+<blockquote>
+<p>[!NOTE]</p>
+<p>Si vous rencontrez des erreurs comme ci-dessous</p>
+<pre><code class="language-bash">2025/11/26 11:37:57 /app/internal/db/pg/pg.go:30
+[error] failed to initialize database, got error failed to connect to `host=db_postgres user=postgres database=dify_plugin`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+
+2025/11/26 11:37:57 /app/internal/db/pg/pg.go:34
+[error] failed to initialize database, got error failed to connect to `host=db_postgres user=postgres database=postgres`: hostname &gt; resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+2025/11/26 11:37:57 init.go:99: [PANIC]failed to init dify plugin db: failed to connect to `host=db_postgres user=postgres database=postgres`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+panic: [PANIC]failed to init dify plugin db: failed to connect to `host=db_postgres user=postgres database=postgres`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+</code></pre>
+<p>Veuillez plutôt utiliser la commande suivante. Pour plus de détails, veuillez lire ce https://github.com/langgenius/dify/issues/28706</p>
+<pre><code class="language-bash">   docker compose --profile postgresql up -d
+</code></pre>
+</blockquote>
+<h3>Déploiements de code source</h3>
+<ol>
+<li>
+<p>Arrêtez le serveur API, le Worker et le serveur Web frontal.</p>
+</li>
+<li>
+<p>Obtenez le dernier code de la branche release :</p>
+<pre><code class="language-bash">git checkout 1.13.1
+</code></pre>
+</li>
+<li>
+<p>Mettez à jour les dépendances de Python :</p>
+<pre><code class="language-bash">cd api
+uv sync
+</code></pre>
+</li>
+<li>
+<p>Ensuite, exécutons le script de migration :</p>
+<pre><code class="language-bash">uv run flask db upgrade
+</code></pre>
+</li>
+<li>
+<p>Enfin, exécutez à nouveau le serveur API, le Worker et le serveur Web frontend.</p>
+</li>
+</ol>
+<hr />
+<h2>Ce qui a changé</h2>
+<ul>
+<li>feat (api) : ajout d'une tâche de nettoyage planifiée pour des journaux de flux de travail spécifiques par @razerzhang dans https://github.com/langgenius/dify/pull/31843</li>
+<li>test : ajout de tests unitaires pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32201</li>
+<li>test : ajoutez des tests unitaires et d'intégration complets pour le module d'ensemble de données par @CodingOnStar dans https://github.com/langgenius/dify/pull/32187</li>
+<li>test (web) : ajoutez des tests unitaires et d'intégration complets pour les plugins et les modules d'outils par @CodingOnStar dans https://github.com/langgenius/dify/pull/32220</li>
+<li>test : ajoutez des tests unitaires et d'intégration complets pour les composants de facturation par @CodingOnStar dans https://github.com/langgenius/dify/pull/32227</li>
+<li>test : ajoutez des tests unitaires et d'intégration pour les modules de partage, de développement et d'accès à tout par @CodingOnStar dans https://github.com/langgenius/dify/pull/32246</li>
+<li>test : ajoutez des tests unitaires et d'intégration complets pour les composants du pipeline RAG par @CodingOnStar dans https://github.com/langgenius/dify/pull/32237</li>
+<li>feat(tests) : ajoutez des tests d'intégration pour explorer la liste des applications, les applications installées et les flux de cycle de vie de la barre latérale par @CodingOnStar dans https://github.com/langgenius/dify/pull/32248</li>
+<li>correctif : la modification par lots de métadonnées échoue silencieusement en raison de transactions fractionnées et d'exceptions avalées par @veeceey dans https://github.com/langgenius/dify/pull/32041</li>
+<li>correctif : impossible de télécharger le fichier en une seule fois par @hyoban dans https://github.com/langgenius/dify/pull/32276</li>
+<li>corvée(deps) : coussin de bosse de 12.0.0 à 12.1.1 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32250</li>
+<li>exploit : prise en charge de la taille maximale de configuration des fichiers générés par le plugin par @bowenliang123 dans https://github.com/langgenius/dify/pull/30887</li>
+<li>exploit (api) : optimisation des performances et de la configurabilité du magasin de vecteurs OceanBase par @connermo dans https://github.com/langgenius/dify/pull/32263</li>
+<li>test (web) : ajoutez et améliorez les tests automatisés frontend sur plusieurs modules par @CodingOnStar dans https://github.com/langgenius/dify/pull/32268</li>
+<li>corvée(deps) : faire passer les qs de 6.14.1 à 6.14.2 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32290</li>
+<li>test : ajout de tests unitaires pour les composants de base-partie-1 par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32154</li>
+<li>test : ajoutez des tests d'intégration pour les opérations de la carte d'application, la navigation dans les listes et créez des flux d'applications par @CodingOnStar dans https://github.com/langgenius/dify/pull/32298</li>
+<li>test : ajout de tests pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32265</li>
+<li>refactor(web) : extrayez les hooks personnalisés de composants complexes et ajoutez des tests complets par @CodingOnStar dans https://github.com/langgenius/dify/pull/32301</li>
+<li>corvée(deps) : déplacer sqlparse de 0.5.3 vers 0.5.4 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32315</li>
+<li>test : ajout de tests unitaires pour les composants de discussion de base par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32249</li>
+<li>correctif (app-copy) : hérite de l'autorisation de l'application Web de l'application originale par @GareArc dans https://github.com/langgenius/dify/pull/32323</li>
+<li>correctif (api) : rend le verrouillage TTL de la migration de base de données Redis configurable et empêche LockNotOwnedError de masquer les échecs de @lin-snow dans https://github.com/langgenius/dify/pull/32299</li>
+<li>correctif : supprimez le contexte d'exploration et migrez la requête vers le contrat orpc par @lyzno1 dans https://github.com/langgenius/dify/pull/32320</li>
+<li>refactor(web) : centraliser les gardes de route basés sur les rôles et corriger les anti-modèles par @lyzno1 dans https://github.com/langgenius/dify/pull/32302</li>
+<li>ci : mettre à jour la configuration de dependabot par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32346</li>
+<li>corvée (deps-dev) : bump types-greenlet de 3.1.0.20250401 à 3.3.0.20251206 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32349</li>
+<li>fix(i18n) : correction des erreurs critiques et révision des traductions en persan (fa-IR) dans workflow.json par @Haohao-end dans https://github.com/langgenius/dify/pull/32342</li>
+<li>refactor (workflow-file) : déplacez <code>core.file</code> vers <code>core.workflow.file</code> par @WH-2099 dans https://github.com/langgenius/dify/pull/32252</li>
+<li>refactor(document_extractor) : Extraire les configurations par @laipz8200 dans https://github.com/langgenius/dify/pull/31828</li>
+<li>refactor(web) : remplacez String.match() par RegExp.exec() pour les regex non globales par @apoorvdarshan dans https://github.com/langgenius/dify/pull/32386</li>
+<li>ci : Ajout d'un programme hebdomadaire pour les écosystèmes pip et uv par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32398</li>
+<li>corvée(deps) : déplacer gmpy2 de 2.2.1 à 2.3.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32402</li>
+<li>corvée (deps-dev) : mise à jour de l'exigence de types-markdown de ~=3.7.0 à ~=3.10.2 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32401</li>
+<li>corvée (deps-dev) : déplacer opensearch-py de 2.4.0 à 3.1.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32400</li>
+<li>refactor (web) : rendre Switch contrôlé uniquement et migrer les sites d'appel par @lyzno1 dans https://github.com/langgenius/dify/pull/32399</li>
+<li>corvée(deps-dev) : déplacer import-linter de 2.7 vers 2.10 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32403</li>
+<li>Correction : correction du nombre de tentatives trompeuses dans le message d'erreur de @kurokobo dans https://github.com/langgenius/dify/pull/32406</li>
+<li>test : ajouter des tests pour base &gt; date-time-picker par @saumyatalwani dans https://github.com/langgenius/dify/pull/32396</li>
+<li>Correction : effacement des informations d'identification obsolètes du fournisseur lors de la désinstallation du plugin par @laipz8200 dans https://github.com/langgenius/dify/pull/32380</li>
+<li>corvée(deps) : déplacer pypdf de 6.6.2 à 6.7.1 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32427</li>
+<li>corvée(deps) : bump werkzeug de 3.1.5 à 3.1.6 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32431</li>
+<li>corvée(deps) : faire passer le flacon de 3.1.2 à 3.1.3 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32432</li>
+<li>refactor : affiner certains types lors de l'essai par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32426</li>
+<li>correctif : correction du nœud après le changement, impossible de sélectionner le nœud de démarrage par @fatelei dans https://github.com/langgenius/dify/pull/32441</li>
+<li>test : resserrez les spécifications visibles par l'utilisateur et augmentez la couverture pour le validateur de clé… par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32281</li>
+<li>test : en-tête du compte à propos, paramètre du compte et liste déroulante du compte par @mahammadasim dans https://github.com/langgenius/dify/pull/32283</li>
+<li>test(web) : ajout d'un test pour les fichiers d'authentification de modèle dans le dossier d'en-tête par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32358</li>
+<li>test : ajoutez des tests unitaires pour les intégrations de sources de données (Notion, site Web) et les modaux par @mahammadasim dans https://github.com/langgenius/dify/pull/32313</li>
+<li>test : ajout de cas de test pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32314</li>
+<li>corvée(deps) : mettre à jour l'exigence pydantique de ~=2.11.4 à ~=2.12.5 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32462</li>
+<li>corvée(deps) : mettre à jour l'exigence python-docx de ~=1.1.0 à ~=1.2.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32463</li>
+<li>corvée(deps) : mise à jour de l'exigence redis[hiredis] de ~=6.1.0 à ~=7.2.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32464</li>
+<li>refactor : hérite d'ABC dans AppQueueManager pour une utilisation correcte de la méthode abstraite par @tysoncung dans https://github.com/langgenius/dify/pull/32461</li>
+<li>test (Web) : ajoutez des spécifications de configuration de compte sur la page des membres et améliorez la couverture par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32311</li>
+<li>test(web) : ajout de tests pour les fichiers de page de fournisseur de modèle dans le compte d'en-tête-… par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32360</li>
+<li>correctif : ajout d'une annotation de type de retour à BaseVector.create par @KinomotoMio dans https://github.com/langgenius/dify/pull/32475</li>
+<li>test : migrer les tests de propriétés Dataset/Document vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32487</li>
+<li>refactor : correction de l'erreur d'affectation du type d'histogramme opentelemetry par @Hypertension42 dans https://github.com/langgenius/dify/pull/32490</li>
+<li>correctif : ajout d'une annotation de type de retour à la méthode abstraite Moderation.validate_config par @tysoncung dans https://github.com/langgenius/dify/pull/32491</li>
+<li>correctif : ajout d'une annotation de type de retour à la méthode abstraite _publish par @J0su3Code dans https://github.com/langgenius/dify/pull/32493</li>
+<li>test : ajout de tests unitaires pour les composants de base partie 3 par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32408</li>
+<li>test : ajoutez des tests unitaires pour le plugin de bloc de sélection de composants de l'éditeur d'invite. par @mahamadasim dans https://github.com/langgenius/dify/pull/32412</li>
+<li>test(web) : augmente la couverture des tests pour les composants dans le dossier d'en-tête par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32392</li>
+<li>test (web) : correction d'un test Web défaillant dans 'Web Tests' GitHub Action de @akashseth-ifp dans https://github.com/langgenius/dify/pull/32481</li>
+<li>test : ajout de tests pour la base &gt; fonctionnalités par @saumyatalwani dans https://github.com/langgenius/dify/pull/32397</li>
+<li>test : ajout de tests unitaires pour base-components-part-2 par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32409</li>
+<li>test : ajout de tests pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32356</li>
+<li>Correction : correction des annotations de type dans les entités de trace Langfuse pour qu'elles correspondent à SDK par @stakeswky dans https://github.com/langgenius/dify/pull/32498</li>
+<li>test : ajout de tests pour les composants de téléchargement de fichiers par @saumyatalwani dans https://github.com/langgenius/dify/pull/32373</li>
+<li>test : ajout de tests pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32370</li>
+<li>correctif : résoudre les erreurs de mauvais index pyright dans parser.py par @tysoncung dans https://github.com/langgenius/dify/pull/32507</li>
+<li>test(web) : augmente la couverture des tests pour le dossier model-provider-page par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32374</li>
+<li>test : ajout de tests unitaires pour les composants de chat par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32367</li>
+<li>correctif : ajout d'annotations de type de retour explicites aux méthodes abstraites BaseVector par @longway-code dans https://github.com/langgenius/dify/pull/32516</li>
+<li>test (web) : augmente la couverture des fichiers dans le dossier plugin-page et model-provider-page par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32377</li>
+<li>test : ajout de tests unitaires pour les composants chat/chatbot intégré par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32361</li>
+<li>test : ajout de tests pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32415</li>
+<li>test : ajout de tests pour base &gt; image-uploader par @saumyatalwani dans https://github.com/langgenius/dify/pull/32416</li>
+<li>test(base) : ajout d'une couverture de test pour former des composants par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32436</li>
+<li>test : migrer les tests SQL du référentiel d'exécution du workflow vers les conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32519</li>
+<li>test : migrez les tests SQL de navigation DocumentSegment restants vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32523</li>
+<li>test : migrer les tests SQL du service utilisateur final vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32530</li>
+<li>test : migrer les tests de contenu supplémentaire du message vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32532</li>
+<li>test : migrer les tests SQL du référentiel de journaux de déclenchement de workflow vers des conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32525</li>
+<li>test : migrer les tests SQL du référentiel d'exécution de nœud vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32524</li>
+<li>test : migrez les tests SQL Remove_app_and_owned_data_task vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32547</li>
+<li>test : migrer les tests SQL test_document_service_display_status vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32545</li>
+<li>test : migrez les tests SQL delete_archived_workflow_run vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32549</li>
+<li>test(base) : ajout d'une couverture de test pour plus de composants de base/formulaire par @akashseth-ifp dans https://github.com/langgenius/dify/pull/32437</li>
+<li>Correction : hauteur de champ de formulaire incorrecte du modal d'entrée par @hjlarry dans https://github.com/langgenius/dify/pull/32557</li>
+<li>corvée(deps) : bosse capricieuse de 0.1.7 à 0.1.8 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32552</li>
+<li>test : migrer les tests SQL du service de conversation vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32527</li>
+<li>test : migrer la collection d'ensembles de données liant les tests SQL aux testscontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32539</li>
+<li>test : migrer les tests SQL de mise à jour et de suppression du service d'ensemble de données vers des conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32548</li>
+<li>test : cas de tests unitaires pour les modules contrôleurs.files, contrôleurs.mcp et contrôleurs.trigger par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32057</li>
+<li>test : améliorer les tests unitaires pour controllers.service_api par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32073</li>
+<li>test : ajout de tests pour certains composants dans la base &gt; éditeur d'invite par @saumyatalwani dans https://github.com/langgenius/dify/pull/32472</li>
+<li>test : ajout de tests pour certains composants de base par @saumyatalwani dans https://github.com/langgenius/dify/pull/32479</li>
+<li>refactor (workflow) : injectez la configuration du nœud de requête http via les usines et les valeurs par défaut par @laipz8200 dans https://github.com/langgenius/dify/pull/32365</li>
+<li>test : migrer les tests SQL de récupération du service d'ensemble de données vers des conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32528</li>
+<li>test : ajout de tests unitaires pour les composants de base-partie-4 par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32452</li>
+<li>test : ajout de tests unitaires pour base-components-part-5 par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32457</li>
+<li>Correction : couleur d'espace réservé incorrecte en mode sombre par @hjlarry dans https://github.com/langgenius/dify/pull/32568</li>
+<li>correctif : animation-delay de spin-animation par @Pandaaaa906 dans https://github.com/langgenius/dify/pull/32560</li>
+<li>feat(aliyun-trace) : ajout de l'attribut app_id par @hieheihei dans https://github.com/langgenius/dify/pull/32489</li>
+<li>test : exemple pour [Refactor/Chore], utilisez Testcontainers pour faire le test SQL #32454 par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32459</li>
+<li>correctif : erreur de vérification de type dans l'analyseur par @ajuijas dans https://github.com/langgenius/dify/pull/32510</li>
+<li>test : migrer les tests SQL test_dataset_service_get_segments vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32544</li>
+<li>test : migrer les tests SQL restaurer_archived_workflow_run vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32590</li>
+<li>test : migrer les tests SQL workflow_node_execution_service_repository vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32591</li>
+<li>Exploit : Ajout de la prise en charge des poignées d'erreur pour Agent Node par @Pandaaaa906 dans https://github.com/langgenius/dify/pull/31596</li>
+<li>ci : essayez depuis le dépôt principal par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32620</li>
+<li>correctif : ajoutez la vérification de None pour tenant.id dans les tests d'index vectoriels de jeux de données par @stakeswky dans https://github.com/langgenius/dify/pull/32603</li>
+<li>test : migrer les tests SQL clean_dataset_task vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32529</li>
+<li>test : migrer les tests SQL dataset_indexing_task vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32531</li>
+<li>correctif : remplacez la fusion dict() par le déballage du dict pour résoudre l'erreur de surcharge par @toroleapinc dans https://github.com/langgenius/dify/pull/32653</li>
+<li>test : migrer les tests SQL de mise à jour du service d'ensemble de données vers des conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32533</li>
+<li>correctif : ajoutez des annotations de type à BaseStorage.exists et BaseStorage.download par @toroleapinc dans https://github.com/langgenius/dify/pull/32652</li>
+<li>correctif : remplacez les SpanAttributes et ResourceAttributes obsolètes par de nouvelles importations semconv par @stakeswky dans https://github.com/langgenius/dify/pull/32661</li>
+<li>test : améliorer la couverture des composants d'en-tête par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32628</li>
+<li>refactor (api) : injecter l'exécuteur de code depuis l'usine de nœuds par @laipz8200 dans https://github.com/langgenius/dify/pull/32618</li>
+<li>refactor (workflow) : injecter redis dans le gestionnaire du moteur graphique par @laipz8200 dans https://github.com/langgenius/dify/pull/32622</li>
+<li>Revert : &quot;correctif : l'aperçu de l'image déclenche le téléchargement binaire&quot; par @laipz8200 dans https://github.com/langgenius/dify/pull/32683</li>
+<li>refactor (workflow) : injecter des ports d'accès aux informations d'identification/modèle dans les nœuds LLM par @laipz8200 dans https://github.com/langgenius/dify/pull/32569</li>
+<li>corvée : mettre à jour README.md par @Inlei dans https://github.com/langgenius/dify/pull/32680</li>
+<li>refactor(web) : supprimez l'écouteur mouseup lors du nettoyage use-resize-panel par @haku-ink dans https://github.com/langgenius/dify/pull/32636</li>
+<li>corvée(ci) : plier les commentaires diff de pyrefly par @laipz8200 dans https://github.com/langgenius/dify/pull/32685</li>
+<li>test : aligner les attentes du type MIME de l'aperçu du fichier par @laipz8200 dans https://github.com/langgenius/dify/pull/32688</li>
+<li>corvée(deps-dev) : faire passer nltk de 3.9.2 à 3.9.3 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32691</li>
+<li>correctif : le bouton d'action du modal de sortie de la structure doit s'aligner à droite de @hjlarry dans https://github.com/langgenius/dify/pull/32700</li>
+<li>docs (api) : simplifiez la configuration README et les conseils des travailleurs par @laipz8200 dans https://github.com/langgenius/dify/pull/32704</li>
+<li>refactor : découpler la logique métier de datasource_node par @fatelei dans https://github.com/langgenius/dify/pull/32515</li>
+<li>Correction : correction du type de retour fictif dans le test CodeBasedExtension par @veeceey dans https://github.com/langgenius/dify/pull/32058</li>
+<li>corvée : mise à jour vers eslint 10 par @hyoban dans https://github.com/langgenius/dify/pull/32646</li>
+<li>test : migrer les tests SQL document_indexing_sync_task vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32534</li>
+<li>feat(web) : ajout d'un bouton d'effacement de survol pour la recherche de fournisseur par @laipz8200 dans https://github.com/langgenius/dify/pull/32707</li>
+<li>correctif : ajout d'un type de retour à la méthode abstraite _publish par @tda1017 dans https://github.com/langgenius/dify/pull/32701</li>
+<li>corvée(deps-dev) : faire passer le livre d'histoires de 10.2.0 à 10.2.10 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32659</li>
+<li>ci(web) : paralléliser les tests Web avec le partitionnement Vitest à 4 fragments par @lyzno1 dans https://github.com/langgenius/dify/pull/32713</li>
+<li>test : migrer les tests SQL test_dataset_service vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32535</li>
+<li>corvée(deps-dev) : alignez tous les packages @storybook/* sur 10.2.13 par @lyzno1 dans https://github.com/langgenius/dify/pull/32714</li>
+<li>Correction : erreur de syntaxe YAML dans le workflow pyrefly-diff-comment par @nielskaspers dans https://github.com/langgenius/dify/pull/32718</li>
+<li>test : migrer les tests SQL document_service_status vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32536</li>
+<li>exploit : ajout de la compétence backend-code-review par @hj24 dans https://github.com/langgenius/dify/pull/32719</li>
+<li>fix(ci) : correction du fichier de workflow invalide pyrefly-diff.yml par @tysoncung dans https://github.com/langgenius/dify/pull/32728</li>
+<li>correctif : remplacez l'expression de rendement inaccessible par rendement de () par @tysoncung dans https://github.com/langgenius/dify/pull/32727</li>
+<li>corvée(deps) : déplacer pypdf de 6.7.1 à 6.7.4 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32736</li>
+<li>refactor : consolider l'état du modèle d'exécution LLM sur ModelInstance par @laipz8200 dans https://github.com/langgenius/dify/pull/32746</li>
+<li>refactor(workflow) : déplacer le package de variables dans core.workflow par @laipz8200 dans https://github.com/langgenius/dify/pull/32750</li>
+<li>refactor : injecter une interface mémoire dans LLMNode par @laipz8200 dans https://github.com/langgenius/dify/pull/32754</li>
+<li>test (api) : ajout d'une spécification automatique à l'utilisation du correctif basé sur MagicMock par @laipz8200 dans https://github.com/langgenius/dify/pull/32752</li>
+<li>corvée : ajouter Vinext comme serveur de développement par @hyoban dans https://github.com/langgenius/dify/pull/32559</li>
+<li>correctif : Correction du problème d'adaptation des formats de réponse pour différents mods… par @FFXN dans https://github.com/langgenius/dify/pull/32326</li>
+<li>refactor(web) : remplacez les résolutions par pnpm.overrides par @slegarraga dans https://github.com/langgenius/dify/pull/32768</li>
+<li>correctif : supprimez REDIRECT_URL_KEY de l'URL par @hyoban dans https://github.com/langgenius/dify/pull/32770</li>
+<li>Correction : certains modèles Qwen3 ne prennent en charge que la sortie streaming. par @FFXN dans https://github.com/langgenius/dify/pull/32766</li>
+<li>correctif (workflow) : découplez les dépendances externes du nœud de requête http par @WH-2099 dans https://github.com/langgenius/dify/pull/32762</li>
+<li>correctif (api) : ajout d'annotations de type de retour explicites aux méthodes clean() par @Br1an67 dans https://github.com/langgenius/dify/pull/32772</li>
+<li>correctif (api) : résolution des erreurs de type dans BaseTraceInstance et OpsTraceManager par @Br1an67 dans https://github.com/langgenius/dify/pull/32773</li>
+<li>correctif : ajout d'une annotation de type de retour aux décorateurs d'authentification par @tda1017 dans https://github.com/langgenius/dify/pull/32699</li>
+<li>correctif (Web) : améliore le comportement de saisie et les raccourcis de modification du chat par @laipz8200 dans https://github.com/langgenius/dify/pull/32757</li>
+<li>refactor (workflow) : supprime les importations d'assistance de nœud de code par @WH-2099 dans https://github.com/langgenius/dify/pull/32759</li>
+<li>Correction : améliore la configuration de TanStack Query client et corrige le bug de queryKey par @lyzno1 dans https://github.com/langgenius/dify/pull/32422</li>
+<li>feat(enterprise) : rejoindre automatiquement les comptes nouvellement enregistrés à l'espace de travail par défaut par @lin-snow dans https://github.com/langgenius/dify/pull/32308</li>
+<li>correctif : ajout de pipeline_templates manquants par @akkoaya dans https://github.com/langgenius/dify/pull/31528</li>
+<li>correctif (api) : appliquer la vérification de la propriété pour la suppression de la conversation par @laipz8200 dans https://github.com/langgenius/dify/pull/32686</li>
+<li>corvée : supprimer ty du pipeline de vérification de type backend par @BeautyyuYanli dans https://github.com/langgenius/dify/pull/32782</li>
+<li>corvée(web) : suppression du gestionnaire de processus PM2 par @majiayu000 dans https://github.com/langgenius/dify/pull/30252</li>
+<li>correctif : sérialiser data_source_info avec json.dumps dans la tâche de synchronisation Notion par @weiguangli-io dans https://github.com/langgenius/dify/pull/32747</li>
+<li>revert(graph-engine) : unification des événements d'arrêt de restauration par @laipz8200 dans https://github.com/langgenius/dify/pull/32789</li>
+<li>corvée : supporte l'inspecteur de code pour vinext par @hjlarry dans https://github.com/langgenius/dify/pull/32788</li>
+<li>refactor (api) : déplacer la déduction du quota llm vers la couche graphique de l'application par @laipz8200 dans https://github.com/langgenius/dify/pull/32786</li>
+<li>refactor : injecter la mémoire du nœud de workflow via le protocole par @laipz8200 dans https://github.com/langgenius/dify/pull/32784</li>
+<li>refactor (workflow) : déplacez PromptMessageMemory vers model_runtime.memory par @laipz8200 dans https://github.com/langgenius/dify/pull/32796</li>
+<li>refactor (workflow) : découpler les dépendances externes du nœud de démarrage par @WH-2099 dans https://github.com/langgenius/dify/pull/32793</li>
+<li>correctif : correction d'une erreur d'importation par @fatelei dans https://github.com/langgenius/dify/pull/32800</li>
+<li>correctif : faute de frappe dans la description du plugin WebScraper : &quot;Scrapper&quot; → &quot;Scraper&quot; par @Copilot dans https://github.com/langgenius/dify/pull/32790</li>
+<li>correctif (ci) : faire en sorte que les commentaires diff de Pyrefly se concentrent sur les diagnostics de @hwb96 dans https://github.com/langgenius/dify/pull/32778</li>
+<li>correctif : suppression des références aux attributs de document inexistants dans le test de @toroleapinc dans https://github.com/langgenius/dify/pull/32654</li>
+<li>correctif : utilisez déclaré_attr.directive pour WorkflowNodeExecutionModel.<strong>table_args</strong> par @toroleapinc dans https://github.com/langgenius/dify/pull/32656</li>
+<li>exploit (web) : ajout d'une couche d'isolation racine pour le contexte d'empilement de portail par @lyzno1 dans https://github.com/langgenius/dify/pull/32807</li>
+<li>correctif : optimisation de la requête iter workflow_run par @hj24 dans https://github.com/langgenius/dify/pull/32815</li>
+<li>test : ajout de tests unitaires pour les composants de base par @CodingOnStar dans https://github.com/langgenius/dify/pull/32818</li>
+<li>refactor(ci) : utilisez diff -u pour la sortie diff pyrefly par @stablegenius49 dans https://github.com/langgenius/dify/pull/32813</li>
+<li>corvée(deps) : mettre à jour l'exigence pyjwt de ~=2.10.1 à ~=2.11.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32804</li>
+<li>corvée (deps-dev) : mettre à jour l'exigence de types-aiofiles de ~=24.1.0 à ~=25.1.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32803</li>
+<li>correctif : le blocage du mode de réponse de l'assistant de chat ne fonctionne pas par @fatelei dans https://github.com/langgenius/dify/pull/32394</li>
+<li>refactor : utiliser le format diff unifié dans le workflow pyrefly-diff par @Echo0ff dans https://github.com/langgenius/dify/pull/32828</li>
+<li>refactor : supprimer les tests et le noyau/rag des exclusions de pyrefly par @stablegenius49 dans https://github.com/langgenius/dify/pull/32801</li>
+<li>Correction : mappez toutes les valeurs NodeType pour couvrir les types dans le traçage Arize Phoenix par @veeceey dans https://github.com/langgenius/dify/pull/32059</li>
+<li>correctif : mise à niveau de OpenTelemetry vers 0.49b0 pour corriger l'erreur de détachement de contexte par @GareArc dans https://github.com/langgenius/dify/pull/32825</li>
+<li>exploit : assurez-vous que l'identifiant du document ne manque pas par @fatelei dans https://github.com/langgenius/dify/pull/32765</li>
+<li>correctif (api) : ajout d'une annotation de type de retour à filter_none_values() par @Br1an67 dans https://github.com/langgenius/dify/pull/32774</li>
+<li>refactor : le nœud d'index de connaissances dissocie la logique métier par @fatelei dans https://github.com/langgenius/dify/pull/32274</li>
+<li>feat(tests) : ajout d'une suite de tests complète pour les utilitaires de workflow et la création de nœuds par @CodingOnStar dans https://github.com/langgenius/dify/pull/32841</li>
+<li>refactoriser : déplacer le package de workflow vers dify_graph par @laipz8200 dans https://github.com/langgenius/dify/pull/32844</li>
+<li>perf : optimiser la vitesse de requête de l'ensemble de données api par @fatelei dans https://github.com/langgenius/dify/pull/32847</li>
+<li>refactor(api) : déplacez model_runtime dans dify_graph par @laipz8200 dans https://github.com/langgenius/dify/pull/32858</li>
+<li>corvée : mettre à jour Vinext, ajouter une solution de contournement par @hyoban dans https://github.com/langgenius/dify/pull/32878</li>
+<li>refactor(web) : restructuration de la barre latérale de l'application avec décomposition des composants et organisation des dossiers par @CodingOnStar dans https://github.com/langgenius/dify/pull/32887</li>
+<li>refactor : exécuteur de code de découplement TemplateTransformNode par @fatelei dans https://github.com/langgenius/dify/pull/32879</li>
+<li>corvée(deps) : déplacer pypdf de 6.7.4 à 6.7.5 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32882</li>
+<li>corvée(deps) : déplacer @orpc/client de 1.13.4 à 1.13.6 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32883</li>
+<li>refactor (dify_graph) : unifier la source d'invocation et d'énumération utilisateur dans le workflow par @WH-2099 dans https://github.com/langgenius/dify/pull/32873</li>
+<li>correctif : Ajout de la validation manquante de doc_form dans le service API. par @FFXN dans https://github.com/langgenius/dify/pull/32892</li>
+<li>correctif : rétrograder la version du nœud vers 22 par @hyoban dans https://github.com/langgenius/dify/pull/32897</li>
+<li>exploit (web) : garde-corps de migration superposés + primitives de base de l'interface utilisateur par @lyzno1 dans https://github.com/langgenius/dify/pull/32824</li>
+<li>test(web) : ajout de tests unitaires de haute qualité pour les primitives du wrapper Base UI par @lyzno1 dans https://github.com/langgenius/dify/pull/32904</li>
+<li>refactor(web) : migrer l'état de requête de la liste de documents vers nuqs par @lyzno1 dans https://github.com/langgenius/dify/pull/32339</li>
+<li>test : migrer les tests SQL test_dataset_service_batch_update_document_status vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32537</li>
+<li>correctif : obtenez i18n paresseux, faites fonctionner la construction de vinext par @hyoban dans https://github.com/langgenius/dify/pull/32917</li>
+<li>corvée : ajouter des groupes de dépendances à la configuration Dependabot par @nightcityblade dans https://github.com/langgenius/dify/pull/32721</li>
+<li>Correction (api) : résolution de l'incompatibilité du type d'histogramme OpenTelemetry par @Br1an67 dans https://github.com/langgenius/dify/pull/32771</li>
+<li>test : migrer les tests SQL test_dataset_service_create_dataset vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32538</li>
+<li>correctif (web) : aligner les styles de menu déroulant avec le design Figma de @lyzno1 dans https://github.com/langgenius/dify/pull/32922</li>
+<li>Correction : gardez le menu déroulant du compte ouvert lors du changement de thème par @lyzno1 dans https://github.com/langgenius/dify/pull/32918</li>
+<li>corvée : correction de l'environnement de chargement et du treeshaking pour vinext par @hyoban dans https://github.com/langgenius/dify/pull/32928</li>
+<li>test (workflow) : ajoutez des tests unitaires pour les tranches de stockage de workflow par @CodingOnStar dans https://github.com/langgenius/dify/pull/32932</li>
+<li>refactor : migrer le modal d'intégration du workflow vers la boîte de dialogue de base par @lyzno1 dans https://github.com/langgenius/dify/pull/32915</li>
+<li>exploit : la connexion redis prend en charge le nombre maximal de connexions par @fatelei dans https://github.com/langgenius/dify/pull/32935</li>
+<li>refactor : le nœud d'entrée humaine découple la base de données par @fatelei dans https://github.com/langgenius/dify/pull/32900
+*exploit : supporte redis xstream par @fatelei dans https://github.com/langgenius/dify/pull/32586</li>
+<li>exploit : remplacez db.session par db_session_with_containers par @RenzoMXD dans https://github.com/langgenius/dify/pull/32942</li>
+<li>refactor(web) : migrer le bouton vers l'interface utilisateur de base avec le focus visible par @lyzno1 dans https://github.com/langgenius/dify/pull/32941</li>
+<li>feat(web) : ajout de la base AlertDialog avec un exemple de migration de carte d'application par @lyzno1 dans https://github.com/langgenius/dify/pull/32933</li>
+<li>perf(api) : utilisez message_workflow_run_id_idx lors de l'interrogation des messages de @QuantumGhost dans https://github.com/langgenius/dify/pull/32944</li>
+<li>correctif (api) : dissocier la jointure de l'espace de travail par défaut de l'entreprise de la création de l'espace de travail personnel par @lin-snow dans https://github.com/langgenius/dify/pull/32938</li>
+<li>refactor : n'importez pas la ressource i18n json pour diviser le morceau par @hyoban dans https://github.com/langgenius/dify/pull/32947</li>
+<li>refactor : le nœud d'extraction de document découple ssrf_proxy par @fatelei dans https://github.com/langgenius/dify/pull/32949</li>
+<li>corvée : affiner les conseils sur les compétences de contrat d'abord oRPC par @lyzno1 dans https://github.com/langgenius/dify/pull/32955</li>
+<li>test (workflow) : ajoutez des tests unitaires de hooks complets et une infrastructure de test de refactorisation (partie 3) par @CodingOnStar dans https://github.com/langgenius/dify/pull/32958</li>
+<li>corvée : drop pwa avec serwist par @hyoban dans https://github.com/langgenius/dify/pull/32838</li>
+<li>corvée : nettoyer le fichier sw par @hyoban dans https://github.com/langgenius/dify/pull/32973</li>
+<li>corvée : ajout du plugin React Refresh pour Vinext par @hyoban dans https://github.com/langgenius/dify/pull/32996</li>
+<li>test : migrer les tests SQL duplicate_document_indexing_task vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32540</li>
+<li>corvée : étendre les règles ESLint de migration par superposition au popover, à la liste déroulante et à la boîte de dialogue par @lyzno1 dans https://github.com/langgenius/dify/pull/33001</li>
+<li>corvée(deps) : bosse capricieuse de 0.1.8 à 0.1.9 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32999</li>
+<li>corvée(deps) : déplacer authlib de 1.6.6 vers 1.6.7 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/32998</li>
+<li>corvée(deps) : passage immuable de 5.1.4 à 5.1.5 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33000</li>
+<li>test : migrer les tests SQL test_document_service_rename_document vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32542</li>
+<li>corvée : ajouter une invite liée à TypedDict à AGENTS.md par @caoergou dans https://github.com/langgenius/dify/pull/32995</li>
+<li>corvée : support i18n hmr, correction de hmr pour le contexte de l'application par @hyoban dans https://github.com/langgenius/dify/pull/32997</li>
+<li>refactor : simplifie la gestion de l'état oauthNewUser dans le composant AppInitializer par @CodingOnStar dans https://github.com/langgenius/dify/pull/33019</li>
+<li>refactor(dify_graph) : introduisez run_context et déléguez la création du moteur enfant par @WH-2099 dans https://github.com/langgenius/dify/pull/32964</li>
+<li>test (workflow) : ajout de tests de validation pour le workflow et le rendu des composants de nœuds, partie 3 par @CodingOnStar dans https://github.com/langgenius/dify/pull/33012</li>
+<li>Correction : synchronisation du canevas du workflow par @zxhlyh dans https://github.com/langgenius/dify/pull/33030</li>
+<li>refactor : contexte renversé pour un meilleur hmr par @hyoban dans https://github.com/langgenius/dify/pull/33033</li>
+<li>corvée : empêcher le crash de Storybook causé par vite-plugin-inspect par @lyzno1 dans https://github.com/langgenius/dify/pull/33039</li>
+<li>exploit : ajouter des index partiels sur les conversations pour app_id avec Create_at et Update_at par @Nov1c444 dans https://github.com/langgenius/dify/pull/32616</li>
+<li>exploit : le code d'état http 204 ne renvoie pas le contenu de @fatelei dans https://github.com/langgenius/dify/pull/33023</li>
+<li>correctif : correctif de la vérification workflow_run par @fatelei dans https://github.com/langgenius/dify/pull/33028</li>
+<li>test : migrer les tests SQL test_dataset_service_delete_dataset vers testcontainers par @KinomotoMio dans https://github.com/langgenius/dify/pull/32543</li>
+<li>corvée (api) : mise à jour des versions du vérificateur de type Python par @lavish0000 dans https://github.com/langgenius/dify/pull/33056</li>
+<li>corvée(deps) : déplacer dompurify de 3.3.0 à 3.3.2 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33062</li>
+<li>test : migrer les tests SQL du service d'autorisation des ensembles de données vers des conteneurs de test par @KinomotoMio dans https://github.com/langgenius/dify/pull/32546</li>
+<li>corvée(deps) : passage de la démarque de 3.5.2 à 3.8.1 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33064</li>
+<li>refactor (api) : ajoutez les définitions TypedDict à models/model.py par @statxc dans https://github.com/langgenius/dify/pull/32925</li>
+<li>corvée : ajouter un workflow d'exclusion de pyrefly local par @BeautyyuYanli dans https://github.com/langgenius/dify/pull/33059</li>
+<li>correctif (api) : renvoie les identifiants insérés depuis Chroma et Clickzetta add_texts par @lavish0000 dans https://github.com/langgenius/dify/pull/33065</li>
+<li>Correction : afficher les citations dans les applications de chat avancées par @kurokobo dans https://github.com/langgenius/dify/pull/32985</li>
+<li>correctif : réinitialisation inattendue de la variable de conversation après le nœud HITL par @hjlarry dans https://github.com/langgenius/dify/pull/32936</li>
+<li>correctif (i18n) : traduction française correcte de &quot;handicapé&quot; du terme médical au terme approprié pour l'interface utilisateur par @Copilot dans https://github.com/langgenius/dify/pull/33067</li>
+<li>correctif (type-check) : résolution de l'attribut manquant dans le gestionnaire de mise à jour de jointure de l'ensemble de données d'application par @hjlarry dans https://github.com/langgenius/dify/pull/33071</li>
+<li>corvée : ajouter l'environnement d'e-mail de support par @nite-knite dans https://github.com/langgenius/dify/pull/33075</li>
+<li>feat(tasks) : isoler la génération de résumé dans la file d'attente dataset_summary dédiée par @euxx dans https://github.com/langgenius/dify/pull/32972</li>
+<li>corvée : utilisez React-Grab pour remplacer code-inspector-plugin par @hyoban dans https://github.com/langgenius/dify/pull/33078</li>
+<li>correctif (api) : corrige le problème selon lequel workflow_runs.started_at est écrasé lors de la reprise par @QuantumGhost dans https://github.com/langgenius/dify/pull/32851</li>
+<li>perf : n'enregistre plus le nombre d'installations pour la mise à niveau automatique par @RockChinQ dans https://github.com/langgenius/dify/pull/33086</li>
+<li>corvée : ramener le plugin code-inspector et l'agentation par @hyoban dans https://github.com/langgenius/dify/pull/33088</li>
+<li>corvée : correction du test de liste déroulante des comptes par @nite-knite dans https://github.com/langgenius/dify/pull/33093</li>
+<li>test : amélioration de la couverture de certains fichiers de test par @saumyatalwani dans https://github.com/langgenius/dify/pull/32916</li>
+<li>feat(toast) : ajoutez l'importation de type IToastProps pour améliorer la sécurité des types par @CodingOnStar dans https://github.com/langgenius/dify/pull/33096</li>
+<li>refactor : passez KnowledgeConfiguration directement au lieu de dict par @pepsile dans https://github.com/langgenius/dify/pull/32732</li>
+<li>exploit : ajouter des messages d'application d'exportation par @hj24 dans https://github.com/langgenius/dify/pull/32990</li>
+<li>exploit : ajouter des fichiers au message de fin pr32019 par @Stormhand dans https://github.com/langgenius/dify/pull/32242</li>
+<li>corvée : ajouter une invite liée à TypedDict à api/AGENTS.md par @CoralGarden52 dans https://github.com/langgenius/dify/pull/33116</li>
+<li>correctif (web) : stabiliser les tests de fuseau horaire dayjs par rapport aux transitions DST par @lyzno1 dans https://github.com/langgenius/dify/pull/33134</li>
+<li>test : composant d'en-tête restant et augmentation de la couverture des branches par @akashseth-ifp dans https://github.com/langgenius/dify/pull/33052</li>
+<li>refactor : utilisez thread.Timer au lieu de time.sleep par @fatelei dans https://github.com/langgenius/dify/pull/33121</li>
+<li>test : cas de test unitaire pour le module contrôleurs.common par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32056</li>
+<li>Correction : gestion des séparateurs de chemin de barre oblique inverse dans les entrées ZIP DOCX exportées sur… (#33129) par @yijiaquan dans https://github.com/langgenius/dify/pull/33131</li>
+<li>corvée : mettre à jour vinext, agentation, supprimer Prism en lexical par @hyoban dans https://github.com/langgenius/dify/pull/33142</li>
+<li>correctif : correction de la condition du filtre de métadonnées non extraite de {{}} par @fatelei dans https://github.com/langgenius/dify/pull/33141</li>
+<li>feat(web) : ajout d'une primitive de menu contextuel et d'un élément de lien déroulant par @lyzno1 dans https://github.com/langgenius/dify/pull/33125</li>
+<li>correctif (Web) : correction du texte de l'élément d'outil non centré verticalement dans le sélecteur de bloc par @lyzno1 dans https://github.com/langgenius/dify/pull/33148</li>
+<li>refactor : déduplication du mappage des sections héritées dans ConfigHelper par @Olexandr88 dans https://github.com/langgenius/dify/pull/32715
+*exploit : conserver les connexions lors du changement de nœud par @hjlarry dans https://github.com/langgenius/dify/pull/31982</li>
+<li>correctif : workflow_as_tool ne fonctionne pas avec l'entrée json par @hjlarry dans https://github.com/langgenius/dify/pull/32554</li>
+<li>exploit : lorsque copier/coller plusieurs nœuds ne nécessite pas de les reconnecter par @hjlarry dans https://github.com/langgenius/dify/pull/32631</li>
+<li>correctif : correctif : la valeur d'autorisation du handle n'est aucune par @fatelei dans https://github.com/langgenius/dify/pull/33031</li>
+<li>exploit : prise en charge du mode relatif pour la commande message clean par @hj24 dans https://github.com/langgenius/dify/pull/32834</li>
+<li>docs : utilisez la commande docker compose de manière cohérente dans README par @haosenwang1018 dans https://github.com/langgenius/dify/pull/33077</li>
+<li>refactor : réutiliser la connexion redis au lieu d'en créer une nouvelle par @fatelei dans https://github.com/langgenius/dify/pull/32678</li>
+<li>test : améliorer les tests unitaires pour controllers.web par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32150</li>
+<li>refactor : l'économiseur de fichiers découple le moteur de base de données et le proxy ssrf par @fatelei dans https://github.com/langgenius/dify/pull/33076</li>
+<li>Correction : l'icône d'arrêt de réponse ne s'affiche pas par @hjlarry dans https://github.com/langgenius/dify/pull/33154</li>
+<li>test : cas de tests unitaires pour le module console.datasets par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32179</li>
+<li>test : scénario de test unitaire pour le module controllers.console.workspace par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32181</li>
+<li>ci : ignorez certaines mises à jour majeures de @hyoban dans https://github.com/langgenius/dify/pull/33161</li>
+<li>ci : ignorer ky et tailwind-merge dans la mise à jour par @hyoban dans https://github.com/langgenius/dify/pull/33167</li>
+<li>corvée(deps-dev) : augmentez le groupe de livres d'histoires dans /web avec 7 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33163</li>
+<li>corvée(deps-dev) : boostez le groupe eslint-group dans /web avec 5 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33168</li>
+<li>corvée(deps) : déplacez le groupe npm-dependencies sur 1 répertoire avec 55 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33170</li>
+<li>ci : mise à jour de la version des actions, réutilisation du workflow par action composite par @hyoban dans https://github.com/langgenius/dify/pull/33177</li>
+<li>test : scénario de test unitaire pour le module controllers.console.app par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32247</li>
+<li>refactor : outil nœud découpler la base de données par @fatelei dans https://github.com/langgenius/dify/pull/33166</li>
+<li>correctif (web) : état de réponse correct après la réponse d'annotation complétée par @JzoNgKVO dans https://github.com/langgenius/dify/pull/33173</li>
+<li>test : ajout d'UT pour api core.trigger par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32587</li>
+<li>test : cas de tests unitaires pour console.explore et module tag par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32186</li>
+<li>exploit : ajoutez le téléchargement par lots pour les documents de l'ensemble de données au format ZIP et URL signée pour le téléchargement d'un seul document. par @ZeroZ-lab dans https://github.com/langgenius/dify/pull/33100</li>
+<li>docs : mise à jour des documents d'intégration Opik par @vincentkoc dans https://github.com/langgenius/dify/pull/32336</li>
+<li>exploit : comportement d'envoi configurable Entrée/Maj+Entrée dans le chat intégré (#32295) par @agent-steven dans https://github.com/langgenius/dify/pull/32300</li>
+<li>Correction : le bouton de copie reste désactivé après la pause/reprise du nœud d'entrée humaine par @stakeswky dans https://github.com/langgenius/dify/pull/32662</li>
+<li>Exploit : Améliorer le contexte des commentaires SQL pour les requêtes de Celery Worker par @Desel72 dans https://github.com/langgenius/dify/pull/33058</li>
+<li>correctif : utilisez le plugin_id correct pour la source de données WaterCrawl par @bgondell dans https://github.com/langgenius/dify/pull/33182</li>
+<li>corvée(ui) : augmente le z-index des primitives de superposition pour la coexistence héritée par @lyzno1 dans https://github.com/langgenius/dify/pull/33185</li>
+<li>test : ajoutez de nouveaux tests unitaires pour les utilitaires de service de messagerie, obtenez des services de messagerie, de commentaires et de rétention. par @mahamadasim dans https://github.com/langgenius/dify/pull/33169</li>
+<li>correctif : empêche l'avertissement d'hydratation de l'imbrication des div à l'intérieur de p pour les images de démarque en ligne par @tysoncung dans https://github.com/langgenius/dify/pull/32419</li>
+<li>test : test unitaire pour le module core.rag par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32630</li>
+<li>exploit : pré-désinstallation du plugin d'entreprise par @wylswz dans https://github.com/langgenius/dify/pull/33158</li>
+<li>correctif : correction de la vérification des paramètres request.metadata_model_config par @fatelei dans https://github.com/langgenius/dify/pull/33189</li>
+<li>refactor : utilisez l'assistant <code>generate_valid_password</code> pour créer des mots de passe de compte de test par @ZeroZ-lab dans https://github.com/langgenius/dify/pull/33192</li>
+<li>Correctif : assurez-vous que les mises à jour des clés API des connaissances externes sont conservées par @Saber-youMianJing dans https://github.com/langgenius/dify/pull/33188</li>
+<li>correctif : travées et traces imbriquées ; par @aadereiko dans https://github.com/langgenius/dify/pull/33049</li>
+<li>correctif : la copie vers clipboard a échoué dans des contextes non sécurisés (HTTP) par @hizhujianfeng dans https://github.com/langgenius/dify/pull/32287</li>
+<li>refactor : remplacez React Markdown par Streamdown par @WTW0313 dans https://github.com/langgenius/dify/pull/32971</li>
+<li>ci : ajout d'une action anti-slop GitHub pour détecter les PR AI de mauvaise qualité par @elliotllliu dans https://github.com/langgenius/dify/pull/33193</li>
+<li>corvée(deps-dev) : augmentez le groupe de livres d'histoires dans /web avec 7 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33198</li>
+<li>corvée : mise à jour de ky vers 1.14.3 par @hyoban dans https://github.com/langgenius/dify/pull/33201</li>
+<li>corvée(deps-dev) : boostez le groupe eslint-group dans /web avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33209</li>
+<li>corvée(deps) : cumul de bosses de 4.56.0 à 4.59.0 dans /web par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33197</li>
+<li>corvée : diviser les commandes par domaine par @hjlarry dans https://github.com/langgenius/dify/pull/33085</li>
+<li>corvée : passer de vinext à npm, supprimer npm de dependabot par @hyoban dans https://github.com/langgenius/dify/pull/33234</li>
+<li>test : ajout d'un test pour la source de données principale api par @mahammadasim dans https://github.com/langgenius/dify/pull/32414</li>
+<li>correctif (ci) : ajout d'une étiquette de fermeture et d'échec au flux de travail anti-slop par @RogueTex dans https://github.com/langgenius/dify/pull/33236</li>
+<li>corvée(deps) : déplacer pypdf de 6.7.5 à 6.8.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33238</li>
+<li>correctif : correction d'un test échoué par @fatelei dans https://github.com/langgenius/dify/pull/33241</li>
+<li>correctif : correction de l'analyse du lien mailto/http dans la cellule du tableau par @fatelei dans https://github.com/langgenius/dify/pull/33224</li>
+<li>exploit : source des tâches du plugin par @zyssyz123 dans https://github.com/langgenius/dify/pull/33244</li>
+<li>correctif : PromptEditor laisse un minuteur de flou en attente qui déclenche une erreur Vitest non gérée par @ZeroZ-lab dans https://github.com/langgenius/dify/pull/33253</li>
+<li>corvée : supprimez le script autonome d'optimisation par @hyoban dans https://github.com/langgenius/dify/pull/33256</li>
+<li>corvée : script de mise à jour pour le build docker par @hyoban dans https://github.com/langgenius/dify/pull/33261</li>
+<li>corvée : désactivez certaines corrections automatiques, désactivez les règles e18e par @hyoban dans https://github.com/langgenius/dify/pull/33265</li>
+<li>correctif : utiliser les entrées modifiées par modération et la requête de @fatelei dans https://github.com/langgenius/dify/pull/33180</li>
+<li>correctif : correction de l'extrait des paramètres de l'outil mcp par @fatelei dans https://github.com/langgenius/dify/pull/33258</li>
+<li>Correction : centrer verticalement les en-têtes du tableau clé-valeur dans HTTP et Webhook par @hjlarry dans https://github.com/langgenius/dify/pull/33260</li>
+<li>test : ajout de tests pour certains fichiers dans le module services par @saumyatalwani dans https://github.com/langgenius/dify/pull/32583</li>
+<li>refactor (avatar) : migrez vers les primitives de l'interface utilisateur de base avec les variantes de taille d'enregistrement par @lyzno1 dans https://github.com/langgenius/dify/pull/33268</li>
+<li>corvée : correction des alertes dependabot par @hyoban dans https://github.com/langgenius/dify/pull/33277</li>
+<li>correctif : CI principal par @hjlarry dans https://github.com/langgenius/dify/pull/33276</li>
+<li>test : ajout de tests unitaires pour certains services par @poojanInfocusp dans https://github.com/langgenius/dify/pull/32866</li>
+<li>refactor : passage à Monaco moderne par @hyoban dans https://github.com/langgenius/dify/pull/32966</li>
+<li>corvée : ignorer la vérification préalable à la validation pour la fusion par @hyoban dans https://github.com/langgenius/dify/pull/33287</li>
+<li>refactor (select) : aligner avec les attributs de données de base de l'interface utilisateur et les spécifications Figma par @lyzno1 dans https://github.com/langgenius/dify/pull/33286
+*exploit : notification par @zyssyz123 dans https://github.com/langgenius/dify/pull/32192
+*exploit : support dans le message du site par @iamjoel dans https://github.com/langgenius/dify/pull/33255</li>
+<li>corvée : diviser les groupes de dépendances /api par catégorie de dépendance logique par @Copilot dans https://github.com/langgenius/dify/pull/33297</li>
+<li>corvée(deps) : boostez le groupe de flacons dans /api avec 4 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33301</li>
+<li>corvée(deps) : boostez le groupe google dans /api avec 5 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33304</li>
+<li>corvée(deps) : déplacer astral-sh/setup-uv de 7.3.1 vers 7.4.0 dans le groupe github-actions-dependencies par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33303</li>
+<li>corvée(deps) : bump le groupe pydantic dans /api avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33302</li>
+<li>corvée(deps) : bump le groupe google dans /api avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33299</li>
+<li>corvée(deps) : boostez le groupe de flacons dans /api avec 3 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33298</li>
+<li>corvée(deps) : boostez le groupe llm dans /api avec 6 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33305</li>
+<li>corvée(deps) : mise à jour de l'exigence redis[hiredis] de ~=7.2.0 à ~=7.3.0 dans /api dans le groupe de base de données par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33306</li>
+<li>corvée(deps) : boostez le groupe de stockage dans /api avec 7 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33315</li>
+<li>corvée(deps) : déplacer mlflow-skinny de 3.6.0 à 3.10.1 dans /api dans le groupe llm sur 1 répertoire par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33317</li>
+<li>corvée(deps) : déplacer opentelemetry-propagator-b3 de 1.28.0 à 1.40.0 dans /api dans le groupe opentelemetry par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33308</li>
+<li>refactor : unifiez NodeConfigDict.data et BaseNodeData par @BeautyyuYanli dans https://github.com/langgenius/dify/pull/32780</li>
+<li>corvée(deps-dev) : déplacez le groupe de développement sur 1 répertoire avec 18 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33322</li>
+<li>corvée(deps) : déplacez le groupe python-packages sur 1 répertoire avec 13 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33319</li>
+<li>ci : Annuler &quot;chore(deps) : déplacer le groupe de packages python sur 1 répertoire avec 13 mises à jour&quot; par @asukaminato0721 dans https://github.com/langgenius/dify/pull/33331</li>
+<li>test : améliorer les tests unitaires pour controllers.inner_api par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32203</li>
+<li>test : cas de tests unitaires pour les modules core.callback, core.base, core.entities par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32471</li>
+<li>test : cas de tests unitaires module core.agent par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32474</li>
+<li>correctif : autoriser les sauts de ligne lorsqu'une valeur de champ déborde en raison d'une longueur excessive par @douxc dans https://github.com/langgenius/dify/pull/33339</li>
+<li>test : cas de tests unitaires pour le module core.app.apps par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32482</li>
+<li>test : ajout d'UT pour api/services.plugin par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32588</li>
+<li>test : cas de tests unitaires pour les modules core.variables, core.plugin, core.prompt par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32637</li>
+<li>test : ajout d'UT pour api/services recommendation_app, outils, workflow par @cryptus-neoxys dans https://github.com/langgenius/dify/pull/32645</li>
+<li>test : ajout d'un test pour l'extension principale, external_data_tool et le générateur llm par @mahammadasim dans https://github.com/langgenius/dify/pull/32468</li>
+<li>test : ajouté pour la journalisation de base et le core mcp par @mahammadasim dans https://github.com/langgenius/dify/pull/32478</li>
+<li>test : ajout d'un test pour la mémoire tampon de jeton principale et l'exécution du modèle par @mahammadasim dans https://github.com/langgenius/dify/pull/32512</li>
+<li>test : cas de tests unitaires pour le module core.tools par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/32447</li>
+<li>corvée : mise à jour de vinext par @hyoban dans https://github.com/langgenius/dify/pull/33347</li>
+<li>refactor(switch) : migration de base de l'interface utilisateur avec variantes de chargement/squelette par @lyzno1 dans https://github.com/langgenius/dify/pull/33345</li>
+<li>test : amélioration des paramètres de couverture pour certains fichiers en base par @saumyatalwani dans https://github.com/langgenius/dify/pull/33207</li>
+<li>test : amélioration de la couverture de certains fichiers par @saumyatalwani dans https://github.com/langgenius/dify/pull/33218</li>
+<li>test : ajout de tests pour le module backend core.ops par @mahammadasim dans https://github.com/langgenius/dify/pull/32639</li>
+<li>test : ajout d'un test pour les services d'ops, summary, vector, website et ji… par @mahammadasim dans https://github.com/langgenius/dify/pull/32893</li>
+<li>test : ajout de cas de test pour le module core.workflow par @rajatagarwal-oss dans https://github.com/langgenius/dify/pull/33126</li>
+<li>test : refactoriser l'implémentation simulée dans les tests de composants markdown par @CodingOnStar dans https://github.com/langgenius/dify/pull/33350</li>
+<li>corvée : utilisez tsconfigPaths pour vinext par @hyoban dans https://github.com/langgenius/dify/pull/33363</li>
+<li>correctif : le panneau du nœud de requête HTTP prend en charge la gestion des sauts de ligne et des débordements pour les valeurs de variables par @douxc dans https://github.com/langgenius/dify/pull/33359</li>
+<li>correctif : test_get_credentials_and_config_selects_plugin_id_and_key_api_ke… par @fatelei dans https://github.com/langgenius/dify/pull/33361</li>
+<li>corvée (web) : désactivez l'avis de support i18next par @Copilot dans https://github.com/langgenius/dify/pull/33309</li>
+<li>corvée : ajouter un serveur proxy de développement, mettre à jour les dépôts par @hyoban dans https://github.com/langgenius/dify/pull/33371</li>
+<li>corvée : supprimer l'option de configuration WEAVIATE_GRPC_ENABLED inutilisée par @majiayu000 dans https://github.com/langgenius/dify/pull/33378</li>
+<li>exploit (workflow) : ajout d'un menu contextuel de bord avec prise en charge de la suppression par @lyzno1 dans https://github.com/langgenius/dify/pull/33391</li>
+<li>corvée : ajouter des informations de suivi du message sur le site par @iamjoel dans https://github.com/langgenius/dify/pull/33394</li>
+<li>correctif : with_debug_recipient() supprime silencieusement les e-mails de débogage lorsque user_id est None ou une chaîne vide par @gambletan dans https://github.com/langgenius/dify/pull/33373</li>
+<li>test : appliquer les portes de couverture des applications/composants dans les tests Web par @CodingOnStar dans https://github.com/langgenius/dify/pull/33395</li>
+<li>test : [Refactor/Chore] utilise Testcontainers pour faire le test SQL #32454 par @asukaminato0721 dans https://github.com/langgenius/dify/pull/32460</li>
+<li>corvée(deps) : déplacer orjson de 3.11.4 à 3.11.6 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33380</li>
+<li>corvée : utilisez vite plus par @hyoban dans https://github.com/langgenius/dify/pull/33407</li>
+<li>refactor(web) : divisez la génération de texte de partage et ajoutez des tests à haute couverture par @CodingOnStar dans https://github.com/langgenius/dify/pull/33408</li>
+<li>correctif (api) : autoriser la ponctuation dans les noms de fichiers téléchargés par @yevanmore dans https://github.com/langgenius/dify/pull/33364</li>
+<li>correctif : détecter correctement les colonnes requises dans le workflow archivé exécuté par @hjlarry dans https://github.com/langgenius/dify/pull/33403</li>
+<li>corvée(deps) : déplacer pyjwt de 2.11.0 vers 2.12.0 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33437</li>
+<li>corvée(deps) : bosse capricieuse de 0.1.9 à 0.1.10 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33436</li>
+<li>refactor : remplacez sa.String par EnumText dans mapped_column pour le type s… par @tmimmanuel dans https://github.com/langgenius/dify/pull/33332</li>
+<li>refactor(tests) : utilisez des valeurs enum au lieu de chaînes littérales pour les champs d'état par @nielskaspers dans https://github.com/langgenius/dify/pull/33441</li>
+<li>refactor : remplacez sa.String restant par EnumText 2 par @tmimmanuel dans https://github.com/langgenius/dify/pull/33448</li>
+<li>refactor (workflow) : déplacez le nœud d'agent vers le workflow principal par @WH-2099 dans https://github.com/langgenius/dify/pull/33431</li>
+<li>refactor (api) : déplacer les nœuds de connaissances du workflow et déclencher les nœuds par @laipz8200 dans https://github.com/langgenius/dify/pull/33445</li>
+<li>Correction : conserver les icônes personnalisées dans le DSL exporté par @majiayu000 dans https://github.com/langgenius/dify/pull/33424</li>
+<li>correctif : ajoutez doc_type aux propriétés Weaviate et aux attributs Vector par défaut par @RickDamon dans https://github.com/langgenius/dify/pull/33398</li>
+<li>correctif : mettre à jour l'exemple INTERNAL_FILES_URL par défaut pour Docker Desktop par @laipz8200 dans https://github.com/langgenius/dify/pull/33447</li>
+<li>exploit : ajouter des Holologres comme choix de base de données VDB et FullText par @TimothyDing dans https://github.com/langgenius/dify/pull/32830</li>
+<li>Correction : rétrograder le journal d'échec de téléchargement d'image d'ERREUR à AVERTISSEMENT par @tysoncung dans https://github.com/langgenius/dify/pull/33429</li>
+<li>correctif (api) : résoudre les erreurs de type dans le service API encapsule les tests de @mahmoodhamdi dans https://github.com/langgenius/dify/pull/33467</li>
+<li>Exploit : Supprimez le boîtier spécial GPT-4 de la sélection de modèle par défaut par @laipz8200 dans https://github.com/langgenius/dify/pull/33458</li>
+<li>correctif : utilisez des requêtes paramétrées pour empêcher l'injection SQL dans les magasins de vecteurs par @mango766 dans https://github.com/langgenius/dify/pull/33421</li>
+<li>corvée(deps) : déplacer sqlalchemy de 2.0.44 vers 2.0.48 dans /api dans le groupe de base de données par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33487</li>
+<li>refactor : module d'exécution de code de découplement llm par @fatelei dans https://github.com/langgenius/dify/pull/33400</li>
+<li>corvée(deps) : boostez le groupe de stockage dans /api avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33488</li>
+<li>corvée(deps) : boostez le groupe github-actions-dependencies avec 4 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33485</li>
+<li>corvée(deps) : faire passer litellm de 1.82.1 à 1.82.2 dans /api dans le groupe llm par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33480</li>
+<li>corvée (deps-dev) : mettre à jour l'exigence de faux de ~=40.8.0 à ~=40.11.0 dans /api dans le groupe de développement par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33482</li>
+<li>corvée : ajouter des index pour les modèles de requête human_input_forms par @hjlarry dans https://github.com/langgenius/dify/pull/32849</li>
+<li>corvée(deps) : boostez le groupe de stockage dans /api avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33481</li>
+<li>corvée(deps) : déplacer le groupe llm sur 1 répertoire avec 2 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33491</li>
+<li>corvée(deps) : remplacez le groupe python-packages dans /api avec 13 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33484</li>
+<li>ci : Simplifiez le téléchargement des données nltk dans le fichier Docker par @asukaminato0721 dans https://github.com/langgenius/dify/pull/33495</li>
+<li>Correction : gestion des erreurs d'entreprise API et application des licences par @GareArc dans https://github.com/langgenius/dify/pull/33044</li>
+<li>corvée(deps) : faire passer google-auth de 2.49.0 à 2.49.1 dans /api dans le groupe google par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33483</li>
+<li>exploit : ajout d'une instance unique weaviate client par @lcedaw dans https://github.com/langgenius/dify/pull/27910</li>
+<li>refactor(web) : consolider les conseils de requête/mutation et déprécier les wrappers de base d'utilisation par @lyzno1 dans https://github.com/langgenius/dify/pull/33456</li>
+<li>corvée(deps-dev) : déplacez le groupe vdb sur 1 répertoire avec 15 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33502</li>
+<li>corvée : changer le brouillon de la variable en utilisateur défini par @hjlarry dans https://github.com/langgenius/dify/pull/33066</li>
+<li>correctif : correction du test weaviate_vector échoué par @fatelei dans https://github.com/langgenius/dify/pull/33511</li>
+<li>feat(diff-coverage) : implémenter une analyse de couverture pour les composants modifiés par @CodingOnStar dans https://github.com/langgenius/dify/pull/33514</li>
+<li>refactor(web) : divisez le flux de résultats de génération de texte et augmentez la couverture par @CodingOnStar dans https://github.com/langgenius/dify/pull/33499</li>
+<li>corvée : supprimer la police suivante par @hyoban dans https://github.com/langgenius/dify/pull/33512</li>
+<li>exploit (diff-coverage) : améliorez les rapports de couverture pour les relevés et les branches multilignes par @CodingOnStar dans https://github.com/langgenius/dify/pull/33516</li>
+<li>corvée : retour de resource_metadata compatible sans schéma par @fatelei dans https://github.com/langgenius/dify/pull/33506</li>
+<li>corvée : supprimer l'image suivante par @hyoban dans https://github.com/langgenius/dify/pull/33517</li>
+<li>exploit : appliquer le rendu markdown aux e-mails HITL, désinfecter le sujet et le corps de l'e-mail par @Blackoutta dans https://github.com/langgenius/dify/pull/32305</li>
+<li>test : limiter la couverture des différences Web à la plage de poussée actuelle par @CodingOnStar dans https://github.com/langgenius/dify/pull/33523</li>
+<li>corvée : mettre à jour la version du démon du plugin vers 0.5.4-local dans Docker, composer les fichiers par @QuantumGhost dans https://github.com/langgenius/dify/pull/33526</li>
+<li>corvée : correction des alertes dep par @hyoban dans https://github.com/langgenius/dify/pull/33527</li>
+<li>corvée(api) : renommer la configuration <code>EVENT_BUS_REDIS_CLUSTERS</code> par @QuantumGhost en https://github.com/langgenius/dify/pull/33528</li>
+<li>correctif (Web) : migrer InputNumber vers Base UI NumberField par @lyzno1 dans https://github.com/langgenius/dify/pull/33520</li>
+<li>refactor (custom) : réorganiser le module de marque de l'application Web et augmenter le seuil de couverture par @CodingOnStar dans https://github.com/langgenius/dify/pull/33531</li>
+<li>corvée(deps-dev) : déplacez le groupe de développement sur 1 répertoire avec 19 mises à jour par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33525</li>
+<li>refactor(api) : simplifie l'éligibilité à la session de réponse par @laipz8200 dans https://github.com/langgenius/dify/pull/33538</li>
+<li>corvée : mettre à jour la vérification du résumé de la couverture dans le workflow des tests Web par @CodingOnStar dans https://github.com/langgenius/dify/pull/33533</li>
+<li>corvée(deps) : déplacer authlib de 1.6.7 vers 1.6.9 dans /api par @dependabot[bot] dans https://github.com/langgenius/dify/pull/33544</li>
+<li>refactor (api) : remplacez dict/Mapping par TypedDict dans les modèles d'ensemble de données par @statxc dans https://github.com/langgenius/dify/pull/33550</li>
+<li>correctif (Web) : crash de la page dans le nœud de récupération de connaissances provoqué par la sélection de l'ensemble de données et le seuil de score par @JzoNgKVO dans https://github.com/langgenius/dify/pull/33553</li>
+<li>Correction : augmentez le z-index de superposition du sélecteur de bloc par @lyzno1 dans https://github.com/langgenius/dify/pull/33557</li>
+<li>refactor : utilisez le monaco moderne hissé par @hyoban dans https://github.com/langgenius/dify/pull/33540</li>
+<li>refactor(api) : remplacez dict/Mapping par TypedDict dans trigger.py et workflow.py par @statxc dans https://github.com/langgenius/dify/pull/33562</li>
+<li>test (web) : ignorer les validations de fusion de branches par défaut dans la couverture différentielle par @CodingOnStar dans https://github.com/langgenius/dify/pull/33564</li>
+<li>corvée : revenir #33540 #32966 par @hyoban dans https://github.com/langgenius/dify/pull/33566</li>
+<li>exploit : ajouter des métriques pour nettoyer les messages et les tâches exécutées par le workflow par @hjlarry dans https://github.com/langgenius/dify/pull/33143</li>
+<li>correctif (Web) : préserver le flux de travail public, reconnexion SSE après une pause par @laipz8200 dans https://github.com/langgenius/dify/pull/33552</li>
+</ul>
+<h2>Nouveaux contributeurs</h2>
+<ul>
+<li>@razerzhang a apporté sa première contribution dans https://github.com/langgenius/dify/pull/31843</li>
+<li>@saumyatalwani a apporté sa première contribution au https://github.com/langgenius/dify/pull/32201</li>
+<li>@poojanInfocusp a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32154</li>
+<li>@Haohao-end a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32342</li>
+<li>@apoorvdarshan a fait sa première contribution dans https://github.com/langgenius/dify/pull/32386</li>
+<li>@akashseth-ifp a fait sa première contribution dans https://github.com/langgenius/dify/pull/32281</li>
+<li>@mahamadasim a fait sa première contribution dans https://github.com/langgenius/dify/pull/32283</li>
+<li>@tysoncung a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32461</li>
+<li>@Hypertension42 a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32490</li>
+<li>@J0su3Code a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32493</li>
+<li>@stakeswky a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32498</li>
+<li>@rajatagarwal-oss a fait sa première contribution dans https://github.com/langgenius/dify/pull/32057</li>
+<li>@cryptus-neoxys a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32073</li>
+<li>@ Pandaaaa906 a fait sa première contribution dans https://github.com/langgenius/dify/pull/32560</li>
+<li>@ajuijas a fait sa première contribution dans https://github.com/langgenius/dify/pull/32510</li>
+<li>@toroleapinc a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32653</li>
+<li>@haku-ink a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32636</li>
+<li>@tda1017 a fait sa première contribution dans https://github.com/langgenius/dify/pull/32701</li>
+<li>@nielskaspers a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32718</li>
+<li>@slegarraga a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32768</li>
+<li>@Br1an67 a fait sa première contribution dans https://github.com/langgenius/dify/pull/32772</li>
+<li>@akkoaya a apporté sa première contribution dans https://github.com/langgenius/dify/pull/31528</li>
+<li>@hwb96 a fait sa première contribution dans https://github.com/langgenius/dify/pull/32778</li>
+<li>@stablegenius49 a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32813</li>
+<li>@Echo0ff a fait sa première contribution dans https://github.com/langgenius/dify/pull/32828</li>
+<li>@nightcityblade a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32721</li>
+<li>@RenzoMXD a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32942</li>
+<li>@caoergou a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32995</li>
+<li>@lavish0000 a fait sa première contribution dans https://github.com/langgenius/dify/pull/33056</li>
+<li>@statxc a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32925</li>
+<li>@pepsile a fait sa première contribution dans https://github.com/langgenius/dify/pull/32732</li>
+<li>@Stormhand a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32242</li>
+<li>@CoralGarden52 a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33116</li>
+<li>@Olexandr88 a fait sa première contribution dans https://github.com/langgenius/dify/pull/32715</li>
+<li>@haosenwang1018 a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33077</li>
+<li>@vincentkoc a fait sa première contribution dans https://github.com/langgenius/dify/pull/32336</li>
+<li>@agent-steven a fait sa première contribution dans https://github.com/langgenius/dify/pull/32300</li>
+<li>@Desel72 a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33058</li>
+<li>@bgondell a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33182</li>
+<li>@Saber-youMianJing a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33188</li>
+<li>@aadereiko a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33049</li>
+<li>@hizhujianfeng a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32287</li>
+<li>@elliotllliu a fait sa première contribution dans https://github.com/langgenius/dify/pull/33193</li>
+<li>@RogueTex a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33236</li>
+<li>@gambletan a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33373</li>
+<li>@tmimmanuel a fait sa première contribution dans https://github.com/langgenius/dify/pull/33332</li>
+<li>@RickDamon a apporté sa première contribution dans https://github.com/langgenius/dify/pull/33398</li>
+<li>@TimothyDing a apporté sa première contribution dans https://github.com/langgenius/dify/pull/32830</li>
+<li>@mahmoodhamdi a fait sa première contribution dans https://github.com/langgenius/dify/pull/33467</li>
+<li>@mango766 a fait sa première contribution dans https://github.com/langgenius/dify/pull/33421</li>
+</ul>
+<p><strong>Changelog complet</strong> : https://github.com/langgenius/dify/compare/1.13.0...1.13.1</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/langgenius/dify">langgenius/dify</a> · <code>1.13.1</code> · 2026-03-17 · <a href="https://github.com/langgenius/dify/releases/tag/1.13.1">version en amont</a></p>
+</blockquote>
+<p><em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>dify 1.13.1</h1>
+<h2>🚀 Major Functional Changes</h2>
+<h3>Data platform and dataset operations</h3>
+<ul>
+<li>Added <strong>Hologres</strong> as a supported backend option for both vector retrieval and full-text search.</li>
+<li>Added Service API endpoints for dataset document downloads:
+<ul>
+<li>Batch ZIP download for selected documents.</li>
+<li>Signed URL download for single-document original files.</li>
+</ul>
+</li>
+</ul>
+<h3>Workflow and chat experience improvements</h3>
+<ul>
+<li><strong>Breaking change:</strong> HITL email content now uses markdown rendering before delivery.
+Existing email templates that relied on raw/plain behavior may render differently after upgrade.</li>
+<li>Draft variables are now user-scoped instead of app-scoped. Historical draft variables will not be available after upgrading.</li>
+<li>Added edge context menu support in workflow canvas, including direct edge deletion.</li>
+<li>Preserved existing connections when changing node types in workflow editing.</li>
+<li>Added configurable send-key behavior (<code>Enter</code> vs <code>Shift+Enter</code>) for embedded chat input.</li>
+<li>Added file payloads in message-end stream responses.</li>
+<li>Removed GPT-4-specific hardcoded behavior from default model selection logic.</li>
+<li>Added a new <code>export-app-messages</code> CLI command to export application messages and related feedback to <code>JSONL.GZ</code> (local or cloud storage).</li>
+</ul>
+<h2>🔐 Security Updates</h2>
+<ul>
+<li>Prevented SQL injection risks in vector-store query paths by switching to parameterized SQL in affected implementations.</li>
+<li>Hardened HITL email delivery:
+<ul>
+<li>Sanitize subject and body content.</li>
+<li>Strip CR/LF from subjects to prevent SMTP header-injection vectors.</li>
+</ul>
+</li>
+<li>Enforced ownership checks for conversation deletion APIs.</li>
+<li>Cleared stale provider credentials during plugin uninstall to reduce residual credential risk.</li>
+<li>Improved enterprise API error handling and license-enforcement behavior for invalid/expired license states.</li>
+</ul>
+<h2>🏗️ Configuration, Architecture, and Deployment Updates</h2>
+<h3>Deployment and operations</h3>
+<ul>
+<li>Added a dedicated Celery queue: <code>dataset_summary</code> for LLM-heavy summary generation tasks.
+<ul>
+<li>Ensure workers subscribe to this queue to avoid summary-job backlog.</li>
+</ul>
+</li>
+<li>Added telemetry metrics for retention cleanup tasks (messages/workflow runs), plus flush behavior for short-lived command jobs.</li>
+</ul>
+<h3>Configuration changes</h3>
+<ul>
+<li>Added <code>REDIS_MAX_CONNECTIONS</code>.</li>
+<li>Deprecated <code>PUBSUB_*</code> event-bus settings in favor of <code>EVENT_BUS_*</code> settings.</li>
+</ul>
+<h2>🛠 Other Noteworthy Changes</h2>
+<ul>
+<li>Fixed <code>workflow_runs.started_at</code> being overwritten on resume.</li>
+<li>Fixed metadata batch-edit silent failures caused by split-transaction edge cases.</li>
+<li>Fixed metadata filter extraction issues in knowledge retrieval (<code>{{...}}</code> conditions).</li>
+<li>Restored citation visibility in advanced chat applications.</li>
+<li>Fixed conversation variable reset behavior after HITL nodes.</li>
+<li>Fixed a page crash in knowledge-retrieval node configuration flow.</li>
+<li>Fixed chat assistant blocking response-mode behavior.</li>
+<li>Added <code>doc_type</code> handling in Weaviate vector attributes for better compatibility.</li>
+<li>Upgraded OpenTelemetry dependencies to resolve context-detach errors.</li>
+</ul>
+<hr />
+<h2>Upgrade Guide</h2>
+<blockquote>
+<p>[!IMPORTANT]
+If you use custom <code>CELERY_QUEUES</code>, make sure <code>workflow_based_app_execution</code> is included.<br />
+If <code>ENABLE_API_TOKEN_LAST_USED_UPDATE_TASK=true</code>, also include <code>api_token</code>.</p>
+<p>For background and details, see <strong>⚠️ Important Upgrade Note</strong> and <strong>🔧 Operational Note</strong> above.</p>
+</blockquote>
+<h3>Docker Compose Deployments</h3>
+<ol>
+<li>
+<p>Back up your customized docker-compose YAML file (optional)</p>
+<pre><code class="language-bash">cd docker
+cp docker-compose.yaml docker-compose.yaml.$(date +%s).bak
+</code></pre>
+</li>
+<li>
+<p>Get the latest code from the main branch</p>
+<pre><code class="language-bash">git checkout main
+git pull origin main
+</code></pre>
+</li>
+<li>
+<p>Stop the service. Please execute in the docker directory</p>
+<pre><code class="language-bash">docker compose down
+</code></pre>
+</li>
+<li>
+<p>Back up data</p>
+<pre><code class="language-bash">tar -cvf volumes-$(date +%s).tgz volumes
+</code></pre>
+</li>
+<li>
+<p>Upgrade services</p>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+</li>
+</ol>
+<blockquote>
+<p>[!NOTE]</p>
+<p>If you encounter errors like below</p>
+<pre><code class="language-bash">2025/11/26 11:37:57 /app/internal/db/pg/pg.go:30
+[error] failed to initialize database, got error failed to connect to `host=db_postgres user=postgres database=dify_plugin`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+
+2025/11/26 11:37:57 /app/internal/db/pg/pg.go:34
+[error] failed to initialize database, got error failed to connect to `host=db_postgres user=postgres database=postgres`: hostname &gt; resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+2025/11/26 11:37:57 init.go:99: [PANIC]failed to init dify plugin db: failed to connect to `host=db_postgres user=postgres database=postgres`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+panic: [PANIC]failed to init dify plugin db: failed to connect to `host=db_postgres user=postgres database=postgres`: hostname resolving error (lookup db_postgres on 127.0.0.11:53: server misbehaving)
+</code></pre>
+<p>Please use the following command instead. For details, please read this https://github.com/langgenius/dify/issues/28706</p>
+<pre><code class="language-bash">docker compose --profile postgresql up -d
+</code></pre>
+</blockquote>
+<h3>Source Code Deployments</h3>
+<ol>
+<li>
+<p>Stop the API server, Worker, and Web frontend Server.</p>
+</li>
+<li>
+<p>Get the latest code from the release branch:</p>
+<pre><code class="language-bash">git checkout 1.13.1
+</code></pre>
+</li>
+<li>
+<p>Update Python dependencies:</p>
+<pre><code class="language-bash">cd api
+uv sync
+</code></pre>
+</li>
+<li>
+<p>Then, let's run the migration script:</p>
+<pre><code class="language-bash">uv run flask db upgrade
+</code></pre>
+</li>
+<li>
+<p>Finally, run the API server, Worker, and Web frontend Server again.</p>
+</li>
+</ol>
+<hr />
+<h2>What's Changed</h2>
+<ul>
+<li>feat(api): add scheduled cleanup task for specific workflow logs by @razerzhang in https://github.com/langgenius/dify/pull/31843</li>
+<li>test: add unit tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32201</li>
+<li>test: add comprehensive unit and integration tests for dataset module by @CodingOnStar in https://github.com/langgenius/dify/pull/32187</li>
+<li>test(web): add comprehensive unit and integration tests for plugins and tools modules by @CodingOnStar in https://github.com/langgenius/dify/pull/32220</li>
+<li>test: add comprehensive unit and integration tests for billing components by @CodingOnStar in https://github.com/langgenius/dify/pull/32227</li>
+<li>test: add unit and integration tests for share, develop, and goto-anything modules by @CodingOnStar in https://github.com/langgenius/dify/pull/32246</li>
+<li>test: add comprehensive unit and integration tests for RAG Pipeline components by @CodingOnStar in https://github.com/langgenius/dify/pull/32237</li>
+<li>feat(tests): add integration tests for explore app list, installed apps, and sidebar lifecycle flows by @CodingOnStar in https://github.com/langgenius/dify/pull/32248</li>
+<li>fix: metadata batch edit silently fails due to split transactions and swallowed exceptions by @veeceey in https://github.com/langgenius/dify/pull/32041</li>
+<li>fix: can not upload file in single run by @hyoban in https://github.com/langgenius/dify/pull/32276</li>
+<li>chore(deps): bump pillow from 12.0.0 to 12.1.1 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32250</li>
+<li>feat: support config max size of plugin generated files by @bowenliang123 in https://github.com/langgenius/dify/pull/30887</li>
+<li>feat(api): optimize OceanBase vector store performance and configurability by @connermo in https://github.com/langgenius/dify/pull/32263</li>
+<li>test(web): add and enhance frontend automated tests across multiple modules by @CodingOnStar in https://github.com/langgenius/dify/pull/32268</li>
+<li>chore(deps): bump qs from 6.14.1 to 6.14.2 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/32290</li>
+<li>test: add unit tests for base components-part-1 by @poojanInfocusp in https://github.com/langgenius/dify/pull/32154</li>
+<li>test: add integration tests for app card operations, list browsing, and create app flows by @CodingOnStar in https://github.com/langgenius/dify/pull/32298</li>
+<li>test: add tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32265</li>
+<li>refactor(web): extract custom hooks from complex components and add comprehensive tests by @CodingOnStar in https://github.com/langgenius/dify/pull/32301</li>
+<li>chore(deps): bump sqlparse from 0.5.3 to 0.5.4 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32315</li>
+<li>test: add unit tests for base chat components by @poojanInfocusp in https://github.com/langgenius/dify/pull/32249</li>
+<li>fix(app-copy): inherit web app permission from original app by @GareArc in https://github.com/langgenius/dify/pull/32323</li>
+<li>fix(api): make DB migration Redis lock TTL configurable and prevent LockNotOwnedError from masking failures by @lin-snow in https://github.com/langgenius/dify/pull/32299</li>
+<li>fix: remove explore context and migrate query to orpc contract by @lyzno1 in https://github.com/langgenius/dify/pull/32320</li>
+<li>refactor(web): centralize role-based route guards and fix anti-patterns by @lyzno1 in https://github.com/langgenius/dify/pull/32302</li>
+<li>ci: update dependabot config by @asukaminato0721 in https://github.com/langgenius/dify/pull/32346</li>
+<li>chore(deps-dev): bump types-greenlet from 3.1.0.20250401 to 3.3.0.20251206 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32349</li>
+<li>fix(i18n): fix critical errors and overhaul Persian (fa-IR) translations in workflow.json by @Haohao-end in https://github.com/langgenius/dify/pull/32342</li>
+<li>refactor(workflow-file): move <code>core.file</code> to <code>core.workflow.file</code> by @WH-2099 in https://github.com/langgenius/dify/pull/32252</li>
+<li>refactor(document_extractor): Extract configs by @laipz8200 in https://github.com/langgenius/dify/pull/31828</li>
+<li>refactor(web): replace String.match() with RegExp.exec() for non-global regex by @apoorvdarshan in https://github.com/langgenius/dify/pull/32386</li>
+<li>ci: Add weekly schedule for pip and uv ecosystems by @asukaminato0721 in https://github.com/langgenius/dify/pull/32398</li>
+<li>chore(deps): bump gmpy2 from 2.2.1 to 2.3.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32402</li>
+<li>chore(deps-dev): update types-markdown requirement from ~=3.7.0 to ~=3.10.2 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32401</li>
+<li>chore(deps-dev): bump opensearch-py from 2.4.0 to 3.1.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32400</li>
+<li>refactor(web): make Switch controlled-only and migrate call sites by @lyzno1 in https://github.com/langgenius/dify/pull/32399</li>
+<li>chore(deps-dev): bump import-linter from 2.7 to 2.10 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32403</li>
+<li>fix: correct misleading retry count in error message by @kurokobo in https://github.com/langgenius/dify/pull/32406</li>
+<li>test: add tests for base &gt; date-time-picker by @saumyatalwani in https://github.com/langgenius/dify/pull/32396</li>
+<li>fix: clear stale provider credentials during plugin uninstall by @laipz8200 in https://github.com/langgenius/dify/pull/32380</li>
+<li>chore(deps): bump pypdf from 6.6.2 to 6.7.1 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32427</li>
+<li>chore(deps): bump werkzeug from 3.1.5 to 3.1.6 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32431</li>
+<li>chore(deps): bump flask from 3.1.2 to 3.1.3 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32432</li>
+<li>refactor: refine some type in trial by @asukaminato0721 in https://github.com/langgenius/dify/pull/32426</li>
+<li>fix: fix node after change can not select start node by @fatelei in https://github.com/langgenius/dify/pull/32441</li>
+<li>test: tighten user-visible specs and raise coverage for key-validator… by @akashseth-ifp in https://github.com/langgenius/dify/pull/32281</li>
+<li>test: header account about, account setting and account dropdown by @mahammadasim in https://github.com/langgenius/dify/pull/32283</li>
+<li>test(web): Added test for model-auth files in header folder by @akashseth-ifp in https://github.com/langgenius/dify/pull/32358</li>
+<li>test: Add unit tests for Data Source Integrations (Notion, Website) and Modals by @mahammadasim in https://github.com/langgenius/dify/pull/32313</li>
+<li>test: add  test cases for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32314</li>
+<li>chore(deps): update pydantic requirement from ~=2.11.4 to ~=2.12.5 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32462</li>
+<li>chore(deps): update python-docx requirement from ~=1.1.0 to ~=1.2.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32463</li>
+<li>chore(deps): update redis[hiredis] requirement from ~=6.1.0 to ~=7.2.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32464</li>
+<li>refactor: inherit ABC in AppQueueManager for proper abstract method usage by @tysoncung in https://github.com/langgenius/dify/pull/32461</li>
+<li>test(web): add members-page account-setting specs and improve coverage by @akashseth-ifp in https://github.com/langgenius/dify/pull/32311</li>
+<li>test(web): add tests for model-provider-page files in header account-… by @akashseth-ifp in https://github.com/langgenius/dify/pull/32360</li>
+<li>fix: add return type annotation to BaseVector.create by @KinomotoMio in https://github.com/langgenius/dify/pull/32475</li>
+<li>test: migrate Dataset/Document property tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32487</li>
+<li>refactor: fix opentelemetry histogram type assignment error by @Hypertension42 in https://github.com/langgenius/dify/pull/32490</li>
+<li>fix: add return type annotation to Moderation.validate_config abstract method by @tysoncung in https://github.com/langgenius/dify/pull/32491</li>
+<li>fix: add return type annotation to abstract _publish method by @J0su3Code in https://github.com/langgenius/dify/pull/32493</li>
+<li>test: add unit tests for base-components part-3 by @poojanInfocusp in https://github.com/langgenius/dify/pull/32408</li>
+<li>test: add unit tests for prompt editor's component picker block plugin. by @mahammadasim in https://github.com/langgenius/dify/pull/32412</li>
+<li>test(web): increase test coverage for components inside header folder by @akashseth-ifp in https://github.com/langgenius/dify/pull/32392</li>
+<li>test(web): Fix failing web test in 'Web Tests' GitHub Action by @akashseth-ifp in https://github.com/langgenius/dify/pull/32481</li>
+<li>test: add tests for base &gt; features by @saumyatalwani in https://github.com/langgenius/dify/pull/32397</li>
+<li>test: add unit tests for base-components-part-2 by @poojanInfocusp in https://github.com/langgenius/dify/pull/32409</li>
+<li>test: add tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32356</li>
+<li>fix: correct type annotations in Langfuse trace entities to match SDK by @stakeswky in https://github.com/langgenius/dify/pull/32498</li>
+<li>test: add tests for file-upload components by @saumyatalwani in https://github.com/langgenius/dify/pull/32373</li>
+<li>test: added tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32370</li>
+<li>fix: resolve pyright bad-index errors in parser.py by @tysoncung in https://github.com/langgenius/dify/pull/32507</li>
+<li>test(web): increase test coverage for model-provider-page folder by @akashseth-ifp in https://github.com/langgenius/dify/pull/32374</li>
+<li>test: add unit tests for chat components by @poojanInfocusp in https://github.com/langgenius/dify/pull/32367</li>
+<li>fix: add explicit return type annotations to BaseVector abstract methods by @longway-code in https://github.com/langgenius/dify/pull/32516</li>
+<li>test(web): increase coverage for files in folder plugin-page and model-provider-page by @akashseth-ifp in https://github.com/langgenius/dify/pull/32377</li>
+<li>test: add unit tests for chat/embedded-chatbot components by @poojanInfocusp in https://github.com/langgenius/dify/pull/32361</li>
+<li>test: add tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32415</li>
+<li>test: add tests for base &gt; image-uploader by @saumyatalwani in https://github.com/langgenius/dify/pull/32416</li>
+<li>test(base): added test coverage to form components by @akashseth-ifp in https://github.com/langgenius/dify/pull/32436</li>
+<li>test: migrate workflow run repository SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32519</li>
+<li>test: migrate remaining DocumentSegment navigation SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32523</li>
+<li>test: migrate end user service SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32530</li>
+<li>test: migrate message extra contents tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32532</li>
+<li>test: migrate workflow trigger log repository sql tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32525</li>
+<li>test: migrate node execution repository sql tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32524</li>
+<li>test: migrate remove_app_and_related_data_task SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32547</li>
+<li>test: migrate test_document_service_display_status SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32545</li>
+<li>test: migrate delete_archived_workflow_run SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32549</li>
+<li>test(base): add test coverage for more base/form components by @akashseth-ifp in https://github.com/langgenius/dify/pull/32437</li>
+<li>fix: incorrect form field height of input modal by @hjlarry in https://github.com/langgenius/dify/pull/32557</li>
+<li>chore(deps): bump fickling from 0.1.7 to 0.1.8 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32552</li>
+<li>test: migrate conversation service SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32527</li>
+<li>test: migrate dataset collection binding SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32539</li>
+<li>test: migrate dataset service update-delete SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32548</li>
+<li>test: unit test cases for controllers.files, controllers.mcp and controllers.trigger module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32057</li>
+<li>test: improve unit tests for controllers.service_api by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32073</li>
+<li>test: add tests for some components in base &gt; prompt-editor by @saumyatalwani in https://github.com/langgenius/dify/pull/32472</li>
+<li>test: add tests for some base components by @saumyatalwani in https://github.com/langgenius/dify/pull/32479</li>
+<li>refactor(workflow): inject http request node config through factories and defaults by @laipz8200 in https://github.com/langgenius/dify/pull/32365</li>
+<li>test: migrate dataset service retrieval SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32528</li>
+<li>test: add unit tests for base components-part-4 by @poojanInfocusp in https://github.com/langgenius/dify/pull/32452</li>
+<li>test: add unit tests for base-components-part-5 by @poojanInfocusp in https://github.com/langgenius/dify/pull/32457</li>
+<li>fix: incorrect placeholder color in dark mode by @hjlarry in https://github.com/langgenius/dify/pull/32568</li>
+<li>fix: spin-animation animation-delay by @Pandaaaa906 in https://github.com/langgenius/dify/pull/32560</li>
+<li>feat(aliyun-trace): add app_id attribute by @hieheihei in https://github.com/langgenius/dify/pull/32489</li>
+<li>test: example for [Refactor/Chore] use Testcontainers to do sql test #32454 by @asukaminato0721 in https://github.com/langgenius/dify/pull/32459</li>
+<li>fix: type checking error in parser by @ajuijas in https://github.com/langgenius/dify/pull/32510</li>
+<li>test: migrate test_dataset_service_get_segments SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32544</li>
+<li>test: migrate restore_archived_workflow_run SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32590</li>
+<li>test: migrate workflow_node_execution_service_repository SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32591</li>
+<li>feat: Adding error handle support for Agent Node by @Pandaaaa906 in https://github.com/langgenius/dify/pull/31596</li>
+<li>ci: try from main repo by @asukaminato0721 in https://github.com/langgenius/dify/pull/32620</li>
+<li>fix: add None checks for tenant.id in dataset vector index tests by @stakeswky in https://github.com/langgenius/dify/pull/32603</li>
+<li>test: migrate clean_dataset_task SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32529</li>
+<li>test: migrate dataset_indexing_task SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32531</li>
+<li>fix: replace dict() merge with dict unpacking to resolve overload error by @toroleapinc in https://github.com/langgenius/dify/pull/32653</li>
+<li>test: migrate dataset service update-dataset SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32533</li>
+<li>fix: add type annotations to BaseStorage.exists and BaseStorage.download by @toroleapinc in https://github.com/langgenius/dify/pull/32652</li>
+<li>fix: replace deprecated SpanAttributes and ResourceAttributes with new semconv imports by @stakeswky in https://github.com/langgenius/dify/pull/32661</li>
+<li>test: improve coverage for header components by @poojanInfocusp in https://github.com/langgenius/dify/pull/32628</li>
+<li>refactor(api): inject code executor from node factory by @laipz8200 in https://github.com/langgenius/dify/pull/32618</li>
+<li>refactor(workflow): inject redis into graph engine manager by @laipz8200 in https://github.com/langgenius/dify/pull/32622</li>
+<li>revert: &quot;fix: image preview triggers binary download&quot; by @laipz8200 in https://github.com/langgenius/dify/pull/32683</li>
+<li>refactor(workflow): inject credential/model access ports into LLM nodes by @laipz8200 in https://github.com/langgenius/dify/pull/32569</li>
+<li>chore: update README.md by @Inlei in https://github.com/langgenius/dify/pull/32680</li>
+<li>refactor(web): remove mouseup listener in use-resize-panel cleanup by @haku-ink in https://github.com/langgenius/dify/pull/32636</li>
+<li>chore(ci): fold pyrefly diff comments by @laipz8200 in https://github.com/langgenius/dify/pull/32685</li>
+<li>test: align file preview mimetype expectation by @laipz8200 in https://github.com/langgenius/dify/pull/32688</li>
+<li>chore(deps-dev): bump nltk from 3.9.2 to 3.9.3 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32691</li>
+<li>fix: the action button of structure output modal should align right by @hjlarry in https://github.com/langgenius/dify/pull/32700</li>
+<li>docs(api): simplify setup README and worker guidance by @laipz8200 in https://github.com/langgenius/dify/pull/32704</li>
+<li>refactor: decouple the business logic from datasource_node by @fatelei in https://github.com/langgenius/dify/pull/32515</li>
+<li>fix: correct mock return type in CodeBasedExtension test by @veeceey in https://github.com/langgenius/dify/pull/32058</li>
+<li>chore: update to eslint 10 by @hyoban in https://github.com/langgenius/dify/pull/32646</li>
+<li>test: migrate document_indexing_sync_task SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32534</li>
+<li>feat(web): add hover clear button for provider search by @laipz8200 in https://github.com/langgenius/dify/pull/32707</li>
+<li>fix: add return type to abstract _publish method by @tda1017 in https://github.com/langgenius/dify/pull/32701</li>
+<li>chore(deps-dev): bump storybook from 10.2.0 to 10.2.10 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/32659</li>
+<li>ci(web): parallelize web tests with 4-shard Vitest sharding by @lyzno1 in https://github.com/langgenius/dify/pull/32713</li>
+<li>test: migrate test_dataset_service SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32535</li>
+<li>chore(deps-dev): align all @storybook/* packages to 10.2.13 by @lyzno1 in https://github.com/langgenius/dify/pull/32714</li>
+<li>fix: YAML syntax error in pyrefly-diff-comment workflow by @nielskaspers in https://github.com/langgenius/dify/pull/32718</li>
+<li>test: migrate document_service_status SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32536</li>
+<li>feat: add backend-code-review skill by @hj24 in https://github.com/langgenius/dify/pull/32719</li>
+<li>fix(ci): fix invalid workflow file pyrefly-diff.yml by @tysoncung in https://github.com/langgenius/dify/pull/32728</li>
+<li>fix: replace unreachable yield expression with yield from () by @tysoncung in https://github.com/langgenius/dify/pull/32727</li>
+<li>chore(deps): bump pypdf from 6.7.1 to 6.7.4 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32736</li>
+<li>refactor: consolidate LLM runtime model state on ModelInstance by @laipz8200 in https://github.com/langgenius/dify/pull/32746</li>
+<li>refactor(workflow): move variables package into core.workflow by @laipz8200 in https://github.com/langgenius/dify/pull/32750</li>
+<li>refactor: inject memory interface into LLMNode by @laipz8200 in https://github.com/langgenius/dify/pull/32754</li>
+<li>test(api): add autospec to MagicMock-based patch usage by @laipz8200 in https://github.com/langgenius/dify/pull/32752</li>
+<li>chore: add vinext as dev server by @hyoban in https://github.com/langgenius/dify/pull/32559</li>
+<li>fix: Fixed the adaptation issue of response formats for different mod… by @FFXN in https://github.com/langgenius/dify/pull/32326</li>
+<li>refactor(web): replace resolutions with pnpm.overrides by @slegarraga in https://github.com/langgenius/dify/pull/32768</li>
+<li>fix: remove REDIRECT_URL_KEY from url by @hyoban in https://github.com/langgenius/dify/pull/32770</li>
+<li>fix: some Qwen3 models only support streaming output. by @FFXN in https://github.com/langgenius/dify/pull/32766</li>
+<li>fix(workflow): decouple http request node external dependencies by @WH-2099 in https://github.com/langgenius/dify/pull/32762</li>
+<li>fix(api): add explicit return type annotations to clean() methods by @Br1an67 in https://github.com/langgenius/dify/pull/32772</li>
+<li>fix(api): resolve type errors in BaseTraceInstance and OpsTraceManager by @Br1an67 in https://github.com/langgenius/dify/pull/32773</li>
+<li>fix: add return type annotation to auth decorators by @tda1017 in https://github.com/langgenius/dify/pull/32699</li>
+<li>fix(web): improve chat edit input behavior and shortcuts by @laipz8200 in https://github.com/langgenius/dify/pull/32757</li>
+<li>refactor(workflow): remove code node helper imports by @WH-2099 in https://github.com/langgenius/dify/pull/32759</li>
+<li>fix: improve TanStack Query client setup and fix queryKey bug by @lyzno1 in https://github.com/langgenius/dify/pull/32422</li>
+<li>feat(enterprise): auto-join newly registered accounts to the default workspace by @lin-snow in https://github.com/langgenius/dify/pull/32308</li>
+<li>fix: add missing pipeline_templates by @akkoaya in https://github.com/langgenius/dify/pull/31528</li>
+<li>fix(api): enforce ownership check for conversation delete by @laipz8200 in https://github.com/langgenius/dify/pull/32686</li>
+<li>chore: remove ty from backend type-check pipeline by @BeautyyuYanli in https://github.com/langgenius/dify/pull/32782</li>
+<li>chore(web): remove PM2 process manager by @majiayu000 in https://github.com/langgenius/dify/pull/30252</li>
+<li>fix: serialize data_source_info with json.dumps in Notion sync task by @weiguangli-io in https://github.com/langgenius/dify/pull/32747</li>
+<li>revert(graph-engine): rollback stop-event unification by @laipz8200 in https://github.com/langgenius/dify/pull/32789</li>
+<li>chore: support code-inspector for vinext by @hjlarry in https://github.com/langgenius/dify/pull/32788</li>
+<li>refactor(api): move llm quota deduction to app graph layer by @laipz8200 in https://github.com/langgenius/dify/pull/32786</li>
+<li>refactor: inject workflow node memory via protocol by @laipz8200 in https://github.com/langgenius/dify/pull/32784</li>
+<li>refactor(workflow): move PromptMessageMemory to model_runtime.memory by @laipz8200 in https://github.com/langgenius/dify/pull/32796</li>
+<li>refactor(workflow): decouple start node external dependencies by @WH-2099 in https://github.com/langgenius/dify/pull/32793</li>
+<li>fix: fix import error by @fatelei in https://github.com/langgenius/dify/pull/32800</li>
+<li>fix: typo in WebScraper plugin description: &quot;Scrapper&quot; → &quot;Scraper&quot; by @Copilot in https://github.com/langgenius/dify/pull/32790</li>
+<li>fix(ci): make pyrefly diff comments focus on diagnostics by @hwb96 in https://github.com/langgenius/dify/pull/32778</li>
+<li>fix: remove references to non-existent Document attributes in test by @toroleapinc in https://github.com/langgenius/dify/pull/32654</li>
+<li>fix: use declared_attr.directive for WorkflowNodeExecutionModel.<strong>table_args</strong> by @toroleapinc in https://github.com/langgenius/dify/pull/32656</li>
+<li>feat(web): add root isolation layer for portal stacking context by @lyzno1 in https://github.com/langgenius/dify/pull/32807</li>
+<li>fix: optimize workflow_run iter query by @hj24 in https://github.com/langgenius/dify/pull/32815</li>
+<li>test: add unit tests for base components by @CodingOnStar in https://github.com/langgenius/dify/pull/32818</li>
+<li>refactor(ci): use diff -u for pyrefly diff output by @stablegenius49 in https://github.com/langgenius/dify/pull/32813</li>
+<li>chore(deps): update pyjwt requirement from ~=2.10.1 to ~=2.11.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32804</li>
+<li>chore(deps-dev): update types-aiofiles requirement from ~=24.1.0 to ~=25.1.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32803</li>
+<li>fix: fix chat assistant response mode blocking is not work by @fatelei in https://github.com/langgenius/dify/pull/32394</li>
+<li>refactor: use unified diff format in pyrefly-diff workflow by @Echo0ff in https://github.com/langgenius/dify/pull/32828</li>
+<li>refactor: remove tests and core/rag from pyrefly excludes by @stablegenius49 in https://github.com/langgenius/dify/pull/32801</li>
+<li>fix: map all NodeType values to span kinds in Arize Phoenix tracing by @veeceey in https://github.com/langgenius/dify/pull/32059</li>
+<li>fix: upgrade OpenTelemetry to 0.49b0 to fix context detach error by @GareArc in https://github.com/langgenius/dify/pull/32825</li>
+<li>feat: ensure document id is not missing by @fatelei in https://github.com/langgenius/dify/pull/32765</li>
+<li>fix(api): add return type annotation to filter_none_values() by @Br1an67 in https://github.com/langgenius/dify/pull/32774</li>
+<li>refactor: knowledge index node decouples business logic by @fatelei in https://github.com/langgenius/dify/pull/32274</li>
+<li>feat(tests): add comprehensive test suite for workflow utilities and node creation by @CodingOnStar in https://github.com/langgenius/dify/pull/32841</li>
+<li>refactor: move workflow package to dify_graph by @laipz8200 in https://github.com/langgenius/dify/pull/32844</li>
+<li>perf: optimize dataset api query speed by @fatelei in https://github.com/langgenius/dify/pull/32847</li>
+<li>refactor(api): move model_runtime into dify_graph by @laipz8200 in https://github.com/langgenius/dify/pull/32858</li>
+<li>chore: update vinext, add workaround by @hyoban in https://github.com/langgenius/dify/pull/32878</li>
+<li>refactor(web): restructure app-sidebar with component decomposition and folder organization by @CodingOnStar in https://github.com/langgenius/dify/pull/32887</li>
+<li>refactor: TemplateTransformNode decouple code executor by @fatelei in https://github.com/langgenius/dify/pull/32879</li>
+<li>chore(deps): bump pypdf from 6.7.4 to 6.7.5 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32882</li>
+<li>chore(deps): bump @orpc/client from 1.13.4 to 1.13.6 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/32883</li>
+<li>refactor(dify_graph): unify invoke and user enums source in workflow by @WH-2099 in https://github.com/langgenius/dify/pull/32873</li>
+<li>fix: Add the missing validation of doc_form in the service API. by @FFXN in https://github.com/langgenius/dify/pull/32892</li>
+<li>fix: downgrade node version to 22 by @hyoban in https://github.com/langgenius/dify/pull/32897</li>
+<li>feat(web): overlay migration guardrails + Base UI primitives by @lyzno1 in https://github.com/langgenius/dify/pull/32824</li>
+<li>test(web): add high-quality unit tests for Base UI wrapper primitives by @lyzno1 in https://github.com/langgenius/dify/pull/32904</li>
+<li>refactor(web): migrate document list query state to nuqs by @lyzno1 in https://github.com/langgenius/dify/pull/32339</li>
+<li>test: migrate test_dataset_service_batch_update_document_status SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32537</li>
+<li>fix: get i18n lazy, make vinext build works by @hyoban in https://github.com/langgenius/dify/pull/32917</li>
+<li>chore: add dependency groups to Dependabot config by @nightcityblade in https://github.com/langgenius/dify/pull/32721</li>
+<li>fix(api): resolve OpenTelemetry histogram type mismatch by @Br1an67 in https://github.com/langgenius/dify/pull/32771</li>
+<li>test: migrate test_dataset_service_create_dataset SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32538</li>
+<li>fix(web): align dropdown-menu styles with Figma design by @lyzno1 in https://github.com/langgenius/dify/pull/32922</li>
+<li>fix: keep account dropdown open when switching theme by @lyzno1 in https://github.com/langgenius/dify/pull/32918</li>
+<li>chore: fix load env and treeshaking for vinext by @hyoban in https://github.com/langgenius/dify/pull/32928</li>
+<li>test(workflow): add unit tests for workflow store slices by @CodingOnStar in https://github.com/langgenius/dify/pull/32932</li>
+<li>refactor: migrate workflow onboarding modal to base dialog by @lyzno1 in https://github.com/langgenius/dify/pull/32915</li>
+<li>feat: redis connection support max connections by @fatelei in https://github.com/langgenius/dify/pull/32935</li>
+<li>refactor: human input node decouple db by @fatelei in https://github.com/langgenius/dify/pull/32900</li>
+<li>feat: support redis xstream by @fatelei in https://github.com/langgenius/dify/pull/32586</li>
+<li>feat: replace db.session with db_session_with_containers by @RenzoMXD in https://github.com/langgenius/dify/pull/32942</li>
+<li>refactor(web): migrate Button to Base UI with focus-visible by @lyzno1 in https://github.com/langgenius/dify/pull/32941</li>
+<li>feat(web): add base AlertDialog with app-card migration example by @lyzno1 in https://github.com/langgenius/dify/pull/32933</li>
+<li>perf(api): utilize the message_workflow_run_id_idx while querying messages by @QuantumGhost in https://github.com/langgenius/dify/pull/32944</li>
+<li>fix(api): decouple enterprise default-workspace join from personal workspace creation by @lin-snow in https://github.com/langgenius/dify/pull/32938</li>
+<li>refactor: do not import i18n resource json to split chunk by @hyoban in https://github.com/langgenius/dify/pull/32947</li>
+<li>refactor: document extract node decouple ssrf_proxy by @fatelei in https://github.com/langgenius/dify/pull/32949</li>
+<li>chore: refine oRPC contract-first skill guidance by @lyzno1 in https://github.com/langgenius/dify/pull/32955</li>
+<li>test(workflow): add comprehensive hooks unit tests and refactor test infrastructure (Part 3) by @CodingOnStar in https://github.com/langgenius/dify/pull/32958</li>
+<li>chore: drop pwa with serwist by @hyoban in https://github.com/langgenius/dify/pull/32838</li>
+<li>chore: clean up sw file by @hyoban in https://github.com/langgenius/dify/pull/32973</li>
+<li>chore: add react refresh plugin for vinext by @hyoban in https://github.com/langgenius/dify/pull/32996</li>
+<li>test: migrate duplicate_document_indexing_task SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32540</li>
+<li>chore: expand overlay migration ESLint rules to popover, dropdown, dialog by @lyzno1 in https://github.com/langgenius/dify/pull/33001</li>
+<li>chore(deps): bump fickling from 0.1.8 to 0.1.9 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32999</li>
+<li>chore(deps): bump authlib from 1.6.6 to 1.6.7 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/32998</li>
+<li>chore(deps): bump immutable from 5.1.4 to 5.1.5 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/33000</li>
+<li>test: migrate test_document_service_rename_document SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32542</li>
+<li>chore: add TypedDict related prompt to AGENTS.md by @caoergou in https://github.com/langgenius/dify/pull/32995</li>
+<li>chore: i18n hmr support, fix hmr for app context by @hyoban in https://github.com/langgenius/dify/pull/32997</li>
+<li>refactor: simplify oauthNewUser state handling in AppInitializer component by @CodingOnStar in https://github.com/langgenius/dify/pull/33019</li>
+<li>refactor(dify_graph): introduce run_context and delegate child engine creation by @WH-2099 in https://github.com/langgenius/dify/pull/32964</li>
+<li>test(workflow): add validation tests for workflow and node component rendering part 3 by @CodingOnStar in https://github.com/langgenius/dify/pull/33012</li>
+<li>fix: workflow canvas sync by @zxhlyh in https://github.com/langgenius/dify/pull/33030</li>
+<li>refactor: spilt context for better hmr by @hyoban in https://github.com/langgenius/dify/pull/33033</li>
+<li>chore: prevent Storybook crash caused by vite-plugin-inspect by @lyzno1 in https://github.com/langgenius/dify/pull/33039</li>
+<li>feat: add partial indexes on conversations for app_id with created_at and updated_at by @Nov1c444 in https://github.com/langgenius/dify/pull/32616</li>
+<li>feat: 204 http status code not return content by @fatelei in https://github.com/langgenius/dify/pull/33023</li>
+<li>fix: fix check workflow_run by @fatelei in https://github.com/langgenius/dify/pull/33028</li>
+<li>test: migrate test_dataset_service_delete_dataset SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32543</li>
+<li>chore(api): update Python type-checker versions by @lavish0000 in https://github.com/langgenius/dify/pull/33056</li>
+<li>chore(deps): bump dompurify from 3.3.0 to 3.3.2 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/33062</li>
+<li>test: migrate dataset permission service SQL tests to testcontainers by @KinomotoMio in https://github.com/langgenius/dify/pull/32546</li>
+<li>chore(deps): bump markdown from 3.5.2 to 3.8.1 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33064</li>
+<li>refactor(api): add TypedDict definitions to models/model.py by @statxc in https://github.com/langgenius/dify/pull/32925</li>
+<li>chore: add local pyrefly exclude workflow by @BeautyyuYanli in https://github.com/langgenius/dify/pull/33059</li>
+<li>fix(api): return inserted ids from Chroma and Clickzetta add_texts by @lavish0000 in https://github.com/langgenius/dify/pull/33065</li>
+<li>fix: show citations in advanced chat apps by @kurokobo in https://github.com/langgenius/dify/pull/32985</li>
+<li>fix: conversation var unexpected reset after HITL node by @hjlarry in https://github.com/langgenius/dify/pull/32936</li>
+<li>fix(i18n): correct French translation of &quot;disabled&quot; from medical term to UI-appropriate term by @Copilot in https://github.com/langgenius/dify/pull/33067</li>
+<li>fix(type-check): resolve missing-attribute in app dataset join update handler by @hjlarry in https://github.com/langgenius/dify/pull/33071</li>
+<li>chore: add support email env by @nite-knite in https://github.com/langgenius/dify/pull/33075</li>
+<li>feat(tasks): isolate summary generation to dedicated dataset_summary queue by @euxx in https://github.com/langgenius/dify/pull/32972</li>
+<li>chore: use react-grab to replace code-inspector-plugin by @hyoban in https://github.com/langgenius/dify/pull/33078</li>
+<li>fix(api): fix the issue that workflow_runs.started_at is overwritten while resuming by @QuantumGhost in https://github.com/langgenius/dify/pull/32851</li>
+<li>perf: no longer record install count for auto upgrade by @RockChinQ in https://github.com/langgenius/dify/pull/33086</li>
+<li>chore: bring back code-inspector-plugin and agentation by @hyoban in https://github.com/langgenius/dify/pull/33088</li>
+<li>chore: fix account dropdown test by @nite-knite in https://github.com/langgenius/dify/pull/33093</li>
+<li>test: improve coverage for some test files by @saumyatalwani in https://github.com/langgenius/dify/pull/32916</li>
+<li>feat(toast): add IToastProps type import to enhance type safety by @CodingOnStar in https://github.com/langgenius/dify/pull/33096</li>
+<li>refactor: pass KnowledgeConfiguration directly instead of dict by @pepsile in https://github.com/langgenius/dify/pull/32732</li>
+<li>feat: add export app messages by @hj24 in https://github.com/langgenius/dify/pull/32990</li>
+<li>feat: add files to message end pr32019 by @Stormhand in https://github.com/langgenius/dify/pull/32242</li>
+<li>chore: add TypedDict related prompt to api/AGENTS.md  by @CoralGarden52 in https://github.com/langgenius/dify/pull/33116</li>
+<li>fix(web): stabilize dayjs timezone tests against DST transitions by @lyzno1 in https://github.com/langgenius/dify/pull/33134</li>
+<li>test: remaining header component and increase branch coverage by @akashseth-ifp in https://github.com/langgenius/dify/pull/33052</li>
+<li>refactor: use thread.Timer instead of time.sleep by @fatelei in https://github.com/langgenius/dify/pull/33121</li>
+<li>test: unit test case for controllers.common module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32056</li>
+<li>fix: handle backslash path separators in DOCX ZIP entries exported on…(#33129) by @yijiaquan in https://github.com/langgenius/dify/pull/33131</li>
+<li>chore: update vinext, agentation, remove Prism in lexical by @hyoban in https://github.com/langgenius/dify/pull/33142</li>
+<li>fix: fix metadata filter condition not extract from {{}} by @fatelei in https://github.com/langgenius/dify/pull/33141</li>
+<li>feat(web): add context menu primitive and dropdown link item by @lyzno1 in https://github.com/langgenius/dify/pull/33125</li>
+<li>fix(web): fix tool item text not vertically centered in block selector by @lyzno1 in https://github.com/langgenius/dify/pull/33148</li>
+<li>refactor: deduplicate legacy section mapping in ConfigHelper by @Olexandr88 in https://github.com/langgenius/dify/pull/32715</li>
+<li>feat: keep connections when change node by @hjlarry in https://github.com/langgenius/dify/pull/31982</li>
+<li>fix: workflow_as_tool not work with json input by @hjlarry in https://github.com/langgenius/dify/pull/32554</li>
+<li>feat: when copy/paste multi nodes not require reconnect them by @hjlarry in https://github.com/langgenius/dify/pull/32631</li>
+<li>fix: fix allow handle value is none by @fatelei in https://github.com/langgenius/dify/pull/33031</li>
+<li>feat: support relative mode for message clean command by @hj24 in https://github.com/langgenius/dify/pull/32834</li>
+<li>docs: use docker compose command consistently in README by @haosenwang1018 in https://github.com/langgenius/dify/pull/33077</li>
+<li>refactor: reuse redis connection instead of create new one by @fatelei in https://github.com/langgenius/dify/pull/32678</li>
+<li>test: improve unit tests for controllers.web by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32150</li>
+<li>refactor: file saver decouple db engine and ssrf proxy by @fatelei in https://github.com/langgenius/dify/pull/33076</li>
+<li>fix: stop responding icon not display by @hjlarry in https://github.com/langgenius/dify/pull/33154</li>
+<li>test: unit test cases for console.datasets module  by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32179</li>
+<li>test: unit test case for controllers.console.workspace module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32181</li>
+<li>ci: ignore some major update by @hyoban in https://github.com/langgenius/dify/pull/33161</li>
+<li>ci: ignore ky and tailwind-merge in update by @hyoban in https://github.com/langgenius/dify/pull/33167</li>
+<li>chore(deps-dev): bump the storybook group in /web with 7 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33163</li>
+<li>chore(deps-dev): bump the eslint-group group in /web with 5 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33168</li>
+<li>chore(deps): bump the npm-dependencies group across 1 directory with 55 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33170</li>
+<li>ci: update actions version, reuse workflow by composite action by @hyoban in https://github.com/langgenius/dify/pull/33177</li>
+<li>test: unit test case for controllers.console.app module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32247</li>
+<li>refactor: tool node decouple db by @fatelei in https://github.com/langgenius/dify/pull/33166</li>
+<li>fix(web): correct responding state after annotation reply completed by @JzoNgKVO in https://github.com/langgenius/dify/pull/33173</li>
+<li>test: add UTs for api core.trigger by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32587</li>
+<li>test: unit test cases for console.explore and tag module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32186</li>
+<li>feat: add batch download for dataset documents as ZIP and signed URL for single document download. by @ZeroZ-lab in https://github.com/langgenius/dify/pull/33100</li>
+<li>docs: Update Opik intergration docs by @vincentkoc in https://github.com/langgenius/dify/pull/32336</li>
+<li>feat: configurable Enter/Shift+Enter send behavior in embedded chat (#32295) by @agent-steven in https://github.com/langgenius/dify/pull/32300</li>
+<li>fix: copy button stays disabled after Human Input node pause/resume by @stakeswky in https://github.com/langgenius/dify/pull/32662</li>
+<li>feat: Improve SQL Comment Context for Celery Worker Queries by @Desel72 in https://github.com/langgenius/dify/pull/33058</li>
+<li>fix: use correct plugin_id for WaterCrawl datasource by @bgondell in https://github.com/langgenius/dify/pull/33182</li>
+<li>chore(ui): raise overlay primitives z-index for legacy coexistence by @lyzno1 in https://github.com/langgenius/dify/pull/33185</li>
+<li>test: add new unit tests for message service utilities, get message, feedback, and retention services. by @mahammadasim in https://github.com/langgenius/dify/pull/33169</li>
+<li>fix: prevent hydration warning from div nesting inside p for inline markdown images by @tysoncung in https://github.com/langgenius/dify/pull/32419</li>
+<li>test: unit test for core.rag module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32630</li>
+<li>feat: enterprise plugin pre uninstall by @wylswz in https://github.com/langgenius/dify/pull/33158</li>
+<li>fix: fix request.metadata_model_config param check by @fatelei in https://github.com/langgenius/dify/pull/33189</li>
+<li>refactor: use <code>generate_valid_password</code> helper for creating test account passwords by @ZeroZ-lab in https://github.com/langgenius/dify/pull/33192</li>
+<li>fix: ensure external knowledge API key updates are persisted by @Saber-youMianJing in https://github.com/langgenius/dify/pull/33188</li>
+<li>fix: nested spans and traces; by @aadereiko in https://github.com/langgenius/dify/pull/33049</li>
+<li>fix: copy to clipboard failed in non-secure (HTTP) contexts by @hizhujianfeng in https://github.com/langgenius/dify/pull/32287</li>
+<li>refactor: replace react markdown with streamdown by @WTW0313 in https://github.com/langgenius/dify/pull/32971</li>
+<li>ci: add anti-slop GitHub Action to detect low-quality AI PRs by @elliotllliu in https://github.com/langgenius/dify/pull/33193</li>
+<li>chore(deps-dev): bump the storybook group in /web with 7 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33198</li>
+<li>chore: update ky to 1.14.3 by @hyoban in https://github.com/langgenius/dify/pull/33201</li>
+<li>chore(deps-dev): bump the eslint-group group in /web with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33209</li>
+<li>chore(deps): bump rollup from 4.56.0 to 4.59.0 in /web by @dependabot[bot] in https://github.com/langgenius/dify/pull/33197</li>
+<li>chore: split commands by domain by @hjlarry in https://github.com/langgenius/dify/pull/33085</li>
+<li>chore: switch vinext to npm, remove npm from dependabot by @hyoban in https://github.com/langgenius/dify/pull/33234</li>
+<li>test: add test for api core datasource by @mahammadasim in https://github.com/langgenius/dify/pull/32414</li>
+<li>fix(ci): add close-pr and failure label to anti-slop workflow by @RogueTex in https://github.com/langgenius/dify/pull/33236</li>
+<li>chore(deps): bump pypdf from 6.7.5 to 6.8.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33238</li>
+<li>fix: fix failed test by @fatelei in https://github.com/langgenius/dify/pull/33241</li>
+<li>fix: fix parse mailto / http link in table cell by @fatelei in https://github.com/langgenius/dify/pull/33224</li>
+<li>feat: source for plugin tasks by @zyssyz123 in https://github.com/langgenius/dify/pull/33244</li>
+<li>fix: PromptEditor leaves a pending blur timer that triggers a Vitest unhandled error by @ZeroZ-lab in https://github.com/langgenius/dify/pull/33253</li>
+<li>chore: remove optimize standalone script by @hyoban in https://github.com/langgenius/dify/pull/33256</li>
+<li>chore: update script for build docker by @hyoban in https://github.com/langgenius/dify/pull/33261</li>
+<li>chore: disable some auto fix, disable e18e rules by @hyoban in https://github.com/langgenius/dify/pull/33265</li>
+<li>fix: use moderation modified inputs and query by @fatelei in https://github.com/langgenius/dify/pull/33180</li>
+<li>fix: fix mcp tool parameter extract by @fatelei in https://github.com/langgenius/dify/pull/33258</li>
+<li>fix: vertically center key-value table headers in HTTP and Webhook  by @hjlarry in https://github.com/langgenius/dify/pull/33260</li>
+<li>test: add tests for some files in services module by @saumyatalwani in https://github.com/langgenius/dify/pull/32583</li>
+<li>refactor(avatar): migrate to Base UI primitives with Record size variants by @lyzno1 in https://github.com/langgenius/dify/pull/33268</li>
+<li>chore: fix dependabot alerts by @hyoban in https://github.com/langgenius/dify/pull/33277</li>
+<li>fix: main CI by @hjlarry in https://github.com/langgenius/dify/pull/33276</li>
+<li>test: add unit tests for some services by @poojanInfocusp in https://github.com/langgenius/dify/pull/32866</li>
+<li>refactor: move to modern monaco by @hyoban in https://github.com/langgenius/dify/pull/32966</li>
+<li>chore: skip pre commit check for merge by @hyoban in https://github.com/langgenius/dify/pull/33287</li>
+<li>refactor(select): align with Base UI data attributes and Figma specs by @lyzno1 in https://github.com/langgenius/dify/pull/33286</li>
+<li>feat: notification by @zyssyz123 in https://github.com/langgenius/dify/pull/32192</li>
+<li>feat: support in site message by @iamjoel in https://github.com/langgenius/dify/pull/33255</li>
+<li>chore: split /api dependabot groups by logical dependency category by @Copilot in https://github.com/langgenius/dify/pull/33297</li>
+<li>chore(deps): bump the flask group in /api with 4 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33301</li>
+<li>chore(deps): bump the google group in /api with 5 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33304</li>
+<li>chore(deps): bump astral-sh/setup-uv from 7.3.1 to 7.4.0 in the github-actions-dependencies group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33303</li>
+<li>chore(deps): bump the pydantic group in /api with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33302</li>
+<li>chore(deps): bump the google group in /api with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33299</li>
+<li>chore(deps): bump the flask group in /api with 3 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33298</li>
+<li>chore(deps): bump the llm group in /api with 6 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33305</li>
+<li>chore(deps): update redis[hiredis] requirement from ~=7.2.0 to ~=7.3.0 in /api in the database group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33306</li>
+<li>chore(deps): bump the storage group in /api with 7 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33315</li>
+<li>chore(deps): bump mlflow-skinny from 3.6.0 to 3.10.1 in /api in the llm group across 1 directory by @dependabot[bot] in https://github.com/langgenius/dify/pull/33317</li>
+<li>chore(deps): bump opentelemetry-propagator-b3 from 1.28.0 to 1.40.0 in /api in the opentelemetry group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33308</li>
+<li>refactor: Unify NodeConfigDict.data and BaseNodeData by @BeautyyuYanli in https://github.com/langgenius/dify/pull/32780</li>
+<li>chore(deps-dev): bump the dev group across 1 directory with 18 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33322</li>
+<li>chore(deps): bump the python-packages group across 1 directory with 13 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33319</li>
+<li>ci: Revert &quot;chore(deps): bump the python-packages group across 1 directory with 13 updates&quot; by @asukaminato0721 in https://github.com/langgenius/dify/pull/33331</li>
+<li>test: improve unit tests for controllers.inner_api by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32203</li>
+<li>test: unit test cases for core.callback, core.base, core.entities module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32471</li>
+<li>test: unit test cases core.agent module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32474</li>
+<li>fix: allow line breaks when a field value overflows due to excessive length by @douxc in https://github.com/langgenius/dify/pull/33339</li>
+<li>test: unit test cases for core.app.apps module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32482</li>
+<li>test: add UTs for api/ services.plugin by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32588</li>
+<li>test: unit test cases for core.variables, core.plugin, core.prompt module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32637</li>
+<li>test: add UTs for api/services recommend_app, tools, workflow by @cryptus-neoxys in https://github.com/langgenius/dify/pull/32645</li>
+<li>test: add test for core extension, external_data_tool and llm generator by @mahammadasim in https://github.com/langgenius/dify/pull/32468</li>
+<li>test: added for core logging and core mcp by @mahammadasim in https://github.com/langgenius/dify/pull/32478</li>
+<li>test: added test for core token buffer memory and model runtime by @mahammadasim in https://github.com/langgenius/dify/pull/32512</li>
+<li>test: Unit test cases for core.tools module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/32447</li>
+<li>chore: update vinext by @hyoban in https://github.com/langgenius/dify/pull/33347</li>
+<li>refactor(switch): Base UI migration with loading/skeleton variants by @lyzno1 in https://github.com/langgenius/dify/pull/33345</li>
+<li>test: improve coverage parameters for some files in base by @saumyatalwani in https://github.com/langgenius/dify/pull/33207</li>
+<li>test: improve coverage for some files by @saumyatalwani in https://github.com/langgenius/dify/pull/33218</li>
+<li>test: added tests for backend core.ops module by @mahammadasim in https://github.com/langgenius/dify/pull/32639</li>
+<li>test: added test for services of ops, summary, vector, website and ji… by @mahammadasim in https://github.com/langgenius/dify/pull/32893</li>
+<li>test: added test cases for core.workflow module by @rajatagarwal-oss in https://github.com/langgenius/dify/pull/33126</li>
+<li>test: refactor mock implementation in markdown component tests by @CodingOnStar in https://github.com/langgenius/dify/pull/33350</li>
+<li>chore: use tsconfigPaths for vinext by @hyoban in https://github.com/langgenius/dify/pull/33363</li>
+<li>fix: The HTTP Request node panel supports line break and overflow handling for variable values by @douxc in https://github.com/langgenius/dify/pull/33359</li>
+<li>fix: test_get_credentials_and_config_selects_plugin_id_and_key_api_ke… by @fatelei in https://github.com/langgenius/dify/pull/33361</li>
+<li>chore(web): disable i18next support notice by @Copilot in https://github.com/langgenius/dify/pull/33309</li>
+<li>chore: add dev proxy server, update deps by @hyoban in https://github.com/langgenius/dify/pull/33371</li>
+<li>chore: remove unused WEAVIATE_GRPC_ENABLED config option by @majiayu000 in https://github.com/langgenius/dify/pull/33378</li>
+<li>feat(workflow): add edge context menu with delete support by @lyzno1 in https://github.com/langgenius/dify/pull/33391</li>
+<li>chore: add tracking info of in site message by @iamjoel in https://github.com/langgenius/dify/pull/33394</li>
+<li>fix: with_debug_recipient() silently drops debug emails when user_id is None or empty string by @gambletan in https://github.com/langgenius/dify/pull/33373</li>
+<li>test: enforce app/components coverage gates in web tests by @CodingOnStar in https://github.com/langgenius/dify/pull/33395</li>
+<li>test: [Refactor/Chore] use Testcontainers to do sql test #32454 by @asukaminato0721 in https://github.com/langgenius/dify/pull/32460</li>
+<li>chore(deps): bump orjson from 3.11.4 to 3.11.6 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33380</li>
+<li>chore: use vite plus by @hyoban in https://github.com/langgenius/dify/pull/33407</li>
+<li>refactor(web): split share text-generation and add high-coverage tests by @CodingOnStar in https://github.com/langgenius/dify/pull/33408</li>
+<li>fix(api): allow punctuation in uploaded filenames by @yevanmore in https://github.com/langgenius/dify/pull/33364</li>
+<li>fix: correctly detect required columns in archived workflow run restore by @hjlarry in https://github.com/langgenius/dify/pull/33403</li>
+<li>chore(deps): bump pyjwt from 2.11.0 to 2.12.0 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33437</li>
+<li>chore(deps): bump fickling from 0.1.9 to 0.1.10 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33436</li>
+<li>refactor: replace sa.String with EnumText in mapped_column for type s… by @tmimmanuel in https://github.com/langgenius/dify/pull/33332</li>
+<li>refactor(tests): use enum values instead of string literals for status fields by @nielskaspers in https://github.com/langgenius/dify/pull/33441</li>
+<li>refactor: replace remaining sa.String with EnumText 2 by @tmimmanuel in https://github.com/langgenius/dify/pull/33448</li>
+<li>refactor(workflow): move agent node back to core workflow by @WH-2099 in https://github.com/langgenius/dify/pull/33431</li>
+<li>refactor(api): move workflow knowledge nodes and trigger nodes by @laipz8200 in https://github.com/langgenius/dify/pull/33445</li>
+<li>fix: preserve custom icons in exported DSL by @majiayu000 in https://github.com/langgenius/dify/pull/33424</li>
+<li>fix: add doc_type to Weaviate properties and default Vector attributes by @RickDamon in https://github.com/langgenius/dify/pull/33398</li>
+<li>fix: update INTERNAL_FILES_URL example default for Docker Desktop by @laipz8200 in https://github.com/langgenius/dify/pull/33447</li>
+<li>feat: Add Hologres as a VDB &amp; FullText DB choice by @TimothyDing in https://github.com/langgenius/dify/pull/32830</li>
+<li>fix: downgrade image download failure log from ERROR to WARNING by @tysoncung in https://github.com/langgenius/dify/pull/33429</li>
+<li>fix(api): resolve type errors in service API wraps tests by @mahmoodhamdi in https://github.com/langgenius/dify/pull/33467</li>
+<li>feat: Remove GPT-4 special-casing from default model selection by @laipz8200 in https://github.com/langgenius/dify/pull/33458</li>
+<li>fix: use parameterized queries to prevent SQL injection in vector stores by @mango766 in https://github.com/langgenius/dify/pull/33421</li>
+<li>chore(deps): bump sqlalchemy from 2.0.44 to 2.0.48 in /api in the database group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33487</li>
+<li>refactor: llm decouple code executor module by @fatelei in https://github.com/langgenius/dify/pull/33400</li>
+<li>chore(deps): bump the storage group in /api with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33488</li>
+<li>chore(deps): bump the github-actions-dependencies group with 4 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33485</li>
+<li>chore(deps): bump litellm from 1.82.1 to 1.82.2 in /api in the llm group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33480</li>
+<li>chore(deps-dev): update faker requirement from ~=40.8.0 to ~=40.11.0 in /api in the dev group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33482</li>
+<li>chore: add indexes for human_input_forms query patterns by @hjlarry in https://github.com/langgenius/dify/pull/32849</li>
+<li>chore(deps): bump the storage group in /api with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33481</li>
+<li>chore(deps): bump the llm group across 1 directory with 2 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33491</li>
+<li>chore(deps): bump the python-packages group in /api with 13 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33484</li>
+<li>ci: Simplify nltk data download in Dockerfile by @asukaminato0721 in https://github.com/langgenius/dify/pull/33495</li>
+<li>fix: enterprise API error handling and license enforcement by @GareArc in https://github.com/langgenius/dify/pull/33044</li>
+<li>chore(deps): bump google-auth from 2.49.0 to 2.49.1 in /api in the google group by @dependabot[bot] in https://github.com/langgenius/dify/pull/33483</li>
+<li>feat: Add weaviate client single instance by @lcedaw in https://github.com/langgenius/dify/pull/27910</li>
+<li>refactor(web): consolidate query/mutation guidance and deprecate use-base wrappers by @lyzno1 in https://github.com/langgenius/dify/pull/33456</li>
+<li>chore(deps-dev): bump the vdb group across 1 directory with 15 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33502</li>
+<li>chore: change draft var to user scoped by @hjlarry in https://github.com/langgenius/dify/pull/33066</li>
+<li>fix: fix weaviate_vector test failed by @fatelei in https://github.com/langgenius/dify/pull/33511</li>
+<li>feat(diff-coverage): implement coverage analysis for changed components by @CodingOnStar in https://github.com/langgenius/dify/pull/33514</li>
+<li>refactor(web): split text-generation result flow and raise coverage by @CodingOnStar in https://github.com/langgenius/dify/pull/33499</li>
+<li>chore: remove next font by @hyoban in https://github.com/langgenius/dify/pull/33512</li>
+<li>feat(diff-coverage): enhance coverage reporting for multi-line statements and branches   by @CodingOnStar in https://github.com/langgenius/dify/pull/33516</li>
+<li>chore: compatiable resource_metadata return without scheme by @fatelei in https://github.com/langgenius/dify/pull/33506</li>
+<li>chore: remove next img by @hyoban in https://github.com/langgenius/dify/pull/33517</li>
+<li>feat: apply markdown rendering to HITL email, sanitize email subject and body by @Blackoutta in https://github.com/langgenius/dify/pull/32305</li>
+<li>test: limit web diff coverage to current push range by @CodingOnStar in https://github.com/langgenius/dify/pull/33523</li>
+<li>chore: update plugin daemon version to 0.5.4-local in Docker compose files by @QuantumGhost in https://github.com/langgenius/dify/pull/33526</li>
+<li>chore: fix dep alerts by @hyoban in https://github.com/langgenius/dify/pull/33527</li>
+<li>chore(api): rename configuration <code>EVENT_BUS_REDIS_CLUSTERS</code> by @QuantumGhost in https://github.com/langgenius/dify/pull/33528</li>
+<li>fix(web): migrate InputNumber to Base UI NumberField by @lyzno1 in https://github.com/langgenius/dify/pull/33520</li>
+<li>refactor(custom): reorganize web app brand module and raise coverage threshold by @CodingOnStar in https://github.com/langgenius/dify/pull/33531</li>
+<li>chore(deps-dev): bump the dev group across 1 directory with 19 updates by @dependabot[bot] in https://github.com/langgenius/dify/pull/33525</li>
+<li>refactor(api): simplify response session eligibility by @laipz8200 in https://github.com/langgenius/dify/pull/33538</li>
+<li>chore: update coverage summary check in web tests workflow by @CodingOnStar in https://github.com/langgenius/dify/pull/33533</li>
+<li>chore(deps): bump authlib from 1.6.7 to 1.6.9 in /api by @dependabot[bot] in https://github.com/langgenius/dify/pull/33544</li>
+<li>refactor(api): replace dict/Mapping with TypedDict in dataset models by @statxc in https://github.com/langgenius/dify/pull/33550</li>
+<li>fix(web): page crash in knowledge retrieval node caused by dataset selection and score threshold by @JzoNgKVO in https://github.com/langgenius/dify/pull/33553</li>
+<li>fix: raise block selector overlay z-index by @lyzno1 in https://github.com/langgenius/dify/pull/33557</li>
+<li>refactor: use hoisted modern monaco by @hyoban in https://github.com/langgenius/dify/pull/33540</li>
+<li>refactor(api): replace dict/Mapping with TypedDict in trigger.py and workflow.py by @statxc in https://github.com/langgenius/dify/pull/33562</li>
+<li>test(web): ignore default-branch merge commits in diff coverage by @CodingOnStar in https://github.com/langgenius/dify/pull/33564</li>
+<li>chore: revert #33540 #32966 by @hyoban in https://github.com/langgenius/dify/pull/33566</li>
+<li>feat: add metrics to clean message and workflow-run task by @hjlarry in https://github.com/langgenius/dify/pull/33143</li>
+<li>fix(web): preserve public workflow SSE reconnect after pause by @laipz8200 in https://github.com/langgenius/dify/pull/33552</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@razerzhang made their first contribution in https://github.com/langgenius/dify/pull/31843</li>
+<li>@saumyatalwani made their first contribution in https://github.com/langgenius/dify/pull/32201</li>
+<li>@poojanInfocusp made their first contribution in https://github.com/langgenius/dify/pull/32154</li>
+<li>@Haohao-end made their first contribution in https://github.com/langgenius/dify/pull/32342</li>
+<li>@apoorvdarshan made their first contribution in https://github.com/langgenius/dify/pull/32386</li>
+<li>@akashseth-ifp made their first contribution in https://github.com/langgenius/dify/pull/32281</li>
+<li>@mahammadasim made their first contribution in https://github.com/langgenius/dify/pull/32283</li>
+<li>@tysoncung made their first contribution in https://github.com/langgenius/dify/pull/32461</li>
+<li>@Hypertension42 made their first contribution in https://github.com/langgenius/dify/pull/32490</li>
+<li>@J0su3Code made their first contribution in https://github.com/langgenius/dify/pull/32493</li>
+<li>@stakeswky made their first contribution in https://github.com/langgenius/dify/pull/32498</li>
+<li>@rajatagarwal-oss made their first contribution in https://github.com/langgenius/dify/pull/32057</li>
+<li>@cryptus-neoxys made their first contribution in https://github.com/langgenius/dify/pull/32073</li>
+<li>@Pandaaaa906 made their first contribution in https://github.com/langgenius/dify/pull/32560</li>
+<li>@ajuijas made their first contribution in https://github.com/langgenius/dify/pull/32510</li>
+<li>@toroleapinc made their first contribution in https://github.com/langgenius/dify/pull/32653</li>
+<li>@haku-ink made their first contribution in https://github.com/langgenius/dify/pull/32636</li>
+<li>@tda1017 made their first contribution in https://github.com/langgenius/dify/pull/32701</li>
+<li>@nielskaspers made their first contribution in https://github.com/langgenius/dify/pull/32718</li>
+<li>@slegarraga made their first contribution in https://github.com/langgenius/dify/pull/32768</li>
+<li>@Br1an67 made their first contribution in https://github.com/langgenius/dify/pull/32772</li>
+<li>@akkoaya made their first contribution in https://github.com/langgenius/dify/pull/31528</li>
+<li>@hwb96 made their first contribution in https://github.com/langgenius/dify/pull/32778</li>
+<li>@stablegenius49 made their first contribution in https://github.com/langgenius/dify/pull/32813</li>
+<li>@Echo0ff made their first contribution in https://github.com/langgenius/dify/pull/32828</li>
+<li>@nightcityblade made their first contribution in https://github.com/langgenius/dify/pull/32721</li>
+<li>@RenzoMXD made their first contribution in https://github.com/langgenius/dify/pull/32942</li>
+<li>@caoergou made their first contribution in https://github.com/langgenius/dify/pull/32995</li>
+<li>@lavish0000 made their first contribution in https://github.com/langgenius/dify/pull/33056</li>
+<li>@statxc made their first contribution in https://github.com/langgenius/dify/pull/32925</li>
+<li>@pepsile made their first contribution in https://github.com/langgenius/dify/pull/32732</li>
+<li>@Stormhand made their first contribution in https://github.com/langgenius/dify/pull/32242</li>
+<li>@CoralGarden52 made their first contribution in https://github.com/langgenius/dify/pull/33116</li>
+<li>@Olexandr88 made their first contribution in https://github.com/langgenius/dify/pull/32715</li>
+<li>@haosenwang1018 made their first contribution in https://github.com/langgenius/dify/pull/33077</li>
+<li>@vincentkoc made their first contribution in https://github.com/langgenius/dify/pull/32336</li>
+<li>@agent-steven made their first contribution in https://github.com/langgenius/dify/pull/32300</li>
+<li>@Desel72 made their first contribution in https://github.com/langgenius/dify/pull/33058</li>
+<li>@bgondell made their first contribution in https://github.com/langgenius/dify/pull/33182</li>
+<li>@Saber-youMianJing made their first contribution in https://github.com/langgenius/dify/pull/33188</li>
+<li>@aadereiko made their first contribution in https://github.com/langgenius/dify/pull/33049</li>
+<li>@hizhujianfeng made their first contribution in https://github.com/langgenius/dify/pull/32287</li>
+<li>@elliotllliu made their first contribution in https://github.com/langgenius/dify/pull/33193</li>
+<li>@RogueTex made their first contribution in https://github.com/langgenius/dify/pull/33236</li>
+<li>@gambletan made their first contribution in https://github.com/langgenius/dify/pull/33373</li>
+<li>@tmimmanuel made their first contribution in https://github.com/langgenius/dify/pull/33332</li>
+<li>@RickDamon made their first contribution in https://github.com/langgenius/dify/pull/33398</li>
+<li>@TimothyDing made their first contribution in https://github.com/langgenius/dify/pull/32830</li>
+<li>@mahmoodhamdi made their first contribution in https://github.com/langgenius/dify/pull/33467</li>
+<li>@mango766 made their first contribution in https://github.com/langgenius/dify/pull/33421</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/langgenius/dify/compare/1.13.0...1.13.1</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/langgenius/dify">langgenius/dify</a> · <code>1.13.1</code> · 2026-03-17 · <a href="https://github.com/langgenius/dify/releases/tag/1.13.1">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/dify/1.13.2"> <span class="k">← Suivant</span> <span class="t">1.13.2</span> </a> <a href="/releases/dify/1.13.0"> <span class="k">Précédent →</span> <span class="t">1.13.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/langgenius/dify/releases/tag/1.13.1" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/langgenius/dify" target="_blank" rel="noopener"> <span>langgenius/dify</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>🚀 Changements fonctionnels majeurs</a><a href="#" class="lv3">Opérations sur la plateforme de données et les ensembles de données</a><a href="#" class="lv3">Améliorations du workflow et de l&#39;expérience de chat</a><a href="#" class>🔐 Mises à jour de sécurité</a><a href="#" class>🏗️ Mises à jour de configuration, d&#39;architecture et de déploiement</a><a href="#" class="lv3">Déploiement et opérations</a><a href="#" class="lv3">Modifications de la configuration</a><a href="#" class>🛠 Autres changements notables</a><a href="#" class>Guide de mise à niveau</a><a href="#" class="lv3">Docker Composer Déploiements</a><a href="#" class="lv3">Déploiements de code source</a><a href="#" class>Ce qui a changé</a><a href="#" class>Nouveaux contributeurs</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/dify/1.20.0"> <span class="v">1.20.0</span> <span class="d">26-11-18</span> </a> </li><li> <a href="/releases/dify/1.19.0"> <span class="v">1.19.0</span> <span class="d">26-11-04</span> </a> </li><li> <a href="/releases/dify/1.18.0"> <span class="v">1.18.0</span> <span class="d">26-10-23</span> </a> </li><li> <a href="/releases/dify/1.17.1"> <span class="v">1.17.1</span> <span class="d">26-09-10</span> </a> </li><li> <a href="/releases/dify/1.17.0"> <span class="v">1.17.0</span> <span class="d">26-08-25</span> </a> </li><li> <a href="/releases/dify/1.16.1"> <span class="v">1.16.1</span> <span class="d">26-07-28</span> </a> </li><li> <a href="/releases/dify/1.16.0"> <span class="v">1.16.0</span> <span class="d">26-07-17</span> </a> </li><li> <a href="/releases/dify/1.16.0-rc1"> <span class="v">1.16.0-rc1</span> <span class="d">26-07-09</span> </a> </li> </ul> <a href="/fr/releases/dify" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 32 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

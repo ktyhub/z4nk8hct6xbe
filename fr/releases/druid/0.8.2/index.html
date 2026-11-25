@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>druid 0.8.2 — STAGS NextStack</title><meta name="description" content="If you are using union queries, please make sure to update broker nodes prior to updating any historical nodes, realtime nodes, or indexing service."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/druid/0.8.2/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/druid/0.8.2/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/druid/0.8.2/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/druid/0.8.2/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="druid 0.8.2 — STAGS NextStack"><meta property="og:description" content="If you are using union queries, please make sure to update broker nodes prior to updating any historical nodes, realtime nodes, or indexing service."><meta property="og:url" content="https://www.stags.cn/fr/releases/druid/0.8.2/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/druid/0.8.2/#article","headline":"druid 0.8.2 release notes","datePublished":"2015-11-18","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/druid"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/druid/0.8.2/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/druid/druid_druid-0.8.2" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/druid/0.8.2/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/druid/0.8.2/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/druid/0.8.2/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/druid/0.8.2/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/druid/0.8.2/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/druid">druid</a> </nav> <h1 class="detail-title"> <span class="p">druid</span> 0.8.2 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>18 nov. 2015</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span class="k">Source</span>apache/druid </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/druid/0.8.2/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/druid/0.8.2/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>druide druide-0.8.2</h1>
+<h2>Mise à jour depuis 0.8.1</h2>
+<p>Si vous utilisez des [requêtes syndicales] (http://druid.io/docs/latest/querying/datasource.html#union-data-source), assurez-vous de mettre à jour les nœuds du courtier avant de mettre à jour les nœuds historiques, les nœuds en temps réel ou le service d'indexation.
+Sinon, vous pouvez suivre les procédures standard de mise à jour continue.</p>
+<h2>Nouvelles fonctionnalités</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1744">#1744</a> Regroupement de connexions Memcached</li>
+<li><a href="https://github.com/druid-io/druid/pull/1753">#1753</a> Autoriser SegmentMetadataQuery à ignorer les calculs de cardinalité et de taille</li>
+<li><a href="https://github.com/druid-io/druid/pull/1609">#1609</a> Lance d'incendie expérimentale kafa simple basée sur le consommateur</li>
+<li><a href="https://github.com/druid-io/druid/pull/1800">#1800</a> Cache expérimental hybride L1/L2</li>
+</ul>
+<h2>Améliorations</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1821">#1821</a> cache l'horodatage maximum des données dans QueryableIndexStorageAdapter</li>
+<li><a href="https://github.com/druid-io/druid/pull/1765">#1765</a> Ajouter CPUTimeMetricQueryRunner à ClientQuerySegmentWalker</li>
+<li><a href="https://github.com/druid-io/druid/pull/1776">#1776</a> Modification du firehose Twitter pour traiter plus de propriétés</li>
+<li><a href="https://github.com/druid-io/druid/pull/1748">#1748</a> Autoriser ForkingTaskRunner javaOpts à mettre entre guillemets des arguments contenant des espaces</li>
+<li><a href="https://github.com/druid-io/druid/pull/1759">#1759</a> de meilleurs bitmaps rugissants plus rapides et plus petits</li>
+<li><a href="https://github.com/druid-io/druid/pull/1755">#1755</a> mise à jour de Druid-api pour accélérer l'analyse de l'horodatage</li>
+<li><a href="https://github.com/druid-io/druid/pull/1756">#1756</a> amélioration des messages lorsque le service d'indexation est introuvable</li>
+<li><a href="https://github.com/druid-io/druid/pull/1739">#1739</a> Autoriser SegmentAnalyzer à lire les colonnes de StorageAdapter, autoriser SegmentMetadataQuery à interroger IncrementalIndexSegments sur le nœud en temps réel</li>
+<li><a href="https://github.com/druid-io/druid/pull/1732">#1732</a> Ajout de la prise en charge d'une période d'historique de segment par défaut configurable pour les requêtes segmentMetadata et les recherches GET /datasources/&lt;datasourceName&gt;</li>
+<li><a href="https://github.com/druid-io/druid/pull/1695">#1695</a> Autoriser l'écriture d'extensions InputRowParser qui utilisent des bibliothèques hadoop/any</li>
+<li><a href="https://github.com/druid-io/druid/pull/1688">#1688</a> Plus de métriques memcached</li>
+<li><a href="https://github.com/druid-io/druid/pull/1712">#1712</a> Ajouter une fonctionnalité d'extraction de dimensions à SearchQuery</li>
+<li><a href="https://github.com/druid-io/druid/pull/1696">#1696</a> Ajoutez du temps CPU aux métriques pour l'analyse des segments.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1718">#1718</a> Ajoute la durée des tâches à la console de l'indexeur pour les tâches terminées.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1725">#1725</a> Ne vérifie pas le tri si nous savons déjà que GenericIndexedWriter n'est pas trié</li>
+<li><a href="https://github.com/druid-io/druid/pull/1699">#1699</a> module émetteur de composition pour utiliser plusieurs émetteurs ensemble</li>
+<li><a href="https://github.com/druid-io/druid/pull/1639">#1639</a> Nouveau plombier</li>
+<li><a href="https://github.com/druid-io/druid/pull/1604">#1604</a> Autoriser la tâche à remplacer les réglages de ForkingTaskRunner et les paramètres de jvm</li>
+<li><a href="https://github.com/druid-io/druid/pull/1542">#1542</a> ajoute un point de terminaison pour récupérer l'historique des règles pour toutes les sources de données</li>
+<li><a href="https://github.com/druid-io/druid/pull/1682">#1682</a> Prise en charge de l'analyse des chaînes BytesWritable dans HadoopDruidIndexerMapper</li>
+<li><a href="https://github.com/druid-io/druid/pull/1622">#1622</a> Prise en charge du format JSON Smile pour EventReceiverFirehoseFactory</li>
+<li><a href="https://github.com/druid-io/druid/pull/1654">#1654</a> Ajout de la possibilité de fournir une taskResource pour IndexTask.</li>
+</ul>
+<h2>Corrections de bugs</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1868">#1868</a> La suppression des chemins parents bloque les observateurs du chemin &quot;annonces&quot;.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1855">#1855</a> correction de [GreaterThan,LessThan,Equals] Ayant des spécifications</li>
+<li><a href="https://github.com/druid-io/druid/pull/1862">#1862</a> Ajouter un délai d'attente à la demande d'arrêt au middle manager pour le service d'indexation</li>
+<li><a href="https://github.com/druid-io/druid/pull/1822">#1822</a> prend en charge plusieurs intervalles non consécutifs dans les requêtes externes de group-by imbriqué</li>
+<li><a href="https://github.com/druid-io/druid/pull/1811">#1811</a> Sélecteur de découverte de serveur compatible ipv6</li>
+<li><a href="https://github.com/druid-io/druid/pull/1823">#1823</a> Pour dataSource inputSpec dans l'ingestion par lots Hadoop, utilisez la granularité de requête configurée pour lire les segments existants au lieu de NONE</li>
+<li><a href="https://github.com/druid-io/druid/pull/1818">#1818</a> Ajouter hashCode et égal aux recherches de stock</li>
+<li><a href="https://github.com/druid-io/druid/pull/1812">#1812</a> Transférez les métriques du serveur vers 0.2.5 pour détecter quelques correctifs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1806">#1806</a> Correction de l'index dépassé msg pour donner également maxRowCount</li>
+<li><a href="https://github.com/druid-io/druid/pull/1801">#1801</a> Correction de ClientInfoResource</li>
+<li><a href="https://github.com/druid-io/druid/pull/1795">#1795</a> Essayez de rendre AnnouncerTest un peu plus prévisible</li>
+<li><a href="https://github.com/druid-io/druid/pull/1797">#1797</a> ingérer le segment firehose ut</li>
+<li><a href="https://github.com/druid-io/druid/pull/1798">#1798</a> Mettre à jour httpcomponents et aws-sdk</li>
+<li><a href="https://github.com/druid-io/druid/pull/1792">#1792</a> GroupByQueryRunnerTest pour la finalisation hyperUnique des agrégateurs de publications</li>
+<li><a href="https://github.com/druid-io/druid/pull/1781">#1781</a> Correction d'un échec dans groupBy imbriqué avec plusieurs agrégateurs avec le même fichier…</li>
+<li><a href="https://github.com/druid-io/druid/pull/1790">#1790</a> Nettoyage de l'espace de noms d'extraction kafka</li>
+<li><a href="https://github.com/druid-io/druid/pull/1782">#1782</a> Ajouter des types d'analyse à la clé de cache SegmentMetadataQuery</li>
+<li><a href="https://github.com/druid-io/druid/pull/1730">#1730</a> correctif #1727 - Correctif des requêtes Union bySegment</li>
+<li><a href="https://github.com/druid-io/druid/pull/1783">#1783</a> Séparez les parties de clé du cache ListColumnIncluderator avec des octets nuls</li>
+<li><a href="https://github.com/druid-io/druid/pull/1740">#1740</a> correctif n°1715 - Les tâches zombies peuvent acquérir des verrous après un échec</li>
+<li><a href="https://github.com/druid-io/druid/pull/1778">#1778</a> Correctifs de redirection</li>
+<li><a href="https://github.com/druid-io/druid/pull/1777">#1777</a> échoue à la tâche si le travail de fin lève une exception</li>
+<li><a href="https://github.com/druid-io/druid/pull/1775">#1775</a> SQLMetadataConnector : réessayez la création de la table, en cas de problème.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1772">#1772</a> RemoteTaskRunner : Correction du démarrage d'un suzerain avant que les travailleurs n'existent.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1764">#1764</a> Activer la journalisation pour Memcached en usine</li>
+<li><a href="https://github.com/druid-io/druid/pull/1760">#1760</a> Mettre à jour memcached client pour une meilleure concurrence dans les métriques.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1761">#1761</a> LocalDataSegmentPusher : correctif pour Hadoop + chemins relatifs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1763">#1763</a> corrige NPE et duplique les clés métriques</li>
+<li><a href="https://github.com/druid-io/druid/pull/1758">#1758</a> Correction de l'injection du fournisseur de cache Memcached et ajout d'un test</li>
+<li><a href="https://github.com/druid-io/druid/pull/1747">#1747</a> Tenir compte des lacunes potentielles dans les bouches d'incendie lors de l'initialisation de l'évier, de l'échange de bouches d'incendie (par exemple h0, h1, h4)</li>
+<li><a href="https://github.com/druid-io/druid/pull/1751">#1751</a> Assouplir les exigences de concurrence sur IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1736">#1736</a> IngestSegmentFirehostFactoryTimelineTest pour l'occultation du milieu d'un segment.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1741">#1741</a> Ajout de meilleurs tests de concurrence à IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1743">#1743</a> Désactiver la tentative de publication de métadonnées dans l'exemple de script</li>
+<li><a href="https://github.com/druid-io/druid/pull/1697">#1697</a> Meilleure journalisation des échecs d'URIExtractionNamespace dus à des fichiers manquants</li>
+<li><a href="https://github.com/druid-io/druid/pull/1702">#1702</a> n'a pas de source de données deux fois dans le chemin d'accès au stockage de segments sur hdfs</li>
+<li><a href="https://github.com/druid-io/druid/pull/1710">#1710</a> Ajout d'un verrouillage de base aux tests de concurrence dans IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1734">#1734</a> correction d'un test d'intégration cassé</li>
+<li><a href="https://github.com/druid-io/druid/pull/1731">#1731</a> correction de NPE avec fonction d'extraction de regex</li>
+<li><a href="https://github.com/druid-io/druid/pull/1700">#1700</a> mise à jour de l'indexation dans l'assistant pour utiliser plusieurs persistants et fusionner</li>
+<li><a href="https://github.com/druid-io/druid/pull/1721">#1721</a> correctif pour l'erreur &quot;java.io.IOException : Aucun système de fichiers pour le schéma : hdfs&quot;</li>
+<li><a href="https://github.com/druid-io/druid/pull/1694">#1694</a> Meilleur timing et verrouillage dans NamespaceExtractionCacheManagerExecutorsTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1703">#1703</a> ajoute une vérification nulle pour le contexte de la tâche.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1637">#1637</a> Créer un fil démon pour les threads du planificateur de jetée</li>
+<li><a href="https://github.com/druid-io/druid/pull/1658">#1658</a> J'espère ajouter de meilleurs délais d'attente et un meilleur classement à JDBCExtractionNamespaceTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1620">#1620</a> Autoriser les valeurs longues dans les champs clé ou valeur pour URIExtractionNamespace</li>
+<li><a href="https://github.com/druid-io/druid/pull/1578">#1578</a> Correction de l'UT et de la documentation du filtre d'extraction</li>
+<li><a href="https://github.com/druid-io/druid/pull/1687">#1687</a> ne permet pas à l'utilisateur de remplacer les paramètres de tâche Hadoop explicitement fournis par le code Druid</li>
+<li><a href="https://github.com/druid-io/druid/pull/1689">#1689</a> Mettre à jour LZ4Transcoder pour qu'il corresponde au type d'usine de stratégie compressée.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1685">#1685</a> Fermez bruyamment les flux de sortie et les canaux lors de la création de segments.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1686">#1686</a> Remplacez les importations géniales par des importations standard.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1683">#1683</a> Supprimez l'interface de l'indexeur inutilisée.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1632">#1632</a> La requête interne doit s'appuyer sur une sous-requête</li>
+<li><a href="https://github.com/druid-io/druid/pull/1676">#1676</a> correction de la tâche de conversion de segment</li>
+<li><a href="https://github.com/druid-io/druid/pull/1672">#1672</a> Migrer TestDerbyConnector vers un JUnit @Rule</li>
+<li><a href="https://github.com/druid-io/druid/pull/1675">#1675</a> mise à jour druide-api pour jackson 2.4.6</li>
+<li><a href="https://github.com/druid-io/druid/pull/1632">#1632</a> La requête interne doit s'appuyer sur une sous-requête</li>
+<li><a href="https://github.com/druid-io/druid/pull/1668">#1668</a> Nettoyage du code pour CachingClusteredClientTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1669">#1669</a> Dépendances de mise à niveau</li>
+<li><a href="https://github.com/druid-io/druid/pull/1663">#1663</a> TaskActionToolbox : suppression de allowOlderVersions, levée de la contrainte d'intervalle</li>
+<li><a href="https://github.com/druid-io/druid/pull/1619">#1619</a> mettre à jour les métriques du serveur</li>
+<li><a href="https://github.com/druid-io/druid/pull/1661">#1661</a> Règles du sondage immédiatement après le changement</li>
+<li><a href="https://github.com/druid-io/druid/pull/1665">#1665</a> Consolidez les nouvelles tentatives SQL en déplaçant la logique dans les connecteurs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1648">#1648</a> gère les virgules dans le chemin avant d'appeler MultipleInputs.addInputPaths</li>
+<li><a href="https://github.com/druid-io/druid/pull/1647">#1647</a> Test unitaire approximatif d'&quot;intégration&quot; de l'histogramme
+##Documents</li>
+<li><a href="https://github.com/druid-io/druid/pull/1814">#1814</a> Ajustez les contraintes en temps réel dans la documentation.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1794">#1794</a> mise à jour R / Python clients</li>
+<li><a href="https://github.com/druid-io/druid/pull/1784">#1784</a> Corrections mineures de la documentation pour CONTRIBUTING.md</li>
+<li><a href="https://github.com/druid-io/druid/pull/1774">#1774</a> mise à jour de la documentation sur le champ d'agrégation dans la tâche de fusion et une vérification nulle</li>
+<li><a href="https://github.com/druid-io/druid/pull/1742">#1742</a> ajouter des documents pour le filtre de recherche</li>
+<li><a href="https://github.com/druid-io/druid/pull/1737">#1737</a> Docs : suggère l'analyseur hadoopyString pour Hadoop.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1735">#1735</a> ajoute un pivot en tant qu'interface utilisateur</li>
+<li><a href="https://github.com/druid-io/druid/pull/1723">#1723</a> correction d'une faute de frappe dans segments.md</li>
+<li><a href="https://github.com/druid-io/druid/pull/1720">#1720</a> mettre à jour la FAQ sur l'ingestion pour mentionner dataSource inputSpec</li>
+<li><a href="https://github.com/druid-io/druid/pull/1717">#1717</a> dans configuration/index.md s/instantialize/initialize</li>
+<li><a href="https://github.com/druid-io/druid/pull/1698">#1698</a> Séries temporelles skipEmptyBucket docs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1662">#1662</a> Ajout de la documentation pour pathFormat lors de l'ingestion par lots</li>
+<li><a href="https://github.com/druid-io/druid/pull/1673">#1673</a> Correction du document d'ingestion par lots</li>
+<li><a href="https://github.com/druid-io/druid/pull/1670">#1670</a> correction du formatage</li>
+<li><a href="https://github.com/druid-io/druid/pull/1656">#1656</a> plus de documents pour les questions courantes</li>
+<li><a href="https://github.com/druid-io/druid/pull/1664">#1664</a> ajout d'une documentation sur le tuyau d'incendie TimedShutoff</li>
+<li><a href="https://github.com/druid-io/druid/pull/1633">#1633</a> échange de description et de colonne de dimension pour certaines métriques JVM</li>
+<li><a href="https://github.com/druid-io/druid/pull/1793">#1793</a> correction du lien vers la doc chunkPeriod
+Merci à tous les contributeurs à cette version !
+@anwenxu
+@cheddar
+@dclim
+@drcrallen
+@fjy
+@gianm
+@guobingkun
+@Hailei
+@himanshug
+@jon-wei
+@nishantmonu51
+@pjain1
+@potto007
+@qix
+@rasahner
+@xvrl</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.8.2</code> · 2015-11-18 · <a href="https://github.com/apache/druid/releases/tag/druid-0.8.2">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>druid druid-0.8.2</h1>
+<h2>Updating from 0.8.1</h2>
+<p>If you are using <a href="http://druid.io/docs/latest/querying/datasource.html#union-data-source">union queries</a>, please make sure to update broker nodes prior to updating any historical nodes, realtime nodes, or indexing service.</p>
+<p>Otherwise, you can follow standard rolling update procedures.</p>
+<h2>New Features</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1744">#1744</a> Memcached connection pooling</li>
+<li><a href="https://github.com/druid-io/druid/pull/1753">#1753</a> Allow SegmentMetadataQuery to skip cardinality and size calculations</li>
+<li><a href="https://github.com/druid-io/druid/pull/1609">#1609</a> Experimental kafa simple consumer based firehose</li>
+<li><a href="https://github.com/druid-io/druid/pull/1800">#1800</a> Experimental Hybrid L1/L2 cache</li>
+</ul>
+<h2>Improvements</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1821">#1821</a> cache max data timestamp in QueryableIndexStorageAdapter</li>
+<li><a href="https://github.com/druid-io/druid/pull/1765">#1765</a> Add CPUTimeMetricQueryRunner to ClientQuerySegmentWalker</li>
+<li><a href="https://github.com/druid-io/druid/pull/1776">#1776</a> Modified the Twitter firehose to process more properties</li>
+<li><a href="https://github.com/druid-io/druid/pull/1748">#1748</a> Allow ForkingTaskRunner javaOpts to have quoted arguments which contain spaces</li>
+<li><a href="https://github.com/druid-io/druid/pull/1759">#1759</a> better faster smaller roaring bitmaps</li>
+<li><a href="https://github.com/druid-io/druid/pull/1755">#1755</a> update druid-api for timestamp parsing speedup</li>
+<li><a href="https://github.com/druid-io/druid/pull/1756">#1756</a> improving msging when indexing service is not found</li>
+<li><a href="https://github.com/druid-io/druid/pull/1739">#1739</a> Allow SegmentAnalyzer to read columns from StorageAdapter, allow SegmentMetadataQuery to query IncrementalIndexSegments on realtime node</li>
+<li><a href="https://github.com/druid-io/druid/pull/1732">#1732</a> Add support for a configurable default segment history period for segmentMetadata queries and GET /datasources/&lt;datasourceName&gt; lookups</li>
+<li><a href="https://github.com/druid-io/druid/pull/1695">#1695</a> Allow writing InputRowParser extensions that use hadoop/any libraries</li>
+<li><a href="https://github.com/druid-io/druid/pull/1688">#1688</a> More memcached metrics</li>
+<li><a href="https://github.com/druid-io/druid/pull/1712">#1712</a> Add dimension extraction functionality to SearchQuery</li>
+<li><a href="https://github.com/druid-io/druid/pull/1696">#1696</a> Add CPU time to metrics for segment scanning.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1718">#1718</a> Adds task duration to indexer console for completed tasks.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1725">#1725</a> Don't check for sortedness if we already know GenericIndexedWriter isn't sorted</li>
+<li><a href="https://github.com/druid-io/druid/pull/1699">#1699</a> composing emitter module to use multiple emitters together</li>
+<li><a href="https://github.com/druid-io/druid/pull/1639">#1639</a> New plumber</li>
+<li><a href="https://github.com/druid-io/druid/pull/1604">#1604</a> Allow task to override ForkingTaskRunner tunings and jvm settings</li>
+<li><a href="https://github.com/druid-io/druid/pull/1542">#1542</a> add endpoint to fetch rule history for all datasources</li>
+<li><a href="https://github.com/druid-io/druid/pull/1682">#1682</a> Support parsing of BytesWritable strings in HadoopDruidIndexerMapper</li>
+<li><a href="https://github.com/druid-io/druid/pull/1622">#1622</a> Support for JSON Smile format for EventReceiverFirehoseFactory</li>
+<li><a href="https://github.com/druid-io/druid/pull/1654">#1654</a> Add ability to provide taskResource for IndexTask.</li>
+</ul>
+<h2>Bug Fixes</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1868">#1868</a> Removing parent paths causes watchers of the &quot;announcements&quot; path to get stuck</li>
+<li><a href="https://github.com/druid-io/druid/pull/1855">#1855</a> fix [GreaterThan,LessThan,Equals] HavingSpecs</li>
+<li><a href="https://github.com/druid-io/druid/pull/1862">#1862</a> Add timeout to shutdown request to middle manager for indexing service</li>
+<li><a href="https://github.com/druid-io/druid/pull/1822">#1822</a> support multiple non-consecutive intervals in outer query of nested group-by</li>
+<li><a href="https://github.com/druid-io/druid/pull/1811">#1811</a> Server discovery selector ipv6 friendly</li>
+<li><a href="https://github.com/druid-io/druid/pull/1823">#1823</a> For dataSource inputSpec in hadoop batch ingestion, use configured query granularity for reading existing segments instead of NONE</li>
+<li><a href="https://github.com/druid-io/druid/pull/1818">#1818</a> Add hashCode and equals to stock lookups</li>
+<li><a href="https://github.com/druid-io/druid/pull/1812">#1812</a> Bump server-metrics to 0.2.5 to catch a few fixes.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1806">#1806</a> Fix index exceeded msg to give maxRowCount as well</li>
+<li><a href="https://github.com/druid-io/druid/pull/1801">#1801</a> Fix ClientInfoResource</li>
+<li><a href="https://github.com/druid-io/druid/pull/1795">#1795</a> Try and make AnnouncerTest a bit more predictable</li>
+<li><a href="https://github.com/druid-io/druid/pull/1797">#1797</a> ingest segment firehose ut</li>
+<li><a href="https://github.com/druid-io/druid/pull/1798">#1798</a> Update httpcomponents and aws-sdk</li>
+<li><a href="https://github.com/druid-io/druid/pull/1792">#1792</a> GroupByQueryRunnerTest for hyperUnique finalizing post aggregators</li>
+<li><a href="https://github.com/druid-io/druid/pull/1781">#1781</a> Fix failure in nested groupBy with multiple aggregators with same fie…</li>
+<li><a href="https://github.com/druid-io/druid/pull/1790">#1790</a> Cleanup kafka-extraction-namespace</li>
+<li><a href="https://github.com/druid-io/druid/pull/1782">#1782</a> Add analysisTypes to SegmentMetadataQuery cache key</li>
+<li><a href="https://github.com/druid-io/druid/pull/1730">#1730</a> fix #1727 - Union bySegment queries fix</li>
+<li><a href="https://github.com/druid-io/druid/pull/1783">#1783</a> Separate ListColumnIncluderator cache key parts with nul bytes</li>
+<li><a href="https://github.com/druid-io/druid/pull/1740">#1740</a> fix #1715 - Zombie tasks able to acquire locks after failure</li>
+<li><a href="https://github.com/druid-io/druid/pull/1778">#1778</a> Redirect fixes</li>
+<li><a href="https://github.com/druid-io/druid/pull/1777">#1777</a> fail task if finishjob throws any exception</li>
+<li><a href="https://github.com/druid-io/druid/pull/1775">#1775</a> SQLMetadataConnector: Retry table creation, in case something goes wrong.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1772">#1772</a> RemoteTaskRunner: Fix for starting an overlord before any workers ever existed.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1764">#1764</a> Enable logging for memcached in factory</li>
+<li><a href="https://github.com/druid-io/druid/pull/1760">#1760</a> Update memcached client for better concurrency in metrics.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1761">#1761</a> LocalDataSegmentPusher: Fix for Hadoop + relative paths.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1763">#1763</a> fix NPE and duplicate metric keys</li>
+<li><a href="https://github.com/druid-io/druid/pull/1758">#1758</a> Fix memcached cache provider injection and add test</li>
+<li><a href="https://github.com/druid-io/druid/pull/1747">#1747</a> Account for potential gaps in hydrants in sink initialization, hydrant swapping (e.g. h0, h1, h4)</li>
+<li><a href="https://github.com/druid-io/druid/pull/1751">#1751</a> Soften concurrency requirements on IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1736">#1736</a> IngestSegmentFirehostFactoryTimelineTest for overshadowing of the middle of a segment.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1741">#1741</a> Add better concurrency testing to IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1743">#1743</a> Disable metadata publishing attempt in example script</li>
+<li><a href="https://github.com/druid-io/druid/pull/1697">#1697</a> Better logging of URIExtractionNamespace failures due to missing files</li>
+<li><a href="https://github.com/druid-io/druid/pull/1702">#1702</a> do not have dataSource twice in path to segment storage on hdfs</li>
+<li><a href="https://github.com/druid-io/druid/pull/1710">#1710</a> Add some basic latching to concurrency testing in IncrementalIndexTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1734">#1734</a> fix broken integration-test</li>
+<li><a href="https://github.com/druid-io/druid/pull/1731">#1731</a> fix NPE with regex extraction function</li>
+<li><a href="https://github.com/druid-io/druid/pull/1700">#1700</a> update indexing in the helper to use multiple persists and merge</li>
+<li><a href="https://github.com/druid-io/druid/pull/1721">#1721</a> fix for &quot;java.io.IOException: No FileSystem for scheme: hdfs&quot; error</li>
+<li><a href="https://github.com/druid-io/druid/pull/1694">#1694</a> Better timing and locking in NamespaceExtractionCacheManagerExecutorsTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1703">#1703</a> add null check for task context.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1637">#1637</a> Make jetty scheduler threads daemon thread</li>
+<li><a href="https://github.com/druid-io/druid/pull/1658">#1658</a> Hopefully add better timeouts and ordering to JDBCExtractionNamespaceTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1620">#1620</a> Allow long values in the key or value fields for URIExtractionNamespace</li>
+<li><a href="https://github.com/druid-io/druid/pull/1578">#1578</a> Fix UT and documentation to the extraction filter</li>
+<li><a href="https://github.com/druid-io/druid/pull/1687">#1687</a> do not let user override hadoop job settings explicitly provided by druid code</li>
+<li><a href="https://github.com/druid-io/druid/pull/1689">#1689</a> Update LZ4Transcoder to match Compressed strategy factory type.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1685">#1685</a> Close output streams and channels loudly when creating segments.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1686">#1686</a> Replace funky imports with standard ones.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1683">#1683</a> Remove unused Indexer interface.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1632">#1632</a> Inner Query should build on sub query</li>
+<li><a href="https://github.com/druid-io/druid/pull/1676">#1676</a> fix convert segment task</li>
+<li><a href="https://github.com/druid-io/druid/pull/1672">#1672</a> Migrate TestDerbyConnector to a JUnit @Rule</li>
+<li><a href="https://github.com/druid-io/druid/pull/1675">#1675</a> update druid-api for jackson 2.4.6</li>
+<li><a href="https://github.com/druid-io/druid/pull/1632">#1632</a> Inner Query should build on sub query</li>
+<li><a href="https://github.com/druid-io/druid/pull/1668">#1668</a> Code cleanup for CachingClusteredClientTest</li>
+<li><a href="https://github.com/druid-io/druid/pull/1669">#1669</a> Upgrade dependencies</li>
+<li><a href="https://github.com/druid-io/druid/pull/1663">#1663</a> TaskActionToolbox: Remove allowOlderVersions, lift interval constraint</li>
+<li><a href="https://github.com/druid-io/druid/pull/1619">#1619</a> update server metrics</li>
+<li><a href="https://github.com/druid-io/druid/pull/1661">#1661</a> Poll rules immediately after change</li>
+<li><a href="https://github.com/druid-io/druid/pull/1665">#1665</a> Consolidate SQL retrying by moving logic into the connectors.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1648">#1648</a> handle commas in the path before calling MultipleInputs.addInputPaths</li>
+<li><a href="https://github.com/druid-io/druid/pull/1647">#1647</a> Approx histogram &quot;integration&quot; unit test</li>
+</ul>
+<h2>Documentation</h2>
+<ul>
+<li><a href="https://github.com/druid-io/druid/pull/1814">#1814</a> Adjust realtime constraints in the docs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1794">#1794</a> update R / Python clients</li>
+<li><a href="https://github.com/druid-io/druid/pull/1784">#1784</a> Minor documentation fixes for CONTRIBUTING.md</li>
+<li><a href="https://github.com/druid-io/druid/pull/1774">#1774</a> update doc about aggregation field in merge task and a null check</li>
+<li><a href="https://github.com/druid-io/druid/pull/1742">#1742</a> add docs for search filter</li>
+<li><a href="https://github.com/druid-io/druid/pull/1737">#1737</a> Docs: Suggest hadoopyString parser for Hadoop.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1735">#1735</a> add pivot as a UI</li>
+<li><a href="https://github.com/druid-io/druid/pull/1723">#1723</a> fix typo in segments.md</li>
+<li><a href="https://github.com/druid-io/druid/pull/1720">#1720</a> update ingestion faq to mention dataSource inputSpec</li>
+<li><a href="https://github.com/druid-io/druid/pull/1717">#1717</a> in configuration/index.md s/instantialize/initialize</li>
+<li><a href="https://github.com/druid-io/druid/pull/1698">#1698</a> Timeseries skipEmptyBucket docs.</li>
+<li><a href="https://github.com/druid-io/druid/pull/1662">#1662</a> Add documentation for pathFormat in batch ingestion</li>
+<li><a href="https://github.com/druid-io/druid/pull/1673">#1673</a> Fix batch ingestion doc</li>
+<li><a href="https://github.com/druid-io/druid/pull/1670">#1670</a> fix formatting</li>
+<li><a href="https://github.com/druid-io/druid/pull/1656">#1656</a> more docs for common questions</li>
+<li><a href="https://github.com/druid-io/druid/pull/1664">#1664</a> add documentation about TimedShutoff firehose</li>
+<li><a href="https://github.com/druid-io/druid/pull/1633">#1633</a> swap description and dimension column for some JVM metrics</li>
+<li><a href="https://github.com/druid-io/druid/pull/1793">#1793</a> fixing the link to chunkPeriod doc</li>
+</ul>
+<p>Thanks to all the contributors to this release!</p>
+<p>@anwenxu
+@cheddar
+@dclim
+@drcrallen
+@fjy
+@gianm
+@guobingkun
+@Hailei
+@himanshug
+@jon-wei
+@nishantmonu51
+@pjain1
+@potto007
+@qix
+@rasahner
+@xvrl</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.8.2</code> · 2015-11-18 · <a href="https://github.com/apache/druid/releases/tag/druid-0.8.2">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/druid/0.8.3"> <span class="k">← Suivant</span> <span class="t">0.8.3</span> </a> <a href="/releases/druid/0.8.1"> <span class="k">Précédent →</span> <span class="t">0.8.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/druid/releases/tag/0.8.2" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span>apache/druid</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Mise à jour depuis 0.8.1</a><a href="#" class>Nouvelles fonctionnalités</a><a href="#" class>Améliorations</a><a href="#" class>Corrections de bugs</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/druid/39.0.0"> <span class="v">39.0.0</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/druid/38.0.0"> <span class="v">38.0.0</span> <span class="d">26-10-01</span> </a> </li><li> <a href="/releases/druid/37.0.0"> <span class="v">37.0.0</span> <span class="d">26-05-08</span> </a> </li><li> <a href="/releases/druid/36.0.0"> <span class="v">36.0.0</span> <span class="d">26-02-09</span> </a> </li><li> <a href="/releases/druid/35.0.1"> <span class="v">35.0.1</span> <span class="d">25-12-15</span> </a> </li><li> <a href="/releases/druid/35.0.0"> <span class="v">35.0.0</span> <span class="d">25-11-18</span> </a> </li><li> <a href="/releases/druid/34.0.0"> <span class="v">34.0.0</span> <span class="d">25-08-11</span> </a> </li><li> <a href="/releases/druid/33.0.0"> <span class="v">33.0.0</span> <span class="d">25-04-29</span> </a> </li> </ul> <a href="/fr/releases/druid" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 71 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

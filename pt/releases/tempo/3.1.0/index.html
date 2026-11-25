@@ -1,0 +1,745 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tempo v3.1.0 — STAGS NextStack</title><meta name="description" content="Grafana Tempo 3.1.0 adds query-based trace redaction, TraceQL metrics arithmetic and sampling-aware extrapolation, Kafka connectivity improvements, and experimental tools for comparing and pruning traces."><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/tempo/3.1.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/tempo/3.1.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/tempo/3.1.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/tempo/3.1.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="tempo v3.1.0 — STAGS NextStack"><meta property="og:description" content="Grafana Tempo 3.1.0 adds query-based trace redaction, TraceQL metrics arithmetic and sampling-aware extrapolation, Kafka connectivity improvements, and experimental tools for comparing and pruning traces."><meta property="og:url" content="https://www.stags.cn/pt/releases/tempo/3.1.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/tempo/3.1.0/#article","headline":"tempo v3.1.0 release notes","datePublished":"2026-09-29","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/grafana/tempo"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/tempo/3.1.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/tempo/tempo_v3.1.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/tempo/3.1.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/tempo/3.1.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/tempo/3.1.0/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/tempo/3.1.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/tempo/3.1.0/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/tempo">tempo</a> </nav> <h1 class="detail-title"> <span class="p">tempo</span> v3.1.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Minor</span> <span><span class="k">Publicado</span>29 de set. de 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/grafana/tempo" target="_blank" rel="noopener"> <span class="k">Fonte</span>grafana/tempo </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/tempo/3.1.0/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/tempo/3.1.0/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><p>#tempo v3.1.0
+Grafana Tempo 3.1.0 adiciona redação de rastreamento baseada em consulta, aritmética de métricas TraceQL e extrapolação com reconhecimento de amostragem, melhorias de conectividade Kafka e ferramentas experimentais para comparação e remoção de rastreamentos.
+Também torna vParquet5 o formato padrão para blocos recém-escritos.</p>
+<h2>Destaques</h2>
+<ul>
+<li><strong>Redação por consulta:</strong> Envie trabalhos de redação usando um seletor TraceQL em vez de enumerar IDs de rastreamento, com janelas de tempo opcionais e melhorias na confiabilidade da redação.</li>
+<li><strong>Métricas TraceQL:</strong> combine agregações com aritmética e opte pela extrapolação usando a probabilidade de amostragem registrada em intervalos. O caminho de busca somente span mais rápido agora está habilitado por padrão.</li>
+<li><strong>Gerador de métricas e gráficos de serviço:</strong> Detecte a topologia de serviço sob amostragem intensa com um medidor de informações de conexão opcional, reconheça <code>db.system.name</code> e reduza as métricas de extensão e a sobrecarga de processamento do gráfico de serviço.</li>
+<li><strong>Remoção de intervalo experimental:</strong> Reduza o tamanho da resposta de rastreamento por ID v2, com aceitação em nível de solicitação e padrões configuráveis.</li>
+<li><strong>Conectividade Kafka:</strong> Configure mecanismos SASL adicionais, TLS e TLS mútuo, busca com reconhecimento de rack e compactação de produtor, incluindo <code>gzip</code> para Azure Event Hubs.</li>
+<li><strong>Diferenças e resumos de rastreamentos experimentais:</strong> Compare rastreamentos por meio de API, <code>tempo-cli</code> e MCP, com formatos de patch completo e resumo compacto.</li>
+<li><strong>vParquet5 por padrão:</strong> Grave novos blocos em vParquet5 enquanto continua a ler blocos vParquet4 e vParquet3 existentes, sem migração de dados.
+O changelog detalhado abaixo inclui as notas RC1 revisadas e backports subsequentes,
+com referências de relações públicas, créditos de contribuidor, identificadores de segurança e orientações de atualização.</li>
+</ul>
+<h2>Recursos</h2>
+<ul>
+<li><code>backend-scheduler</code>: os trabalhos de redação podem ser enviados com um seletor de consulta TraceQL em vez de uma lista explícita de IDs de rastreamento, para que grandes exclusões possam ser expressas como uma consulta. (<a href="https://github.com/grafana/tempo/issues/7663">#7663</a>) (@zalegrala)</li>
+<li><code>metrics-generator</code>: adicione subprocessadores <code>service-graphs-*</code> e um medidor de presença <code>traces_service_graph_connection_info</code> opcional para detecção de topologia sob amostragem pesada. (<a href="https://github.com/grafana/tempo/issues/7202">#7202</a>) (@jcreixell)</li>
+<li><code>operations</code>: Adicione escalonamento automático KEDA para armazenamento ao vivo por meio de um gatilho Prometheus em bytes esperados retidos. Habilite com <code>live_store.keda.enabled: true</code>. (<a href="https://github.com/grafana/tempo/issues/7154">#7154</a>) (@zachfi)
+Habilite o escalonamento automático do construtor de blocos separadamente com <code>block_builder.keda.enabled: true</code> e selecione a abordagem com <code>block_builder.keda.scaling</code>.
+O padrão, <code>'rollout-operator'</code>, espelha réplicas da zona a do armazenamento ativo e requer que o KEDA do armazenamento ativo seja ativado.
+A abordagem <code>'keda'</code> usa um gatilho de carga de trabalho kubernetes e funciona com ou sem KEDA de loja ativa.
+Habilitar KEDA de loja ao vivo habilita automaticamente <code>rollout_operator_replica_template_access_enabled</code>.</li>
+<li><code>operations</code>: Monitore a integridade e o desempenho da loja ao vivo Tempo com um novo painel Grafana. (<a href="https://github.com/grafana/tempo/issues/7287">#7287</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Adicionar remoção de extensão experimental ao endpoint v2 de rastreamento por ID. (<a href="https://github.com/grafana/tempo/issues/7566">#7566</a>, <a href="https://github.com/grafana/tempo/issues/7628">#7628</a>, <a href="https://github.com/grafana/tempo/issues/7693">#7693</a>) (@ie-pham)
+Habilite a remoção por padrão com <code>span_pruning_enabled_by_default</code> para solicitações que omitem <code>span_pruning</code>,
+ou configure o padrão por locatário com a substituição <code>span_pruning_enabled</code>.
+Os rastros já removidos no caminho de gravação são detectados e não são removidos novamente.</li>
+<li><code>query-frontend</code>: adicione um endpoint experimental para comparar dois rastreamentos, com um limite de tamanho de entrada combinado imposto pela configuração <code>max_bytes_per_trace</code> do locatário. (<a href="https://github.com/grafana/tempo/issues/7523">#7523</a>, <a href="https://github.com/grafana/tempo/issues/7539">#7539</a>, <a href="https://github.com/grafana/tempo/issues/7564">#7564</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Adicione trace-summary-v0-composed como um diferencial de rastreamento experimental opcional API e formato tempo-cli. As respostas sempre incluem um resumo compacto e incluem o patch completo de até 64 KiB; patches maiores relatam que o patch foi omitido. O padrão permanece trace-patch-v0. (<a href="https://github.com/grafana/tempo/issues/7593">#7593</a>) (@carles-grafana)</li>
+<li><code>tempo</code>: Adicione a opção de configuração <code>client_rack</code> Kafka para ativar a busca com reconhecimento de rack (KIP-392) e reduzir o tráfego Kafka entre zonas. (<a href="https://github.com/grafana/tempo/issues/7594">#7594</a>) (@AvivGuiser)</li>
+<li><code>tempo</code>: suporta operações aritméticas em métricas TraceQL (<a href="https://github.com/grafana/tempo/issues/6866">#6866</a>, <a href="https://github.com/grafana/tempo/issues/7199">#7199</a>, <a href="https://github.com/grafana/tempo/issues/7409">#7409</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo-cli</code>: Adicione um formato experimental trace-summary-v0-native ao tempo-cli trace diff. Ele fornece uma visão geral compacta da latência, duração somada do intervalo, erros, alterações estruturais e serviços afetados. (<a href="https://github.com/grafana/tempo/issues/7510">#7510</a>) (@carles-grafana)</li>
+<li><code>tempo-cli</code>: Adicione um comando experimental trace diff que compara dois arquivos de rastreamento local JSON e emite a saída trace-patch-v0. (<a href="https://github.com/grafana/tempo/issues/7468">#7468</a>) (@javiermolinar)</li>
+<li><code>traceql</code>: consultas de métricas TraceQL podem extrapolar contagens da probabilidade de amostragem de tracestate W3C. Ative por consulta por meio da dica <code>with(extrapolate=true)</code>. (<a href="https://github.com/grafana/tempo/issues/7452">#7452</a>) (@csmarchbanks)
+Quando um intervalo carrega um limite de probabilidade OpenTelemetry em seu tracestate
+(<code>ot=th:...</code>), cada intervalo correspondente contribui com <code>1 / sampling_probability</code> para
+<code>rate</code>, <code>count_over_time</code>, <code>sum_over_time</code>, <code>avg_over_time</code>,
+Agregados <code>histogram_over_time</code>, <code>quantile_over_time</code> e <code>compare</code> —
+combinando o comportamento existente do multiplicador por período do gerador de métricas.
+<code>min_over_time</code> e <code>max_over_time</code> não são afetados. Suportado apenas em
+vparquet4 e posterior.</li>
+</ul>
+<h2>Melhorias</h2>
+<ul>
+<li><code>backend-scheduler</code>: expõe trabalhos de back-end pendentes por locatário e tipo de trabalho e habilita histogramas nativos para tamanhos de itens de cache de back-end. (<a href="https://github.com/grafana/tempo/issues/7772">#7772</a>) (@zalegrala)
+<code>tempo_backend_scheduler_jobs_pending{tenant, job_type}</code> conta trabalhos aguardando envio,
+fornecendo um sinal de profundidade de fila para monitoramento e escalonamento automático.
+<code>tempodb_cache_store_size_bytes</code> agora suporta histogramas nativos.</li>
+<li><code>backend-scheduler</code>: adicione a métrica <code>tempo_backend_scheduler_redaction_traces_found_total{tenant, mode}</code> — rastreamentos correspondidos por trabalhos de redação por locatário, com mode=apply contando rastreamentos realmente removidos e mode=dry_run contando o raio de explosão visualizado de uma simulação. (<a href="https://github.com/grafana/tempo/issues/7699">#7699</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: reduz a sobrecarga de pesquisa de trabalhos do agendador de back-end indexando trabalhos pendentes e blocos ocupados por inquilino. (<a href="https://github.com/grafana/tempo/issues/7141">#7141</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: adicione uma janela de tempo <code>[start, end]</code> opcional para redação (<code>tempo-cli redact --start/--end</code>), delimitando o escopo para blocos sobrepostos e limitando a varredura por bloco. (<a href="https://github.com/grafana/tempo/issues/7702">#7702</a>) (@zalegrala)
+Uma redação em janela permite que um inquilino grande seja editado em fatias, em vez de uma passagem sobre cada bloco, para que a compactação não seja adiada durante toda a execução. Ambos os limites são obrigatórios e devem ser ordenados; omiti-los elimina todo o inquilino, como antes. Os limites são resolvidos para carimbos de data/hora absolutos pelo client, ​​portanto, uma redação longa não avança para os dados recém-ingeridos.
+A janela limita a varredura do seletor <code>--query</code>. Não pode ser combinado com <code>--trace-id</code>, que resolve rastreamentos sem limite de tempo: o par removeria cada rastreamento listado apenas dos blocos que se sobrepõem à janela e deixaria o restante no lugar enquanto relatava sucesso.
+Não envie uma redação em janela enquanto agendadores e trabalhadores executam versões diferentes. Um trabalhador anterior a essa alteração ignora os campos da janela e remove todas as correspondências de consulta em cada bloco fornecido, independentemente do carimbo de data e hora, sem erro e sem maneira de recuperar os dados.</li>
+<li><code>block-builder</code>: Adicionado histograma nativo <code>tempo_block_builder_flush_size_bytes</code> registrando o tamanho dos blocos liberados pelo construtor de blocos. (<a href="https://github.com/grafana/tempo/issues/7773">#7773</a>) (@zalegrala)
+Use isso junto com <code>tempo_live_store_local_flush_size_bytes</code> e
+<code>tempodb_compaction_output_block_size_bytes</code> para comparar tamanhos de bloco no caminho de gravação
+e ajuste a configuração <code>max_input_blocks</code> da compactação.</li>
+<li><code>cache</code>: Adicione as opções <code>connect_timeout</code> e <code>min_idle_conns_headroom_percentage</code> ao client memcached para ajustar o comportamento da conexão. (<a href="https://github.com/grafana/tempo/issues/7671">#7671</a>) (@mapno)
+<code>connect_timeout</code> limita o estabelecimento de conexão separadamente de <code>timeout</code> (solicitação
+viagens de ida e volta) e o padrão é <code>timeout</code> quando não definido. <code>min_idle_conns_headroom_percentage</code>
+controla a conexão ociosa reaping: valores negativos (o padrão) nunca fecha ocioso
+conexões, valores positivos mantêm essa porcentagem de conexões ociosas abertas em relação
+ao número de usados recentemente.</li>
+<li><code>cache</code>: aplica um MaxItemSize configurável para Redis. (<a href="https://github.com/grafana/tempo/issues/7311">#7311</a>) (@electron0zero)</li>
+<li><code>compactor</code>: Adicionado histograma nativo do <code>tempodb_compaction_output_block_size_bytes</code> registrando o tamanho dos blocos produzidos pela compactação. (<a href="https://github.com/grafana/tempo/issues/7773">#7773</a>) (@zalegrala)
+Nenhuma métrica existente capturou o tamanho final dos blocos de saída compactados (o
+<code>tempodb_compaction_bytes_written_total</code> é um contador cumulativo alimentado por liberação de grupo de linhas, não um
+tamanho por bloco acabado). Isso fornece aos operadores os dados necessários para ajustar o <code>max_input_blocks</code> e
+razão sobre o TCO.</li>
+<li><code>distributor</code>: Adicione a configuração <code>ingest.kafka.producer_compression</code> para permitir que o codec de compactação do produtor Kafka seja substituído. (<a href="https://github.com/grafana/tempo/issues/7691">#7691</a>) (@fleighton)
+Alguns back-ends compatíveis com Kafka suportam apenas determinados codecs de compactação,
+notavelmente Azure Event Hubs, que suporta apenas <code>gzip</code>. Os valores suportados são
+<code>none</code>, <code>gzip</code>, <code>snappy</code>, <code>lz4</code>, <code>zstd</code> (sem distinção entre maiúsculas e minúsculas); um indefinido
+O valor deixa a preferência de codec padrão do Kafka client inalterada.</li>
+<li><code>distributor</code>: Adicionar métricas de formato push por locatário: rótulo do locatário em <code>tempo_distributor_push_duration_seconds</code>, além dos novos <code>tempo_distributor_push_bytes</code> e <code>tempo_distributor_received_traces_total</code> (<a href="https://github.com/grafana/tempo/issues/7865">#7865</a>) (@zalegrala)</li>
+<li><code>distributor</code>: Adicionar seleção de mecanismo Kafka SASL e suporte TLS. A opção <code>sasl_mechanism</code> seleciona o mecanismo SASL (<code>PLAIN</code> (padrão), <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>, <code>OAUTHBEARER</code> ou <code>AWS_MSK_IAM</code>) e <code>tls_enabled</code> com as opções <code>tls_*</code> permite transporte TLS e TLS mútuo para o Kafka client. (<a href="https://github.com/grafana/tempo/issues/7586">#7586</a>) (@heytrav)
+As credenciais OAUTHBEARER e AWS_MSK_IAM podem ser fornecidas estaticamente, a partir de um arquivo JSON, ou obtidas por meio de um soquete de domínio Unix. As configurações existentes não são afetadas porque o mecanismo padrão permanece <code>PLAIN</code> com SASL desabilitado quando nenhum nome de usuário ou senha é definido.</li>
+<li><code>distributor</code>: Esquecimento automático de instâncias não íntegras do anel distribuidor após <code>2 × distributor.ring.heartbeat-timeout</code>, eliminando a necessidade de click &quot;Esquecer&quot; manualmente em <code>/distributor/ring</code> após encerramentos de pod não normais. (<a href="https://github.com/grafana/tempo/issues/7098">#7098</a>) (@oleg-kozlyuk-grafana)</li>
+<li><code>docs</code>: Documentação correta de início rápido de binário único em relação aos requisitos do Redpanda e Kafka. (<a href="https://github.com/grafana/tempo/issues/7704">#7704</a>) (@veenoise)</li>
+<li><code>docs</code>: adicione orientação para configurar o back-end compatível com Kafka usado pelas implantações de microsserviços Tempo. (<a href="https://github.com/grafana/tempo/issues/7714">#7714</a>) (@javiermolinar)</li>
+<li><code>docs</code>: Adicione habilidades de documentação compartilhada, contexto do projeto e fluxo de trabalho de notas de versão para criação de documentos assistida por IA. (<a href="https://github.com/grafana/tempo/issues/7447">#7447</a>) (@knylander-grafana)</li>
+<li><code>live-store</code>: expõe os bytes inspecionados da consulta como uma métrica. (<a href="https://github.com/grafana/tempo/issues/7162">#7162</a>, <a href="https://github.com/grafana/tempo/issues/7163">#7163</a>) (@zhxiaogg)</li>
+<li><code>live-store</code>: Melhore o desempenho da consulta de métricas TraceQL removendo a contenção de bloqueio entre blocos WAL avaliados simultaneamente. (<a href="https://github.com/grafana/tempo/issues/7867">#7867</a>) (@ruslan-mikhailov)
+Cada bloco agora é avaliado com seu próprio avaliador de métricas e os resultados por bloco são
+resumidos, em vez de todos os blocos WAL compartilharem um avaliador protegido por um mutex.</li>
+<li><code>live-store</code>: reduz a contenção de mutex na pesquisa de tags, tornando o coletor de string distinto com escopo livre de bloqueio. (<a href="https://github.com/grafana/tempo/issues/7492">#7492</a>) (@zhxiaogg)</li>
+<li><code>metrics-generator</code>: Correspondência de filtro de span de caminho rápido para o regex de tipo span padrão e avaliação de filtros intrínsecos antes dos filtros de atributos. (<a href="https://github.com/grafana/tempo/issues/7465">#7465</a>) (@carles-grafana)</li>
+<li><code>metrics-generator</code>: Reconhece o atributo <code>db.system.name</code> em gráficos de serviço, para detecção de nós de banco de dados e nomeação de nós virtuais. (<a href="https://github.com/grafana/tempo/issues/7697">#7697</a>) (@iamrajiv)
+Convenções semânticas de OpenTelemetry v1.30.0 renomeado <code>db.system</code> para <code>db.system.name</code>. Se estende de
+instrumentação que emite apenas o novo atributo não foi mais identificada como solicitações de banco de dados
+e não foi possível nomear um nó virtual.
+<code>db.system.name</code> é anexado aos padrões para <code>peer_attributes</code> e
+<code>database_name_attributes</code>, após <code>db.system</code>. Como as listas são pesquisadas em ordem e o
+o atributo mais antigo ainda está listado primeiro, os spans que carregam <code>db.system</code> continuam produzindo os nomes dos nós
+eles fazem hoje. Ambos os padrões ainda podem ser substituídos por locatário.</li>
+<li><code>metrics-generator</code>: Reduz a CPU do sanitizador de nomes de span e as alocações para nomes exatos repetidos. (<a href="https://github.com/grafana/tempo/issues/7794">#7794</a>) (@ carles-grafana)
+Drain agora possui bytes de token retidos, reutiliza o estado do tokenizer, remove candidatos obsoletos durante a correspondência,
+e usa um índice de correspondência exata limitado codificado por nomes de span completos para folhas grandes. Métrica de span gerada
+rótulos e acessórios de padrão existentes permanecem inalterados.</li>
+<li><code>metrics-generator</code>: reduz a CPU e as alocações por span no processador de métricas de span criando rótulos de série por meio do caminho de rótulo emprestado em pool do registro. (<a href="https://github.com/grafana/tempo/issues/7584">#7584</a>) (@carles-grafana)
+O processador span-metrics agora cria rótulos de série em buffers agrupados de propriedade do registro, atualiza métricas com um hash de rótulo pré-computado e cria target_info uma vez por recurso em vez de uma vez por intervalo. Os nomes, rótulos e valores das métricas permanecem inalterados.</li>
+<li><code>metrics-generator</code>: Adicione <code>skip_stale_backlog_on_startup</code> para buscar partições para o horizonte de folga de ingestão na inicialização, em vez de reproduzir o backlog que a folga descartaria, mantendo a métrica de atraso de partição honesta na reinicialização. (<a href="https://github.com/grafana/tempo/issues/7611">#7611</a>) (@zalegrala)</li>
+<li><code>metrics-generator</code>: Melhore a solução de problemas do gráfico de serviço rotulando as bordas expiradas com o tipo de intervalo incomparável. (<a href="https://github.com/grafana/tempo/issues/7709">#7709</a>) (@javiermolinar)</li>
+<li><code>metrics-generator</code>: reduz a CPU por borda e as alocações no processador de gráficos de serviço criando rótulos de série por meio do caminho de rótulo emprestado em pool do registro. (<a href="https://github.com/grafana/tempo/issues/7587">#7587</a>) (@ carles-grafana)
+O processador de gráficos de serviço agora usa atualizações de rótulos emprestados para contadores, histogramas e medidor de informações de conexão; usa chaves de tamanho fixo para rastreamento padrão e IDs de extensão; reutiliza buffers de ID de rastreamento; adia a codificação clássica de exemplares até a coleta; e compartilha uma codificação por borda para histogramas nativos. Os nomes, rótulos e valores das métricas permanecem inalterados.</li>
+<li><code>operations</code>: adicione campos de configuração de nível superior <code>autoscaling_prometheus_url</code> e <code>autoscaling_prometheus_tenant</code> para escalonamento automático KEDA. A configuração de <code>autoscaling_prometheus_tenant</code> envia um cabeçalho <code>X-Scope-OrgID</code> em todas as solicitações de gatilho Prometheus, o que é necessário quando o back-end é um sistema multilocatário, como Grafana Mimir. (<a href="https://github.com/grafana/tempo/issues/7099">#7099</a>) (@zachfi)</li>
+<li><code>operations</code>: Expanda o painel Backend Work com progresso de redação, trabalhos pendentes, trabalhos descartados e painéis de duração do trabalho. (<a href="https://github.com/grafana/tempo/issues/7184">#7184</a>, <a href="https://github.com/grafana/tempo/issues/7758">#7758</a>, <a href="https://github.com/grafana/tempo/issues/7772">#7772</a>, <a href="https://github.com/grafana/tempo/issues/7795">#7795</a>) (@zalegrala)
+Rastreie trabalhos de redação por locatário e alterne os painéis de latência entre histogramas clássicos e nativos.
+Selecione Namespace antes do Cluster para filtrar os clusters disponíveis.
+O painel Repetir agora usa a métrica <code>jobs_retry_total</code> correta.</li>
+<li><code>operations</code>: jsonnet: suporta escalonamento automático KEDA baseado em Prometheus para o gerador de métricas. (<a href="https://github.com/grafana/tempo/issues/7362">#7362</a>) (@mapno)</li>
+<li><code>operations</code>: adicionar dashboard do <code>tempo-service-graph.json</code> visualizando a topologia de serviço do <code>traces_service_graph_connection_info</code>. (<a href="https://github.com/grafana/tempo/issues/7207">#7207</a>) (@jcreixell)</li>
+<li><code>querier</code>: Adicionado histograma <code>tempo_querier_backend_processing_duration_seconds</code> medindo o tempo que o consultador gasta processando blocos de back-end, rotulados por operação e inquilino. (<a href="https://github.com/grafana/tempo/issues/7525">#7525</a>) (@zhxiaogg)</li>
+<li><code>querier</code>: estende métricas de estatísticas de consulta para métodos de consulta adicionais. (<a href="https://github.com/grafana/tempo/issues/7568">#7568</a>, <a href="https://github.com/grafana/tempo/issues/7571">#7571</a>) (@javiermolinar)</li>
+<li><code>querier</code>: limita o tamanho da resposta do endpoint externo ao questionador grpc MaxSendMsgSize. (<a href="https://github.com/grafana/tempo/issues/7240">#7240</a>) (@electron0zero)</li>
+<li><code>query-frontend</code>: Espelha campos de log de resposta por consulta como atributos de span em todos os caminhos de consulta. Atributos de extensão do formato de consulta renomeados para snake_case (<code>queryType</code> -&gt; <code>query_type</code>, etc.). (<a href="https://github.com/grafana/tempo/issues/7605">#7605</a>) (@mapno)</li>
+<li><code>query-frontend</code>: Adicione uma ferramenta <code>traces-diff</code> ao servidor Tempo MCP para comparar traços completos. (<a href="https://github.com/grafana/tempo/issues/7785">#7785</a>) (@carles-grafana)
+A resposta composta padrão inclui um resumo compacto e inclui condicionalmente patches de até 64 KiB. Resumo nativo e formatos completos de patch permanecem disponíveis mediante solicitação; patches completos não têm garantia de tamanho de saída.</li>
+<li><code>query-frontend</code>: TraceByID V2: Adicione parâmetros de consulta <code>match_depth</code> e <code>ancestor_depth</code> ao filtro <code>q</code> para limitar quantos saltos de descendentes/ancestrais de intervalos correspondentes são mantidos (<code>-1</code> ilimitado, <code>0</code> nenhum, <code>n</code> exatamente n saltos). (<a href="https://github.com/grafana/tempo/issues/7708">#7708</a>) (@ie-pham)</li>
+<li><code>query-frontend</code>: Adicionar observabilidade de caminho de leitura: contadores de acertos/erros de cache, formato de consulta em logs/spans, estatísticas de back-end, spans vparquet5. (<a href="https://github.com/grafana/tempo/issues/7504">#7504</a>) (@stoewer)</li>
+<li><code>query-frontend</code>: Adicione um rótulo <code>op</code> a <code>tempo_query_frontend_queue_duration_seconds</code> para que o tempo de fila possa ser dividido por tipo de consulta. (<a href="https://github.com/grafana/tempo/issues/7817">#7817</a>) (@zhxiaogg)</li>
+<li><code>query-frontend</code>: retorna a etapa resolvida na resposta query_range das métricas TraceQL. (<a href="https://github.com/grafana/tempo/issues/7871">#7871</a>) (@ruslan-mikhailov)</li>
+<li><code>query-frontend</code>: Adiciona novo recurso para calcular e rastrear a quantidade de dados de spans e seus atributos fluindo através do mecanismo de consulta TraceQL e pesquisas de rastreamento retornadas de dados. Desativado por padrão, defina o valor de substituição <code>engine_bytes_tracking</code> como ativado. (<a href="https://github.com/grafana/tempo/issues/7689">#7689</a>) (@mdisibio)</li>
+<li><code>query-frontend</code>: Trace diff relata durações de intervalo em nanossegundos e compara valores numéricos com uma tolerância relativa. (<a href="https://github.com/grafana/tempo/issues/7544">#7544</a>) (@stoewer)</li>
+<li><code>query-frontend</code>: TraceByID V2: adicione primeira passagem de suporte de filtragem com <code>q</code> (filtro TraceQL) e parâmetros de consulta <code>keep_hierarchy</code> para retornar apenas intervalos correspondentes (<a href="https://github.com/grafana/tempo/issues/7483">#7483</a>) (@electron0zero)</li>
+<li><code>storage</code>: acelere <code>ByteInPredicate</code>/<code>ByteNotInPredicate</code> usando uma pesquisa de mapa em vez de uma varredura linear para conjuntos de valores grandes. (<a href="https://github.com/grafana/tempo/issues/7535">#7535</a>) (@mapno)</li>
+<li><code>storage</code>: Remove entradas de cache de filtro bloom e índice de ID de rastreamento para blocos excluídos durante a retenção, liberando espaço de cache para blocos ativos mais cedo. (<a href="https://github.com/grafana/tempo/issues/7204">#7204</a>) (@zalegrala)</li>
+<li><code>storage</code>: Interrompe a varredura de um bloco em busca de valores de tag assim que o limite do chamador for atingido. (<a href="https://github.com/grafana/tempo/issues/7696">#7696</a>) (@zhxiaogg)
+SearchTagValues percorreu anteriormente cada grupo de linhas de um bloco, mesmo após a resposta
+limite havia sido atingido, reportando valores que foram então descartados. Agora abandona a varredura
+no primeiro grupo de linhas onde o limite é atingido. Em um bloco de 2,4 GB, coletando valores
+para um atributo dedicado de alta cardinalidade cai de 67ms para 9ms.</li>
+<li><code>storage</code>: substitua os loops O(N²) <code>slices.ContainsFunc</code> em <code>updateInternal</code> por pesquisas de mapas pré-construídas, reduzindo o custo por pesquisa de O(N·M) para O(N+M). (<a href="https://github.com/grafana/tempo/issues/7140">#7140</a>) (@zalegrala)</li>
+<li><code>storage</code>: armazena em cache o hash de colunas dedicadas de cada bloco no seletor de bloco da janela de tempo em vez de recalculá-lo em cada comparação no hot loop do <code>BlocksToCompact</code>. (<a href="https://github.com/grafana/tempo/issues/7803">#7803</a>) (@zalegrala)</li>
+<li><code>storage</code>: Atualize grafana/gomemcache com melhorias durante tempestades OOM. (<a href="https://github.com/grafana/tempo/issues/7809">#7809</a>) (@mapno)</li>
+<li><code>storage</code>: Informa o formato do bloco configurado em estatísticas de uso anônimas. (<a href="https://github.com/grafana/tempo/issues/7807">#7807</a>) (@javiermolinar)
+O novo campo <code>storage_block_format</code> informa o <code>storage.trace.block.version</code> efetivo usado para blocos recém-escritos. Versões mais antigas do Tempo omitem o campo.</li>
+<li><code>storage</code>: adicione o histograma <code>tempodb_cache_store_size_bytes</code> rotulado por <code>role</code> registrando o tamanho de cada item gravado no cache de back-end. (<a href="https://github.com/grafana/tempo/issues/7152">#7152</a>) (@javiermolinar)</li>
+<li><code>tempo</code>: Evite a alocação de heap e o alias de string inseguro ao codificar IDs de rastreamento hexadecimais. (<a href="https://github.com/grafana/tempo/issues/7463">#7463</a>) (@carles-grafana)</li>
+<li><code>tempo</code>: Adicionado alerta <code>TempoDistributorKafkaProduceFailing</code> que é acionado quando os registros Kafka não podem ser produzidos pelo distribuidor. (<a href="https://github.com/grafana/tempo/issues/7148">#7148</a>) (@javiermolinar)</li>
+<li><code>tempo</code>: reative as compilações de lançamento do Darwin novamente (<a href="https://github.com/grafana/tempo/issues/7407">#7407</a>) (@electron0zero)</li>
+<li><code>tempo</code>: Adiciona suporte para todas as configurações de rastreamento de otel para auto-rastreamento (<a href="https://github.com/grafana/tempo/issues/7577">#7577</a>) (@electron0zero)
+A configuração do auto-rastreamento é feita via dskit e suporta todas as configurações OTEL_* e JAEGER_*.</li>
+<li><code>traceql</code>: Adicione uma estrutura de span-watcher ao mecanismo TraceQL para coletar métricas de consulta extras sob demanda. (<a href="https://github.com/grafana/tempo/issues/7532">#7532</a>) (@mapno)
+Ativado por meio da substituição experimental por locatário <code>span_pruning_awareness</code>, ele informa se os intervalos correspondentes incluem intervalos de resumo de remoção de intervalo. Aplica-se a consultas de pesquisa e métricas.</li>
+<li><code>traceql</code>: ativa a nova busca somente de span por padrão. Pode ser desabilitado por locatário via <code>metrics_spanonly_fetch: false</code> ou por consulta por meio da dica insegura <code>with(spanonly_fetch=false)</code>. (<a href="https://github.com/grafana/tempo/issues/7179">#7179</a>) (@mdisibio)</li>
+</ul>
+<h2>Mudanças significativas</h2>
+<h3>Antes de atualizar</h3>
+<p>Esta versão inclui alterações significativas na configuração e novos padrões.
+Revise as entradas detalhadas abaixo, especialmente se você usar cache Redis, gravações vParquet3 ou configurações personalizadas de front-end de consulta.</p>
+<ul>
+<li><strong>vParquet3:</strong> O Tempo se recusa a iniciar quando configurado para gravar blocos vParquet3. Mude <code>storage.trace.block.version</code> para <code>vParquet5</code> ou <code>vParquet4</code> antes de atualizar. Os blocos vParquet3 existentes permanecem legíveis, mas não são mais compactados.</li>
+<li><strong>Redis:</strong> O cluster Redis se torna o padrão, o suporte do Sentinel é removido e as chaves de configuração e as configurações de TLS são alteradas. Revise os detalhes da migração antes de atualizar uma instalação usando o cache experimental Redis.</li>
+<li><strong>Edição em janela:</strong> não envie trabalhos de redação em janela enquanto agendadores e trabalhadores executam versões diferentes. Um trabalhador mais velho pode ignorar a janela de tempo e redigir todos os rastreamentos correspondentes em um bloco.</li>
+<li><strong>Atualizando de um 3.1 RC:</strong> Remova a opção obsoleta <code>query_frontend.trace_by_id.span_pruning_enabled</code>.
+A remoção permanece opcional com <code>span_pruning=true</code>, a menos que um padrão seja configurado;
+<code>span_pruning_enabled_by_default</code> e a substituição <code>span_pruning_enabled</code> por locatário permanecem disponíveis.</li>
+<li><strong>Comparação de rastreamento:</strong> O comando CLI e a ferramenta MCP agora são denominados <code>traces-diff</code>.</li>
+<li><strong>Comportamento de consulta:</strong> Revise as alterações de fragmentação de rastreamento por ID, validação de consulta de métricas mais rigorosa e o tamanho reduzido do pacote de streaming gRPC padrão.</li>
+<li><code>cache</code>: O cache experimental Redis foi completamente reescrito com várias alterações significativas. O suporte do Sentinel foi abandonado em favor do cluster Redis (padrão, opt-out) (<a href="https://github.com/grafana/tempo/issues/7337">#7337</a>) (@oleg-kozlyuk-grafana)
+<ul>
+<li>Atualize Redis client para <code>github.com/redis/go-redis/v9</code> e torne o roteamento explícito.</li>
+<li>Cluster Redis agora é o padrão; opte pelo client de nó único com <code>single_node: true</code> (ou <code>-redis.single-node</code>).</li>
+<li>As implantações de cluster Redis requerem Redis 7+.</li>
+<li>O suporte do Redis Sentinel foi removido: as chaves <code>master_name</code>, <code>sentinel_username</code>, <code>sentinel_password</code> YAML e seus sinalizadores <code>-redis.master-name</code>, <code>-redis.sentinel-username</code>, <code>-redis.sentinel-password</code> desapareceram. As chaves YAML <code>idle_timeout</code> e <code>max_connection_age</code> foram renomeadas para <code>conn_max_idle_time</code> e <code>conn_max_lifetime</code>.</li>
+<li>O par mínimo <code>tls_enabled</code>/<code>tls_insecure_skip_verify</code> é substituído pelo bloco TLS estilo dskit (<code>tls_cert_path</code>, <code>tls_key_path</code>, <code>tls_ca_path</code>, <code>tls_server_name</code>, <code>tls_insecure_skip_verify</code>, <code>tls_cipher_suites</code>, <code>tls_min_version</code>); configurações de TLS inválidas agora falham ao serem fechadas em vez de fazer downgrade silenciosamente para texto não criptografado.</li>
+<li>Adiciona opções de roteamento de cluster Redis (<code>route_by_latency</code>, <code>route_randomly</code>, <code>read_only</code>, <code>max_redirects</code>, <code>min_idle_conns</code>) e um limite <code>max_item_size</code> configurável. <code>MGet</code>/<code>Del</code> de slot cruzado espalham-se pelos fragmentos em paralelo; <code>MSet</code> usa <code>Pipeline</code> em vez de <code>TxPipeline</code> para que as gravações entre slots não falhem mais com <code>CROSSSLOT</code>.</li>
+<li><code>RedisCache.Store</code> agora está registrado em <code>tempo_rediscache_request_duration_seconds</code>, correspondendo ao client do memcached.</li>
+</ul>
+</li>
+<li><code>operations</code>: pare de publicar tags de imagem Docker mutáveis ​​em repositórios GAR imutáveis ​​e fixe exemplos no Tempo 3.0.0. (<a href="https://github.com/grafana/tempo/issues/7369">#7369</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Remove a opção de configuração <code>query_frontend.trace_by_id.span_pruning_enabled</code> em todo o cluster; a remoção de span está sempre disponível para solicitações de rastreamento por ID v2. (<a href="https://github.com/grafana/tempo/issues/7912">#7912</a>, <a href="https://github.com/grafana/tempo/issues/8010">#8010</a>) (@ie-pham)
+A remoção permanece opcional por solicitação com <code>span_pruning=true</code>, a menos que um padrão seja configurado.
+A opção experimental <code>span_pruning_enabled_by_default</code> e por inquilino
+A substituição do <code>span_pruning_enabled</code> permanece disponível; um valor de solicitação explícito tem precedência.
+Os usuários que atualizam de um 3.1 RC anterior devem remover a opção obsoleta para todo o cluster.</li>
+<li><code>query-frontend</code>: nova abordagem de fragmentação de trabalho para pesquisas de rastreamento, usando uma nova opção de configuração <code>blocks_per_shard</code> que substitui <code>query_shards</code>. (<a href="https://github.com/grafana/tempo/issues/7105">#7105</a>) (@mdisibio)</li>
+<li><code>storage</code>: Imponha a descontinuação do vParquet3. O Tempo agora se recusa a iniciar com <code>storage.trace.block.version</code> definido como <code>vParquet3</code>, e o compactador não compacta mais os blocos vParquet3 existentes. (<a href="https://github.com/grafana/tempo/issues/7858">#7858</a>) (@mdisibio)
+Os blocos vParquet3 existentes permanecem legíveis e são deixados como estão. Defina a versão do bloco como
+vParquet4 ou posterior.</li>
+<li><code>traceql</code>: rejeita solicitações de consulta de métricas com carimbos de data e hora de início e término idênticos. (<a href="https://github.com/grafana/tempo/issues/7602">#7602</a>) (@mdisibio)</li>
+</ul>
+<h2>Mudanças</h2>
+<ul>
+<li><code>backend-scheduler</code>: Limita a lista explícita de IDs de rastreamento em um envio de redação em 1000, rejeitando solicitações maiores com um ponteiro para o seletor de consulta. (<a href="https://github.com/grafana/tempo/issues/7808">#7808</a>) (@zalegrala)
+Cada trabalho criado por uma redação carrega toda a lista de IDs de rastreamento do lote, portanto, o custo de envio aumenta com ids x blocos: alguns milhões de IDs de 16 bytes contra um locatário com dezenas de milhares de blocos atingem terabytes de tráfego de despacho de um único agendador. O limite de mensagens gRPC já limitou um envio próximo a 5,8 milhões, mas como uma falha encontrada sob carga, e não como um limite declarado. Um seletor de consulta resolve por bloco no trabalhador e não adiciona nada a nenhuma carga útil do trabalho.</li>
+<li><code>cache</code>: Mantenha os pools de conexão memcached aquecidos para reduzir a latência final sob carga de leitura intermitente. As conexões ociosas não são mais fechadas por padrão e o <code>max_idle_conns</code> padrão foi aumentado de 16 para 100. (<a href="https://github.com/grafana/tempo/issues/7671">#7671</a>) (@mapno)
+Anteriormente, as conexões inativas por mais de 2 minutos eram sempre fechadas, portanto, cada explosão de
+leituras (por exemplo, pesquisas de rastreamento por ID) começaram com uma tempestade de novos dials que aumentaram a latência do p99
+e produziu tempos limite do lado client. Defina <code>min_idle_conns_headroom_percentage</code> como positivo
+valor para reativar a conexão ociosa reaping.</li>
+<li><code>deps</code>: Crie imagens de contêiner Tempo e libere binários com Go 1.27.1. (<a href="https://github.com/grafana/tempo/issues/7913">#7913</a>) (@javiermolinar)</li>
+<li><code>deps</code>: Atualize GoReleaser de v1.25.1 para v2.16.0 em RC0 (substituído por v2.18.2 em RC1). (<a href="https://github.com/grafana/tempo/issues/7453">#7453</a>) (@mapno)</li>
+<li><code>operations</code>: adicione uma duração <code>for</code> de 15 m ao alerta <code>TempoUserConfigurableOverridesReloadFailing</code> para que falhas transitórias breves não sejam paginadas e corrija seu link de runbook. (<a href="https://github.com/grafana/tempo/issues/7639">#7639</a>) (@zhxiaogg)</li>
+<li><code>query-frontend</code>: Reduza o tamanho padrão do pacote de streaming gRPC de 2 MB para 1 MB. (<a href="https://github.com/grafana/tempo/issues/7615">#7615</a>) (@mdisibio)</li>
+<li><code>storage</code>: Torna <code>vParquet5</code> o formato de bloco padrão para blocos recém-escritos (era <code>vParquet4</code>). (<a href="https://github.com/grafana/tempo/issues/7775">#7775</a>) (@javiermolinar)
+Nenhuma migração de dados é necessária. Após a atualização, o Tempo grava novos blocos em
+vParquet5 enquanto continua a ler os blocos vParquet4 e vParquet3 existentes. Para
+continue escrevendo vParquet4, defina <code>storage.trace.block.version: vParquet4</code> explicitamente.</li>
+<li><code>tempo-cli</code>: Renomeie <code>tempo-cli experimental trace-diff</code> para <code>tempo-cli experimental traces-diff</code> e a ferramenta MCP <code>trace-diff</code> para <code>traces-diff</code>. (<a href="https://github.com/grafana/tempo/issues/8005">#8005</a>) (@javiermolinar)</li>
+</ul>
+<h2>Correções de segurança</h2>
+<ul>
+<li><code>backend-scheduler</code>: evita a redação entre inquilinos retirando o inquilino alvo exclusivamente do contexto da solicitação (<code>X-Scope-OrgID</code>), ignorando o campo <code>tenant_id</code> do corpo da solicitação. (<a href="https://github.com/grafana/tempo/issues/7153">#7153</a>) (@zalegrala)</li>
+<li><code>operations</code>: Assine todas as imagens de contêiner publicadas (<code>tempo</code>, <code>tempo-vulture</code>, <code>tempo-query</code> e <code>tempo-cli</code>) com assinaturas de fiança sem chave e anexe a proveniência da construção SLSA. (<a href="https://github.com/grafana/tempo/issues/7493">#7493</a>, <a href="https://github.com/grafana/tempo/issues/7534">#7534</a>, <a href="https://github.com/grafana/tempo/issues/7543">#7543</a>, <a href="https://github.com/grafana/tempo/issues/7565">#7565</a>, <a href="https://github.com/grafana/tempo/issues/7601">#7601</a>) (@mattdurham)</li>
+<li><code>operations</code>: atualize <code>memcached</code> para <code>1.6.42-alpine</code> e <code>prom/memcached-exporter</code> para <code>v0.16.0</code> para solucionar vulnerabilidades conhecidas. (<a href="https://github.com/grafana/tempo/issues/7244">#7244</a>) (@zhxiaogg)</li>
+</ul>
+<h2>Correções de bugs</h2>
+<ul>
+<li><code>backend-scheduler</code>: corrige a contenção de bloqueio O(N) em GetJobForWorker sob carga de trabalho simultânea; substitua a varredura de shard pela pesquisa de índice O(1). (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: corrige a métrica de blocos pendentes suprimida para zero durante o lote de redação ativa, fazendo com que o escalonador automático reduza os trabalhadores no meio da redação. (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: corrige o lote de redação não limpo após o tempo limite do trabalho morto, deixando o inquilino permanentemente bloqueado para novos envios de redação e compactação. (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: uma redação simulada (visualização somente leitura) não desativa mais a compactação/retenção do locatário, entra em repouso ou arma uma nova varredura - isso se aplica apenas a uma redação no modo de aplicação, que na verdade reescreve blocos. (<a href="https://github.com/grafana/tempo/issues/7700">#7700</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: um lote de redação concluído agora entra em um curto período de inatividade antes da remoção, mantendo a compactação de locatário desativada até que a nova varredura possa cobrir qualquer bloco que uma compactação produziu assim que o último trabalho de redação foi concluído. Anteriormente, o lote era removido no instante em que seus trabalhos eram concluídos, portanto, um bloco compactado naquela janela poderia escapar da edição. (<a href="https://github.com/grafana/tempo/issues/7695">#7695</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: correção de um bug do agendador de back-end em que um trabalho de redação descartado na atribuição vazava um contador interno em andamento, o que poderia deixar a redação de um locatário parecendo perpetuamente em andamento e bloquear futuros envios de redação desse locatário. (<a href="https://github.com/grafana/tempo/issues/7703">#7703</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: a retenção agora é bloqueada na barreira do lote de redação (<code>TenantPending</code>) em vez de apenas nos trabalhos de redação em andamento, portanto, a retenção não pode marcar um bloco compactado enquanto um lote de redação aguarda sua nova varredura. (<a href="https://github.com/grafana/tempo/issues/7358">#7358</a>) (@zalegrala)</li>
+<li><code>backend-worker</code>: adicione <code>tempo_backend_worker_redaction_block_missing_total</code> e um log de aviso quando o bloco de destino de um trabalho de redação estiver ausente da lista de bloqueio ativa, de modo que uma lacuna de cobertura seja observável em vez de uma operação silenciosa. (<a href="https://github.com/grafana/tempo/issues/7358">#7358</a>) (@zalegrala)</li>
+<li><code>cache</code>: respeite <code>cache_min_compaction_level</code> no mínimo ao selecionar filtros Bloom para armazenamento em cache. (<a href="https://github.com/grafana/tempo/issues/7904">#7904</a>) (@ruslan-mikhailov)</li>
+<li><code>cache</code>: habilita o hashing consistente do Memcached por padrão quando omitido em YAML, correspondendo ao padrão documentado. (<a href="https://github.com/grafana/tempo/issues/7903">#7903</a>) (@ruslan-mikhailov)</li>
+<li><code>cache</code>: respeitar o padrão do disjuntor memcache para configuração yaml. (<a href="https://github.com/grafana/tempo/issues/7972">#7972</a>) (@ruslan-mikhailov)</li>
+<li><code>compactor</code>: pula blocos de entrada cujo meta não existe mais em vez de falhar toda a compactação. (<a href="https://github.com/grafana/tempo/issues/7902">#7902</a>) (@zhxiaogg)</li>
+<li><code>distributor</code>: Retorna um status de nova tentativa para erros transitórios ao gravar no Kafka. (<a href="https://github.com/grafana/tempo/issues/7506">#7506</a>) (@javiermolinar)</li>
+<li><code>distributor</code>: pré-alocação de fatia vinculada por rastreamento durante o novo lote. (<a href="https://github.com/grafana/tempo/issues/7288">#7288</a>) (@carles-grafana)</li>
+<li><code>live-store</code>: Corrige um pânico no armazenamento ativo <code>FindTraceByID</code> quando mais spans para o rastreamento chegam enquanto ele está sendo combinado com dados de bloco e empacotado. (<a href="https://github.com/grafana/tempo/issues/7856">#7856</a>) (@KR-Ravindra)
+A fatia <code>Batches</code> do rastreamento ao vivo foi entregue ao combinador de rastreamento com capacidade livre, de modo que o
+o acréscimo do combinador e o acréscimo do caminho push gravaram lotes diferentes no mesmo slot do
+matriz de apoio do rastreamento ao vivo. <code>Size()</code> e <code>Marshal()</code> viram objetos diferentes e organizaram
+entrou em pânico com <code>slice bounds out of range</code>.</li>
+<li><code>live-store</code>: Consultas de valor de tag não descartam mais silenciosamente os valores de um bloco quando sua entrada de cache de disco é ilegível ou falha ao desempacotar; o bloco é pesquisado novamente em vez de ser ignorado. (<a href="https://github.com/grafana/tempo/issues/7610">#7610</a>) (@zalegrala)</li>
+<li><code>live-store</code>: grava o cache de resposta do intervalo de consulta por bloco atomicamente (arquivo temporário + renomear) e registra + ignora erros de leitura do cache. (<a href="https://github.com/grafana/tempo/issues/7155">#7155</a>) (@zhxiaogg)</li>
+<li><code>live-store</code>: Consultas de valor de tag agora armazenam em cache resultados vazios (negativos) por bloco, portanto, um bloco que não contém valores para a tag solicitada não é verificado novamente em cada consulta. (<a href="https://github.com/grafana/tempo/issues/7617">#7617</a>) (@zalegrala)</li>
+<li><code>metrics-generator</code>: evita travamentos do gerador de métricas quando a sanitização de nome de intervalo remove clusters DRAIN durante o processamento de intervalos. (<a href="https://github.com/grafana/tempo/issues/7787">#7787</a>) (@ carles-grafana)</li>
+<li><code>metrics-generator</code>: Corrige a higienização do nome do span criando um novo cluster DRAIN em cada span quando um irmão curinga aparece na árvore de padrões (<a href="https://github.com/grafana/tempo/issues/7922">#7922</a>) (@zhxiaogg)</li>
+<li><code>metrics-generator</code>: corrige o sub-relato do histograma clássico da série <code>_sum</code> (por exemplo, <code>traces_spanmetrics_latency_sum</code>) via <code>increase()</code>/<code>rate()</code> para séries que são frequentemente criadas e removidas. (<a href="https://github.com/grafana/tempo/issues/7811">#7811</a>) (@yvrhdn)
+As séries <code>_count</code> e <code>_bucket</code> já foram semeadas com amostra zero quando uma série é
+criado pela primeira vez (ou recriado após ser despejado como obsoleto), então <code>increase()</code>/<code>rate()</code>
+podem atribuir corretamente seu primeiro valor real. <code>_sum</code> estava faltando esta semente, então
+<code>increase()</code>/<code>rate()</code> podem subcontar ou diminuir a contribuição de séries com alta
+agitar. Aplica-se ao caminho do histograma somente clássico e aos histogramas clássicos emitidos
+no modo &quot;ambos&quot; (nativo + clássico).</li>
+<li><code>metrics-generator</code>: Pare de anexar exemplares de traceID vazios a histogramas nativos para intervalos sem um ID de rastreamento. (<a href="https://github.com/grafana/tempo/issues/7584">#7584</a>) (@ carles-grafana)
+Nos modos de histograma <code>native</code> e <code>both</code>, as observações para intervalos com um ID de traço ausente ou totalmente zero anexavam um exemplar com um rótulo traceID vazio; eles agora não carregam nenhum histograma clássico exemplar e correspondente.</li>
+<li><code>metrics-generator</code>: registre apenas métricas de span-sanitizer quando span_name_sanitization estiver habilitado ou dry_run (<a href="https://github.com/grafana/tempo/issues/7810">#7810</a>) (@electron0zero)</li>
+<li><code>metrics-generator</code>: elimina métricas de atraso de ingestão obsoletas por partição quando uma partição se move entre consumidores e mantém partições inativas em seu proprietário anterior em vez de reorganizá-las a cada rebalanceamento. (<a href="https://github.com/grafana/tempo/issues/7665">#7665</a>) (@aldernero)
+Corrige o crescente tempo_ingest_group_partition_lag e tempo_ingest_group_partition_lag_seconds
+relatado por um antigo proprietário após uma transferência de partição. Afeta os consumidores que usam o anel de partição
+balanceador cooperativo-ativo-adesivo (gerador de métricas, construtor de blocos, loja ao vivo). O
+O gerador de métricas agora também limpa essas métricas em OnPartitionsLost (por exemplo, tempo limite da sessão ou
+fence), que anteriormente deixou séries obsoletas para trás.</li>
+<li><code>operations</code>: Corrija o nome da métrica para <code>traces_service_graph_request_total</code> no painel de topologia de serviço Grafana (<a href="https://github.com/grafana/tempo/issues/7710">#7710</a>) (@veenoise)</li>
+<li><code>operations</code>: Use <code>AverageValue</code> (não <code>Value</code>) para o gatilho do autoescalador KEDA de armazenamento ativo; o <code>Value</code> metricType dimensiona incorretamente a métrica de ingestão com valor de byte e executa o escalonador automático para maxReplicas, independentemente da carga. (<a href="https://github.com/grafana/tempo/issues/7376">#7376</a>) (@zalegrala)</li>
+<li><code>operations</code>: protege <code>TempoDistributorKafkaProduceFailing</code> em uma taxa de produção diferente de zero para que ele não page em <code>+Inf%</code> em células onde <code>tempo_distributor_produce_records_total</code> não é incrementado. (<a href="https://github.com/grafana/tempo/issues/7715">#7715</a>) (@zalegrala)
+O alerta dividiu a taxa de falha na produção pela taxa de produção sem guarda. Em uma célula onde
+<code>tempo_distributor_produce_records_total</code> é plano, essa proporção divide por zero, o que PromQL
+avalia como <code>+Inf</code>. Como <code>+Inf</code> excede qualquer limite, o alerta é disparado como crítico com um
+valor <code>+Inf%</code> sem sentido assim que uma única falha de produção foi registrada.</li>
+<li><code>operations</code>: Restaure versões binárias e de pacotes com Go 1.27 atualizando GoReleaser para v2.18.2. (<a href="https://github.com/grafana/tempo/issues/7920">#7920</a>) (@javiermolinar)</li>
+<li><code>overrides</code>: emite campos de duração como escalares planos YAML em <code>/status/overrides/{tenant}</code> e omite <code>generate_native_histograms</code> quando não definido. (<a href="https://github.com/grafana/tempo/issues/7138">#7138</a>) (@electron0zero)</li>
+<li><code>overrides</code>: corrige a substituição por locatário de <code>retry_info_enabled</code>, substituindo silenciosamente o padrão do cluster quando não definido (<a href="https://github.com/grafana/tempo/issues/7662">#7662</a>) (@zhxiaogg)</li>
+<li><code>querier</code>: limite compare() topn (<a href="https://github.com/grafana/tempo/issues/7467">#7467</a>) (@ruslan-mikhailov)</li>
+<li><code>query-frontend</code>: As consultas de valor de tag agora propagam os parâmetros <code>limit</code> e <code>maxStaleValues</code> para os consultadores e o armazenamento ativo, limitando as varreduras por bloco e permitindo a saída antecipada de valor obsoleto. Anteriormente, eles eram aplicados apenas no frontend da consulta, portanto, cada bloco era verificado sem limite de contagem. (<a href="https://github.com/grafana/tempo/issues/7609">#7609</a>) (@zalegrala)</li>
+<li><code>query-frontend</code>: Correção de corrida de dados no frontend de consulta ao despachar lotes de solicitações para consultadores (<code>max_batch_size</code> &gt; 1). (<a href="https://github.com/grafana/tempo/issues/7664">#7664</a>) (@aldernero)</li>
+<li><code>query-frontend</code>: Registra corretamente o motivo da falha se a consulta for rejeitada pelo query-frontend (<a href="https://github.com/grafana/tempo/issues/7527">#7527</a>) (@oleg-kozlyuk-grafana)</li>
+<li><code>query-frontend</code>: aplica <code>max_metrics_duration</code> ao intervalo fornecido pelo usuário, não ao intervalo pós-alinhamento. Uma consulta de intervalo cuja janela cai inteiramente dentro de <code>query_end_cutoff</code> agora retorna 400 em vez de um resultado vazio; uma consulta instantânea com a mesma condição agora também é rejeitada explicitamente. As consultas de métricas gRPC agora retornam <code>InvalidArgument</code> para falhas de validação de duração máxima. (<a href="https://github.com/grafana/tempo/issues/7170">#7170</a>) (@ carles-grafana)</li>
+<li><code>query-frontend</code>: evita que filas de locatários vazias bloqueiem o desligamento da fila de front-end de consulta. (<a href="https://github.com/grafana/tempo/issues/7986">#7986</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Rejeite consultas TraceQL maiores que <code>max_query_expression_size_bytes</code> antes de analisá-las. (<a href="https://github.com/grafana/tempo/issues/7245">#7245</a>) (@ carles-grafana)</li>
+<li><code>storage</code>: Corrige blocos vParquet5 com atributos de string grandes sendo gravados com grupos de linhas superdimensionados, o que poderia corromper blocos e travar a compactação. (<a href="https://github.com/grafana/tempo/issues/7988">#7988</a>) (@zhxiaogg)</li>
+<li><code>storage</code>: Atualize o parquet-go para v0.32.0 para evitar a perda de valores quando um dicionário de coluna volta à codificação simples. (<a href="https://github.com/grafana/tempo/issues/7989">#7989</a>) (@renovate-sh-app[bot])</li>
+<li><code>storage</code>: Preserva o sinalizador no-compact ao copiar blocos vParquet5 para que os blocos recém-liberados não sejam compactados ou pesquisados antes da conclusão. (<a href="https://github.com/grafana/tempo/issues/7786">#7786</a>) (@javiermolinar)</li>
+<li><code>storage</code>: respeite o intervalo de páginas do trabalho em pesquisas de nome e valor de tag e relate todos os bytes lidos para pesquisas de tags filtradas pelo TraceQL (<a href="https://github.com/grafana/tempo/issues/7992">#7992</a>) (@zhxiaogg)</li>
+<li><code>storage</code>: corrige prefixo duplo no compactador e DeleteVersioned no azure e s3. (<a href="https://github.com/grafana/tempo/issues/7271">#7271</a>) (@electron0zero)</li>
+<li><code>tempo</code>: Corrige a configuração do pacote para deb/rpm. (<a href="https://github.com/grafana/tempo/issues/7830">#7830</a>) (@electron0zero)
+Também adiciona validação de CI e um sinalizador somente de erros para <code>-config.verify</code>.</li>
+<li><code>tempo</code>: Retorna dica de rastreamento parcial para a codificação llm (<a href="https://github.com/grafana/tempo/issues/7332">#7332</a>) (@javiermolinar)</li>
+<li><code>tempo</code>: pare de calcular as métricas de atraso do consumidor Kafka quando o intervalo de atualização for definido como zero. (<a href="https://github.com/grafana/tempo/issues/7973">#7973</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: Melhor validação para endpoint query_range: não aceite etapa negativa (<a href="https://github.com/grafana/tempo/issues/7221">#7221</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: corrige citações inseguras em atributos de consulta (<a href="https://github.com/grafana/tempo/issues/7220">#7220</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: corrige colisão rara de cache entre consultas de métricas instantâneas e de intervalo (<a href="https://github.com/grafana/tempo/issues/7290">#7290</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: preserva a configuração do corretor Kafka não relacionado, incluindo retenção de compensações de grupos de consumidores, ao definir a contagem de partições padrão para tópicos criados automaticamente. (<a href="https://github.com/grafana/tempo/issues/7869">#7869</a>) (@ carles-grafana)</li>
+<li><code>traceql</code>: Consultas de métricas instantâneas agora reutilizam corretamente o cache de resultados de trabalho por bloco. (<a href="https://github.com/grafana/tempo/issues/7602">#7602</a>) (@mdisibio)</li>
+<li><code>traceql</code>: corrige o preenchimento automático do valor da tag, ignorando os filtros de consulta quando a correspondência incompleta tem como alvo um intrínseco (por exemplo, <code>{ resource.service.name = &quot;foo&quot; &amp;&amp; name = }</code>) (<a href="https://github.com/grafana/tempo/issues/7660">#7660</a>) (@mapno)</li>
+<li><code>traceql</code>: corrige um bug em que as consultas de métricas TraceQL em eventos e intrínsecos de link, como <code>{ } | rate() by (event:name)</code>, retornavam resultados incorretos ao usar vParquet5 e a nova camada de busca mais rápida. (<a href="https://github.com/grafana/tempo/issues/7508">#7508</a>) (@mdisibio)</li>
+<li><code>traceql</code>: corrige problemas adicionais de correção na nova camada de busca mais rápida do vParquet5, incluindo traços intrínsecos como <code>{ trace:rootService=&quot;...&quot; } | rate()</code>, <code>span:childCount</code> e operações de array. (<a href="https://github.com/grafana/tempo/issues/7533">#7533</a>) (@mdisibio)</li>
+<li><code>traceql</code>: corrige um pânico em consultas métricas-matemáticas do TraceQL (por exemplo, <code>(A) / (B)</code>) quando a cláusula <code>by()</code> de uma subconsulta usa o número máximo de atributos de agrupamento. (<a href="https://github.com/grafana/tempo/issues/7831">#7831</a>) (@electron0zero)</li>
+<li><code>traceql</code>: corrige casos extremos em consultas TraceQL <code>=nil</code> faltando alguns valores (<a href="https://github.com/grafana/tempo/issues/7345">#7345</a>) (@mdisibio)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/grafana/tempo">grafana/tempo</a> · <code>v3.1.0</code> · 2026-09-29 · <a href="https://github.com/grafana/tempo/releases/tag/v3.1.0">lançamento upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>tempo v3.1.0</h1>
+<p>Grafana Tempo 3.1.0 adds query-based trace redaction, TraceQL metrics arithmetic and sampling-aware extrapolation, Kafka connectivity improvements, and experimental tools for comparing and pruning traces.
+It also makes vParquet5 the default format for newly written blocks.</p>
+<h2>Highlights</h2>
+<ul>
+<li><strong>Redaction by query:</strong> Submit redaction jobs using a TraceQL selector instead of enumerating trace IDs, with optional time windows and redaction reliability improvements.</li>
+<li><strong>TraceQL metrics:</strong> Combine aggregations with arithmetic and opt into extrapolation using the sampling probability recorded in spans. The faster span-only fetch path is now enabled by default.</li>
+<li><strong>Metrics-generator and service graphs:</strong> Detect service topology under heavy sampling with an opt-in connection-information gauge, recognize <code>db.system.name</code>, and reduce span-metrics and service-graph processing overhead.</li>
+<li><strong>Experimental span pruning:</strong> Reduce trace-by-ID v2 response size, with request-level opt-in and configurable defaults.</li>
+<li><strong>Kafka connectivity:</strong> Configure additional SASL mechanisms, TLS and mutual TLS, rack-aware fetching, and producer compression, including <code>gzip</code> for Azure Event Hubs.</li>
+<li><strong>Experimental trace diff and summaries:</strong> Compare traces through the API, <code>tempo-cli</code>, and MCP, with full-patch and compact-summary formats.</li>
+<li><strong>vParquet5 by default:</strong> Write new blocks in vParquet5 while continuing to read existing vParquet4 and vParquet3 blocks, without a data migration.</li>
+</ul>
+<p>The detailed changelog below includes the reviewed RC1 notes and subsequent backports,
+with PR references, contributor credits, security identifiers, and upgrade guidance.</p>
+<h2>Features</h2>
+<ul>
+<li><code>backend-scheduler</code>: redaction jobs can be submitted with a TraceQL query selector instead of an explicit trace ID list, so large deletions can be expressed as a query. (<a href="https://github.com/grafana/tempo/issues/7663">#7663</a>) (@zalegrala)</li>
+<li><code>metrics-generator</code>: add <code>service-graphs-*</code> subprocessors and an opt-in <code>traces_service_graph_connection_info</code> presence gauge for topology detection under heavy sampling. (<a href="https://github.com/grafana/tempo/issues/7202">#7202</a>) (@jcreixell)</li>
+<li><code>operations</code>: Add KEDA autoscaling for live-store via a Prometheus trigger on expected bytes held. Enable with <code>live_store.keda.enabled: true</code>. (<a href="https://github.com/grafana/tempo/issues/7154">#7154</a>) (@zachfi)
+Enable block-builder autoscaling separately with <code>block_builder.keda.enabled: true</code> and select the approach with <code>block_builder.keda.scaling</code>.
+The default, <code>'rollout-operator'</code>, mirrors live-store zone-a replicas and requires live-store KEDA to be enabled.
+The <code>'keda'</code> approach uses a kubernetes-workload trigger and works with or without live-store KEDA.
+Enabling live-store KEDA automatically enables <code>rollout_operator_replica_template_access_enabled</code>.</li>
+<li><code>operations</code>: Monitor Tempo live-store health and performance with a new Grafana dashboard. (<a href="https://github.com/grafana/tempo/issues/7287">#7287</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Add experimental span pruning to the trace-by-ID v2 endpoint. (<a href="https://github.com/grafana/tempo/issues/7566">#7566</a>, <a href="https://github.com/grafana/tempo/issues/7628">#7628</a>, <a href="https://github.com/grafana/tempo/issues/7693">#7693</a>) (@ie-pham)
+Enable pruning by default with <code>span_pruning_enabled_by_default</code> for requests that omit <code>span_pruning</code>,
+or configure the default per tenant with the <code>span_pruning_enabled</code> override.
+Traces already pruned on the write path are detected and are not pruned again.</li>
+<li><code>query-frontend</code>: Add an experimental endpoint for comparing two traces, with a combined input-size limit enforced by the tenant's <code>max_bytes_per_trace</code> setting. (<a href="https://github.com/grafana/tempo/issues/7523">#7523</a>, <a href="https://github.com/grafana/tempo/issues/7539">#7539</a>, <a href="https://github.com/grafana/tempo/issues/7564">#7564</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Add trace-summary-v0-composed as an optional experimental trace diff API and tempo-cli format. Responses always include a compact summary and include the full patch up to 64 KiB; larger patches report that the patch was omitted. The default remains trace-patch-v0. (<a href="https://github.com/grafana/tempo/issues/7593">#7593</a>) (@carles-grafana)</li>
+<li><code>tempo</code>: Add <code>client_rack</code> Kafka config option to enable rack-aware fetching (KIP-392) and reduce cross-zone Kafka traffic. (<a href="https://github.com/grafana/tempo/issues/7594">#7594</a>) (@AvivGuiser)</li>
+<li><code>tempo</code>: Support arithmetic operations in TraceQL Metrics (<a href="https://github.com/grafana/tempo/issues/6866">#6866</a>, <a href="https://github.com/grafana/tempo/issues/7199">#7199</a>, <a href="https://github.com/grafana/tempo/issues/7409">#7409</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo-cli</code>: Add an experimental trace-summary-v0-native format to tempo-cli trace diff. It provides a compact overview of latency, summed span duration, errors, structural changes, and affected services. (<a href="https://github.com/grafana/tempo/issues/7510">#7510</a>) (@carles-grafana)</li>
+<li><code>tempo-cli</code>: Add an experimental trace diff command that compares two local trace JSON files and emits trace-patch-v0 output. (<a href="https://github.com/grafana/tempo/issues/7468">#7468</a>) (@javiermolinar)</li>
+<li><code>traceql</code>: TraceQL metrics queries can extrapolate counts from the W3C tracestate sampling probability. Opt in per query via the <code>with(extrapolate=true)</code> hint. (<a href="https://github.com/grafana/tempo/issues/7452">#7452</a>) (@csmarchbanks)
+When a span carries an OpenTelemetry probability threshold in its tracestate
+(<code>ot=th:...</code>), each matched span contributes <code>1 / sampling_probability</code> to
+<code>rate</code>, <code>count_over_time</code>, <code>sum_over_time</code>, <code>avg_over_time</code>,
+<code>histogram_over_time</code>, <code>quantile_over_time</code>, and <code>compare</code> aggregates —
+matching the metrics generator's existing per-span multiplier behaviour.
+<code>min_over_time</code> and <code>max_over_time</code> are unaffected. Only supported on
+vparquet4 and later.</li>
+</ul>
+<h2>Enhancements</h2>
+<ul>
+<li>
+<p><code>backend-scheduler</code>: Expose pending backend jobs per tenant and job type, and enable native histograms for backend cache item sizes. (<a href="https://github.com/grafana/tempo/issues/7772">#7772</a>) (@zalegrala)
+<code>tempo_backend_scheduler_jobs_pending{tenant, job_type}</code> counts jobs awaiting dispatch,
+providing a queue-depth signal for monitoring and autoscaling.
+<code>tempodb_cache_store_size_bytes</code> now supports native histograms.</p>
+</li>
+<li>
+<p><code>backend-scheduler</code>: add the <code>tempo_backend_scheduler_redaction_traces_found_total{tenant, mode}</code> metric — traces matched by redaction jobs per tenant, with mode=apply counting traces actually removed and mode=dry_run counting a dry-run's previewed blast radius. (<a href="https://github.com/grafana/tempo/issues/7699">#7699</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>backend-scheduler</code>: Reduce backend-scheduler job lookup overhead by indexing pending jobs and busy blocks per tenant. (<a href="https://github.com/grafana/tempo/issues/7141">#7141</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>backend-scheduler</code>: add an optional <code>[start, end]</code> time window to redaction (<code>tempo-cli redact --start/--end</code>), scoping it to overlapping blocks and bounding the per-block scan. (<a href="https://github.com/grafana/tempo/issues/7702">#7702</a>) (@zalegrala)
+A windowed redaction lets a large tenant be redacted in slices instead of one pass over every block, so compaction is not held off for the whole run. Both bounds are required and must be ordered; omitting them redacts the whole tenant, as before. Bounds are resolved to absolute timestamps by the client, so a long redaction does not drift forward into newly ingested data.</p>
+<p>The window bounds the scan for the <code>--query</code> selector. It cannot be combined with <code>--trace-id</code>, which resolves traces with no time bound: the pair would remove each listed trace only from the blocks that overlap the window and leave the rest in place while reporting success.</p>
+<p>Do not submit a windowed redaction while schedulers and workers run different versions. A worker predating this change ignores the window fields and removes every query match in each block it is given, regardless of timestamp, with no error and no way to recover the data.</p>
+</li>
+<li>
+<p><code>block-builder</code>: Add <code>tempo_block_builder_flush_size_bytes</code> native histogram recording the size of blocks flushed by the block-builder. (<a href="https://github.com/grafana/tempo/issues/7773">#7773</a>) (@zalegrala)
+Use this alongside <code>tempo_live_store_local_flush_size_bytes</code> and
+<code>tempodb_compaction_output_block_size_bytes</code> to compare block sizes across the write path
+and tune compaction's <code>max_input_blocks</code> setting.</p>
+</li>
+<li>
+<p><code>cache</code>: Add <code>connect_timeout</code> and <code>min_idle_conns_headroom_percentage</code> options to the memcached client for tuning connection behavior. (<a href="https://github.com/grafana/tempo/issues/7671">#7671</a>) (@mapno)
+<code>connect_timeout</code> bounds connection establishment separately from <code>timeout</code> (request
+round trips) and defaults to <code>timeout</code> when unset. <code>min_idle_conns_headroom_percentage</code>
+controls idle connection reaping: negative values (the default) never close idle
+connections, positive values keep that percentage of idle connections open relative
+to the number of recently used ones.</p>
+</li>
+<li>
+<p><code>cache</code>: enforce a configurable MaxItemSize for Redis. (<a href="https://github.com/grafana/tempo/issues/7311">#7311</a>) (@electron0zero)</p>
+</li>
+<li>
+<p><code>compactor</code>: Add <code>tempodb_compaction_output_block_size_bytes</code> native histogram recording the size of blocks produced by compaction. (<a href="https://github.com/grafana/tempo/issues/7773">#7773</a>) (@zalegrala)
+No existing metric captured the final size of compacted output blocks (the existing
+<code>tempodb_compaction_bytes_written_total</code> is a cumulative counter fed per row-group flush, not a
+per-finished-block size). This gives operators the data needed to tune <code>max_input_blocks</code> and
+reason about TCO.</p>
+</li>
+<li>
+<p><code>distributor</code>: Add <code>ingest.kafka.producer_compression</code> config to allow the Kafka producer's compression codec be overridden. (<a href="https://github.com/grafana/tempo/issues/7691">#7691</a>) (@fleighton)
+Some Kafka-compatible backends only support certain compression codecs,
+notably Azure Event Hubs, which only supports <code>gzip</code>. Supported values are
+<code>none</code>, <code>gzip</code>, <code>snappy</code>, <code>lz4</code>, <code>zstd</code> (case-insensitive); an unset
+value leaves the Kafka client's own default codec preference unchanged.</p>
+</li>
+<li>
+<p><code>distributor</code>: Add per-tenant push shape metrics: tenant label on <code>tempo_distributor_push_duration_seconds</code>, plus new <code>tempo_distributor_push_bytes</code> and <code>tempo_distributor_received_traces_total</code> (<a href="https://github.com/grafana/tempo/issues/7865">#7865</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>distributor</code>: Add Kafka SASL mechanism selection and TLS support. The <code>sasl_mechanism</code> option selects the SASL mechanism (<code>PLAIN</code> (default), <code>SCRAM-SHA-256</code>, <code>SCRAM-SHA-512</code>, <code>OAUTHBEARER</code>, or <code>AWS_MSK_IAM</code>), and <code>tls_enabled</code> with the <code>tls_*</code> options enables TLS transport and mutual-TLS for the Kafka client. (<a href="https://github.com/grafana/tempo/issues/7586">#7586</a>) (@heytrav)
+OAUTHBEARER and AWS_MSK_IAM credentials can be supplied statically, from a JSON file, or fetched over a Unix domain socket. Existing configurations are unaffected because the default mechanism remains <code>PLAIN</code> with SASL disabled when no username or password is set.</p>
+</li>
+<li>
+<p><code>distributor</code>: Auto-forget unhealthy instances from the distributor ring after <code>2 × distributor.ring.heartbeat-timeout</code>, removing the need to manually click &quot;Forget&quot; on <code>/distributor/ring</code> after non-graceful pod terminations. (<a href="https://github.com/grafana/tempo/issues/7098">#7098</a>) (@oleg-kozlyuk-grafana)</p>
+</li>
+<li>
+<p><code>docs</code>: Correct single-binary quickstart documentation regarding Redpanda and Kafka requirements. (<a href="https://github.com/grafana/tempo/issues/7704">#7704</a>) (@veenoise)</p>
+</li>
+<li>
+<p><code>docs</code>: Add guidance for configuring the Kafka-compatible backend used by Tempo microservices deployments. (<a href="https://github.com/grafana/tempo/issues/7714">#7714</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>docs</code>: Add shared documentation skills, project context, and release-notes workflow for AI-assisted doc authoring. (<a href="https://github.com/grafana/tempo/issues/7447">#7447</a>) (@knylander-grafana)</p>
+</li>
+<li>
+<p><code>live-store</code>: expose query inspected bytes as a metric. (<a href="https://github.com/grafana/tempo/issues/7162">#7162</a>, <a href="https://github.com/grafana/tempo/issues/7163">#7163</a>) (@zhxiaogg)</p>
+</li>
+<li>
+<p><code>live-store</code>: Improve TraceQL metrics query performance by removing lock contention between concurrently evaluated WAL blocks. (<a href="https://github.com/grafana/tempo/issues/7867">#7867</a>) (@ruslan-mikhailov)
+Each block is now evaluated with its own metrics evaluator and the per-block results are
+summed, instead of all WAL blocks sharing one evaluator guarded by a mutex.</p>
+</li>
+<li>
+<p><code>live-store</code>: reduce mutex contention in tag search by making the scoped distinct string collector lock-free. (<a href="https://github.com/grafana/tempo/issues/7492">#7492</a>) (@zhxiaogg)</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Fast-path span filter matching for the default span-kind regex and evaluate intrinsic filters before attribute filters. (<a href="https://github.com/grafana/tempo/issues/7465">#7465</a>) (@carles-grafana)</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Recognize the <code>db.system.name</code> attribute in service graphs, for database node detection and virtual node naming. (<a href="https://github.com/grafana/tempo/issues/7697">#7697</a>) (@iamrajiv)
+OpenTelemetry semantic conventions v1.30.0 renamed <code>db.system</code> to <code>db.system.name</code>. Spans from
+instrumentation that emits only the new attribute were no longer identified as database requests
+and could not name a virtual node.
+<code>db.system.name</code> is appended to the defaults for both <code>peer_attributes</code> and
+<code>database_name_attributes</code>, after <code>db.system</code>. Because the lists are searched in order and the
+older attribute is still listed first, spans that carry <code>db.system</code> keep producing the node names
+they do today. Both defaults can still be overridden per tenant.</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Reduce span-name sanitizer CPU and allocations for repeated exact names. (<a href="https://github.com/grafana/tempo/issues/7794">#7794</a>) (@carles-grafana)
+Drain now owns retained token bytes, reuses tokenizer state, removes stale candidates during matching,
+and uses a bounded exact-match index keyed by complete span names for large leaves. Generated span-metric
+labels and existing pattern fixtures are unchanged.</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Reduce per-span CPU and allocations in the span-metrics processor by building series labels through the registry's pooled borrowed-label path. (<a href="https://github.com/grafana/tempo/issues/7584">#7584</a>) (@carles-grafana)
+The span-metrics processor now builds series labels in registry-owned pooled buffers, updates metrics with a precomputed label hash, and builds target_info once per resource instead of once per span. Metric names, labels, and values are unchanged.</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Add <code>skip_stale_backlog_on_startup</code> to seek partitions forward to the ingestion-slack horizon on startup instead of replaying backlog the slack would discard, keeping the partition-lag metric honest on restart. (<a href="https://github.com/grafana/tempo/issues/7611">#7611</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Improve service graph troubleshooting by labeling expired edges with the unmatched span kind. (<a href="https://github.com/grafana/tempo/issues/7709">#7709</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>metrics-generator</code>: Reduce per-edge CPU and allocations in the service-graphs processor by building series labels through the registry's pooled borrowed-label path. (<a href="https://github.com/grafana/tempo/issues/7587">#7587</a>) (@carles-grafana)
+The service-graphs processor now uses borrowed-label updates for counters, histograms, and the connection-info gauge; uses fixed-size keys for standard trace and span IDs; reuses trace ID buffers; defers classic exemplar encoding until collection; and shares one encoding per edge for native histograms. Metric names, labels, and values are unchanged.</p>
+</li>
+<li>
+<p><code>operations</code>: add <code>autoscaling_prometheus_url</code> and <code>autoscaling_prometheus_tenant</code> top-level config fields for KEDA autoscaling. Setting <code>autoscaling_prometheus_tenant</code> sends an <code>X-Scope-OrgID</code> header on all Prometheus trigger requests, which is required when the backend is a multi-tenant system such as Grafana Mimir. (<a href="https://github.com/grafana/tempo/issues/7099">#7099</a>) (@zachfi)</p>
+</li>
+<li>
+<p><code>operations</code>: Expand the Backend Work dashboard with redaction progress, pending jobs, dropped jobs, and job-duration panels. (<a href="https://github.com/grafana/tempo/issues/7184">#7184</a>, <a href="https://github.com/grafana/tempo/issues/7758">#7758</a>, <a href="https://github.com/grafana/tempo/issues/7772">#7772</a>, <a href="https://github.com/grafana/tempo/issues/7795">#7795</a>) (@zalegrala)
+Track redaction jobs by tenant and switch latency panels between classic and native histograms.
+Select Namespace before Cluster to filter the available clusters.
+The Retry panel now uses the correct <code>jobs_retry_total</code> metric.</p>
+</li>
+<li>
+<p><code>operations</code>: jsonnet: support Prometheus-based KEDA autoscaling for the metrics-generator. (<a href="https://github.com/grafana/tempo/issues/7362">#7362</a>) (@mapno)</p>
+</li>
+<li>
+<p><code>operations</code>: add <code>tempo-service-graph.json</code> dashboard visualizing the service topology from <code>traces_service_graph_connection_info</code>. (<a href="https://github.com/grafana/tempo/issues/7207">#7207</a>) (@jcreixell)</p>
+</li>
+<li>
+<p><code>querier</code>: Add <code>tempo_querier_backend_processing_duration_seconds</code> histogram measuring time the querier spends processing backend blocks, labeled by operation and tenant. (<a href="https://github.com/grafana/tempo/issues/7525">#7525</a>) (@zhxiaogg)</p>
+</li>
+<li>
+<p><code>querier</code>: Extend query statistics metrics to additional querier methods. (<a href="https://github.com/grafana/tempo/issues/7568">#7568</a>, <a href="https://github.com/grafana/tempo/issues/7571">#7571</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>querier</code>: limit external endpoint response size to querier grpc MaxSendMsgSize. (<a href="https://github.com/grafana/tempo/issues/7240">#7240</a>) (@electron0zero)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Mirror per-query response log fields as span attributes on all query paths. Query-shape span attributes renamed to snake_case (<code>queryType</code> -&gt; <code>query_type</code>, etc.). (<a href="https://github.com/grafana/tempo/issues/7605">#7605</a>) (@mapno)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Add a <code>traces-diff</code> tool to the Tempo MCP server for comparing complete traces. (<a href="https://github.com/grafana/tempo/issues/7785">#7785</a>) (@carles-grafana)
+The default composed response includes a compact summary and conditionally includes patches up to 64 KiB. Native summary and full patch formats remain available on request; full patches have no output-size guarantee.</p>
+</li>
+<li>
+<p><code>query-frontend</code>: TraceByID V2: Add <code>match_depth</code> and <code>ancestor_depth</code> query params to the <code>q</code> filter to bound how many hops of descendants/ancestors of matched spans are kept (<code>-1</code> unbounded, <code>0</code> none, <code>n</code> exactly n hops). (<a href="https://github.com/grafana/tempo/issues/7708">#7708</a>) (@ie-pham)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Add read-path observability: cache hit/miss counters, query-shape on logs/spans, backend stats, vparquet5 spans. (<a href="https://github.com/grafana/tempo/issues/7504">#7504</a>) (@stoewer)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Add an <code>op</code> label to <code>tempo_query_frontend_queue_duration_seconds</code> so queue time can be broken down by query type. (<a href="https://github.com/grafana/tempo/issues/7817">#7817</a>) (@zhxiaogg)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: return the resolved step in the TraceQL metrics query_range response. (<a href="https://github.com/grafana/tempo/issues/7871">#7871</a>) (@ruslan-mikhailov)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Adds new feature to compute and track the amount of data of spans and their attributes flowing through the TraceQL query engine and data returned trace lookups. Disabled by default, set the override value <code>engine_bytes_tracking</code> to enable. (<a href="https://github.com/grafana/tempo/issues/7689">#7689</a>) (@mdisibio)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Trace diff reports span durations in nanoseconds and compares numeric values with a relative tolerance. (<a href="https://github.com/grafana/tempo/issues/7544">#7544</a>) (@stoewer)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: TraceByID V2: Add first pass of filtering support with <code>q</code> (TraceQL filter) and <code>keep_hierarchy</code> query parameters to return only matching spans (<a href="https://github.com/grafana/tempo/issues/7483">#7483</a>) (@electron0zero)</p>
+</li>
+<li>
+<p><code>storage</code>: speed up <code>ByteInPredicate</code>/<code>ByteNotInPredicate</code> by using a map lookup instead of a linear scan for large value sets. (<a href="https://github.com/grafana/tempo/issues/7535">#7535</a>) (@mapno)</p>
+</li>
+<li>
+<p><code>storage</code>: Evict bloom-filter and trace-ID-index cache entries for blocks deleted during retention, freeing cache space for active blocks sooner. (<a href="https://github.com/grafana/tempo/issues/7204">#7204</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>storage</code>: Stop scanning a block for tag values as soon as the caller's limit is reached. (<a href="https://github.com/grafana/tempo/issues/7696">#7696</a>) (@zhxiaogg)
+SearchTagValues previously walked every row group of a block even after the response
+limit had been hit, reporting values that were then discarded. It now abandons the scan
+at the first row group where the limit is reached. On a 2.4GB block, collecting values
+for a high-cardinality dedicated attribute drops from 67ms to 9ms.</p>
+</li>
+<li>
+<p><code>storage</code>: replace O(N²) <code>slices.ContainsFunc</code> loops in <code>updateInternal</code> with pre-built map lookups, reducing per-poll cost from O(N·M) to O(N+M). (<a href="https://github.com/grafana/tempo/issues/7140">#7140</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>storage</code>: cache each block's dedicated-columns hash in the time-window block selector instead of recomputing it on every comparison in <code>BlocksToCompact</code>'s hot loop. (<a href="https://github.com/grafana/tempo/issues/7803">#7803</a>) (@zalegrala)</p>
+</li>
+<li>
+<p><code>storage</code>: Upgrade grafana/gomemcache with improvements during OOM storms. (<a href="https://github.com/grafana/tempo/issues/7809">#7809</a>) (@mapno)</p>
+</li>
+<li>
+<p><code>storage</code>: Report the configured block format in anonymous usage statistics. (<a href="https://github.com/grafana/tempo/issues/7807">#7807</a>) (@javiermolinar)
+The new <code>storage_block_format</code> field reports the effective <code>storage.trace.block.version</code> used for newly written blocks. Older Tempo versions omit the field.</p>
+</li>
+<li>
+<p><code>storage</code>: add <code>tempodb_cache_store_size_bytes</code> histogram labelled by <code>role</code> recording the size of every item written to the backend cache. (<a href="https://github.com/grafana/tempo/issues/7152">#7152</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>tempo</code>: Avoid heap allocation and unsafe string aliasing when hex-encoding trace IDs. (<a href="https://github.com/grafana/tempo/issues/7463">#7463</a>) (@carles-grafana)</p>
+</li>
+<li>
+<p><code>tempo</code>: Add <code>TempoDistributorKafkaProduceFailing</code> alert that triggers when Kafka records cannot be produced by the distributor. (<a href="https://github.com/grafana/tempo/issues/7148">#7148</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>tempo</code>: re-enable darwin release builds again (<a href="https://github.com/grafana/tempo/issues/7407">#7407</a>) (@electron0zero)</p>
+</li>
+<li>
+<p><code>tempo</code>: Add support for all otel tracing configs for self tracing (<a href="https://github.com/grafana/tempo/issues/7577">#7577</a>) (@electron0zero)
+Self tracing setup is done via dskit, and supports all OTEL_* and JAEGER_* configs.</p>
+</li>
+<li>
+<p><code>traceql</code>: Add a span-watcher framework to the TraceQL engine for collecting extra query metrics on-demand. (<a href="https://github.com/grafana/tempo/issues/7532">#7532</a>) (@mapno)
+Enabled via the experimental per-tenant <code>span_pruning_awareness</code> override, it reports whether matched spans include span-pruning summary spans. Applies to search and metrics queries.</p>
+</li>
+<li>
+<p><code>traceql</code>: enable new span-only fetch by default. Can be disabled per-tenant via <code>metrics_spanonly_fetch: false</code> or per-query via the unsafe hint <code>with(spanonly_fetch=false)</code>. (<a href="https://github.com/grafana/tempo/issues/7179">#7179</a>) (@mdisibio)</p>
+</li>
+</ul>
+<h2>Breaking Changes</h2>
+<h3>Before upgrading</h3>
+<p>This release includes breaking configuration changes and new defaults.
+Review the detailed entries below, especially if you use Redis caching, vParquet3 writes, or custom query-frontend settings.</p>
+<ul>
+<li>
+<p><strong>vParquet3:</strong> Tempo refuses to start when configured to write vParquet3 blocks. Change <code>storage.trace.block.version</code> to <code>vParquet5</code> or <code>vParquet4</code> before upgrading. Existing vParquet3 blocks remain readable but are no longer compacted.</p>
+</li>
+<li>
+<p><strong>Redis:</strong> Redis Cluster becomes the default, Sentinel support is removed, and configuration keys and TLS settings change. Review the migration details before upgrading an installation using the experimental Redis cache.</p>
+</li>
+<li>
+<p><strong>Windowed redaction:</strong> Do not submit windowed redaction jobs while schedulers and workers run different versions. An older worker can ignore the time window and redact every matching trace in a block.</p>
+</li>
+<li>
+<p><strong>Upgrading from a 3.1 RC:</strong> Remove the obsolete <code>query_frontend.trace_by_id.span_pruning_enabled</code> option.
+Pruning remains opt-in with <code>span_pruning=true</code> unless a default is configured;
+<code>span_pruning_enabled_by_default</code> and the per-tenant <code>span_pruning_enabled</code> override remain available.</p>
+</li>
+<li>
+<p><strong>Trace comparison:</strong> The CLI command and MCP tool are now named <code>traces-diff</code>.</p>
+</li>
+<li>
+<p><strong>Query behavior:</strong> Review Trace-by-ID sharding changes, stricter metrics-query validation, and the reduced default gRPC streaming packet size.</p>
+</li>
+<li>
+<p><code>cache</code>: Experimental Redis cache has been completely rewritten with multiple breaking changes. Sentinel support has been dropped in favor of Redis Cluster (default, opt-out) (<a href="https://github.com/grafana/tempo/issues/7337">#7337</a>) (@oleg-kozlyuk-grafana)</p>
+<ul>
+<li>Upgrade Redis client to <code>github.com/redis/go-redis/v9</code> and make routing explicit.</li>
+<li>Redis Cluster is now the default; opt into the single-node client with <code>single_node: true</code> (or <code>-redis.single-node</code>).</li>
+<li>Redis Cluster deployments require Redis 7+.</li>
+<li>Redis Sentinel support is removed: the <code>master_name</code>, <code>sentinel_username</code>, <code>sentinel_password</code> YAML keys and their <code>-redis.master-name</code>, <code>-redis.sentinel-username</code>, <code>-redis.sentinel-password</code> flags are gone. YAML keys <code>idle_timeout</code> and <code>max_connection_age</code> are renamed to <code>conn_max_idle_time</code> and <code>conn_max_lifetime</code>.</li>
+<li>The minimal <code>tls_enabled</code>/<code>tls_insecure_skip_verify</code> pair is replaced with the dskit-style TLS block (<code>tls_cert_path</code>, <code>tls_key_path</code>, <code>tls_ca_path</code>, <code>tls_server_name</code>, <code>tls_insecure_skip_verify</code>, <code>tls_cipher_suites</code>, <code>tls_min_version</code>); invalid TLS settings now fail closed instead of silently downgrading to cleartext.</li>
+<li>Adds Redis Cluster routing options (<code>route_by_latency</code>, <code>route_randomly</code>, <code>read_only</code>, <code>max_redirects</code>, <code>min_idle_conns</code>) and a configurable <code>max_item_size</code> cap. Cross-slot <code>MGet</code>/<code>Del</code> fan out across shards in parallel; <code>MSet</code> uses <code>Pipeline</code> instead of <code>TxPipeline</code> so cross-slot writes no longer fail with <code>CROSSSLOT</code>.</li>
+<li><code>RedisCache.Store</code> is now recorded in <code>tempo_rediscache_request_duration_seconds</code>, matching the memcached client.</li>
+</ul>
+</li>
+<li>
+<p><code>operations</code>: Stop publishing mutable Docker image tags to immutable GAR repositories and pin examples to Tempo 3.0.0. (<a href="https://github.com/grafana/tempo/issues/7369">#7369</a>) (@javiermolinar)</p>
+</li>
+<li>
+<p><code>query-frontend</code>: Remove the cluster-wide <code>query_frontend.trace_by_id.span_pruning_enabled</code> configuration option; span pruning is always available for trace-by-ID v2 requests. (<a href="https://github.com/grafana/tempo/issues/7912">#7912</a>, <a href="https://github.com/grafana/tempo/issues/8010">#8010</a>) (@ie-pham)
+Pruning remains opt-in per request with <code>span_pruning=true</code> unless a default is configured.
+The experimental <code>span_pruning_enabled_by_default</code> option and per-tenant
+<code>span_pruning_enabled</code> override remain available; an explicit request value takes precedence.
+Users upgrading from an earlier 3.1 RC should remove the obsolete cluster-wide option.</p>
+</li>
+<li>
+<p><code>query-frontend</code>: new job sharding approach for trace lookups, using a new config option <code>blocks_per_shard</code> which replaces <code>query_shards</code>. (<a href="https://github.com/grafana/tempo/issues/7105">#7105</a>) (@mdisibio)</p>
+</li>
+<li>
+<p><code>storage</code>: Enforce the vParquet3 deprecation. Tempo now refuses to start with <code>storage.trace.block.version</code> set to <code>vParquet3</code>, and the compactor no longer compacts existing vParquet3 blocks together. (<a href="https://github.com/grafana/tempo/issues/7858">#7858</a>) (@mdisibio)
+Existing vParquet3 blocks remain readable and are left as-is. Set the block version to
+vParquet4 or later.</p>
+</li>
+<li>
+<p><code>traceql</code>: Reject metrics query requests with identical start and end timestamps. (<a href="https://github.com/grafana/tempo/issues/7602">#7602</a>) (@mdisibio)</p>
+</li>
+</ul>
+<h2>Changes</h2>
+<ul>
+<li><code>backend-scheduler</code>: Cap the explicit trace-ID list on a redaction submission at 1000, rejecting larger requests with a pointer to the query selector. (<a href="https://github.com/grafana/tempo/issues/7808">#7808</a>) (@zalegrala)
+Each job a redaction creates carries the batch's whole trace-ID list, so submission cost scales with ids x blocks: a few million 16-byte IDs against a tenant with tens of thousands of blocks reaches terabytes of dispatch traffic from a single scheduler. The gRPC message limit already capped a submission near 5.8M, but as a failure found under load rather than a stated boundary. A query selector resolves per block on the worker and adds nothing to any job payload.</li>
+<li><code>cache</code>: Keep memcached connection pools warm to reduce tail latency under bursty read load. Idle connections are no longer closed by default and the default <code>max_idle_conns</code> was raised from 16 to 100. (<a href="https://github.com/grafana/tempo/issues/7671">#7671</a>) (@mapno)
+Previously, connections idle for more than 2 minutes were always closed, so every burst of
+reads (e.g. trace-by-ID lookups) began with a storm of new dials that inflated p99 latency
+and produced client-side timeouts. Set <code>min_idle_conns_headroom_percentage</code> to a positive
+value to re-enable idle connection reaping.</li>
+<li><code>deps</code>: Build Tempo container images and release binaries with Go 1.27.1. (<a href="https://github.com/grafana/tempo/issues/7913">#7913</a>) (@javiermolinar)</li>
+<li><code>deps</code>: Upgrade GoReleaser from v1.25.1 to v2.16.0 in RC0 (superseded by v2.18.2 in RC1). (<a href="https://github.com/grafana/tempo/issues/7453">#7453</a>) (@mapno)</li>
+<li><code>operations</code>: Add a 15m <code>for</code> duration to the <code>TempoUserConfigurableOverridesReloadFailing</code> alert so brief transient failures don't page, and fix its runbook link. (<a href="https://github.com/grafana/tempo/issues/7639">#7639</a>) (@zhxiaogg)</li>
+<li><code>query-frontend</code>: Reduce the default gRPC streaming packet size from 2MB to 1MB. (<a href="https://github.com/grafana/tempo/issues/7615">#7615</a>) (@mdisibio)</li>
+<li><code>storage</code>: Make <code>vParquet5</code> the default block format for newly written blocks (was <code>vParquet4</code>). (<a href="https://github.com/grafana/tempo/issues/7775">#7775</a>) (@javiermolinar)
+No data migration is required. After upgrading, Tempo writes new blocks in
+vParquet5 while continuing to read existing vParquet4 and vParquet3 blocks. To
+keep writing vParquet4, set <code>storage.trace.block.version: vParquet4</code> explicitly.</li>
+<li><code>tempo-cli</code>: Rename <code>tempo-cli experimental trace-diff</code> to <code>tempo-cli experimental traces-diff</code> and the MCP tool <code>trace-diff</code> to <code>traces-diff</code>. (<a href="https://github.com/grafana/tempo/issues/8005">#8005</a>) (@javiermolinar)</li>
+</ul>
+<h2>Security fixes</h2>
+<ul>
+<li><code>backend-scheduler</code>: Prevent cross-tenant redaction by taking the target tenant exclusively from the request context (<code>X-Scope-OrgID</code>), ignoring the request body's <code>tenant_id</code> field. (<a href="https://github.com/grafana/tempo/issues/7153">#7153</a>) (@zalegrala)</li>
+<li><code>operations</code>: Sign all published container images (<code>tempo</code>, <code>tempo-vulture</code>, <code>tempo-query</code>, and <code>tempo-cli</code>) with keyless cosign signatures and attach SLSA build provenance. (<a href="https://github.com/grafana/tempo/issues/7493">#7493</a>, <a href="https://github.com/grafana/tempo/issues/7534">#7534</a>, <a href="https://github.com/grafana/tempo/issues/7543">#7543</a>, <a href="https://github.com/grafana/tempo/issues/7565">#7565</a>, <a href="https://github.com/grafana/tempo/issues/7601">#7601</a>) (@mattdurham)</li>
+<li><code>operations</code>: Update <code>memcached</code> to <code>1.6.42-alpine</code> and <code>prom/memcached-exporter</code> to <code>v0.16.0</code> to address known vulnerabilities. (<a href="https://github.com/grafana/tempo/issues/7244">#7244</a>) (@zhxiaogg)</li>
+</ul>
+<h2>Bugfixes</h2>
+<ul>
+<li><code>backend-scheduler</code>: fix O(N) lock contention in GetJobForWorker under concurrent worker load; replace shard scan with O(1) index lookup. (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: fix outstanding-blocks metric suppressed to zero during active redaction batch, causing autoscaler to scale down workers mid-redaction. (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: fix redaction batch not cleaned up after dead-job timeout, leaving tenant permanently blocked from new redaction submissions and compaction. (<a href="https://github.com/grafana/tempo/issues/6992">#6992</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: a dry-run redaction (read-only preview) no longer disables the tenant's compaction/retention, enters quiescence, or arms a rescan — those only apply to an apply-mode redaction, which actually rewrites blocks. (<a href="https://github.com/grafana/tempo/issues/7700">#7700</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: a completed redaction batch now enters a short quiescence period before removal, keeping tenant compaction disabled until the rescan can cover any block a compaction produced just as the last redaction job finished. Previously the batch was removed the instant its jobs completed, so a block compacted in that window could escape redaction. (<a href="https://github.com/grafana/tempo/issues/7695">#7695</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: fix a backend-scheduler bug where a redaction job dropped at assignment leaked an internal in-flight counter, which could leave a tenant's redaction looking perpetually in progress and block that tenant's future redaction submissions. (<a href="https://github.com/grafana/tempo/issues/7703">#7703</a>) (@zalegrala)</li>
+<li><code>backend-scheduler</code>: retention now gates on the redaction batch barrier (<code>TenantPending</code>) instead of only in-flight redaction jobs, so retention cannot mark a block compacted while a redaction batch is awaiting its rescan. (<a href="https://github.com/grafana/tempo/issues/7358">#7358</a>) (@zalegrala)</li>
+<li><code>backend-worker</code>: add <code>tempo_backend_worker_redaction_block_missing_total</code> and a warning log when a redaction job's target block is absent from the live blocklist, so a coverage gap is observable rather than a silent no-op. (<a href="https://github.com/grafana/tempo/issues/7358">#7358</a>) (@zalegrala)</li>
+<li><code>cache</code>: honor <code>cache_min_compaction_level</code> as a minimum when selecting bloom filters for caching. (<a href="https://github.com/grafana/tempo/issues/7904">#7904</a>) (@ruslan-mikhailov)</li>
+<li><code>cache</code>: Enable Memcached consistent hashing by default when omitted from YAML, matching the documented default. (<a href="https://github.com/grafana/tempo/issues/7903">#7903</a>) (@ruslan-mikhailov)</li>
+<li><code>cache</code>: respect memcache circuit breaker default for yaml configuration. (<a href="https://github.com/grafana/tempo/issues/7972">#7972</a>) (@ruslan-mikhailov)</li>
+<li><code>compactor</code>: skip input blocks whose meta no longer exists instead of failing the whole compaction. (<a href="https://github.com/grafana/tempo/issues/7902">#7902</a>) (@zhxiaogg)</li>
+<li><code>distributor</code>: Return a retryable status for transient errors writing to Kafka. (<a href="https://github.com/grafana/tempo/issues/7506">#7506</a>) (@javiermolinar)</li>
+<li><code>distributor</code>: bound per-trace slice preallocation during rebatching. (<a href="https://github.com/grafana/tempo/issues/7288">#7288</a>) (@carles-grafana)</li>
+<li><code>live-store</code>: Fix a panic in live-store <code>FindTraceByID</code> when more spans for the trace arrive while it is being combined with block data and marshalled. (<a href="https://github.com/grafana/tempo/issues/7856">#7856</a>) (@KR-Ravindra)
+The live trace's <code>Batches</code> slice was handed to the trace combiner with spare capacity, so the
+combiner's append and the push path's append wrote different batches into the same slot of the
+live trace's backing array. <code>Size()</code> and <code>Marshal()</code> then saw different objects and marshalling
+panicked with <code>slice bounds out of range</code>.</li>
+<li><code>live-store</code>: Tag value queries no longer silently drop a block's values when its disk-cache entry is unreadable or fails to unmarshal; the block is re-searched instead of being skipped. (<a href="https://github.com/grafana/tempo/issues/7610">#7610</a>) (@zalegrala)</li>
+<li><code>live-store</code>: write the per-block query-range response cache atomically (temp file + rename) and log+ignore cache read errors. (<a href="https://github.com/grafana/tempo/issues/7155">#7155</a>) (@zhxiaogg)</li>
+<li><code>live-store</code>: Tag value queries now cache empty (negative) results per block, so a block that contains no values for the requested tag is not re-scanned on every query. (<a href="https://github.com/grafana/tempo/issues/7617">#7617</a>) (@zalegrala)</li>
+<li><code>metrics-generator</code>: Prevent metrics-generator crashes when span-name sanitization prunes DRAIN clusters while processing spans. (<a href="https://github.com/grafana/tempo/issues/7787">#7787</a>) (@carles-grafana)</li>
+<li><code>metrics-generator</code>: Fix span name sanitization creating a new DRAIN cluster on every span once a wildcard sibling appeared in the pattern tree (<a href="https://github.com/grafana/tempo/issues/7922">#7922</a>) (@zhxiaogg)</li>
+<li><code>metrics-generator</code>: Fix classic histogram <code>_sum</code> series (e.g. <code>traces_spanmetrics_latency_sum</code>) under-reporting via <code>increase()</code>/<code>rate()</code> for series that are frequently created and evicted. (<a href="https://github.com/grafana/tempo/issues/7811">#7811</a>) (@yvrhdn)
+<code>_count</code> and <code>_bucket</code> series were already seeded with a zero sample when a series is
+first created (or recreated after being evicted as stale), so <code>increase()</code>/<code>rate()</code>
+can correctly attribute their first real value. <code>_sum</code> was missing this seed, so
+<code>increase()</code>/<code>rate()</code> could under-count or drop the contribution of series with high
+churn. Applies to both the classic-only histogram path and classic histograms emitted
+in &quot;both&quot; (native + classic) mode.</li>
+<li><code>metrics-generator</code>: Stop attaching empty traceID exemplars to native histograms for spans without a trace ID. (<a href="https://github.com/grafana/tempo/issues/7584">#7584</a>) (@carles-grafana)
+In <code>native</code> and <code>both</code> histogram modes, observations for spans with a missing or all-zero trace ID attached an exemplar with an empty traceID label; they now carry no exemplar, matching classic histograms.</li>
+<li><code>metrics-generator</code>: Only register span-sanitizer metrics when span_name_sanitization is enabled or dry_run (<a href="https://github.com/grafana/tempo/issues/7810">#7810</a>) (@electron0zero)</li>
+<li><code>metrics-generator</code>: prune stale per-partition ingest lag metrics when a partition moves between consumers, and keep inactive partitions on their previous owner instead of reshuffling them on every rebalance. (<a href="https://github.com/grafana/tempo/issues/7665">#7665</a>) (@aldernero)
+Fixes ever-growing tempo_ingest_group_partition_lag and tempo_ingest_group_partition_lag_seconds
+reported by a former owner after a partition handoff. Affects consumers using the partition-ring
+cooperative-active-sticky balancer (metrics-generator, block-builder, live-store). The
+metrics-generator now also clears these metrics on OnPartitionsLost (e.g. session timeout or
+fence), which previously left stale series behind.</li>
+<li><code>operations</code>: Fix metric name to <code>traces_service_graph_request_total</code> in Service Topology Grafana dashboard (<a href="https://github.com/grafana/tempo/issues/7710">#7710</a>) (@veenoise)</li>
+<li><code>operations</code>: Use <code>AverageValue</code> (not <code>Value</code>) for the live-store KEDA autoscaler trigger; the <code>Value</code> metricType mis-scales the byte-valued ingest metric and runs the autoscaler away to maxReplicas regardless of load. (<a href="https://github.com/grafana/tempo/issues/7376">#7376</a>) (@zalegrala)</li>
+<li><code>operations</code>: Guard <code>TempoDistributorKafkaProduceFailing</code> on a non-zero produce rate so it does not page at <code>+Inf%</code> on cells where <code>tempo_distributor_produce_records_total</code> is not incremented. (<a href="https://github.com/grafana/tempo/issues/7715">#7715</a>) (@zalegrala)
+The alert divided the produce-failure rate by the produce rate with no guard. On a cell where
+<code>tempo_distributor_produce_records_total</code> is flat, that ratio divides by zero, which PromQL
+evaluates to <code>+Inf</code>. Since <code>+Inf</code> exceeds any threshold, the alert fired as critical with a
+meaningless <code>+Inf%</code> value as soon as a single produce failure was recorded.</li>
+<li><code>operations</code>: Restore release binary and package builds with Go 1.27 by upgrading GoReleaser to v2.18.2. (<a href="https://github.com/grafana/tempo/issues/7920">#7920</a>) (@javiermolinar)</li>
+<li><code>overrides</code>: emit duration fields as flat YAML scalars on <code>/status/overrides/{tenant}</code> and omit <code>generate_native_histograms</code> when unset. (<a href="https://github.com/grafana/tempo/issues/7138">#7138</a>) (@electron0zero)</li>
+<li><code>overrides</code>: fix <code>retry_info_enabled</code> per-tenant override silently overriding the cluster default when unset (<a href="https://github.com/grafana/tempo/issues/7662">#7662</a>) (@zhxiaogg)</li>
+<li><code>querier</code>: limit compare() topn (<a href="https://github.com/grafana/tempo/issues/7467">#7467</a>) (@ruslan-mikhailov)</li>
+<li><code>query-frontend</code>: Tag value queries now propagate the <code>limit</code> and <code>maxStaleValues</code> parameters to the queriers and live-store, bounding per-block scans and enabling the stale-value early-exit. Previously these were only applied at the query-frontend, so each block was scanned without a count limit. (<a href="https://github.com/grafana/tempo/issues/7609">#7609</a>) (@zalegrala)</li>
+<li><code>query-frontend</code>: Fix a data race in the query frontend when dispatching request batches to queriers (<code>max_batch_size</code> &gt; 1). (<a href="https://github.com/grafana/tempo/issues/7664">#7664</a>) (@aldernero)</li>
+<li><code>query-frontend</code>: Correctly log failure reason if query is rejected by query-frontend (<a href="https://github.com/grafana/tempo/issues/7527">#7527</a>) (@oleg-kozlyuk-grafana)</li>
+<li><code>query-frontend</code>: enforce <code>max_metrics_duration</code> against the user-provided range, not the post-alignment range. A range query whose window falls entirely inside <code>query_end_cutoff</code> now returns 400 instead of an empty result; an instant query with the same condition is now also rejected explicitly. gRPC metrics queries now return <code>InvalidArgument</code> for max-duration validation failures. (<a href="https://github.com/grafana/tempo/issues/7170">#7170</a>) (@carles-grafana)</li>
+<li><code>query-frontend</code>: Prevent empty tenant queues from blocking query-frontend queue shutdown. (<a href="https://github.com/grafana/tempo/issues/7986">#7986</a>) (@javiermolinar)</li>
+<li><code>query-frontend</code>: Reject TraceQL queries larger than <code>max_query_expression_size_bytes</code> before parsing them. (<a href="https://github.com/grafana/tempo/issues/7245">#7245</a>) (@carles-grafana)</li>
+<li><code>storage</code>: Fix vParquet5 blocks with large string attributes being written with oversized row groups, which could corrupt blocks and crash compaction. (<a href="https://github.com/grafana/tempo/issues/7988">#7988</a>) (@zhxiaogg)</li>
+<li><code>storage</code>: Upgrade parquet-go to v0.32.0 to prevent values being lost when a column dictionary falls back to plain encoding. (<a href="https://github.com/grafana/tempo/issues/7989">#7989</a>) (@renovate-sh-app[bot])</li>
+<li><code>storage</code>: Preserve the no-compact flag when copying vParquet5 blocks so freshly flushed blocks are not compacted or polled before completion. (<a href="https://github.com/grafana/tempo/issues/7786">#7786</a>) (@javiermolinar)</li>
+<li><code>storage</code>: Honour the job's page range in tag name and value searches, and report all bytes read for TraceQL-filtered tag searches (<a href="https://github.com/grafana/tempo/issues/7992">#7992</a>) (@zhxiaogg)</li>
+<li><code>storage</code>: fix double prefix in compactor and DeleteVersioned in azure and s3. (<a href="https://github.com/grafana/tempo/issues/7271">#7271</a>) (@electron0zero)</li>
+<li><code>tempo</code>: Fix the packaged config for the deb/rpm. (<a href="https://github.com/grafana/tempo/issues/7830">#7830</a>) (@electron0zero)
+Also adds CI validation and an errors-only flag for <code>-config.verify</code>.</li>
+<li><code>tempo</code>: Return partial trace hint for the llm encoding (<a href="https://github.com/grafana/tempo/issues/7332">#7332</a>) (@javiermolinar)</li>
+<li><code>tempo</code>: Stop calculating Kafka consumer lag metrics when their update interval is set to zero. (<a href="https://github.com/grafana/tempo/issues/7973">#7973</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: Better validation for query_range endpoint: do not accept negative step (<a href="https://github.com/grafana/tempo/issues/7221">#7221</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: Fix unsafe quoting in query attributes (<a href="https://github.com/grafana/tempo/issues/7220">#7220</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: Fix rare cache collision between instant and range metrics queries (<a href="https://github.com/grafana/tempo/issues/7290">#7290</a>) (@ruslan-mikhailov)</li>
+<li><code>tempo</code>: Preserve unrelated Kafka broker configuration, including consumer group offsets retention, when setting the default partition count for auto-created topics. (<a href="https://github.com/grafana/tempo/issues/7869">#7869</a>) (@carles-grafana)</li>
+<li><code>traceql</code>: Instant metrics queries now correctly reuse the per-block job results cache. (<a href="https://github.com/grafana/tempo/issues/7602">#7602</a>) (@mdisibio)</li>
+<li><code>traceql</code>: Fix tag-value autocomplete ignoring query filters when the incomplete matcher targets an intrinsic (e.g. <code>{ resource.service.name = &quot;foo&quot; &amp;&amp; name = }</code>) (<a href="https://github.com/grafana/tempo/issues/7660">#7660</a>) (@mapno)</li>
+<li><code>traceql</code>: Fixes a bug where TraceQL metrics queries on event and link intrinsics such as <code>{ } | rate() by (event:name)</code> would return incorrect results when using vParquet5 and the new faster fetch layer. (<a href="https://github.com/grafana/tempo/issues/7508">#7508</a>) (@mdisibio)</li>
+<li><code>traceql</code>: Fixes additional correctness issues in the new vParquet5 faster fetch layer, including trace intrinsics such as <code>{ trace:rootService=&quot;...&quot; } | rate()</code>, <code>span:childCount</code>, and array operations. (<a href="https://github.com/grafana/tempo/issues/7533">#7533</a>) (@mdisibio)</li>
+<li><code>traceql</code>: Fixes a panic in TraceQL metrics-math queries (e.g. <code>(A) / (B)</code>) when a sub-query's <code>by()</code> clause uses the maximum number of group-by attributes. (<a href="https://github.com/grafana/tempo/issues/7831">#7831</a>) (@electron0zero)</li>
+<li><code>traceql</code>: Fix edge cases in TraceQL <code>=nil</code> queries missing some values (<a href="https://github.com/grafana/tempo/issues/7345">#7345</a>) (@mdisibio)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/grafana/tempo">grafana/tempo</a> · <code>v3.1.0</code> · 2026-09-29 · <a href="https://github.com/grafana/tempo/releases/tag/v3.1.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/tempo/3.0.4"> <span class="k">← Próximo</span> <span class="t">v3.0.4</span> </a> <a href="/releases/tempo/3.0.3"> <span class="k">Anterior →</span> <span class="t">v3.0.3</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/grafana/tempo/releases/tag/v3.1.0" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/grafana/tempo" target="_blank" rel="noopener"> <span>grafana/tempo</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Nesta página</div> <nav> <a href="#" class>Destaques</a><a href="#" class>Recursos</a><a href="#" class>Melhorias</a><a href="#" class>Mudanças significativas</a><a href="#" class="lv3">Antes de atualizar</a><a href="#" class>Mudanças</a><a href="#" class>Correções de segurança</a><a href="#" class>Correções de bugs</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/tempo/3.1.1"> <span class="v">v3.1.1</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/3.0.5"> <span class="v">v3.0.5</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/2.10.10"> <span class="v">v2.10.10</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/2.10.9"> <span class="v">v2.10.9</span> <span class="d">26-10-20</span> </a> </li><li> <a href="/releases/tempo/3.0.4"> <span class="v">v3.0.4</span> <span class="d">26-10-16</span> </a> </li><li> <a href="/releases/tempo/3.1.0" aria-current="true"> <span class="v">v3.1.0</span> <span class="d">26-09-29</span> </a> </li><li> <a href="/releases/tempo/3.0.3"> <span class="v">v3.0.3</span> <span class="d">26-08-13</span> </a> </li><li> <a href="/releases/tempo/2.9.5"> <span class="v">v2.9.5</span> <span class="d">26-08-13</span> </a> </li> </ul> <a href="/pt/releases/tempo" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

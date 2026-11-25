@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>druid 0.18.0 — STAGS NextStack</title><meta name="description" content="Apache Druid 0.18.0 contains over 200 new features, performance enhancements, bug fixes, and major documentation improvements from 42 contributors."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/druid/0.18.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/druid/0.18.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/druid/0.18.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/druid/0.18.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="druid 0.18.0 — STAGS NextStack"><meta property="og:description" content="Apache Druid 0.18.0 contains over 200 new features, performance enhancements, bug fixes, and major documentation improvements from 42 contributors."><meta property="og:url" content="https://www.stags.cn/fr/releases/druid/0.18.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/druid/0.18.0/#article","headline":"druid 0.18.0 release notes","datePublished":"2020-04-20","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/druid"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/druid/0.18.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/druid/druid_druid-0.18.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/druid/0.18.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/druid/0.18.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/druid/0.18.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/druid/0.18.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/druid/0.18.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/druid">druid</a> </nav> <h1 class="detail-title"> <span class="p">druid</span> 0.18.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>20 avr. 2020</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span class="k">Source</span>apache/druid </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/druid/0.18.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/druid/0.18.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>druide druide-0.18.0</h1>
+<p>Apache Druid 0.18.0 contient plus de 200 nouvelles fonctionnalités, améliorations de performances, corrections de bogues et améliorations majeures de la documentation provenant de 42 contributeurs. Consultez la [liste complète des modifications] (https://github.com/apache/druid/compare/0.17.0...0.18.0) et [tout ce qui est associé au jalon] (https://github.com/apache/druid/milestone/37).</p>
+<h1>&lt;a name=&quot;new-features&quot; href=&quot;#new-features&quot;&gt;#&lt;/a&gt; Nouvelles fonctionnalités</h1>
+<h2>&lt;a name=&quot;join&quot; href=&quot;#join&quot;&gt;#&lt;/a&gt; Rejoignez le support</h2>
+<p>Rejoindre est une opération clé dans l’analyse des données. Avant 0.18.0, Druid prenait en charge certaines fonctionnalités liées aux jointures, telles que les recherches ou les semi-jointures dans SQL. Cependant, les cas d'utilisation de ces fonctionnalités étaient assez limités et, pour d'autres cas d'utilisation de jointure, les utilisateurs devaient dénormaliser leurs sources de données lorsqu'ils ingèrent des données au lieu de les rejoindre au moment de la requête, ce qui pouvait entraîner une explosion du volume de données et un long temps d'ingestion.
+Druid 0.18.0 prend en charge les véritables jointures pour la première fois de son histoire. Druid prend en charge les jointures INNER, LEFT et CROSS pour le moment. Pour les requêtes natives, la source de données <code>join</code> a été nouvellement introduite pour représenter une jointure de deux sources de données. Actuellement, seule la jointure <em>left-deep</em> est autorisée. Cela signifie que seule une source de données <code>table</code> ou une autre source de données <code>join</code> est autorisée pour la source de données de gauche. Pour la bonne source de données, les sources de données <code>lookup</code>, <code>inline</code> ou <code>query</code> sont autorisées. Notez que la jointure des sources de données Druid n'est pas encore prise en charge. Il ne doit y avoir qu'une seule source de données <code>table</code> dans la même requête de jointure.
+Druid SQL prend également en charge les jointures. Sous les couvertures, les requêtes de jointure SQL sont traduites en une ou plusieurs requêtes natives incluant des sources de données de jointure. Voir <a href="https://druid.apache.org/docs/0.18.0/querying/sql.html#query-translation">Traduction de requêtes</a> pour plus de détails sur la traduction SQL et les meilleures pratiques pour écrire des requêtes efficaces.
+Lorsqu'une requête de jointure est émise, le courtier <em>évalue</em> d'abord toutes les sources de données, à l'exception de la source de données de base qui est la seule source de données <code>table</code> de la requête. L'évaluation peut inclure l'exécution de sous-requêtes pour les sources de données <code>query</code>. Une fois que le courtier a évalué toutes les sources de données autres que la base, il les remplace par les sources de données <code>inline</code> et envoie la requête réécrite aux nœuds de données (voir la section ci-dessous « Requête intégrée dans les courtiers » pour plus de détails). Les nœuds de données utilisent la jointure par hachage pour traiter les requêtes de jointure. Ils créent une table de hachage pour chaque source de données feuille non principale, à moins qu'elle n'existe déjà. Notez que seule la source de données <code>lookup</code> dispose actuellement d'une table de hachage prédéfinie. Voir <a href="https://druid.apache.org/docs/0.18.0/querying/query-execution.html">Exécution de requête</a> pour plus de détails sur l'exécution de requêtes de jointure.
+Les jointures peuvent affecter les performances de vos requêtes. En général, toutes les requêtes incluant des jointures peuvent être plus lentes que les requêtes équivalentes sur une source de données dénormalisée. La fonction <code>LOOKUP</code> pourrait être plus performante que les jointures avec des sources de données de recherche. Voir <a href="https://druid.apache.org/docs/0.18.0/querying/datasource.html#join-performance">Performances de jointure</a> pour plus de détails sur les performances des requêtes de jointure et les plans futurs d'amélioration des performances.
+https://github.com/apache/druid/pull/8728
+https://github.com/apache/druid/pull/9545
+https://github.com/apache/druid/pull/9111</p>
+<h2>&lt;a name=&quot;query-inlining&quot; href=&quot;#query-inlining&quot;&gt;#&lt;/a&gt; Requête en ligne dans les courtiers</h2>
+<p>Druid est désormais capable d'exécuter une requête imbriquée en incorporant des sous-requêtes. Tout type de sous-requête peut se superposer à n’importe quel type d’un autre, comme dans l’exemple suivant :</p>
+<pre><code>             topN
+               |
+       (join datasource)
+         /          \
+(table datasource)  groupBy
+</code></pre>
+<p>Pour exécuter cette requête, le courtier évalue d'abord la sous-requête feuille groupBy ; il envoie la sous-requête aux nœuds de données et collecte le résultat. Le résultat collecté est matérialisé dans la mémoire du Broker. Une fois que le courtier a collecté tous les résultats de la requête groupBy, il réécrit la requête topN en remplaçant la feuille groupBy par une source de données en ligne contenant le résultat de la requête groupBy. Enfin, la requête réécrite est envoyée aux nœuds de données pour exécuter la requête topN.</p>
+<h2>&lt;a name=&quot;query-laning&quot; href=&quot;#query-laning&quot;&gt;#&lt;/a&gt; Gestion des requêtes et priorisation</h2>
+<p>Lorsque vous exécutez plusieurs requêtes de charges de travail hétérogènes à la fois, vous souhaiterez peut-être parfois contrôler l'engagement des ressources pour une requête en fonction de sa priorité. Par exemple, vous souhaiterez limiter les ressources affectées aux requêtes moins importantes, afin que les requêtes importantes puissent être exécutées à temps sans être perturbées par des requêtes moins importantes.
+Le laning des requêtes vous permet de contrôler l’utilisation de la capacité pour les charges de travail de requêtes hétérogènes. Avec le laning, le courtier examine et classe une requête dans le but de l'attribuer à une « voie ». Les voies ont des limites de capacité, appliquées par le courtier, qui peuvent être utilisées pour garantir que des ressources suffisantes sont disponibles pour d'autres voies ou pour des requêtes interactives (sans voie), ou pour limiter le débit global des requêtes au sein de la voie.
+La priorisation automatique des requêtes détermine la priorité des requêtes en fonction de la stratégie configurée. La stratégie de priorisation basée sur des seuils a été ajoutée ; il réduit automatiquement la priorité des requêtes qui franchissent l'un des ensemble de seuils configurables, tels que l'ancienneté des données, la taille de l'intervalle couvert par une requête ou le nombre de segments participant à une requête.
+Voir <a href="https://druid.apache.org/docs/0.18.0/configuration/index.html#query-prioritization-and-laning">Priorisation et laning des requêtes</a> pour plus de détails.
+https://github.com/apache/druid/issues/6993
+https://github.com/apache/druid/pull/9407
+https://github.com/apache/druid/pull/9493</p>
+<h3>Nouvelle dimension dans les métriques de requête</h3>
+<p>Puisqu'une requête native contenant des sous-requêtes peut être exécutée partie par partie, un nouveau <code>subQueryId</code> a été introduit. Chaque sous-requête a des <code>subQueryId</code> différents mais le même <code>queryId</code>. Le <code>subQueryId</code> est disponible en tant que nouvelle dimension dans les métriques de requête.</p>
+<h3>Nouvelle configuration</h3>
+<p>Une nouvelle configuration <code>druid.server.http.maxSubqueryRows</code> contrôle le nombre maximum de lignes matérialisées dans la mémoire du Broker.
+Veuillez consulter <a href="https://druid.apache.org/docs/0.18.0/querying/query-execution.html#query">Exécution de requête</a> pour plus de détails.
+https://github.com/apache/druid/pull/9533</p>
+<h2>&lt;a name=&quot;grouping-sets&quot; href=&quot;#grouping-sets&quot;&gt;#&lt;/a&gt; Ensembles de regroupement SQL</h2>
+<p>GROUPING SETS est désormais pris en charge, vous permettant de combiner plusieurs clauses GROUP BY en une seule clause GROUP BY. Cette clause GROUPING SETS est traduite en interne dans la requête groupBy avec <code>subtotalsSpec</code>. La clause LIMIT est désormais appliquée après subtotalsSpec, plutôt qu'appliquée à chaque ensemble de regroupement.
+https://github.com/apache/druid/pull/9122</p>
+<h2>&lt;a name=&quot;dynamic-params&quot; href=&quot;#dynamic-params&quot;&gt;#&lt;/a&gt; Paramètres dynamiques SQL</h2>
+<p>Druid prend désormais en charge les paramètres dynamiques pour SQL. Pour utiliser des paramètres dynamiques, remplacez tout littéral de la requête par un point d'interrogation (<code>?</code>). Ces points d'interrogation représentent les endroits où les paramètres seront liés au moment de l'exécution. Voir <a href="https://druid.apache.org/docs/0.18.0/querying/sql.html#dynamic-parameters">Paramètres dynamiques SQL</a> pour plus de détails.
+https://github.com/apache/druid/pull/6974</p>
+<h1>&lt;a name=&quot;important-changes&quot; href=&quot;#important-changes&quot;&gt;#&lt;/a&gt; Modifications importantes</h1>
+<h2>&lt;a name=&quot;limit-push-down&quot; href=&quot;#limit-push-down&quot;&gt;#&lt;/a&gt; <code>applyLimitPushDownToSegments</code> est désactivé par défaut</h2>
+<p><code>applyLimitPushDownToSegments</code> a été ajouté dans 0.17.0 pour étendre l'évaluation des limites aux nœuds interrogeables, limitant ainsi les résultats lors de l'analyse de segment pour groupBy v2. Cela peut entraîner une dégradation des performances, comme indiqué dans https://github.com/apache/druid/issues/9689, si de nombreux segments sont impliqués dans le traitement des requêtes. En effet, « limit push down to segment scan » initialise un tampon d'agrégation par segment, dont la surcharge n'est pas négligeable. Activez cette configuration uniquement si votre requête implique un nombre relativement faible de segments par tâche historique ou en temps réel.
+https://github.com/apache/druid/pull/9711</p>
+<h2>&lt;a name=&quot;default-roaring&quot; href=&quot;#default-roaring&quot;&gt;#&lt;/a&gt; Bitmaps rugissants par défaut</h2>
+<p>Druid prend en charge deux types de bitmap, à savoir Roaring et CONCISE. Étant donné que les bitmaps Roaring offrent une meilleure expérience prête à l'emploi (vitesse de requête plus rapide en général), le type de bitmap par défaut est désormais remplacé par les bitmaps Roaring. Voir <a href="https://druid.apache.org/docs/0.18.0/design/segments.html#compression">Compression de segment</a> pour plus de détails sur les bitmaps.
+https://github.com/apache/druid/pull/9548</p>
+<h2>&lt;a name=&quot;complex-metrics&quot; href=&quot;#complex-metrics&quot;&gt;#&lt;/a&gt; Le comportement des métriques complexes change au moment de l'ingestion lorsque la gestion des valeurs nulles compatible SQL est désactivée (mode par défaut)</h2>
+<p>Lorsque la gestion des valeurs nulles compatible SQL est désactivée, le comportement de l'agrégation de métriques complexes au moment de l'ingestion a désormais changé pour être cohérent avec celui au moment de la requête. Les métriques complexes sont regroupées aux valeurs par défaut 0 pour les valeurs nulles au lieu de les ignorer lors de l'ingestion.
+https://github.com/apache/druid/pull/9484</p>
+<h2>&lt;a name=&quot;array-expr&quot; href=&quot;#array-expr&quot;&gt;#&lt;/a&gt; Modification de la syntaxe de l'expression du tableau</h2>
+<p>L'expression Druid prend désormais en charge les constructeurs typés pour la création de tableaux. Les tableaux peuvent être définis avec un type explicite. Par exemple, <code>&lt;LONG&gt;[1, 2, null]</code> crée un tableau de type <code>LONG</code> contenant <code>1</code>, <code>2</code> et <code>null</code>. Notez que vous pouvez toujours créer un tableau sans type explicite. Par exemple, <code>[1, 2, null]</code> reste une syntaxe valide pour créer un tableau équivalent. Dans ce cas, Druid déduira le type de tableau à partir de ses éléments. Cette nouvelle syntaxe s'applique également aux tableaux vides. <code>&lt;STRING&gt;[]</code>, <code>&lt;DOUBLE&gt;[]</code> et <code>&lt;LONG&gt;[]</code> créeront respectivement un tableau vide de type <code>STRING</code>, <code>DOUBLE</code> et <code>LONG</code>.
+https://github.com/apache/druid/pull/9367</p>
+<h2>&lt;a name=&quot;ending-segments-cleanup&quot; href=&quot;#ending-segments-cleanup&quot;&gt;#&lt;/a&gt; Activation par défaut du nettoyage des segments en attente</h2>
+<p>La table <code>pendingSegments</code> dans le magasin de métadonnées est utilisée pour créer de nouveaux ID de segment uniques pour les tâches d'ajout telles que les tâches d'indexation Kafka/Kinesis ou les tâches par lots en mode ajout. Le nettoyage automatique des segments en attente a été introduit dans 0.12.0, mais a été désactivé par défaut avant 0.18.0. Cette configuration est désormais activée par défaut.
+https://github.com/apache/druid/pull/9385</p>
+<h2>&lt;a name=&quot;better-split&quot; href=&quot;#better-split&quot;&gt;#&lt;/a&gt; Création de meilleures répartitions d'entrée pour l'indexation parallèle native</h2>
+<p>La tâche parallèle peut désormais créer de meilleures répartitions. Chaque fractionnement peut contenir plusieurs fichiers d'entrée en fonction de leur taille. Les fichiers vides seront ignorés. La taille du fractionnement est contrôlable avec la nouvelle spécification d'indice de fractionnement. Voir [Spécification des indices partagés] (https://druid.apache.org/docs/0.18.0/ingestion/native-batch.html#split-hint-spec) pour plus de détails.
+https://github.com/apache/druid/pull/9360
+https://github.com/apache/druid/pull/9450</p>
+<h2>&lt;a name=&quot;extension-transform&quot; href=&quot;#extension-transform&quot;&gt;#&lt;/a&gt; Transform est désormais un point d'extension</h2>
+<p><a href="https://github.com/apache/druid/blob/0.18.0/processing/src/main/java/org/apache/druid/segment/transform/Transform.java"><code>Transform</code></a> est un <code>Interface</code> qui représente une transformation à appliquer à chaque ligne au moment de l'ingestion. Cette interface est désormais un point d'extension. Veuillez consulter [Écrire vos propres extensions] (https://druid.apache.org/docs/0.18.0/development/modules.html#writing-your-own-extensions) pour savoir comment ajouter votre <code>Transform</code> personnalisé.
+https://github.com/apache/druid/pull/9319</p>
+<h2>&lt;a name=&quot;chunk-period&quot; href=&quot;#chunk-period&quot;&gt;#&lt;/a&gt; Le contexte de requête <code>chunkPeriod</code> est supprimé</h2>
+<p><code>chunkPeriod</code> est obsolète depuis 0.14.0 en raison de son utilisation limitée (il était parfois utile uniquement pour groupBy v1). Ce contexte de requête est désormais supprimé dans 0.18.0.
+https://github.com/apache/druid/pull/9216</p>
+<h2>&lt;a name=&quot;java-11&quot; href=&quot;#java-11&quot;&gt;#&lt;/a&gt; Prise en charge expérimentale de Java 11</h2>
+<p>Druid prend désormais en charge Java 11 à titre expérimental. Vous pouvez exécuter la même distribution binaire Druid avec Java 11 qui est compilée avec Java 8. Nos tests sur Travis incluent :</p>
+<ul>
+<li>Compilation et exécution de tests unitaires avec Java 11</li>
+<li>Compilation avec Java 8 et réalisation de tests d'intégration avec Java 11
+Les résultats des tests de performances ne sont pas encore disponibles.</li>
+</ul>
+<h3>Avertissements concernant les accès réfléchissants illégaux lors de l'exécution de Druid avec Java 11</h3>
+<p>Depuis Java 9, il émet un avertissement lorsqu'il s'avère que certaines bibliothèques utilisent la réflexion pour accéder illégalement aux API internes du JDK. Ces avertissements seront corrigés en modifiant les codes Druid ou en mettant à niveau les versions de la bibliothèque dans les prochaines versions. Pour l'instant, ces avertissements peuvent être supprimés en ajoutant des options JVM telles que <code>--add-opens</code> ou <code>--add-exports</code>. Voir <a href="https://docs.oracle.com/en/java/javase/11/migrate/index.html#JSMIG-GUID-7BB28E4D-99B3-4078-BDC4-FC24180CE82B">Guide de migration JDK 11</a> pour plus de détails.
+Certains des avertissements sont :</p>
+<pre><code>2020-01-22T21:30:08,893 WARN [main] org.apache.druid.java.util.metrics.AllocationMetricCollectors - Cannot initialize org.apache.druid.java.util.metrics.AllocationMetricCollector
+java.lang.reflect.InaccessibleObjectException: Unable to make public long[] com.sun.management.internal.HotSpotThreadImpl.getThreadAllocatedBytes(long[]) accessible: module jdk.management does not &quot;exports com.sun.management.internal&quot; to unnamed module @6955cb39
+</code></pre>
+<p>Cet avertissement peut être supprimé en ajoutant <code>--add-exports jdk.management/com.sun.management.internal=ALL-UNNAMED</code>.</p>
+<pre><code>2020-01-22T21:30:08,902 WARN [main] org.apache.druid.java.util.metrics.JvmMonitor - Cannot initialize GC counters. If running JDK11 and above, add --add-exports java.base/jdk.internal.perf=ALL-UNNAMED to the JVM arguments to enable GC counters.
+</code></pre>
+<p>Cet avertissement peut être supprimé en ajoutant <code>--add-exports java.base/jdk.internal.perf=ALL-UNNAMED</code>.</p>
+<pre><code>WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+</code></pre>
+<p>Cet avertissement peut être supprimé en ajoutant <code>--add-opens java.base/java.lang=ALL-UNNAMED</code>.
+https://github.com/apache/druid/pull/7306
+https://github.com/apache/druid/pull/9491</p>
+<h1>&lt;a name=&quot;new-extension&quot; href=&quot;#new-extension&quot;&gt;#&lt;/a&gt; Nouvelle extension</h1>
+<h2>&lt;a name=&quot;pac4j&quot; href=&quot;#pac4j&quot;&gt;#&lt;/a&gt; Nouvelle extension Pac4j</h2>
+<p>Une nouvelle extension est ajoutée dans 0.18.0 pour activer l'authentification basée sur [OpenID Connect] (https://openid.net/connect/) pour les processus Druid. Cela peut être utilisé avec n'importe quel serveur d'authentification qui le prend en charge, par ex. <a href="https://developer.okta.com/">Octa</a>. Cette extension ne doit être utilisée qu'au niveau du nœud du routeur pour permettre à un groupe d'utilisateurs du serveur d'authentification existant d'interagir avec le cluster Druid, à l'aide de la [Console Web] (https://druid.apache.org/docs/0.18.0/operations/management-uis.html#druid-console).
+https://github.com/apache/druid/pull/8992</p>
+<h1>&lt;a name=&quot;security&quot; href=&quot;#security&quot;&gt;#&lt;/a&gt; Problèmes de sécurité</h1>
+<h2>&lt;a name=&quot;ldap-security&quot; href=&quot;#ldap-security&quot;&gt;#&lt;/a&gt; [CVE-2020-1958] Vulnérabilité d'injection LDAP d'Apache Druid</h2>
+<p><a href="https://nvd.nist.gov/vuln/detail/CVE-2020-1958">CVE-2020-1958</a> a été signalé récemment et corrigé dans 0.18.0 et 0.17.1. Lorsque l'authentification LDAP est activée, les appelants des Druid API peuvent contourner la barrière du filtre qualificationsValidator.userSearch ou récupérer toutes les valeurs d'attribut LDAP des utilisateurs qui existent sur le serveur LDAP, à condition que ces informations soient visibles par le serveur Druid. Veuillez consulter la description dans le lien pour plus de détails. Il est <em>fortement</em> recommandé de passer à 0.18.0 ou 0.17.1 si vous utilisez l'authentification LDAP avec Druid.
+https://github.com/apache/druid/pull/9600</p>
+<h2>&lt;a name=&quot;kafka-client-security&quot; href=&quot;#kafka-client-security&quot;&gt;#&lt;/a&gt; Mise à jour de Kafka client vers 2.2.2</h2>
+<p>La bibliothèque Kafka client a été mise à jour vers 2.2.2, dans laquelle <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-12399">CVE-2019-12399</a> est corrigé.
+https://github.com/apache/druid/pull/9259</p>
+<h1>&lt;a name=&quot;bug-fixes&quot; href=&quot;#bug-fixes&quot;&gt;#&lt;/a&gt; Corrections de bugs</h1>
+<p>Druid 0.18.0 comprend 40 corrections de bugs. Veuillez consulter https://github.com/apache/druid/pulls?page=1&amp;q=is%3Apr+milestone%3A0.18.0+is%3Aclosed+label%3ABug pour la liste complète des corrections de bugs.</p>
+<ul>
+<li>Correction des limites de la dernière partition de fusion Superbatch (https://github.com/apache/druid/pull/9448)</li>
+<li>Réutiliser le transformateur dans l'indexation de flux (https://github.com/apache/druid/pull/9625)</li>
+<li>Conserver les valeurs nulles pour les dimensions de type numérique après compactage (https://github.com/apache/druid/pull/9622)</li>
+<li>DruidInputSource peut ajouter de nouvelles dimensions lors de la réingestion (https://github.com/apache/druid/pull/9590)</li>
+<li>Erreur sur dépassement du compteur de valeur au lieu d'écrire des segments défectueux (https://github.com/apache/druid/pull/9559)</li>
+<li>Correction de quelques problèmes avec les filtres sur les colonnes numériques avec des valeurs nulles (https://github.com/apache/druid/pull/9251)</li>
+<li>Correction de l'expression timestamp_format en dehors du fuseau horaire UTC (https://github.com/apache/druid/pull/9282)</li>
+<li>La tâche KIS échoue lors de la définition de segmentGranularity avec le fuseau horaire (https://github.com/apache/druid/issues/8690)</li>
+<li>Correction d'un problème avec le regroupement par limite pour l'extractionFn, les expressions, les jointures, etc. (https://github.com/apache/druid/pull/9662)</li>
+</ul>
+<h1>&lt;a name=&quot;upgrading-to-0.18.0&quot; href=&quot;#upgrading-to-0.18.0&quot;&gt;#&lt;/a&gt; Mise à niveau vers Druid 0.18.0</h1>
+<p>Soyez conscient des changements suivants entre 0.17.1 et 0.18.0 dont vous devez être conscient avant la mise à niveau. Si vous effectuez une mise à jour à partir d'une version antérieure à 0.17.1, veuillez consulter les release note des versions intermédiaires concernées.</p>
+<h2>&lt;a name=&quot;upgrade-s3&quot; href=&quot;#upgrade-s3&quot;&gt;#&lt;/a&gt; Extension S3</h2>
+<p>L'extension de stockage S3 prend désormais en charge le nettoyage des journaux et segments de tâches obsolètes. Lors du déploiement de 0.18.0, veuillez vous assurer que votre répertoire <code>extensions</code> ne contient pas d'anciennes versions de l'extension <code>druid-s3-extensions</code>.
+https://github.com/apache/druid/pull/9459</p>
+<h2>&lt;a name=&quot;upgrade-azure&quot; href=&quot;#upgrade-azure&quot;&gt;#&lt;/a&gt; Extension principale pour Azure</h2>
+<p>L'extension de stockage Azure a été promue au rang d'extension principale. Il prend également désormais en charge le nettoyage des journaux et segments de tâches obsolètes. Lors du déploiement de 0.18.0, veuillez vous assurer que votre répertoire <code>extensions-contrib</code> ne contient pas d'anciennes versions de l'extension <code>druid-azure-extensions</code>.
+https://github.com/apache/druid/pull/9394
+https://github.com/apache/druid/pull/9523</p>
+<h2>&lt;a name=&quot;upgrade-google&quot; href=&quot;#upgrade-google&quot;&gt;#&lt;/a&gt; Extension de stockage Google</h2>
+<p>L'extension de stockage Google prend désormais en charge le nettoyage des journaux et segments de tâches obsolètes. Lors du déploiement de 0.18.0, veuillez vous assurer que votre répertoire <code>extensions</code> ne contient pas d'anciennes versions de l'extension <code>druid-google-extensions</code>.
+https://github.com/apache/druid/pull/9519</p>
+<h2>&lt;a name=&quot;upgrade-hadoop-aws&quot; href=&quot;#upgrade-hadoop-aws&quot;&gt;#&lt;/a&gt; Bibliothèque Hadoop AWS incluse dans la distribution binaire</h2>
+<p>La bibliothèque Hadoop AWS est désormais incluse dans la distribution binaire pour une meilleure expérience prête à l'emploi. Lors du déploiement de 0.18.0, veuillez vous assurer que votre répertoire <code>hadoop-dependencies</code> ou tout autre répertoire du chemin de classe ne contient pas de bibliothèques en double.</p>
+<h2>&lt;a name=&quot;upgrade-postgres&quot; href=&quot;#upgrade-postgres&quot;&gt;#&lt;/a&gt; Pilote JDBC PostgreSQL pour les recherches inclus dans la distribution binaire</h2>
+<p>Le pilote JDBC PostgreSQL pour les recherches est désormais inclus dans la distribution binaire pour une meilleure expérience prête à l'emploi. Lors du déploiement de 0.18.0, assurez-vous que votre répertoire <code>extensions/druid-lookups-cached-single</code> ou tout autre répertoire du chemin de classe ne contient pas de pilotes JDBC en double.
+https://github.com/apache/druid/pull/9399</p>
+<h1>&lt;a name=&quot;known-issues&quot; href=&quot;#known-issues&quot;&gt;#&lt;/a&gt; Problèmes connus</h1>
+<h2>&lt;a name=&quot;inline-query-multi-value&quot; href=&quot;#inline-query-multi-value&quot;&gt;#&lt;/a&gt; Échec de la requête avec <code>topN</code> ou <code>groupBy</code> sur <code>scan</code> avec des colonnes à valeurs multiples</h2>
+<p>L'intégration de requêtes dans Brokers est nouvellement introduite dans 0.18.0, mais présente un bogue qui fait que les requêtes avec <code>topN</code> ou <code>groupBy</code> au-dessus de <code>scan</code> échouent si la requête d'analyse sélectionne des dimensions à valeurs multiples. Voir https://github.com/apache/druid/issues/9697 pour plus de détails.</p>
+<h2>&lt;a name=&quot;npe-kafka&quot; href=&quot;#npe-kafka&quot;&gt;#&lt;/a&gt; NullPointerException lors de l'utilisation de l'analyseur Avro avec le service d'indexation Kafka.</h2>
+<p>L'analyseur Avro ne fonctionne pas avec le service d'indexation Kafka en raison d'une mauvaise vérification nulle. Voir https://github.com/apache/druid/issues/9728 pour plus de détails.</p>
+<h2>&lt;a name=&quot;unavailable-segment-metric&quot; href=&quot;#unavailable-segment-metric&quot;&gt;#&lt;/a&gt; Métrique <code>segment/unavailable/count</code> trompeuse lors du transfert</h2>
+<p>Cette métrique est censée prendre également en compte le nombre de segments servis par les tâches en temps réel, mais ce n'est pas le cas actuellement. En conséquence, il semble que l'indisponibilité augmente avant que les nouveaux segments ne soient chargés par les historiques, même si tous les segments sont en réalité disponibles en permanence sur une combinaison de tâches et d'historiques en temps réel.
+https://github.com/apache/druid/issues/9677</p>
+<h2>&lt;a name=&quot;sql-explain&quot; href=&quot;#sql-explain&quot;&gt;#&lt;/a&gt; Légère différence entre le résultat de la requête <code>explain plan for</code> et le plan d'exécution réel</h2>
+<p>Le résultat de <code>explain plan for</code> peut être légèrement différent de ce que Druid exécute réellement lorsque la requête inclut des jointures ou des sous-requêtes. La différence réside dans le fait que chaque partie du plan de requête serait représentée comme s'il s'agissait de sa propre requête native dans le résultat de <code>explain plan for</code>. Par exemple, pour une jointure d'une source de données <code>d1</code> et d'une sous-requête groupBy sur la source de données <code>d2</code>, le <code>explain plan for</code> pourrait renvoyer un plan comme ci-dessous</p>
+<pre><code>     join
+    /    \
+scan    groupBy
+ |        |
+d1       d2
+</code></pre>
+<p>alors que le plan de requête réel que Druid exécuterait est</p>
+<pre><code>     join
+    /    \
+  d1    groupBy
+          |
+         d2
+</code></pre>
+<h2>&lt;a name=&quot;other-known-issues&quot; href=&quot;#other-known-issues&quot;&gt;#&lt;/a&gt; Autres problèmes connus</h2>
+<p>Pour une liste complète des problèmes ouverts, veuillez consulter https://github.com/apache/druid/labels/Bug.</p>
+<h1>&lt;a name=&quot;credits&quot; href=&quot;#credits&quot;&gt;#&lt;/a&gt; Crédits</h1>
+<h2>Merci à tous ceux qui ont contribué à cette version !
+@a2l007
+@abhishekrb19
+@aditya-r-m
+@AlexandreSaydakov
+@als-sdin
+@aP0StAl
+@asdf2014
+@benhopp
+@bjozet
+@capistrant
+@Caroline1000
+@ccaominh
+@clintropolis
+@dampcake
+@fjy
+@Fokko
+@frnidito
+@gianm
+@himanshug
+@JaeGeunBang
+@jihoonson
+@jon-wei
+@JulianJaffePinterest
+@kou64yama
+@lamber-ken
+@leventov
+@liutang123
+@maytasm
+@mcbrewster
+@mgill25
+@mitchlloyd
+@mrsrinivas
+@nvolungis
+@prabcs
+@samarthjain
+@sthetland
+@suneet-s
+@themaric
+@vogievetsky
+@xvrl
+@zachjsh
+@zhenxiao</h2>
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.18.0</code> · 20/04/2020 · <a href="https://github.com/apache/druid/releases/tag/druid-0.18.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>druid druid-0.18.0</h1>
+<p>Apache Druid 0.18.0 contains over 200 new features, performance enhancements, bug fixes, and major documentation improvements from 42 contributors. Check out the <a href="https://github.com/apache/druid/compare/0.17.0...0.18.0">complete list of changes</a> and <a href="https://github.com/apache/druid/milestone/37">everything tagged to the milestone</a>.</p>
+<h1>&lt;a name=&quot;new-features&quot; href=&quot;#new-features&quot;&gt;#&lt;/a&gt; New Features</h1>
+<h2>&lt;a name=&quot;join&quot; href=&quot;#join&quot;&gt;#&lt;/a&gt; Join support</h2>
+<p>Join is a key operation in data analytics. Prior to 0.18.0, Druid supported some join-related features, such as Lookups or semi-joins in SQL. However, the use cases for those features were pretty limited and, for other join use cases, users had to denormalize their datasources when they ingest data instead of joining them at query time, which could result in exploding data volume and long ingestion time.</p>
+<p>Druid 0.18.0 supports real joins for the first time ever in its history. Druid supports INNER, LEFT, and CROSS joins for now. For native queries, the <code>join</code> datasource has been newly introduced to represent a join of two datasources. Currently, only the <em>left-deep</em> join is allowed. That means, only a <code>table</code> or another <code>join</code> datasource is allowed for the left datasource. For the right datasource, <code>lookup</code>, <code>inline</code>, or <code>query</code> datasources are allowed. Note that join of Druid datasources is not supported yet. There should be only one <code>table</code> datasource in the same join query.</p>
+<p>Druid SQL also supports joins. Under the covers, SQL join queries are translated into one or several native queries that include join datasources. See <a href="https://druid.apache.org/docs/0.18.0/querying/sql.html#query-translation">Query translation</a> for more details of SQL translation and best practices to write efficient queries.</p>
+<p>When a join query is issued, the Broker first <em>evaluates</em> all datasources except for the base datasource which is the only <code>table</code> datasource in the query. The evaluation can include executing subqueries for <code>query</code> datasources. Once the Broker evaluates all non-base datasources, it replaces them with <code>inline</code> datasources and sends the rewritten query to data nodes (see the below &quot;Query inlining in Brokers&quot; section for more details). Data nodes use the hash join to process join queries. They build a hash table for each non-primary leaf datasource unless it already exists. Note that only <code>lookup</code> datasource currently has a pre-built hash table. See <a href="https://druid.apache.org/docs/0.18.0/querying/query-execution.html">Query execution</a> for more details about join query execution.</p>
+<p>Joins can affect performance of your queries. In general, any queries including joins can be slower than equivalent queries against a denormalized datasource. The <code>LOOKUP</code> function could perform better than joins with lookup datasources. See <a href="https://druid.apache.org/docs/0.18.0/querying/datasource.html#join-performance">Join performance</a> for more details about join query performance and future plans for performance improvement.</p>
+<p>https://github.com/apache/druid/pull/8728
+https://github.com/apache/druid/pull/9545
+https://github.com/apache/druid/pull/9111</p>
+<h2>&lt;a name=&quot;query-inlining&quot; href=&quot;#query-inlining&quot;&gt;#&lt;/a&gt; Query inlining in Brokers</h2>
+<p>Druid is now able to execute a nested query by inlining subqueries. Any type of subquery can be on top of any type of another, such as in the following example:</p>
+<pre><code>             topN
+               |
+       (join datasource)
+         /          \
+(table datasource)  groupBy
+</code></pre>
+<p>To execute this query, the Broker first evaluates the leaf groupBy subquery; it sends the subquery to data nodes and collects the result. The collected result is materialized in the Broker memory. Once the Broker collects all results for the groupBy query, it rewrites the topN query by replacing the leaf groupBy with an inline datasource which has the result of the groupBy query. Finally, the rewritten query is sent to data nodes to execute the topN query.</p>
+<h2>&lt;a name=&quot;query-laning&quot; href=&quot;#query-laning&quot;&gt;#&lt;/a&gt; Query laning and prioritization</h2>
+<p>When you run multiple queries of heterogenous workloads at a time, you may sometimes want to control the resource commitment for a query based on its priority. For example, you would want to limit the resources assigned to less important queries, so that important queries can be executed in time without being disrupted by less important ones.</p>
+<p>Query laning allows you to control capacity utilization for heterogeneous query workloads. With laning, the broker examines and classifies a query for the purpose of assigning it to a 'lane'. Lanes have capacity limits, enforced by the Broker, that can be used to ensure sufficient resources are available for other lanes or for interactive queries (with no lane), or to limit overall throughput for queries within the lane.</p>
+<p>Automatic query prioritization determines the query priority based on the configured strategy. The threshold-based prioritization strategy has been added; it automatically lowers the priority of queries that cross any of a configurable set of thresholds, such as how far in the past the data is, how large of an interval a query covers, or the number of segments taking part in a query.</p>
+<p>See <a href="https://druid.apache.org/docs/0.18.0/configuration/index.html#query-prioritization-and-laning">Query prioritization and laning</a> for more details.</p>
+<p>https://github.com/apache/druid/issues/6993
+https://github.com/apache/druid/pull/9407
+https://github.com/apache/druid/pull/9493</p>
+<h3>New dimension in query metrics</h3>
+<p>Since a native query containing subqueries can be executed part-by-part, a new <code>subQueryId</code> has been introduced. Each subquery has different <code>subQueryId</code>s but same <code>queryId</code>. The <code>subQueryId</code> is available as a new dimension in query metrics.</p>
+<h3>New configuration</h3>
+<p>A new <code>druid.server.http.maxSubqueryRows</code> configuration controls the maximum number of rows materialized in the Broker memory.</p>
+<p>Please see <a href="https://druid.apache.org/docs/0.18.0/querying/query-execution.html#query">Query execution</a> for more details.</p>
+<p>https://github.com/apache/druid/pull/9533</p>
+<h2>&lt;a name=&quot;grouping-sets&quot; href=&quot;#grouping-sets&quot;&gt;#&lt;/a&gt; SQL grouping sets</h2>
+<p>GROUPING SETS is now supported, allowing you to combine multiple GROUP BY clauses into one GROUP BY clause. This GROUPING SETS clause is internally translated into the groupBy query with <code>subtotalsSpec</code>. The LIMIT clause is now applied after subtotalsSpec, rather than applied to each grouping set.</p>
+<p>https://github.com/apache/druid/pull/9122</p>
+<h2>&lt;a name=&quot;dynamic-params&quot; href=&quot;#dynamic-params&quot;&gt;#&lt;/a&gt; SQL Dynamic parameters</h2>
+<p>Druid now supports dynamic parameters for SQL. To use dynamic parameters, replace any literal in the query with a question mark (<code>?</code>) character. These question marks represent the places where the parameters will be bound at execution time. See <a href="https://druid.apache.org/docs/0.18.0/querying/sql.html#dynamic-parameters">SQL dynamic parameters</a> for more details.</p>
+<p>https://github.com/apache/druid/pull/6974</p>
+<h1>&lt;a name=&quot;important-changes&quot; href=&quot;#important-changes&quot;&gt;#&lt;/a&gt;  Important Changes</h1>
+<h2>&lt;a name=&quot;limit-push-down&quot; href=&quot;#limit-push-down&quot;&gt;#&lt;/a&gt; <code>applyLimitPushDownToSegments</code> is disabled by default</h2>
+<p><code>applyLimitPushDownToSegments</code> was added in 0.17.0 to push down limit evaluation to queryable nodes, limiting results during segment scan for groupBy v2. This can lead to performance degradation, as reported in https://github.com/apache/druid/issues/9689, if many segments are involved in query processing. This is because “limit push down to segment scan” initializes an aggregation buffer per segment, the overhead for which is not negligible. Enable this configuration only if your query involves a relatively small number of segments per historical or realtime task.</p>
+<p>https://github.com/apache/druid/pull/9711</p>
+<h2>&lt;a name=&quot;default-roaring&quot; href=&quot;#default-roaring&quot;&gt;#&lt;/a&gt; Roaring bitmaps as default</h2>
+<p>Druid supports two bitmap types, i.e., Roaring and CONCISE. Since Roaring bitmaps provide a better out-of-box experience (faster query speed in general), the default bitmap type is now switched to Roaring bitmaps. See <a href="https://druid.apache.org/docs/0.18.0/design/segments.html#compression">Segment compression</a> for more details about bitmaps.</p>
+<p>https://github.com/apache/druid/pull/9548</p>
+<h2>&lt;a name=&quot;complex-metrics&quot; href=&quot;#complex-metrics&quot;&gt;#&lt;/a&gt; Complex metrics behavior change at ingestion time when SQL-compatible null handling is disabled (default mode)</h2>
+<p>When SQL-compatible null handling is disabled, the behavior of complex metric aggregation at ingestion time has now changed to be consistent with that at query time. The complex metrics are aggregated to the default 0 values for nulls instead of skipping them during ingestion.</p>
+<p>https://github.com/apache/druid/pull/9484</p>
+<h2>&lt;a name=&quot;array-expr&quot; href=&quot;#array-expr&quot;&gt;#&lt;/a&gt; Array expression syntax change</h2>
+<p>Druid expression now supports typed constructors for creating arrays. Arrays can be defined with an explicit type. For example, <code>&lt;LONG&gt;[1, 2, null]</code> creates an array of <code>LONG</code> type containing <code>1</code>, <code>2</code>, and <code>null</code>. Note that you can still create an array without an explicit type. For example, <code>[1, 2, null]</code> is still a valid syntax to create an equivalent array. In this case, Druid will infer the type of array from its elements. This new syntax applies to empty arrays as well. <code>&lt;STRING&gt;[]</code>, <code>&lt;DOUBLE&gt;[]</code>, and <code>&lt;LONG&gt;[]</code> will create an empty array of <code>STRING</code>, <code>DOUBLE</code>, and <code>LONG</code> type, respectively.</p>
+<p>https://github.com/apache/druid/pull/9367</p>
+<h2>&lt;a name=&quot;pending-segments-cleanup&quot; href=&quot;#pending-segments-cleanup&quot;&gt;#&lt;/a&gt; Enabling pending segments cleanup by default</h2>
+<p>The <code>pendingSegments</code> table in the metadata store is used to create unique new segment IDs for appending tasks such as Kafka/Kinesis indexing tasks or batch tasks of appending mode. Automatic pending segments cleanup was introduced in 0.12.0, but has been disabled by default prior to 0.18.0. This configuration is now enabled by default.</p>
+<p>https://github.com/apache/druid/pull/9385</p>
+<h2>&lt;a name=&quot;better-split&quot; href=&quot;#better-split&quot;&gt;#&lt;/a&gt; Creating better input splits for native parallel indexing</h2>
+<p>The Parallel task now can create better splits. Each split can contain multiple input files based on their size. Empty files will be ignored. The split size is controllable with the new split hint spec. See <a href="https://druid.apache.org/docs/0.18.0/ingestion/native-batch.html#split-hint-spec">Split hint spec</a> for more details.</p>
+<p>https://github.com/apache/druid/pull/9360
+https://github.com/apache/druid/pull/9450</p>
+<h2>&lt;a name=&quot;extension-transform&quot; href=&quot;#extension-transform&quot;&gt;#&lt;/a&gt; Transform is now an extension point</h2>
+<p><a href="https://github.com/apache/druid/blob/0.18.0/processing/src/main/java/org/apache/druid/segment/transform/Transform.java"><code>Transform</code></a> is an <code>Interface</code> that represents a transformation to be applied to each row at ingestion time. This interface is now an Extension point. Please see <a href="https://druid.apache.org/docs/0.18.0/development/modules.html#writing-your-own-extensions">Writing your own extensions</a> for how to add your custom <code>Transform</code>.</p>
+<p>https://github.com/apache/druid/pull/9319</p>
+<h2>&lt;a name=&quot;chunk-period&quot; href=&quot;#chunk-period&quot;&gt;#&lt;/a&gt; <code>chunkPeriod</code> query context is removed</h2>
+<p><code>chunkPeriod</code> has been deprecated since 0.14.0 because of its limited usage (it was sometimes useful for only groupBy v1). This query context is now removed in 0.18.0.</p>
+<p>https://github.com/apache/druid/pull/9216</p>
+<h2>&lt;a name=&quot;java-11&quot; href=&quot;#java-11&quot;&gt;#&lt;/a&gt; Experimental support for Java 11</h2>
+<p>Druid now experimentally supports Java 11. You can run the same Druid binary distribution with Java 11 which is compiled with Java 8. Our tests on Travis include:</p>
+<ul>
+<li>Compiling and running unit tests with Java 11</li>
+<li>Compiling with Java 8 and running integration tests with Java 11</li>
+</ul>
+<p>Performance testing results are not available yet.</p>
+<h3>Warnings for illegal reflective accesses when running Druid with Java 11</h3>
+<p>Since Java 9, it issues a warning when it is found that some libraries use reflection to illegally access internal APIs of the JDK. These warnings will be fixed by modifying Druid codes or upgrading library versions in future releases. For now, these warnings can be suppressed by adding JVM options such as <code>--add-opens</code> or <code>--add-exports</code>. See <a href="https://docs.oracle.com/en/java/javase/11/migrate/index.html#JSMIG-GUID-7BB28E4D-99B3-4078-BDC4-FC24180CE82B">JDK 11 Migration Guide</a> for more details.</p>
+<p>Some of the warnings are:</p>
+<pre><code>2020-01-22T21:30:08,893 WARN [main] org.apache.druid.java.util.metrics.AllocationMetricCollectors - Cannot initialize org.apache.druid.java.util.metrics.AllocationMetricCollector
+java.lang.reflect.InaccessibleObjectException: Unable to make public long[] com.sun.management.internal.HotSpotThreadImpl.getThreadAllocatedBytes(long[]) accessible: module jdk.management does not &quot;exports com.sun.management.internal&quot; to unnamed module @6955cb39
+</code></pre>
+<p>This warning can be suppressed by adding <code>--add-exports jdk.management/com.sun.management.internal=ALL-UNNAMED</code>.</p>
+<pre><code>2020-01-22T21:30:08,902 WARN [main] org.apache.druid.java.util.metrics.JvmMonitor - Cannot initialize GC counters. If running JDK11 and above, add --add-exports java.base/jdk.internal.perf=ALL-UNNAMED to the JVM arguments to enable GC counters.
+</code></pre>
+<p>This warning can be suppressed by adding <code>--add-exports java.base/jdk.internal.perf=ALL-UNNAMED</code>.</p>
+<pre><code>WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+</code></pre>
+<p>This warning can be suppressed by adding <code>--add-opens java.base/java.lang=ALL-UNNAMED</code>.</p>
+<p>https://github.com/apache/druid/pull/7306
+https://github.com/apache/druid/pull/9491</p>
+<h1>&lt;a name=&quot;new-extension&quot; href=&quot;#new-extension&quot;&gt;#&lt;/a&gt; New Extension</h1>
+<h2>&lt;a name=&quot;pac4j&quot; href=&quot;#pac4j&quot;&gt;#&lt;/a&gt; New Pac4j extension</h2>
+<p>A new extension is added in 0.18.0 to enable <a href="https://openid.net/connect/">OpenID Connect</a> based Authentication for Druid Processes. This can be used  with any authentication server that supports same e.g. <a href="https://developer.okta.com/">Okta</a>. This extension should only be used at the router node to enable a group of users in existing authentication server to interact with Druid cluster, using the <a href="https://druid.apache.org/docs/0.18.0/operations/management-uis.html#druid-console">Web Console</a>.</p>
+<p>https://github.com/apache/druid/pull/8992</p>
+<h1>&lt;a name=&quot;security&quot; href=&quot;#security&quot;&gt;#&lt;/a&gt; Security Issues</h1>
+<h2>&lt;a name=&quot;ldap-security&quot; href=&quot;#ldap-security&quot;&gt;#&lt;/a&gt; [CVE-2020-1958] Apache Druid LDAP injection vulnerability</h2>
+<p><a href="https://nvd.nist.gov/vuln/detail/CVE-2020-1958">CVE-2020-1958</a> has been reported recently and fixed in 0.18.0 and 0.17.1. When LDAP authentication is enabled, callers of Druid APIs can bypass the credentialsValidator.userSearch filter barrier or retrieve any LDAP attribute values of users that exist on the LDAP server, so long as that information is visible to the Druid server. Please see the description in the link for more details. It is <em>strongly</em> recommended to upgrade to 0.18.0 or 0.17.1 if you are using LDAP authentication with Druid.</p>
+<p>https://github.com/apache/druid/pull/9600</p>
+<h2>&lt;a name=&quot;kafka-client-security&quot; href=&quot;#kafka-client-security&quot;&gt;#&lt;/a&gt; Updating Kafka client to 2.2.2</h2>
+<p>Kafka client library has been updated to 2.2.2, in which <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-12399">CVE-2019-12399</a> is fixed.</p>
+<p>https://github.com/apache/druid/pull/9259</p>
+<h1>&lt;a name=&quot;bug-fixes&quot; href=&quot;#bug-fixes&quot;&gt;#&lt;/a&gt; Bug fixes</h1>
+<p>Druid 0.18.0 includes 40 bug fixes. Please see https://github.com/apache/druid/pulls?page=1&amp;q=is%3Apr+milestone%3A0.18.0+is%3Aclosed+label%3ABug for the full list of bug fixes.</p>
+<ul>
+<li>Fix superbatch merge last partition boundaries (https://github.com/apache/druid/pull/9448)</li>
+<li>Reuse transformer in stream indexing (https://github.com/apache/druid/pull/9625)</li>
+<li>Preserve the null values for numeric type dimensions post-compaction (https://github.com/apache/druid/pull/9622)</li>
+<li>DruidInputSource can add new dimensions during re-ingestion (https://github.com/apache/druid/pull/9590)</li>
+<li>Error on value counter overflow instead of writing bad segments (https://github.com/apache/druid/pull/9559)</li>
+<li>Fix some issues with filters on numeric columns with nulls (https://github.com/apache/druid/pull/9251)</li>
+<li>Fix timestamp_format expr outside UTC time zone (https://github.com/apache/druid/pull/9282)</li>
+<li>KIS task fail when setting segmentGranularity with time zone (https://github.com/apache/druid/issues/8690)</li>
+<li>Fix issue with group by limit pushdown for extractionFn, expressions, joins, etc (https://github.com/apache/druid/pull/9662)</li>
+</ul>
+<h1>&lt;a name=&quot;upgrading-to-0.18.0&quot; href=&quot;#upgrading-to-0.18.0&quot;&gt;#&lt;/a&gt; Upgrading to Druid 0.18.0</h1>
+<p>Be aware of the following changes between 0.17.1 and 0.18.0 that you should be aware of before upgrading. If you're updating from an earlier version than 0.17.1, please see the release notes of the relevant intermediate versions.</p>
+<h2>&lt;a name=&quot;upgrade-s3&quot; href=&quot;#upgrade-s3&quot;&gt;#&lt;/a&gt; S3 extension</h2>
+<p>The S3 storage extension now supports cleanup of stale task logs and segments. When deploying 0.18.0, please ensure that your <code>extensions</code> directory does not have any older versions of <code>druid-s3-extensions</code> extension.</p>
+<p>https://github.com/apache/druid/pull/9459</p>
+<h2>&lt;a name=&quot;upgrade-azure&quot; href=&quot;#upgrade-azure&quot;&gt;#&lt;/a&gt; Core extension for Azure</h2>
+<p>The Azure storage extension has been promoted to a core extension. It also supports cleanup of stale task logs and segments now. When deploying 0.18.0, please ensure that your <code>extensions-contrib</code> directory does not have any older versions of <code>druid-azure-extensions</code> extension.</p>
+<p>https://github.com/apache/druid/pull/9394
+https://github.com/apache/druid/pull/9523</p>
+<h2>&lt;a name=&quot;upgrade-google&quot; href=&quot;#upgrade-google&quot;&gt;#&lt;/a&gt; Google Storage extension</h2>
+<p>The Google storage extension now supports cleanup of stale task logs and segments. When deploying 0.18.0, please ensure that your <code>extensions</code> directory does not have any older versions of <code>druid-google-extensions</code> extension.</p>
+<p>https://github.com/apache/druid/pull/9519</p>
+<h2>&lt;a name=&quot;upgrade-hadoop-aws&quot; href=&quot;#upgrade-hadoop-aws&quot;&gt;#&lt;/a&gt; Hadoop AWS library included in binary distribution</h2>
+<p>Hadoop AWS library is now included in the binary distribution for better out-of-box experience. When deploying 0.18.0, please ensure that your <code>hadoop-dependencies</code> directory or any other directories in the classpath does not have duplicate libraries.</p>
+<h2>&lt;a name=&quot;upgrade-postgres&quot; href=&quot;#upgrade-postgres&quot;&gt;#&lt;/a&gt; PostgreSQL JDBC driver for Lookups included in binary distribution</h2>
+<p>PostgreSQL JDBC driver for Lookups is now included in the binary distribution for better out-of-box experience. When deploying 0.18.0, please ensure that your <code>extensions/druid-lookups-cached-single</code> directory or any other directories in the classpath does not have duplicate JDBC drivers.</p>
+<p>https://github.com/apache/druid/pull/9399</p>
+<h1>&lt;a name=&quot;known-issues&quot; href=&quot;#known-issues&quot;&gt;#&lt;/a&gt; Known Issues</h1>
+<h2>&lt;a name=&quot;inline-query-multi-value&quot; href=&quot;#inline-query-multi-value&quot;&gt;#&lt;/a&gt; Query failure with <code>topN</code> or <code>groupBy</code> on <code>scan</code> with multi-valued columns</h2>
+<p>Query inlining in Brokers is newly introduced in 0.18.0 but has a bug that queries with <code>topN</code> or <code>groupBy</code> on top of <code>scan</code> fail if the scan query selects multi-valued dimensions. See https://github.com/apache/druid/issues/9697 for more details.</p>
+<h2>&lt;a name=&quot;npe-kafka&quot; href=&quot;#npe-kafka&quot;&gt;#&lt;/a&gt; NullPointerException when using Avro parser with Kafka indexing service.</h2>
+<p>Avro parser doesn't work with Kafka indexing service because of a wrong null check. See https://github.com/apache/druid/issues/9728 for more details.</p>
+<h2>&lt;a name=&quot;unavailable-segment-metric&quot; href=&quot;#unavailable-segment-metric&quot;&gt;#&lt;/a&gt; Misleading <code>segment/unavailable/count</code> metric during handoff</h2>
+<p>This metric is supposed to take the number of segments served by realtime tasks into consideration as well, but it isn't now. As a result, it appears that unavailability spikes up before the new segments are loaded by historicals, even if all segments actually are continuously available on some combination of realtime tasks and historicals.</p>
+<p>https://github.com/apache/druid/issues/9677</p>
+<h2>&lt;a name=&quot;sql-explain&quot; href=&quot;#sql-explain&quot;&gt;#&lt;/a&gt; Slight difference between the result of <code>explain plan for</code> query and the actual execution plan</h2>
+<p>The result of <code>explain plan for</code> can be slightly different from what Druid actually executes when the query includes joins or subqueries. The difference can be found in that each part of the query plan would be represented as if it was its own native query in the result of <code>explain plan for</code>. For example, for a join of a datasource <code>d1</code> and a groupBy subquery on datasource <code>d2</code>, the <code>explain plan for</code> could return a plan like below</p>
+<pre><code>     join
+    /    \
+scan    groupBy
+ |        |
+d1       d2
+</code></pre>
+<p>whereas the actual query plan Druid would execute is</p>
+<pre><code>     join
+    /    \
+  d1    groupBy
+          |
+         d2
+</code></pre>
+<h2>&lt;a name=&quot;other-known-issues&quot; href=&quot;#other-known-issues&quot;&gt;#&lt;/a&gt; Other known issues</h2>
+<p>For a full list of open issues, please see https://github.com/apache/druid/labels/Bug.</p>
+<h1>&lt;a name=&quot;credits&quot; href=&quot;#credits&quot;&gt;#&lt;/a&gt; Credits</h1>
+<p>Thanks to everyone who contributed to this release!</p>
+<p>@a2l007
+@abhishekrb19
+@aditya-r-m
+@AlexanderSaydakov
+@als-sdin
+@aP0StAl
+@asdf2014
+@benhopp
+@bjozet
+@capistrant
+@Caroline1000
+@ccaominh
+@clintropolis
+@dampcake
+@fjy
+@Fokko
+@frnidito
+@gianm
+@himanshug
+@JaeGeunBang
+@jihoonson
+@jon-wei
+@JulianJaffePinterest
+@kou64yama
+@lamber-ken
+@leventov
+@liutang123
+@maytasm
+@mcbrewster
+@mgill25
+@mitchlloyd
+@mrsrinivas
+@nvolungis
+@prabcs
+@samarthjain
+@sthetland
+@suneet-s
+@themaric
+@vogievetsky
+@xvrl
+@zachjsh
+@zhenxiao</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.18.0</code> · 2020-04-20 · <a href="https://github.com/apache/druid/releases/tag/druid-0.18.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/druid/0.18.1"> <span class="k">← Suivant</span> <span class="t">0.18.1</span> </a> <a href="/releases/druid/0.17.1"> <span class="k">Précédent →</span> <span class="t">0.17.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/druid/releases/tag/0.18.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span>apache/druid</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>&lt;a name=&quot;join&quot; href=&quot;#join&quot;&gt;#&lt;/a&gt; Rejoignez le support</a><a href="#" class>&lt;a name=&quot;query-inlining&quot; href=&quot;#query-inlining&quot;&gt;#&lt;/a&gt; Requête en ligne dans les courtiers</a><a href="#" class>&lt;a name=&quot;query-laning&quot; href=&quot;#query-laning&quot;&gt;#&lt;/a&gt; Gestion des requêtes et priorisation</a><a href="#" class="lv3">Nouvelle dimension dans les métriques de requête</a><a href="#" class="lv3">Nouvelle configuration</a><a href="#" class>&lt;a name=&quot;grouping-sets&quot; href=&quot;#grouping-sets&quot;&gt;#&lt;/a&gt; Ensembles de regroupement SQL</a><a href="#" class>&lt;a name=&quot;dynamic-params&quot; href=&quot;#dynamic-params&quot;&gt;#&lt;/a&gt; Paramètres dynamiques SQL</a><a href="#" class>&lt;a name=&quot;limit-push-down&quot; href=&quot;#limit-push-down&quot;&gt;#&lt;/a&gt; applyLimitPushDownToSegments est désactivé par défaut</a><a href="#" class>&lt;a name=&quot;default-roaring&quot; href=&quot;#default-roaring&quot;&gt;#&lt;/a&gt; Bitmaps rugissants par défaut</a><a href="#" class>&lt;a name=&quot;complex-metrics&quot; href=&quot;#complex-metrics&quot;&gt;#&lt;/a&gt; Le comportement des métriques complexes change au moment de l&#39;ingestion lorsque la gestion des valeurs nulles compatible SQL est désactivée (mode par défaut)</a><a href="#" class>&lt;a name=&quot;array-expr&quot; href=&quot;#array-expr&quot;&gt;#&lt;/a&gt; Modification de la syntaxe de l&#39;expression du tableau</a><a href="#" class>&lt;a name=&quot;ending-segments-cleanup&quot; href=&quot;#ending-segments-cleanup&quot;&gt;#&lt;/a&gt; Activation par défaut du nettoyage des segments en attente</a><a href="#" class>&lt;a name=&quot;better-split&quot; href=&quot;#better-split&quot;&gt;#&lt;/a&gt; Création de meilleures répartitions d&#39;entrée pour l&#39;indexation parallèle native</a><a href="#" class>&lt;a name=&quot;extension-transform&quot; href=&quot;#extension-transform&quot;&gt;#&lt;/a&gt; Transform est désormais un point d&#39;extension</a><a href="#" class>&lt;a name=&quot;chunk-period&quot; href=&quot;#chunk-period&quot;&gt;#&lt;/a&gt; Le contexte de requête chunkPeriod est supprimé</a><a href="#" class>&lt;a name=&quot;java-11&quot; href=&quot;#java-11&quot;&gt;#&lt;/a&gt; Prise en charge expérimentale de Java 11</a><a href="#" class="lv3">Avertissements concernant les accès réfléchissants illégaux lors de l&#39;exécution de Druid avec Java 11</a><a href="#" class>&lt;a name=&quot;pac4j&quot; href=&quot;#pac4j&quot;&gt;#&lt;/a&gt; Nouvelle extension Pac4j</a><a href="#" class>&lt;a name=&quot;ldap-security&quot; href=&quot;#ldap-security&quot;&gt;#&lt;/a&gt; [CVE-2020-1958] Vulnérabilité d&#39;injection LDAP d&#39;Apache Druid</a><a href="#" class>&lt;a name=&quot;kafka-client-security&quot; href=&quot;#kafka-client-security&quot;&gt;#&lt;/a&gt; Mise à jour de Kafka client vers 2.2.2</a><a href="#" class>&lt;a name=&quot;upgrade-s3&quot; href=&quot;#upgrade-s3&quot;&gt;#&lt;/a&gt; Extension S3</a><a href="#" class>&lt;a name=&quot;upgrade-azure&quot; href=&quot;#upgrade-azure&quot;&gt;#&lt;/a&gt; Extension principale pour Azure</a><a href="#" class>&lt;a name=&quot;upgrade-google&quot; href=&quot;#upgrade-google&quot;&gt;#&lt;/a&gt; Extension de stockage Google</a><a href="#" class>&lt;a name=&quot;upgrade-hadoop-aws&quot; href=&quot;#upgrade-hadoop-aws&quot;&gt;#&lt;/a&gt; Bibliothèque Hadoop AWS incluse dans la distribution binaire</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/druid/39.0.0"> <span class="v">39.0.0</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/druid/38.0.0"> <span class="v">38.0.0</span> <span class="d">26-10-01</span> </a> </li><li> <a href="/releases/druid/37.0.0"> <span class="v">37.0.0</span> <span class="d">26-05-08</span> </a> </li><li> <a href="/releases/druid/36.0.0"> <span class="v">36.0.0</span> <span class="d">26-02-09</span> </a> </li><li> <a href="/releases/druid/35.0.1"> <span class="v">35.0.1</span> <span class="d">25-12-15</span> </a> </li><li> <a href="/releases/druid/35.0.0"> <span class="v">35.0.0</span> <span class="d">25-11-18</span> </a> </li><li> <a href="/releases/druid/34.0.0"> <span class="v">34.0.0</span> <span class="d">25-08-11</span> </a> </li><li> <a href="/releases/druid/33.0.0"> <span class="v">33.0.0</span> <span class="d">25-04-29</span> </a> </li> </ul> <a href="/fr/releases/druid" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 71 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

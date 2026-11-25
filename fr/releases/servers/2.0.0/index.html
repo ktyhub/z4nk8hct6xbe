@@ -1,0 +1,324 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>servers v2.0.0 — STAGS NextStack</title><meta name="description" content="This release refactors all the servers to support the modern era spec, while still answering legacy era clients as expected."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/servers/2.0.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/servers/2.0.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/servers/2.0.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/servers/2.0.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="servers v2.0.0 — STAGS NextStack"><meta property="og:description" content="This release refactors all the servers to support the modern era spec, while still answering legacy era clients as expected."><meta property="og:url" content="https://www.stags.cn/fr/releases/servers/2.0.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/servers/2.0.0/#article","headline":"servers v2.0.0 release notes","datePublished":"2026-10-19","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/modelcontextprotocol/servers"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/servers/2.0.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/servers/servers_v2.0.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/servers/2.0.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/servers/2.0.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/servers/2.0.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/servers/2.0.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/servers/2.0.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/servers">servers</a> </nav> <h1 class="detail-title"> <span class="p">servers</span> v2.0.0 </h1> <div class="detail-meta"> <span class="chip chip--major">Majeure</span> <span><span class="k">Publié</span>19 oct. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener"> <span class="k">Source</span>modelcontextprotocol/servers </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/servers/2.0.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/servers/2.0.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><p># serveurs v2.0.0</p>
+<h2>Serveurs refactorisés à l'ère moderne</h2>
+<p>Cette version refactorise tous les serveurs pour prendre en charge les spécifications de l'ère moderne, tout en répondant comme prévu aux clients de l'ère héritée.</p>
+<h2>Forfaits</h2>
+<p>| Forfait | Version | Registre | Dans cette version |
+| --- | --- | --- | --- |
+| <code>@modelcontextprotocol/server-everything</code> | <code>2.0.0</code> | npm | <strong>publié</strong> |
+| <code>@modelcontextprotocol/server-filesystem</code> | <code>2.0.0</code> | npm | <strong>publié</strong> |
+| <code>@modelcontextprotocol/server-memory</code> | <code>2.0.0</code> | npm | <strong>publié</strong> |
+| <code>@modelcontextprotocol/server-sequential-thinking</code> | <code>2.0.0</code> | npm | <strong>publié</strong> |
+| <code>mcp-server-fetch</code> | <code>2026.10.19</code> | PyPI | <strong>publié</strong> |
+| <code>mcp-server-git</code> | <code>2026.10.19</code> | PyPI | <strong>publié</strong> |
+| <code>mcp-server-time</code> | <code>2026.10.19</code> | PyPI | <strong>publié</strong> |
+Grand livre de version : <a href="https://claude.ai/artifact/G5uY8rqMeKgbr5xmpzSCfi">v2/chore/5159-release-v2.0.0</a></p>
+<h2>@modelcontextprotocol/server-everything 2.0.0</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>corvée : migrer les serveurs TypeScript vers TS SDK v2 (codemod) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : plier les modifications en attente dans un 1.0.0 CHANGELOG pour chaque serveur TypeScript par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Réconcilier v2/main avec la branche release v1.0.0 : changesets, changelog, fusion de v2/release/1.0.0 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>exploit : serveurs TypeScript de l'ère moderne (2026-07-28 + 2025) et les nouvelles fonctionnalités dans tout par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>ci : valider les serveurs TypeScript sur les Node 22, 24 et 26 en parallèle par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>corvée : packages de version par @github-actions[bot] dans https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>correctif : augmentez le niveau de nœud des serveurs TypeScript à 24 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-filesystem 2.0.0</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>corvée : migrer les serveurs TypeScript vers TS SDK v2 (codemod) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : plier les modifications en attente dans un 1.0.0 CHANGELOG pour chaque serveur TypeScript par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>correctif (système de fichiers) : révoquer l'accès lorsqu'une mise à jour des racines ne laisse aucune racine valide par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5095</li>
+<li>correctif (système de fichiers) : applique uniquement la réponse de l'actualisation des racines la plus récente par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5098</li>
+<li>correctif (système de fichiers) : suspendre les appels d'outil pendant qu'une actualisation des racines est en attente par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5102</li>
+<li>Réconcilier v2/main avec la branche de release v1.0.0 : changesets, changelog, fusion de v2/release/1.0.0 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>exploit : serveurs TypeScript de l'ère moderne (2026-07-28 + 2025) et les nouvelles fonctionnalités dans tout par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>ci : valider les serveurs TypeScript sur les Node 22, 24 et 26 en parallèle par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>corvée : packages de versions par @github-actions[bot] dans https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>correctif : augmentez le niveau de nœud des serveurs TypeScript à 24 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-memory 2.0.0</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>corvée : migrer les serveurs TypeScript vers TS SDK v2 (codemod) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>mémoire : attendez-vous au message EISDIR avec suffixe de chemin du nœud 26 dans le test de persistance par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5078</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : plier les modifications en attente dans un 1.0.0 CHANGELOG pour chaque serveur TypeScript par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Réconcilier v2/main avec la branche release v1.0.0 : changesets, changelog, fusion de v2/release/1.0.0 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>exploit : serveurs TypeScript de l'ère moderne (2026-07-28 + 2025) et les nouvelles fonctionnalités dans tout par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5131
+*ci : valider les serveurs TypeScript sur les Node 22, 24 et 26 en parallèle par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>corvée : packages de versions par @github-actions[bot] dans https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>correctif : augmentez le niveau de nœud des serveurs TypeScript à 24 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-sequential-thinking 2.0.0</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>corvée : migrer les serveurs TypeScript vers TS SDK v2 (codemod) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : plier les modifications en attente dans un 1.0.0 CHANGELOG pour chaque serveur TypeScript par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Réconcilier v2/main avec la branche de release v1.0.0 : changesets, changelog, fusion de v2/release/1.0.0 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>exploit : serveurs TypeScript de l'ère moderne (2026-07-28 + 2025) et les nouvelles fonctionnalités dans tout par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>correctif (pensée séquentielle) : complétez la ligne d'en-tête de la boîte de réflexion jusqu'à la bordure par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5144
+*ci : valider les serveurs TypeScript sur les Node 22, 24 et 26 en parallèle par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>corvée : packages de versions par @github-actions[bot] dans https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>correctif : augmentez le niveau de nœud des serveurs TypeScript à 24 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>Serveurs Python : changements pour clients</h2>
+<p><code>mcp-server-fetch</code>, <code>mcp-server-git</code> et <code>mcp-server-time</code> n'ont pas de CHANGELOG, voici donc ce qui change pour un client dans <code>2026.10.19</code>. Ils sont désormais construits sur le <code>MCPServer</code> de haut niveau du MCP Python SDK (<a href="https://github.com/modelcontextprotocol/servers/pull/5175">#5175</a>).</p>
+<ul>
+<li><strong>Outil inconnu :</strong> une erreur JSON-RPC <code>-32602</code> (<code>Unknown tool: &lt;name&gt;</code>) dans les deux époques de protocole, comme l'exige la spécification. C'était auparavant un résultat <code>isError</code>.</li>
+<li><strong>Erreurs d'outil</strong> lire <code>Error executing tool &lt;name&gt;: &lt;message&gt;</code>. Les erreurs de validation d'argument utilisent désormais la formulation de pydantic. Les deux sont toujours des résultats <code>isError</code>.</li>
+<li><strong>Capacités :</strong> chaque serveur annonce désormais les capacités <code>prompts</code> et <code>resources</code> (avec <code>listChanged: false</code>). L'invite <code>fetch</code> de fetch est la seule entrée dans ces listes.</li>
+<li><strong>time :</strong> <code>get_current_time</code> et <code>convert_time</code> déclarent un <code>outputSchema</code> et renvoient <code>structuredContent</code>. Le contenu du texte est inchangé.</li>
+<li><strong>fetch :</strong> le <code>description</code> d'un résultat <code>prompts/get</code> est désormais toujours la description enregistrée de l'invite.</li>
+<li><strong>Nécessite</strong> <code>mcp&gt;=2.3,&lt;3</code>.</li>
+</ul>
+<h2>mcp-server-fetch 2026.10.19</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>Récupération du port, git et heure vers le MCP Python SDK v2 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : tamponner les versions Python CalVer pour 2026.10.10 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>fix(fetch) : annotez l'outil de récupération par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5112</li>
+<li>feat(fetch,git,time) : servir l'ère du 28/07/2026 aux côtés du 25/11/2025 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>corvée : tamponner Python versions CalVer pour 2026.10.18 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Serveurs Python : build fetch, git et time sur MCPServer ; l'outil inconnu est -32602 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>corvée : tamponner Python versions CalVer pour 2026.10.19 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>mcp-server-git 2026.10.19</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>Récupération du port, git et heure vers le MCP Python SDK v2 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : tamponner les versions Python CalVer pour 2026.10.10 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>feat(fetch,git,time) : servir l'ère du 28/07/2026 aux côtés du 25/11/2025 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>fix(git) : préfixez les en-têtes de différence git_show avec a/ et b/ par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5145</li>
+<li>corvée : tamponner Python versions CalVer pour 2026.10.18 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Serveurs Python : build fetch, git et time sur MCPServer ; l'outil inconnu est -32602 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>corvée : tamponner les versions Python CalVer pour 2026.10.19 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>mcp-server-time 2026.10.19</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>Récupération du port, git et heure vers le MCP Python SDK v2 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>heure : n'acceptez que les clés de fuseau horaire IANA exactes sur chaque plateforme par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5077</li>
+<li>corvée : audit de version v1.0.0, correctifs de dépendances par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>corvée : tamponner les versions Python CalVer pour 2026.10.10 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>feat(fetch,git,time) : servir l'ère du 28/07/2026 aux côtés du 25/11/2025 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>corvée : tamponner Python versions CalVer pour 2026.10.18 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Serveurs Python : build fetch, git et time sur MCPServer ; l'outil inconnu est -32602 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>corvée : tamponner Python versions CalVer pour 2026.10.19 par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Sortie v2.0.0 : fusionner v2/main dans main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>Référentiel</h2>
+<h3>Ce qui a changé</h3>
+<ul>
+<li>ci(everything) : adopter le diff d'interface MCP (adapté du #3260) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/4975</li>
+<li>docs(release) : mettre en garde contre la branche de mise à jour sur le PR de fusion de jalons par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5093</li>
+<li>ci(release) : publiez avec le npm fourni avec Node 24 au lieu d'en installer un par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5105</li>
+<li>ci : amener la garde de la source principale à main (bootstrap pour #5119) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5122</li>
+<li>ci : guard main donc un PR n'apporte rien qui ne soit déjà sur v2/main par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5120</li>
+<li>release:notes : placez la ligne release-ledger sous la table Packages par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5132</li>
+<li>docs : enregistrez l'ensemble de règles v2/main (PR uniquement, pas de poussée ou de suppression forcée) par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5140</li>
+<li>docs : démarrez toujours le travail de relations publiques dans un nouvel arbre de travail git par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5139</li>
+<li>ci : déclarer les autorisations en lecture seule GITHUB_TOKEN dans python.yml et typescript.yml par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5141</li>
+<li>correctif (scripts) : doubles barres obliques inverses avant une citation dans win-shell-args par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5143</li>
+<li>docs : ajoutez une règle AGENTS.md pour stimuler les écritures groupées de GitHub par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5142</li>
+<li>ci : dispatch TypeScript et Python CI sur PR version automatisée par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5146</li>
+<li>corvée : supprimez &quot;Merci&quot; de l'attribution des modifications, conservez l'auteur par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5163</li>
+<li>Fusionner main dans v2/main pour que main-source.yml partage l'historique par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5172</li>
+<li>correctif (ci) : une exécution distribuée remplacée ne publie aucun statut, quelles que soient ses tâches effectuées par @cliffhall dans https://github.com/modelcontextprotocol/servers/pull/5179
+<strong>Changelog complet</strong> : https://github.com/modelcontextprotocol/servers/compare/v1.0.0...v2.0.0</li>
+</ul>
+<h2>Merci de nous aider à nous améliorer</h2>
+<p>Merci à ces contributeurs, dont les demandes d'extraction ont prototypé les modifications fournies dans cette version. En vertu de la politique du référentiel [problèmes, pas de demandes d'extraction] (https://github.com/modelcontextprotocol/servers/blob/v2/main/CONTRIBUTING.md), leurs PR ont été fermés et les modifications reconstruites par les responsables, les créditant pour le problème :</p>
+<ul>
+<li>@jayzuccarelli (#4565), le portage de <code>mcp-server-fetch</code> vers le MCP Python SDK v2, que le #5062 a suivi pour le #4851</li>
+<li>@SamMorrowDrums (#3260), le CI d'interface MCP pour le serveur Everything, adapté comme #4975 pour #4860</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/modelcontextprotocol/servers">modelcontextprotocol/servers</a> · <code>v2.0.0</code> · 2026-10-19 · <a href="https://github.com/modelcontextprotocol/servers/releases/tag/v2.0.0">version en amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>servers v2.0.0</h1>
+<h2>Servers refactored to modern era</h2>
+<p>This release refactors all the servers to support the modern era spec, while still answering legacy era clients as expected.</p>
+<h2>Packages</h2>
+<p>| Package | Version | Registry | In this release |
+| --- | --- | --- | --- |
+| <code>@modelcontextprotocol/server-everything</code> | <code>2.0.0</code> | npm | <strong>published</strong> |
+| <code>@modelcontextprotocol/server-filesystem</code> | <code>2.0.0</code> | npm | <strong>published</strong> |
+| <code>@modelcontextprotocol/server-memory</code> | <code>2.0.0</code> | npm | <strong>published</strong> |
+| <code>@modelcontextprotocol/server-sequential-thinking</code> | <code>2.0.0</code> | npm | <strong>published</strong> |
+| <code>mcp-server-fetch</code> | <code>2026.10.19</code> | PyPI | <strong>published</strong> |
+| <code>mcp-server-git</code> | <code>2026.10.19</code> | PyPI | <strong>published</strong> |
+| <code>mcp-server-time</code> | <code>2026.10.19</code> | PyPI | <strong>published</strong> |</p>
+<p>Release ledger: <a href="https://claude.ai/artifact/G5uY8rqMeKgbr5xmpzSCfi">v2/chore/5159-release-v2.0.0</a></p>
+<h2>@modelcontextprotocol/server-everything 2.0.0</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>chore: migrate the TypeScript servers to TS SDK v2 (codemod) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: fold pending changesets into a 1.0.0 CHANGELOG for each TypeScript server by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Reconcile v2/main with the v1.0.0 release branch: changesets, changelogs, merge of v2/release/1.0.0 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>feat: modern-era TypeScript servers (2026-07-28 + 2025) and the new features in everything by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>ci: validate the TypeScript servers on Node 22, 24 and 26 in parallel by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>chore: version packages by @github-actions[bot] in https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>fix: raise the TypeScript servers' Node floor to 24 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-filesystem 2.0.0</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>chore: migrate the TypeScript servers to TS SDK v2 (codemod) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: fold pending changesets into a 1.0.0 CHANGELOG for each TypeScript server by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>fix(filesystem): revoke access when a roots update leaves no valid root by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5095</li>
+<li>fix(filesystem): apply only the newest roots refresh's answer by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5098</li>
+<li>fix(filesystem): hold tool calls while any roots refresh is pending by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5102</li>
+<li>Reconcile v2/main with the v1.0.0 release branch: changesets, changelogs, merge of v2/release/1.0.0 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>feat: modern-era TypeScript servers (2026-07-28 + 2025) and the new features in everything by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>ci: validate the TypeScript servers on Node 22, 24 and 26 in parallel by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>chore: version packages by @github-actions[bot] in https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>fix: raise the TypeScript servers' Node floor to 24 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-memory 2.0.0</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>chore: migrate the TypeScript servers to TS SDK v2 (codemod) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>memory: expect Node 26's path-suffixed EISDIR message in persistence test by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5078</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: fold pending changesets into a 1.0.0 CHANGELOG for each TypeScript server by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Reconcile v2/main with the v1.0.0 release branch: changesets, changelogs, merge of v2/release/1.0.0 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>feat: modern-era TypeScript servers (2026-07-28 + 2025) and the new features in everything by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>ci: validate the TypeScript servers on Node 22, 24 and 26 in parallel by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>chore: version packages by @github-actions[bot] in https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>fix: raise the TypeScript servers' Node floor to 24 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>@modelcontextprotocol/server-sequential-thinking 2.0.0</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>chore: migrate the TypeScript servers to TS SDK v2 (codemod) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5063</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: fold pending changesets into a 1.0.0 CHANGELOG for each TypeScript server by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5083</li>
+<li>Reconcile v2/main with the v1.0.0 release branch: changesets, changelogs, merge of v2/release/1.0.0 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5118</li>
+<li>feat: modern-era TypeScript servers (2026-07-28 + 2025) and the new features in everything by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5131</li>
+<li>fix(sequentialthinking): pad the thought box's header row to the border by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5144</li>
+<li>ci: validate the TypeScript servers on Node 22, 24 and 26 in parallel by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5147</li>
+<li>chore: version packages by @github-actions[bot] in https://github.com/modelcontextprotocol/servers/pull/5100</li>
+<li>fix: raise the TypeScript servers' Node floor to 24 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5169</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>Python servers: changes for clients</h2>
+<p><code>mcp-server-fetch</code>, <code>mcp-server-git</code> and <code>mcp-server-time</code> have no CHANGELOG, so here is what changes for a client in <code>2026.10.19</code>. They are now built on the MCP Python SDK's high-level <code>MCPServer</code> (<a href="https://github.com/modelcontextprotocol/servers/pull/5175">#5175</a>).</p>
+<ul>
+<li><strong>Unknown tool:</strong> a JSON-RPC <code>-32602</code> error (<code>Unknown tool: &lt;name&gt;</code>) in both protocol eras, as the spec requires. It used to be an <code>isError</code> result.</li>
+<li><strong>Tool errors</strong> read <code>Error executing tool &lt;name&gt;: &lt;message&gt;</code>. Argument-validation errors now use pydantic's wording. Both are still <code>isError</code> results.</li>
+<li><strong>Capabilities:</strong> each server now advertises <code>prompts</code> and <code>resources</code> capabilities (with <code>listChanged: false</code>). fetch's <code>fetch</code> prompt is the only entry in those lists.</li>
+<li><strong>time:</strong> <code>get_current_time</code> and <code>convert_time</code> declare an <code>outputSchema</code> and return <code>structuredContent</code>. The text content is unchanged.</li>
+<li><strong>fetch:</strong> a <code>prompts/get</code> result's <code>description</code> is now always the prompt's registered description.</li>
+<li><strong>Requires</strong> <code>mcp&gt;=2.3,&lt;3</code>.</li>
+</ul>
+<h2>mcp-server-fetch 2026.10.19</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>Port fetch, git and time to the MCP Python SDK v2 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: stamp Python CalVer versions for 2026.10.10 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>fix(fetch): annotate the fetch tool by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5112</li>
+<li>feat(fetch,git,time): serve the 2026-07-28 era beside 2025-11-25 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>chore: stamp Python CalVer versions for 2026.10.18 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Python servers: build fetch, git and time on MCPServer; unknown tool is -32602 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>chore: stamp Python CalVer versions for 2026.10.19 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>mcp-server-git 2026.10.19</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>Port fetch, git and time to the MCP Python SDK v2 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: stamp Python CalVer versions for 2026.10.10 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>feat(fetch,git,time): serve the 2026-07-28 era beside 2025-11-25 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>fix(git): prefix git_show diff headers with a/ and b/ by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5145</li>
+<li>chore: stamp Python CalVer versions for 2026.10.18 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Python servers: build fetch, git and time on MCPServer; unknown tool is -32602 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>chore: stamp Python CalVer versions for 2026.10.19 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>mcp-server-time 2026.10.19</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>Port fetch, git and time to the MCP Python SDK v2 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5062</li>
+<li>time: accept only exact IANA timezone keys on every platform by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5077</li>
+<li>chore: v1.0.0 release audit, dependency fixes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5082</li>
+<li>chore: stamp Python CalVer versions for 2026.10.10 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5084</li>
+<li>feat(fetch,git,time): serve the 2026-07-28 era beside 2025-11-25 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5126</li>
+<li>chore: stamp Python CalVer versions for 2026.10.18 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5165</li>
+<li>Python servers: build fetch, git and time on MCPServer; unknown tool is -32602 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5175</li>
+<li>chore: stamp Python CalVer versions for 2026.10.19 by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5177</li>
+<li>Release v2.0.0: merge v2/main into main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5166</li>
+</ul>
+<h2>Repository</h2>
+<h3>What's Changed</h3>
+<ul>
+<li>ci(everything): adopt the MCP interface diff (adapted from #3260) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/4975</li>
+<li>docs(release): warn against Update branch on the milestone merge PR by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5093</li>
+<li>ci(release): publish with Node 24's bundled npm instead of installing one by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5105</li>
+<li>ci: bring the main-source guard to main (bootstrap for #5119) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5122</li>
+<li>ci: guard main so a PR into it brings nothing not already on v2/main by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5120</li>
+<li>release:notes: put the release-ledger line under the Packages table by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5132</li>
+<li>docs: record the v2/main ruleset (PRs only, no force-push or deletion) by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5140</li>
+<li>docs: always start PR work in a new git worktree by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5139</li>
+<li>ci: declare read-only GITHUB_TOKEN permissions in python.yml and typescript.yml by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5141</li>
+<li>fix(scripts): double backslashes before a quote in win-shell-args by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5143</li>
+<li>docs: add an AGENTS.md rule for pacing bulk GitHub writes by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5142</li>
+<li>ci: dispatch TypeScript and Python CI on automated version PRs by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5146</li>
+<li>chore: drop &quot;Thanks&quot; from the changesets attribution, keep the author by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5163</li>
+<li>Merge main into v2/main so main-source.yml shares history by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5172</li>
+<li>fix(ci): a superseded dispatched run posts no status, whatever its jobs did by @cliffhall in https://github.com/modelcontextprotocol/servers/pull/5179</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/modelcontextprotocol/servers/compare/v1.0.0...v2.0.0</p>
+<h2>Thanks for helping us improve</h2>
+<p>Thank you to these contributors, whose pull requests prototyped changes that ship in this release. Under the repository's <a href="https://github.com/modelcontextprotocol/servers/blob/v2/main/CONTRIBUTING.md">issues, not pull requests</a> policy their PRs were closed and the changes rebuilt by the maintainers, crediting them on the issue:</p>
+<ul>
+<li>@jayzuccarelli (#4565), the port of <code>mcp-server-fetch</code> to the MCP Python SDK v2, which #5062 followed for #4851</li>
+<li>@SamMorrowDrums (#3260), the MCP interface-diff CI for the everything server, adapted as #4975 for #4860</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/modelcontextprotocol/servers">modelcontextprotocol/servers</a> · <code>v2.0.0</code> · 2026-10-19 · <a href="https://github.com/modelcontextprotocol/servers/releases/tag/v2.0.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/servers/2.1.0"> <span class="k">← Suivant</span> <span class="t">v2.1.0</span> </a> <a href="/releases/servers/1.0.0"> <span class="k">Précédent →</span> <span class="t">v1.0.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/modelcontextprotocol/servers/releases/tag/v2.0.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener"> <span>modelcontextprotocol/servers</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Serveurs refactorisés à l&#39;ère moderne</a><a href="#" class>Forfaits</a><a href="#" class>@modelcontextprotocol/server-everything 2.0.0</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>@modelcontextprotocol/server-filesystem 2.0.0</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>@modelcontextprotocol/server-memory 2.0.0</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>@modelcontextprotocol/server-sequential-thinking 2.0.0</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>Serveurs Python : changements pour clients</a><a href="#" class>mcp-server-fetch 2026.10.19</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>mcp-server-git 2026.10.19</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>mcp-server-time 2026.10.19</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>Référentiel</a><a href="#" class="lv3">Ce qui a changé</a><a href="#" class>Merci de nous aider à nous améliorer</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/servers/2.5.0"> <span class="v">v2.5.0</span> <span class="d">26-11-18</span> </a> </li><li> <a href="/releases/servers/2.4.0"> <span class="v">v2.4.0</span> <span class="d">26-11-11</span> </a> </li><li> <a href="/releases/servers/2.3.0"> <span class="v">v2.3.0</span> <span class="d">26-11-04</span> </a> </li><li> <a href="/releases/servers/2.2.0"> <span class="v">v2.2.0</span> <span class="d">26-10-28</span> </a> </li><li> <a href="/releases/servers/2.1.0"> <span class="v">v2.1.0</span> <span class="d">26-10-25</span> </a> </li><li> <a href="/releases/servers/2.0.0" aria-current="true"> <span class="v">v2.0.0</span> <span class="d">26-10-19</span> </a> </li><li> <a href="/releases/servers/1.0.0"> <span class="v">v1.0.0</span> <span class="d">26-10-11</span> </a> </li><li> <a href="/releases/servers/2026.8.31"> <span class="v">2026.8.31</span> <span class="d">26-08-31</span> </a> </li> </ul> <a href="/fr/releases/servers" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

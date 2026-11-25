@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>coredns v1.15.0 — STAGS NextStack</title><meta name="description" content="This release improves DNS caching, forwarding, and transport reliability, with fixes for stale-cache handling, upstream connections, crashes/race fixes, as well as enhancemence from quite a few plugins."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/coredns/1.15.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/coredns/1.15.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/coredns/1.15.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/coredns/1.15.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="coredns v1.15.0 — STAGS NextStack"><meta property="og:description" content="This release improves DNS caching, forwarding, and transport reliability, with fixes for stale-cache handling, upstream connections, crashes/race fixes, as well as enhancemence from quite a few plugins."><meta property="og:url" content="https://www.stags.cn/fr/releases/coredns/1.15.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/coredns/1.15.0/#article","headline":"coredns v1.15.0 release notes","datePublished":"2026-10-21","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/coredns/coredns"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/coredns/1.15.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/coredns/coredns_v1.15.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/coredns/1.15.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/coredns/1.15.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/coredns/1.15.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/coredns/1.15.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/coredns/1.15.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/coredns">coredns</a> </nav> <h1 class="detail-title"> <span class="p">coredns</span> v1.15.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>21 oct. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/coredns/coredns" target="_blank" rel="noopener"> <span class="k">Source</span>coredns/coredns </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/coredns/1.15.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/coredns/1.15.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>coredns v1.15.0</h1>
+<p>Cette version améliore la mise en cache DNS, le transfert et la fiabilité du transport,
+avec des correctifs pour la gestion des caches obsolètes, les connexions en amont, les correctifs de plantages/courses,
+ainsi que l'amélioration de nombreux plugins.
+Le transfert prend désormais en charge les amonts DNS sur QUIC. Les nouvelles fonctionnalités supplémentaires incluent
+Journalisation des requêtes JSON en option, mises à jour DNS dynamiques authentifiées RFC 2136, prise en charge SIIT,
+modèles expr-lang et métadonnées du protocole PROXY v2.
+La version est construite avec Go 1.27.3, couvrant CVE-2026-56865, CVE-2026-56864,
+CVE-2026-33818, CVE-2026-97032, CVE-2026-78659, CVE-2026-97031 et CVE-2026-111943, ainsi que
+d'autres correctifs de sécurité.</p>
+<h2>Présenté par</h2>
+<p>Ahmad Mehrabi
+Amila Senadheera
+Andre Yngvason
+Aradhya Jain
+Arunesh Dwivedi
+Baltasar Blanco
+Ben Kochie
+Choudhry Shehryar
+Christian Mengès
+houyuwushang
+Ilya Koulakov
+jxj
+Lucas
+Manuel Ruger
+Michée Lengronne
+MohibShaikh
+myohannes
+Paco Cartones
+Pujitha Paladugu
+Sakıp Han Dursun
+Saleh
+Sam Lockart
+ump45nose
+Yash Singh
+Yong Tang
+Zhao Jianing</p>
+<h2>Changements notables</h2>
+<h2>core : ajout de la journalisation opt-in JSON avec des champs de requête DNS structurés (https://github.com/coredns/coredns/pull/8553)
+core : Ajouter une admission d'opcode opt-in (https://github.com/coredns/coredns/pull/8469)
+core : annule uniquement le flux DoQ bloqué, pas toute la connexion DoQ (https://github.com/coredns/coredns/pull/8567)
+core : Correction du problème de dépendance de la bibliothèque DataDog (https://github.com/coredns/coredns/pull/8541)
+noyau : Rendre TsigSecret public (https://github.com/coredns/coredns/pull/8434)
+core : rejeter les politiques TLS conflictuelles sur les écouteurs partagés. (https://github.com/coredns/coredns/pull/8565)
+core : arrêter de faire écho aux options EDNS non gérées (https://github.com/coredns/coredns/pull/8514)
+core : prise en charge de l'enregistrement explicite pour les hôtes intégrés (https://github.com/coredns/coredns/pull/8525)
+core : utilisez Zones.Contains lorsqu'une correspondance suffit (https://github.com/coredns/coredns/pull/8505)
+plugin/autopath : corrige une panique de déréférencement de pointeur nul dans autopath pendant le parcours du chemin de recherche (https://github.com/coredns/coredns/pull/8517)
+plugin/azure : Ajouter une directive d'actualisation (https://github.com/coredns/coredns/pull/8614)
+plugin/azure : Autoriser le démarrage avec des zones indisponibles (https://github.com/coredns/coredns/pull/8524)
+plugin/cache : Mettre en cache SERVFAIL lorsque le résolveur échoue sans réponse (https://github.com/coredns/coredns/pull/8629)
+plugin/cache : clarifier le comportement de vérification obsolète (https://github.com/coredns/coredns/pull/8579)
+plugin/cache : Ne pas mettre en cache ni paniquer sur les réponses sans question (https://github.com/coredns/coredns/pull/8467)
+plugin/cache : correction des actualisations obsolètes provoquées par un délai (https://github.com/coredns/coredns/pull/8587)
+plugin/cache : empêche une panique de déréférencement de pointeur nul dans la prélecture du cache (https://github.com/coredns/coredns/pull/8512)
+plugin/cache : Arrêtez de définir AA sur les réponses servies depuis le cache (https://github.com/coredns/coredns/pull/8419)
+plugin/clouddns : Ajouter une directive de point de terminaison (https://github.com/coredns/coredns/pull/8618)
+plugin/clouddns : Ajouter une directive d'actualisation (https://github.com/coredns/coredns/pull/8616)
+plugin/dns64 : corrige une panique de déréférencement de pointeur nul dans DNS64 pendant la réponse (https://github.com/coredns/coredns/pull/8511)
+plugin/dns64 : préserver les codes de réponse de secours A (https://github.com/coredns/coredns/pull/8619)
+plugin/dns64 : rejeter les longueurs de préfixe non prises en charge (https://github.com/coredns/coredns/pull/8611)
+plugin/dnstap : appuyez sur les réponses d'erreur différées (https://github.com/coredns/coredns/pull/8549)
+plugin/dynupdate : Ajouter des mises à jour RFC 2136 authentifiées durables (https://github.com/coredns/coredns/pull/8520)
+plugin/etcd : Autoriser la désactivation du repli de l'apex hérité (https://github.com/coredns/coredns/pull/8468)
+plugin/etcd : évitez le repli apex sur les erreurs backend (https://github.com/coredns/coredns/pull/8465)
+plugin/etcd : Correction du problème de mise à jour de la bibliothèque etcd (https://github.com/coredns/coredns/pull/8542)
+plugin/etcd : Arrête la suppression de cible à la fin d'un nom (https://github.com/coredns/coredns/pull/8584)
+plugin/fichier : Fix less n'est pas conforme aux RFC 1034 et 4034 (https://github.com/coredns/coredns/pull/8503)
+plugin/fichier : Correction d'une condition de concurrence critique dans le fichier plugin plus proche (https://github.com/coredns/coredns/pull/8583)
+plugin/fichier : rejeter les propriétaires SOA qui ne correspondent pas à la zone (https://github.com/coredns/coredns/pull/8555)
+plugin/fichier : renvoie SERVFAIL sur les boucles CNAME auto-référentielles (https://github.com/coredns/coredns/pull/8475)
+plugin/fichier : Testez que les cibles CNAME hors zone conservent NOERROR (https://github.com/coredns/coredns/pull/8569)
+plugin/fichier : suivre la zone mtime pour reload_by_mtime (https://github.com/coredns/coredns/pull/8556)
+plugin/forward : configuration de la connexion DoT liée pour les tentatives (https://github.com/coredns/coredns/pull/8543)
+plugin/forward : assurez-vous que forward définit l'hôte DoH (https://github.com/coredns/coredns/pull/8470)
+plugin/forward : définissez IP_RECVERR sur les sockets UDP en amont (https://github.com/coredns/coredns/pull/8628)
+plugin/forward : prise en charge des amonts DNS sur QUIC (https://github.com/coredns/coredns/pull/8474)
+plugin/forward : traitez les noms d'hôtes en amont transférés comme des noms de domaine complets absolus pour éviter la résolution du domaine de recherche. (https://github.com/coredns/coredns/pull/8563)
+plugin/grpc : Fermez clients à l'arrêt (https://github.com/coredns/coredns/pull/8582)
+plugin/grpc_server : les deux limites acceptent zéro, pas seulement les entiers positifs (https://github.com/coredns/coredns/pull/8660)
+plugin/hosts : Ne supprimez pas les entrées après une ligne trop longue (https://github.com/coredns/coredns/pull/8496)
+plugin/hosts : Ne supprimez pas silencieusement les champs trop longs (https://github.com/coredns/coredns/pull/8551)
+plugin/hosts : analyser les fichiers hôtes avec bufio.Reader (https://github.com/coredns/coredns/pull/8516)
+plugin/https : ajoutez max_streams pour limiter les flux simultanés HTTP/2 (https://github.com/coredns/coredns/pull/8522)
+plugin/k8s_external : Corrigez l'exemple SOA dans la documentation (https://github.com/coredns/coredns/pull/8666)
+plugin/k8s_external : corrige une panique de déréférencement de pointeur nul lorsque la recherche en amont ne renvoie aucune réponse (https://github.com/coredns/coredns/pull/8518)
+plugin/kubernetes : Inclure un contexte clé/valeur structuré dans les journaux client-go (https://github.com/coredns/coredns/pull/8490)
+plugin/kubernetes : Isoler les appareils de test d'adresse NS (https://github.com/coredns/coredns/pull/8513)
+plugin/kubernetes : Prise en charge des pods avec plusieurs IP (https://github.com/coredns/coredns/pull/8635)
+plugin/loadbalance : réduire les allocations roundRobin pour les ensembles d'adresses homogènes (https://github.com/coredns/coredns/pull/8375)
+plugin/loadbalance : Validez la réponse avant de la déréférencer dans WriteMsg (https://github.com/coredns/coredns/pull/8523)
+plugin/metrics : supprimez l'étiquette de type inexistante de request_duration_seconds (https://github.com/coredns/coredns/pull/8650)
+plugin/metrics : Libérer l'écouteur en cas d'échec du démarrage de TLS (https://github.com/coredns/coredns/pull/8527)
+plugin/minimal : corrige une panique de déréférencement de pointeur nul dans le traitement minimal de la réponse de prélecture (https://github.com/coredns/coredns/pull/8506)
+plugin/proxyproto : exposer les TLV PPv2 aux plugins en aval en tant que métadonnées (https://github.com/coredns/coredns/pull/8641)
+plugin/proxyproto : préserver le homologue UDP pour LOCAL (https://github.com/coredns/coredns/pull/8581)
+plugin/quic : Ajouter la directive max_connections (https://github.com/coredns/coredns/pull/8610)
+plugin/ready : Libérer le verrou avant l'arrêt du serveur (https://github.com/coredns/coredns/pull/8526)
+plugin/reload : signal d'arrêt de diffusion (https://github.com/coredns/coredns/pull/8504)
+plugin/rewrite : supprimez le temporaire avec préfixe de point par enregistrement dans remapStringRewriter (https://github.com/coredns/coredns/pull/8382)
+plugin/rewrite : corrige une panique de déréférencement de pointeur nul dans ResponseReverter.WriteMsg (https://github.com/coredns/coredns/pull/8519)
+plugin/rewrite : Limiter la réécriture de la réécriture du nom cname (https://github.com/coredns/coredns/pull/8570)
+plugin/rewrite : pointez sur la configuration au lieu de copier pour les réécritures CNAME (https://github.com/coredns/coredns/pull/8568)
+plugin/réécriture : prise en charge des métadonnées d'adhésion dans les remplacements de noms d'expressions régulières (https://github.com/coredns/coredns/pull/8665)
+plugin/route53 : Ne maintenez pas zMu dans la recherche de zone (https://github.com/coredns/coredns/pull/8601)
+plugin/route53 : Correction d'une faute de frappe « crentials » dans README et dans la page de manuel générée (https://github.com/coredns/coredns/pull/8655)
+plugin/siit : Ajouter l'implémentation initiale du SIIT (https://github.com/coredns/coredns/pull/8188)
+plugin/template : Ajout du support expr-lang aux modèles (https://github.com/coredns/coredns/pull/8450)
+plugin/tls : document qui dig prend en charge DoT (https://github.com/coredns/coredns/pull/8539)
+plugin/trace : Reconnaître les schémas d'URL Zipkin par préfixe (https://github.com/coredns/coredns/pull/8625)
+plugin/trace : erreur de retour de Zipkin NewEndpoint dans la configuration de la trace (https://github.com/coredns/coredns/pull/8577)
+plugin/tsig : exposer l'identité de clé TSIG validée (https://github.com/coredns/coredns/pull/8471)
+plugin/tsig : Rejeter les enregistrements TSIG non finaux (https://github.com/coredns/coredns/pull/8585)
+plugin/view : supprimez une accolade fermante parasite de l'exemple de split-DNS (https://github.com/coredns/coredns/pull/8643)</h2>
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/coredns/coredns">coredns/coredns</a> · <code>v1.15.0</code> · 2026-10-21 · <a href="https://github.com/coredns/coredns/releases/tag/v1.15.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>coredns v1.15.0</h1>
+<p>This release improves DNS caching, forwarding, and transport reliability,
+with fixes for stale-cache handling, upstream connections, crashes/race fixes,
+as well as enhancemence from quite a few plugins.</p>
+<p>Forwarding now supports DNS-over-QUIC upstreams. Additional new features include
+optional JSON query logging, authenticated RFC 2136 dynamic DNS updates, SIIT support,
+expr-lang templates, and PROXY protocol v2 metadata.</p>
+<p>The release is built with Go 1.27.3, covering CVE-2026-56865, CVE-2026-56864,
+CVE-2026-33818, CVE-2026-97032, CVE-2026-78659, CVE-2026-97031, and CVE-2026-111943, along with
+other security fixes.</p>
+<h2>Brought to You By</h2>
+<p>Ahmad Mehrabi
+Amila Senadheera
+Andri Yngvason
+Aradhya Jain
+Arunesh Dwivedi
+Baltasar Blanco
+Ben Kochie
+Choudhry Shehryar
+Christian Menges
+houyuwushang
+Ilya Kulakov
+jxj
+llucas
+Manuel Rüger
+Michée lengronne
+MohibShaikh
+myohannes
+Paco Cartones
+Pujitha Paladugu
+Sakıp Han Dursun
+Saleh
+sam lockart
+ump45nose
+Yash Singh
+Yong Tang
+Zhao Jianing</p>
+<h2>Noteworthy Changes</h2>
+<p>core: Add opt-in JSON logging with structured DNS query fields (https://github.com/coredns/coredns/pull/8553)
+core: Add opt-in opcode admission (https://github.com/coredns/coredns/pull/8469)
+core: Cancel only the stalled DoQ stream, not the whole DoQ connection (https://github.com/coredns/coredns/pull/8567)
+core: Fix DataDog library dependency issue (https://github.com/coredns/coredns/pull/8541)
+core: Make TsigSecret public (https://github.com/coredns/coredns/pull/8434)
+core: Reject conflicting TLS policies on shared listeners. (https://github.com/coredns/coredns/pull/8565)
+core: Stop echoing unhandled EDNS options (https://github.com/coredns/coredns/pull/8514)
+core: Support explicit registration for embedded hosts (https://github.com/coredns/coredns/pull/8525)
+core: Use Zones.Contains when any match suffices (https://github.com/coredns/coredns/pull/8505)
+plugin/autopath: Fixes a nil pointer dereference panic in autopath during search path walk (https://github.com/coredns/coredns/pull/8517)
+plugin/azure: Add refresh directive (https://github.com/coredns/coredns/pull/8614)
+plugin/azure: Allow startup with unavailable zones (https://github.com/coredns/coredns/pull/8524)
+plugin/cache: Cache SERVFAIL when the resolver fails without a response (https://github.com/coredns/coredns/pull/8629)
+plugin/cache: Clarify stale verify behavior (https://github.com/coredns/coredns/pull/8579)
+plugin/cache: Don't cache or panic on responses with no question (https://github.com/coredns/coredns/pull/8467)
+plugin/cache: Fix timed stale caused refreshes (https://github.com/coredns/coredns/pull/8587)
+plugin/cache: Prevents a nil pointer dereference panic in the cache prefetch (https://github.com/coredns/coredns/pull/8512)
+plugin/cache: Stop setting AA on answers served from cache (https://github.com/coredns/coredns/pull/8419)
+plugin/clouddns: Add endpoint directive (https://github.com/coredns/coredns/pull/8618)
+plugin/clouddns: Add refresh directive (https://github.com/coredns/coredns/pull/8616)
+plugin/dns64: Fixes a nil pointer dereference panic in dns64 during response (https://github.com/coredns/coredns/pull/8511)
+plugin/dns64: Preserve A fallback response codes (https://github.com/coredns/coredns/pull/8619)
+plugin/dns64: Reject unsupported prefix lengths (https://github.com/coredns/coredns/pull/8611)
+plugin/dnstap: Tap deferred error responses (https://github.com/coredns/coredns/pull/8549)
+plugin/dynupdate: Add durable authenticated RFC 2136 updates (https://github.com/coredns/coredns/pull/8520)
+plugin/etcd: Allow disabling legacy apex fallback (https://github.com/coredns/coredns/pull/8468)
+plugin/etcd: Avoid apex fallback on backend errors (https://github.com/coredns/coredns/pull/8465)
+plugin/etcd: Fix etcd library update issue (https://github.com/coredns/coredns/pull/8542)
+plugin/etcd: Stop target stripping at the end of a name (https://github.com/coredns/coredns/pull/8584)
+plugin/file: Fix less is not up to RFC 1034 and 4034 (https://github.com/coredns/coredns/pull/8503)
+plugin/file: Fix race condition in file plugin closer (https://github.com/coredns/coredns/pull/8583)
+plugin/file: Reject SOA owners that do not match the zone (https://github.com/coredns/coredns/pull/8555)
+plugin/file: Return SERVFAIL on self-referential CNAME loops (https://github.com/coredns/coredns/pull/8475)
+plugin/file: Test that out-of-zone CNAME targets keep NOERROR (https://github.com/coredns/coredns/pull/8569)
+plugin/file: Track zone mtime for reload_by_mtime (https://github.com/coredns/coredns/pull/8556)
+plugin/forward: Bound DoT connection setup for retries (https://github.com/coredns/coredns/pull/8543)
+plugin/forward: Ensure forward sets the DoH host (https://github.com/coredns/coredns/pull/8470)
+plugin/forward: Set IP_RECVERR on upstream UDP sockets (https://github.com/coredns/coredns/pull/8628)
+plugin/forward: Support DNS-over-QUIC upstreams (https://github.com/coredns/coredns/pull/8474)
+plugin/forward: Treat forward upstream hostnames as absolute FQDNs to avoid search-domain resolution. (https://github.com/coredns/coredns/pull/8563)
+plugin/grpc: Close clients on shutdown (https://github.com/coredns/coredns/pull/8582)
+plugin/grpc_server: Both limits accept zero, not only positive integers (https://github.com/coredns/coredns/pull/8660)
+plugin/hosts: Don't drop entries after an over-long line (https://github.com/coredns/coredns/pull/8496)
+plugin/hosts: Don't drop over-long fields silently (https://github.com/coredns/coredns/pull/8551)
+plugin/hosts: Parse hosts files with bufio.Reader (https://github.com/coredns/coredns/pull/8516)
+plugin/https: Add max_streams to limit HTTP/2 concurrent streams (https://github.com/coredns/coredns/pull/8522)
+plugin/k8s_external: Correct the SOA example in the docs (https://github.com/coredns/coredns/pull/8666)
+plugin/k8s_external: Fixes a nil pointer dereference panic when upstream lookup returns no response (https://github.com/coredns/coredns/pull/8518)
+plugin/kubernetes: Include structured key/value context in client-go logs (https://github.com/coredns/coredns/pull/8490)
+plugin/kubernetes: Isolate NS address test fixtures (https://github.com/coredns/coredns/pull/8513)
+plugin/kubernetes: Support pods with multiple IPs (https://github.com/coredns/coredns/pull/8635)
+plugin/loadbalance: Reduce roundRobin allocations for homogeneous address sets (https://github.com/coredns/coredns/pull/8375)
+plugin/loadbalance: Validate the response before dereferencing it in WriteMsg (https://github.com/coredns/coredns/pull/8523)
+plugin/metrics: Drop the nonexistent type label from request_duration_seconds (https://github.com/coredns/coredns/pull/8650)
+plugin/metrics: Release listener on TLS startup failure (https://github.com/coredns/coredns/pull/8527)
+plugin/minimal: Fixes a nil pointer dereference panic in minimal prefetch response processing (https://github.com/coredns/coredns/pull/8506)
+plugin/proxyproto: Expose PPv2 TLVs to downstream plugins as metadata (https://github.com/coredns/coredns/pull/8641)
+plugin/proxyproto: Preserve the UDP peer for LOCAL (https://github.com/coredns/coredns/pull/8581)
+plugin/quic: Add max_connections directive (https://github.com/coredns/coredns/pull/8610)
+plugin/ready: Release lock before server shutdown (https://github.com/coredns/coredns/pull/8526)
+plugin/reload: Broadcast shutdown signal (https://github.com/coredns/coredns/pull/8504)
+plugin/rewrite: Drop the per-record dot-prefixed temporary in remapStringRewriter (https://github.com/coredns/coredns/pull/8382)
+plugin/rewrite: Fixes a nil pointer dereference panic in ResponseReverter.WriteMsg (https://github.com/coredns/coredns/pull/8519)
+plugin/rewrite: Limit rewrite cname recursion (https://github.com/coredns/coredns/pull/8570)
+plugin/rewrite: Point to config instead of copying for CNAME rewrites (https://github.com/coredns/coredns/pull/8568)
+plugin/rewrite: Support opt-in metadata in regex name replacements (https://github.com/coredns/coredns/pull/8665)
+plugin/route53: Don't hold zMu across zone Lookup (https://github.com/coredns/coredns/pull/8601)
+plugin/route53: Fix 'crentials' typo in README and generated man page (https://github.com/coredns/coredns/pull/8655)
+plugin/siit: Add initial SIIT implementation (https://github.com/coredns/coredns/pull/8188)
+plugin/template: Add expr-lang support to templates (https://github.com/coredns/coredns/pull/8450)
+plugin/tls: Document that dig supports DoT (https://github.com/coredns/coredns/pull/8539)
+plugin/trace: Recognize Zipkin URL schemes by prefix (https://github.com/coredns/coredns/pull/8625)
+plugin/trace: Return error from Zipkin NewEndpoint in trace setup (https://github.com/coredns/coredns/pull/8577)
+plugin/tsig: Expose validated TSIG key identity (https://github.com/coredns/coredns/pull/8471)
+plugin/tsig: Reject non-final TSIG records (https://github.com/coredns/coredns/pull/8585)
+plugin/view: Drop a stray closing brace from the split-DNS example (https://github.com/coredns/coredns/pull/8643)</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/coredns/coredns">coredns/coredns</a> · <code>v1.15.0</code> · 2026-10-21 · <a href="https://github.com/coredns/coredns/releases/tag/v1.15.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <span></span> <a href="/releases/coredns/1.14.7"> <span class="k">Précédent →</span> <span class="t">v1.14.7</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/coredns/coredns/releases/tag/v1.15.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/coredns/coredns" target="_blank" rel="noopener"> <span>coredns/coredns</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/coredns/1.15.0" aria-current="true"> <span class="v">v1.15.0</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/coredns/1.14.7"> <span class="v">v1.14.7</span> <span class="d">26-08-19</span> </a> </li><li> <a href="/releases/coredns/1.14.6"> <span class="v">v1.14.6</span> <span class="d">26-07-10</span> </a> </li><li> <a href="/releases/coredns/1.14.5"> <span class="v">v1.14.5</span> <span class="d">26-07-10</span> </a> </li><li> <a href="/releases/coredns/1.14.4"> <span class="v">v1.14.4</span> <span class="d">26-06-09</span> </a> </li><li> <a href="/releases/coredns/1.14.3"> <span class="v">v1.14.3</span> <span class="d">26-04-22</span> </a> </li><li> <a href="/releases/coredns/1.14.2"> <span class="v">v1.14.2</span> <span class="d">26-03-06</span> </a> </li><li> <a href="/releases/coredns/1.14.1"> <span class="v">v1.14.1</span> <span class="d">26-01-16</span> </a> </li> </ul> <a href="/fr/releases/coredns" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

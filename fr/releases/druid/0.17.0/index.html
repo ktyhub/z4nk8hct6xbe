@@ -1,0 +1,481 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>druid 0.17.0 — STAGS NextStack</title><meta name="description" content="Apache Druid 0.17.0 contains over 250 new features, performance enhancements, bug fixes, and major documentation improvements from 52 contributors."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/druid/0.17.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/druid/0.17.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/druid/0.17.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/druid/0.17.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="druid 0.17.0 — STAGS NextStack"><meta property="og:description" content="Apache Druid 0.17.0 contains over 250 new features, performance enhancements, bug fixes, and major documentation improvements from 52 contributors."><meta property="og:url" content="https://www.stags.cn/fr/releases/druid/0.17.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/druid/0.17.0/#article","headline":"druid 0.17.0 release notes","datePublished":"2020-01-27","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/druid"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/druid/0.17.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/druid/druid_druid-0.17.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/druid/0.17.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/druid/0.17.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/druid/0.17.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/druid/0.17.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/druid/0.17.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/druid">druid</a> </nav> <h1 class="detail-title"> <span class="p">druid</span> 0.17.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>27 janv. 2020</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span class="k">Source</span>apache/druid </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/druid/0.17.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/druid/0.17.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>druide druide-0.17.0</h1>
+<p>Apache Druid 0.17.0 contient plus de 250 nouvelles fonctionnalités, améliorations de performances, corrections de bogues et améliorations majeures de la documentation provenant de 52 contributeurs. Consultez la [liste complète des modifications] (https://github.com/apache/incubator-druid/compare/0.16.1-incubating...0.17.0-incubating) et [tout ce qui est associé au jalon] (https://github.com/apache/incubator-druid/milestone/35).</p>
+<h1>Faits saillants</h1>
+<h2>Améliorations de l'ingestion par lots</h2>
+<p>Druid 0.17.0 inclut une mise à jour importante du système natif d’ingestion par lots. Cette mise à jour ajoute le cadre interne pour prendre en charge les formats binaires non textuels, avec une prise en charge initiale d'ORC et Parquet. De plus, les tâches par lots natives peuvent désormais lire les données de HDFS.
+Cette refonte modifie la manière dont la source d'ingestion et le format des données sont spécifiés dans la tâche d'ingestion. Pour utiliser les nouvelles fonctionnalités, veuillez vous référer à la documentation sur InputSources et InputFormats.
+Veuillez consulter la documentation suivante pour plus de détails :
+https://druid.apache.org/docs/0.17.0/ingestion/data-formats.html#input-format
+https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html#input-sources
+https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html#partitionsspec
+https://github.com/apache/druid/issues/8812</p>
+<h3>Partitionnement de plage à dimension unique pour l'ingestion de lots natifs parallèles</h3>
+<p>La tâche d'index parallèle prend désormais en charge la spécification de partitions de type <code>single_dim</code>, qui permet un partitionnement basé sur une plage sur une seule dimension.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html pour plus de détails.</p>
+<h2>Modifications du compactage</h2>
+<h3>Conseils de répartition des tâches d'index parallèle</h3>
+<p>La tâche d'indexation parallèle a désormais une nouvelle configuration, <code>splitHintSpec</code>, dans le <code>tuningConfig</code> pour permettre aux opérateurs de fournir des conseils pour contrôler la quantité de données lues par chaque sous-tâche de première phase. Il existe actuellement un type de spécification d'indice partagé, <code>SegmentsSplitHintSpec</code>, utilisé pour réingérer les segments Druid.</p>
+<h3>Compactage automatique parallèle</h3>
+<p>Le compactage automatique peut désormais utiliser la tâche d'indexation parallèle, permettant un plus grand débit de compactage.
+Pour contrôler le niveau de parallélisme, l'auto-compaction<code>tuningConfig</code> dispose de nouveaux paramètres, <code>maxNumConcurrentSubTasks</code> et <code>splitHintSpec</code>.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/configuration/index.html#compaction-dynamic-configuration pour plus de détails.
+https://github.com/apache/incubator-druid/pull/8570
+### Compaction automatique avec état
+Le compactage automatique utilise désormais partitionSpec pour suivre les modifications apportées par les tâches de compactage précédentes, permettant au coordinateur de réduire les opérations de compactage redondantes.
+Veuillez consulter https://github.com/apache/druid/issues/8489 pour plus de détails.
+Si le compactage automatique est activé, veuillez consulter les informations sous « Modifications du compactage automatique avec état » dans la section « Mise à niveau vers Druid 0.17.0 » avant la mise à niveau.</p>
+<h2>Fusion de requêtes parallèles sur les courtiers</h2>
+<p>Le courtier Druid peut désormais fusionner de manière opportuniste les résultats des requêtes en parallèle à l’aide de plusieurs threads.
+Veuillez consulter <code>druid.processing.merge.useParallelMergePool</code> dans la section Broker de la [référence de configuration] (https://druid.apache.org/docs/0.17.0/configuration/index.html) pour plus de détails sur la façon de configurer cette nouvelle fonctionnalité.
+La fusion parallèle est activée par défaut (contrôlée par la propriété <code>druid.processing.merge.useParallelMergePool</code>) et la plupart des utilisateurs ne devraient pas avoir à modifier les propriétés de configuration avancées décrites dans la référence de configuration.
+De plus, le parallélisme de fusion peut être contrôlé requête par requête à l’aide du contexte de requête. Des informations sur les nouveaux paramètres de contexte de requête sont disponibles sur https://druid.apache.org/docs/0.17.0/querying/query-context.html.
+https://github.com/apache/incubator-druid/pull/8578</p>
+<h2>Gestion des valeurs nulles compatible SQL</h2>
+<p>Dans 0.17.0, nous avons ajouté une documentation officielle pour le mode de gestion des valeurs nulles compatible SQL de Druid.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/configuration/index.html#sql-compatible-null-handling et https://druid.apache.org/docs/0.17.0/design/segments.html#sql-compatible-null-handling pour plus de détails.
+Plusieurs bugs qui existaient dans ce mode jusqu'alors non documenté ont été corrigés, notamment autour de la gestion des valeurs nulles dans les colonnes numériques. Nous recommandons aux utilisateurs de commencer à envisager de faire passer leurs clusters vers ce nouveau mode après la mise à niveau vers 0.17.0.
+La liste complète des bogues de gestion des valeurs nulles corrigés dans 0.17.0 peut être trouvée sur https://github.com/apache/druid/issues?utf8=%E2%9C%93&amp;q=label%3A%22Area+-+Null+Handling%22+milestone%3A0.17.0+.</p>
+<h2>Extension LDAP</h2>
+<p>Druid prend désormais en charge l'authentification LDAP. L'autorisation à l'aide de groupes LDAP est également prise en charge en mappant les groupes LDAP aux rôles Druid.</p>
+<ul>
+<li>L'authentification LDAP est gérée en spécifiant un validateur d'informations d'identification de type LDAP.</li>
+<li>L'autorisation à l'aide de LDAP est gérée en spécifiant un fournisseur de rôles de type LDAP et en définissant les mappages de rôles groupe LDAP -&gt; Druid dans Druid.
+L'intégration LDAP nécessite l'extension principale <code>druid-basic-security</code>. Veuillez consulter https://druid.apache.org/docs/0.17.0/development/extensions-core/druid-basic-security.html pour plus de détails.
+Comme il s'agit de la première version prenant en charge LDAP et qu'il existe une grande variété d'écosystèmes LDAP, certains cas d'utilisation et fonctionnalités LDAP peuvent ne pas être encore pris en charge. Veuillez signaler un problème si vous avez besoin d'améliorations de cette nouvelle fonctionnalité.
+https://github.com/apache/incubator-druid/pull/6972</li>
+</ul>
+<h2>Émetteur Dropwizard</h2>
+<p>Un nouvel émetteur de métriques Dropwizard a été ajouté en tant qu'extension de contribution.
+Les types de métriques Dropwizard actuellement pris en charge sont le compteur, la jauge, le compteur, la minuterie et l'histogramme. Ces métriques peuvent être émises à l'aide d'une console ou d'un rapporteur JMX.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/design/extensions-contrib/dropwizard.html pour plus de détails.
+https://github.com/apache/incubator-druid/pull/7363</p>
+<h2>Ressource de découverte de soi</h2>
+<p>Une nouvelle paire de points de terminaison a été ajoutée à tous les services Druid qui renvoient des informations indiquant si le service Druid a reçu une confirmation que le service a été ajouté au cluster, du mécanisme central de découverte de service (actuellement ZooKeeper). Ces points de terminaison peuvent être utiles en tant que contrôles de santé/prêts.
+Les nouveaux points de terminaison sont :
+-<code>/status/selfDiscovered/status</code>
+-<code>/status/selfDiscovered</code>
+Veuillez consulter le Druide [référence API] (https://druid.apache.org/docs/0.17.0/operations/api-reference.html) pour plus de détails.
+https://github.com/apache/incubator-druid/pull/6702
+https://github.com/apache/incubator-druid/pull/9005</p>
+<h2>Table système des superviseurs</h2>
+<p>Les superviseurs de tâches (par exemple les superviseurs Kafka ou Kinesis) sont désormais enregistrés dans les tables système dans une nouvelle table <code>sys.supervisors</code>.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/querying/sql.html#supervisors-table pour plus de détails.
+https://github.com/apache/incubator-druid/pull/8547</p>
+<h2>Démarrage historique rapide avec chargement paresseux</h2>
+<p>Une nouvelle propriété de configuration booléenne pour les historiques, <code>druid.segmentCache.lazyLoadOnStart</code>, a été ajoutée.
+Cette nouvelle propriété permet aux historiques de différer le chargement d'un segment jusqu'à la première interrogation de ce segment, ce qui peut réduire considérablement les temps de démarrage de l'historique pour les clusters comportant un grand nombre de segments.
+Veuillez consulter la <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">référence de configuration</a> pour plus de détails.
+https://github.com/apache/incubator-druid/pull/6988</p>
+<h2>Modification de la distribution du cache des segments historiques</h2>
+<p>Une nouvelle propriété historique, <code>druid.segmentCache.locationSelectorStrategy</code>, a été ajoutée.
+Si plusieurs emplacements de stockage de segments sont spécifiés dans <code>druid.segmentCache.locations</code>, la nouvelle propriété <code>locationSelectorStrategy</code> permet à l'utilisateur de spécifier la stratégie utilisée pour remplir les emplacements. Les options actuellement prises en charge sont <code>roundRobin</code> et <code>leastBytesUsed</code>.
+Veuillez consulter la <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">référence de configuration</a> pour plus de détails.
+https://github.com/apache/incubator-druid/pull/8038</p>
+<h2>Nouveaux points de terminaison de préparation</h2>
+<p>Un nouveau point de terminaison Broker a été ajouté : <code>/druid/broker/v1/readiness</code>.
+Un nouveau point de terminaison historique a été ajouté : <code>/druid/historical/v1/readiness</code>.
+Ces points de terminaison sont similaires aux points de terminaison <code>/druid/broker/v1/loadstatus</code> et <code>/druid/historical/v1/loadstatus</code> existants.
+Ils diffèrent en ce sens qu'ils ne nécessitent pas de contrôles d'authentification/autorisation et qu'au lieu d'un corps JSON, ils renvoient uniquement un code de réponse HTTP 200 succès ou 503.
+https://github.com/apache/incubator-druid/pull/8841</p>
+<h2>Affectation des tâches de support en fonction des catégories MiddleManager</h2>
+<p>Il est désormais possible de définir une propriété de nom « catégorie » pour chaque MiddleManager. De nouvelles stratégies de sélection des travailleurs prenant en compte les catégories ont été ajoutées, permettant à l'utilisateur de contrôler la manière dont les tâches sont attribuées aux MiddleManagers en fonction des catégories configurées.
+Veuillez consulter la documentation du <code>druid.worker.category</code> dans la [référence de configuration] (https://druid.apache.org/docs/0.17.0/configuration/index.html) et les liens suivants pour plus de détails :
+https://druid.apache.org/docs/0.17.0/configuration/index.htmlEqual-Distribution-With-Category-Spec
+https://druid.apache.org/docs/0.17.0/configuration/index.html#Fill-Capacity-With-Category-Spec
+https://druid.apache.org/docs/0.17.0/configuration/index.html#WorkerCategorySpec
+https://github.com/apache/druid/pull/7066</p>
+<h2>Mises à jour des vulnérabilités de sécurité</h2>
+<p>Un grand nombre de dépendances ont été mises à jour vers des versions plus récentes pour corriger les vulnérabilités de sécurité.
+Veuillez consulter les PR ci-dessous pour plus de détails :
+-https://github.com/apache/incubator-druid/pull/8878
+-https://github.com/apache/incubator-druid/pull/8980</p>
+<h1>Mise à niveau vers Druid 0.17.0</h1>
+<h2>La requête native sélectionnée a été remplacée</h2>
+<p>Le type de requête natif Select, obsolète, a été supprimé dans 0.17.0.
+Si vous disposez de requêtes natives qui utilisent Select, vous devez les modifier pour utiliser Scan à la place. Consultez la documentation sur les requêtes d'analyse (https://druid.apache.org/docs/0.17.0/querying/scan-query.html) pour plus de détails sur la syntaxe et le format de sortie.
+Pour les requêtes Druid SQL qui utilisent Select, aucune modification n’est nécessaire ; le planificateur SQL utilise déjà le type de requête Scan sous les couvertures pour les requêtes Select.
+https://github.com/apache/incubator-druid/pull/8739</p>
+<h2>Les anciennes consoles ont été supprimées</h2>
+<p>Les anciennes consoles de coordinateur et de suzerain ont été supprimées et remplacées par la nouvelle console Web sur le coordinateur et le suzerain.
+https://github.com/apache/incubator-druid/pull/8838</p>
+<h2>Mise à niveau de Calcite 1.21, gestion des valeurs nulles Druid SQL</h2>
+<p>Druid 0.17.0 met à jour Calcite vers la version 1.21. Cette version plus récente de Calcite peut effectuer des optimisations supplémentaires qui supposent un comportement de gestion des valeurs nulles conforme à SQL lors de la planification des requêtes.
+Si vous utilisez Druid SQL et comptez sur un comportement de gestion des valeurs nulles, veuillez lire les informations sur https://druid.apache.org/docs/0.17.0/configuration/index.html#sql-compatible-null-handling et assurez-vous que votre cluster Druid s'exécute en mode de gestion des valeurs nulles conforme à SQL avant la mise à niveau.
+https://github.com/apache/incubator-druid/pull/8566</p>
+<h2>Ajustements de journalisation</h2>
+<p>Druid 0.17.0 a rangé son cycle de vie, ses requêtes et sa journalisation d'ingestion.
+Veuillez consulter https://github.com/apache/incubator-druid/pull/8889 pour une liste détaillée des modifications. Si vous vous êtes appuyé sur des messages de journal spécifiques pour les intégrations externes, veuillez consulter les nouvelles modifications de journalisation avant la mise à niveau.
+L’ensemble complet des messages du journal est toujours visible lorsque la journalisation est définie au niveau DEBUG. Les fichiers de configuration du modèle log4j2 qui montrent comment activer la journalisation DEBUG par package sont fournis dans le dossier de configuration <code>_common</code> dans les exemples de clusters sous <code>conf/druid</code>.</p>
+<h2>Modifications du compactage automatique avec état</h2>
+<p>La logique de planification du compactage automatique du 0.17.0 suit les informations de partitionnement de segments supplémentaires dans le magasin de métadonnées de Druid qui ne sont pas présentes dans les anciennes versions. Ces informations sont utilisées pour déterminer si un ensemble de segments a déjà été compacté selon les configurations de compactage automatique actuelles du cluster.
+Lorsque ces nouvelles métadonnées ne sont pas présentes, un ensemble de segments sera toujours planifié pour un compactage initial et ces nouvelles métadonnées seront créées après leur compactage, permettant au planificateur de les ignorer ultérieurement si la configuration du compactage automatique reste inchangée.
+Étant donné que ces métadonnées supplémentaires de partitionnement de segments ne sont pas présentes avant 0.17.0, la logique de planification de compactage automatique recompactera tous les segments d'une source de données une fois après la mise à niveau vers 0.17.0.
+Ce recompactage sur l'ensemble des segments pour chaque source de données pour laquelle le compactage automatique est activé signifie que :</p>
+<ul>
+<li>Il y aura une période de transition après la mise à niveau au cours de laquelle davantage de tâches de compactage totales seront mises en file d'attente que dans des conditions normales.</li>
+<li>L'utilisation du stockage profond augmentera à mesure que l'ensemble de segments sera recompacté (l'ancien ensemble de segments est toujours conservé dans le stockage profond à moins qu'il ne soit explicitement supprimé).
+Il est conseillé aux utilisateurs d'être conscients de l'augmentation temporaire des tâches de compactage planifiées et de l'impact sur l'utilisation du stockage en profondeur. La documentation sur la suppression des anciens segments se trouve sur https://druid.apache.org/docs/0.17.0/ingestion/data-management.html#deleting-data</li>
+</ul>
+<h2>Propriété <code>targetCompactionSizeBytes</code> supprimée</h2>
+<p>La propriété <code>targetCompactionSizeBytes</code> a été supprimée de la tâche de compactage et de la configuration du compactage automatique. Pour l'auto-compaction, <code>maxRowsPerSegment</code> est désormais une configuration obligatoire. Pour les tâches de compactage non automatique, n'importe quel <code>partitionsSpec</code> peut être utilisé.
+https://github.com/apache/incubator-druid/pull/8573</p>
+<h2>Réglage de la tâche de compactageConfig</h2>
+<p>En raison des modifications de compactage automatique parallèle introduites par #8570, toutes les spécifications de tâche de compactage soumises manuellement doivent être mises à jour pour utiliser un type index_parallel pour la section tuningConfig au lieu d'index. Ces modifications de spécifications doivent être appliquées après la mise à niveau du cluster vers 0.17.0.
+Les configurations de compactage automatique existantes peuvent rester inchangées après la mise à jour ; le compactage automatique créera des tâches de compactage non parallèles jusqu'à ce que les configurations de compactage automatique soient mises à jour pour utiliser le parallélisme après la mise à niveau.
+Pour contrôler le niveau de parallélisme, l'auto-compaction<code>tuningConfig</code> dispose de nouveaux paramètres, <code>maxNumConcurrentSubTasks</code> et <code>splitHintSpec</code>.
+Veuillez consulter https://druid.apache.org/docs/0.17.0/configuration/index.html#compaction-dynamic-configuration pour plus de détails.</p>
+<h2>Tâche de compactage ioConfig</h2>
+<p>La tâche de compactage nécessite désormais un <code>ioConfig</code> dans la spécification de la tâche.
+Veuillez consulter le https://druid.apache.org/docs/0.17.0/ingestion/data-management.html#compaction-ioconfig pour plus de détails.
+<code>ioConfig</code> n'a pas besoin d'être ajouté aux configurations d'auto-compactage existantes, le coordinateur après la mise à niveau créera automatiquement des spécifications de tâches avec des sections <code>ioConfig</code>.
+https://github.com/apache/incubator-druid/pull/8571</p>
+<h2>Champs de spécification de partition renommés</h2>
+<p>Les champs <code>targetPartitionSize</code> et <code>maxSegmentSize</code> dans les spécifications de partition sont obsolètes. Ils ont été renommés respectivement <code>targetNumRowsPerSegment</code> et <code>maxRowsPerSegment</code>.
+https://github.com/apache/incubator-druid/pull/8507</p>
+<h2>Les métriques du cache sont désactivées par défaut</h2>
+<p>Les métriques du cache sont désormais désactivées par défaut. Pour activer les métriques de cache, ajoutez <code>&quot;org.apache.druid.client.cache.CacheMonitor&quot;</code> à la propriété <code>druid.monitoring.monitors</code>.
+https://github.com/apache/incubator-druid/pull/8561</p>
+<h2>Le superviseur API a été modifié pour être cohérent avec la tâche API</h2>
+<p>Les spécifications des tâches du superviseur doivent désormais placer les sections <code>dataSchema</code>, <code>tuningConfig</code> et <code>ioConfig</code> comme sous-champs d'un champ <code>spec</code>. Veuillez consulter https://github.com/apache/incubator-druid/pull/8810 pour des exemples.
+L'ancien format est toujours accepté dans 0.17.0.</p>
+<h2>Segments API changement de sémantique</h2>
+<p>Le point de terminaison <code>/datasources/{dataSourceName}/segments</code> sur le coordinateur renvoie désormais tous les segments utilisés (y compris ceux masqués) sur les intervalles spécifiés, plutôt que uniquement ceux visibles.
+https://github.com/apache/incubator-druid/pull/8564</p>
+<h2>Fournisseur de mot de passe pour l'authentification de base de HttpEmitterConfig</h2>
+<p>La propriété <code>druid.emitter.http.basicAuthentication</code> accepte désormais un <a href="https://druid.apache.org/docs/0.17.0/operations/password-provider.html">fournisseur de mot de passe</a>. Nous vous recommandons de mettre à jour vos configurations pour utiliser un fournisseur de mots de passe si vous utilisez l'émetteur HTTP.
+https://github.com/apache/incubator-druid/pull/8618</p>
+<h2>Changement de transformation d'expression à valeurs multiples</h2>
+<p>La réutilisation de colonnes à valeurs multiples dans les expressions n'entraînera plus d'explosions cartésiennes inutiles. Veuillez consulter les liens suivants pour plus de détails.
+https://github.com/apache/druid/issues/8947
+https://github.com/apache/incubator-druid/pull/8957</p>
+<h2>Ingestion Kafka/Kinesis lors des mises à niveau progressives</h2>
+<p>Lors d'une mise à niveau continue, s'il y a des tâches exécutant 0.17.0 et des overlords exécutant des versions plus anciennes, et qu'une tâche a progressé dans la lecture des données de son flux mais a rejeté tous les enregistrements qu'elle a vus (par exemple, tous n'étaient pas analysables), vous verrez des NullPointerExceptions sur les overlords exécutant des versions plus anciennes lorsque la tâche met à jour le overlord avec ses décalages de flux actuels.
+Auparavant, il y avait un bug dans cette zone (https://github.com/apache/incubator-druid/issues/8765) où de telles tâches ne parvenaient pas à communiquer leurs décalages actuels au suzerain. Le protocole de publication des tâches/overlord a été mis à jour pour résoudre ce problème, mais les anciens overlords ne reconnaissent pas ce changement de protocole.
+Cette condition devrait être assez rare.</p>
+<h2>Changement de version Hadoop par défaut</h2>
+<p>Druid 0.17.0 regroupe désormais les bibliothèques Hadoop 2.8.5 au lieu de 2.8.3.
+Si vous faisiez référence aux bibliothèques 2.8.3 groupées dans votre configuration via la propriété <code>druid.indexer.task.defaultHadoopCoordinates</code> ou la propriété <code>hadoopDependencyCoordinates</code> dans vos spécifications d'ingestion Hadoop, vous devrez mettre à jour ces références pour qu'elles pointent plutôt vers les bibliothèques 2.8.5 groupées.</p>
+<h2>Méthode ParseSpec.verify supprimée</h2>
+<p>Si vous conserviez une extension personnalisée qui fournit une implémentation pour l'interface <code>ParseSpec</code>, la méthode <code>verify</code> a été supprimée et l'annotation <code>@Override</code> sur la méthode devra être supprimée dans toutes les implémentations personnalisées.
+https://github.com/apache/druid/pull/8744</p>
+<h1>Problèmes connus</h1>
+<h3>Filtrage sur les colonnes longues en mode de gestion des valeurs nulles compatible SQL</h3>
+<p>Nous sommes actuellement conscients d'un bug lié à l'application de certains types de filtres sur les valeurs nulles des colonnes longues lorsque la gestion des valeurs nulles compatible SQL est activée (https://github.com/apache/druid/issues/9255).
+Veuillez signaler un problème si vous rencontrez d'autres problèmes de gestion des valeurs nulles.</p>
+<h3>Aperçu des spécifications d'ingestion dans la console Web</h3>
+<p>Les spécifications d'aperçu affichées pour les tâches d'ingestion par lots natives créées dans le chargeur de données de la console Web ne sont pas correctement formatées et échoueront si vous les copiez et les soumettez manuellement. Cependant, la soumission de ces spécifications via Data Loader soumet une spécification correctement formatée.
+https://github.com/apache/druid/issues/9144</p>
+<h3>Autres problèmes connus</h3>
+<p>Pour une liste complète des problèmes ouverts, veuillez consulter https://github.com/apache/druid/labels/Bug</p>
+<h1>Crédits</h1>
+<h2>Merci à tous ceux qui ont contribué à cette version !
+@a2l007
+@abhishekrb19
+@aditya-r-m
+@AlexandreSaydakov
+@asdf2014
+@capisrant
+@ccaominh
+@clintropolis
+@denever
+@elloooooo
+@FaxianZhao
+@fjy
+@Fokko
+@fstolba
+@gianm
+@gkc2104
+@glasser
+@GraceKoo
+@himanshug
+@jihoonson
+@jnaous
+@jon-wei
+@karthikbhat13
+@legendtkl
+@leventov
+@maytasm3
+@mcbrewster
+@mitchlloyd
+@mohammadjkhan
+@nishantmonu51
+@pdeva
+@pjain1
+@pzhdfy
+@QiMM
+@qutang1
+@renevan10
+@richardstartin
+@samarthjain
+@SandishKumarHN
+@sashidhar
+@sekingme
+@SEKIRO-J
+@suneet-s
+@surekhasaharan
+@tijoparacka
+@vogievetsky
+@xingbowu
+@xvrl
+@yuanlihan
+@yunwan
+@yurmix
+@zhenxiao</h2>
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.17.0</code> · 2020-01-27 · <a href="https://github.com/apache/druid/releases/tag/druid-0.17.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>druid druid-0.17.0</h1>
+<p>Apache Druid 0.17.0 contains over 250 new features, performance enhancements, bug fixes, and major documentation improvements from 52 contributors. Check out the <a href="https://github.com/apache/incubator-druid/compare/0.16.1-incubating...0.17.0-incubating">complete list of changes</a> and <a href="https://github.com/apache/incubator-druid/milestone/35">everything tagged to the milestone</a>.</p>
+<h1>Highlights</h1>
+<h2>Batch ingestion improvements</h2>
+<p>Druid 0.17.0 includes a significant update to the native batch ingestion system. This update adds the internal framework to support non-text binary formats, with initial support for ORC and Parquet. Additionally, native batch tasks can now read data from HDFS.</p>
+<p>This rework changes how the ingestion source and data format are specified in the ingestion task. To use the new features, please refer to the documentation on InputSources and InputFormats.</p>
+<p>Please see the following documentation for details:
+https://druid.apache.org/docs/0.17.0/ingestion/data-formats.html#input-format
+https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html#input-sources
+https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html#partitionsspec</p>
+<p>https://github.com/apache/druid/issues/8812</p>
+<h3>Single dimension range partitioning for parallel native batch ingestion</h3>
+<p>The parallel index task now supports the <code>single_dim</code> type partitions spec, which allows for range-based partitioning on a single dimension.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/ingestion/native-batch.html for details.</p>
+<h2>Compaction changes</h2>
+<h3>Parallel index task split hints</h3>
+<p>The parallel indexing task now has a new configuration, <code>splitHintSpec</code>, in the <code>tuningConfig</code> to allow for operators to provide hints to control the amount of data that each first phase subtask reads. There is currently one split hint spec type, <code>SegmentsSplitHintSpec</code>, used for re-ingesting Druid segments.</p>
+<h3>Parallel auto-compaction</h3>
+<p>Auto-compaction can now use the parallel indexing task, allowing for greater compaction throughput.</p>
+<p>To control the level of parallelism, the auto-compaction<code>tuningConfig</code> has new parameters, <code>maxNumConcurrentSubTasks</code> and <code>splitHintSpec</code>.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/configuration/index.html#compaction-dynamic-configuration for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/8570</p>
+<h3>Stateful auto-compaction</h3>
+<p>Auto-compaction now uses the partitionSpec to track changes made by previous compaction tasks, allowing the coordinator to reduce redundant compaction operations.</p>
+<p>Please see https://github.com/apache/druid/issues/8489 for details.</p>
+<p>If you have auto-compaction enabled, please see the information under &quot;Stateful auto-compaction changes&quot; in the &quot;Upgrading to Druid 0.17.0&quot; section before upgrading.</p>
+<h2>Parallel query merging on brokers</h2>
+<p>The Druid broker can now opportunistically merge query results in parallel using multiple threads.</p>
+<p>Please see <code>druid.processing.merge.useParallelMergePool</code> in the Broker section of the <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">configuration reference</a> for details on how to configure this new feature.</p>
+<p>Parallel merging is enabled by default (controlled by the <code>druid.processing.merge.useParallelMergePool</code> property), and most users should not have to change any of the advanced configuration properties described in the configuration reference.</p>
+<p>Additionally, merge parallelism can be controlled on a per-query basis using the query context. Information about the new query context parameters can be found at https://druid.apache.org/docs/0.17.0/querying/query-context.html.</p>
+<p>https://github.com/apache/incubator-druid/pull/8578</p>
+<h2>SQL-compatible null handling</h2>
+<p>In 0.17.0, we have added official documentation for Druid's SQL-compatible null handling mode.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/configuration/index.html#sql-compatible-null-handling and https://druid.apache.org/docs/0.17.0/design/segments.html#sql-compatible-null-handling  for details.</p>
+<p>Several bugs that existed in this previously undocumented mode have been fixed, particularly around null handling in numeric columns. We recommend that users begin to consider transitioning their clusters to this new mode after upgrading to 0.17.0.</p>
+<p>The full list of null handling bugs fixed in 0.17.0 can be found at https://github.com/apache/druid/issues?utf8=%E2%9C%93&amp;q=label%3A%22Area+-+Null+Handling%22+milestone%3A0.17.0+</p>
+<h2>LDAP extension</h2>
+<p>Druid now supports LDAP authentication. Authorization using LDAP groups is also supported by mapping LDAP groups to Druid roles.</p>
+<ul>
+<li>LDAP authentication is handled by specifying an LDAP-type credentials validator.</li>
+<li>Authorization using LDAP is handled by specifying an LDAP-type role provider, and defining LDAP group-&gt;Druid role mappings within Druid.</li>
+</ul>
+<p>LDAP integration requires the <code>druid-basic-security</code> core extension. Please see https://druid.apache.org/docs/0.17.0/development/extensions-core/druid-basic-security.html for details.</p>
+<p>As this is the first release with LDAP support, and there are a large variety of LDAP ecosystems, some LDAP use cases and features may not be supported yet. Please file an issue if you need enhancements to this new functionality.</p>
+<p>https://github.com/apache/incubator-druid/pull/6972</p>
+<h2>Dropwizard emitter</h2>
+<p>A new Dropwizard metrics emitter has been added as a contrib extension.</p>
+<p>The currently supported Dropwizard metrics types are counter, gauge, meter, timer and histogram. These metrics can be emitted using either a Console or JMX reporter.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/design/extensions-contrib/dropwizard.html for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/7363</p>
+<h2>Self-discovery resource</h2>
+<p>A new pair of endpoints have been added to all Druid services that return information about whether the Druid service has received a confirmation that the service has been added to the cluster, from the central service discovery mechanism (currently ZooKeeper). These endpoints can be useful as health/ready checks.</p>
+<p>The new endpoints are:</p>
+<ul>
+<li><code>/status/selfDiscovered/status</code></li>
+<li><code>/status/selfDiscovered</code></li>
+</ul>
+<p>Please see the Druid <a href="https://druid.apache.org/docs/0.17.0/operations/api-reference.html">API reference</a> for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/6702
+https://github.com/apache/incubator-druid/pull/9005</p>
+<h2>Supervisors system table</h2>
+<p>Task supervisors (e.g. Kafka or Kinesis supervisors) are now recorded in the system tables in a new <code>sys.supervisors</code> table.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/querying/sql.html#supervisors-table for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/8547</p>
+<h2>Fast historical start with lazy loading</h2>
+<p>A new boolean configuration property for historicals, <code>druid.segmentCache.lazyLoadOnStart</code>, has been added.</p>
+<p>This new property allows historicals to defer loading of a segment until the first time that segment is queried, which can significantly decrease historical startup times for clusters with a large number of segments.</p>
+<p>Please see the <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">configuration reference</a> for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/6988</p>
+<h2>Historical segment cache distribution change</h2>
+<p>A new historical property, <code>druid.segmentCache.locationSelectorStrategy</code>, has been added.</p>
+<p>If there are multiple segment storage locations specified in <code>druid.segmentCache.locations</code>, the new <code>locationSelectorStrategy</code> property allows the user to specify what strategy is used to fill the locations. Currently supported options are <code>roundRobin</code> and <code>leastBytesUsed</code>.</p>
+<p>Please see the <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">configuration reference</a> for details.</p>
+<p>https://github.com/apache/incubator-druid/pull/8038</p>
+<h2>New readiness endpoints</h2>
+<p>A new Broker endpoint has been added: <code>/druid/broker/v1/readiness</code>.</p>
+<p>A new Historical endpoint has been added: <code>/druid/historical/v1/readiness</code>.</p>
+<p>These endpoints are similar to the existing <code>/druid/broker/v1/loadstatus</code> and <code>/druid/historical/v1/loadstatus</code> endpoints.</p>
+<p>They differ in that they do not require authentication/authorization checks, and instead of a JSON body they only return a 200 success or 503 HTTP response code.</p>
+<p>https://github.com/apache/incubator-druid/pull/8841</p>
+<h2>Support task assignment based on MiddleManager categories</h2>
+<p>It is now possible to define a &quot;category&quot; name property for each MiddleManager. New worker select strategies that are category-aware have been added, allowing the user to control how tasks are assigned to MiddleManagers based on the configured categories.</p>
+<p>Please see the documentation for <code>druid.worker.category</code> in the <a href="https://druid.apache.org/docs/0.17.0/configuration/index.html">configuration reference</a>, and the following links, for more details:
+https://druid.apache.org/docs/0.17.0/configuration/index.htmlEqual-Distribution-With-Category-Spec
+https://druid.apache.org/docs/0.17.0/configuration/index.html#Fill-Capacity-With-Category-Spec
+https://druid.apache.org/docs/0.17.0/configuration/index.html#WorkerCategorySpec</p>
+<p>https://github.com/apache/druid/pull/7066</p>
+<h2>Security vulnerability updates</h2>
+<p>A large number of dependencies have been updated to newer versions to address security vulnerabilities.</p>
+<p>Please see the PRs below for details:</p>
+<ul>
+<li>https://github.com/apache/incubator-druid/pull/8878</li>
+<li>https://github.com/apache/incubator-druid/pull/8980</li>
+</ul>
+<h1>Upgrading to Druid 0.17.0</h1>
+<h2>Select native query has been replaced</h2>
+<p>The deprecated Select native query type has been removed in 0.17.0.</p>
+<p>If you have native queries that use Select, you need to modify them to use Scan instead. See the Scan query documentation (https://druid.apache.org/docs/0.17.0/querying/scan-query.html) for syntax and output format details.</p>
+<p>For Druid SQL queries that use Select, no changes are needed; the SQL planner already uses the Scan query type under the covers for Select queries.</p>
+<p>https://github.com/apache/incubator-druid/pull/8739</p>
+<h2>Old consoles have been removed</h2>
+<p>The legacy coordinator and overlord consoles have been removed, and they have been replaced with the new web console on the coordinator and overlord.</p>
+<p>https://github.com/apache/incubator-druid/pull/8838</p>
+<h2>Calcite 1.21 upgrade, Druid SQL null handling</h2>
+<p>Druid 0.17.0 updates Calcite to version 1.21. This newer version of Calcite can make additional optimizations that assume SQL-compliant null handling behavior when planning queries.</p>
+<p>If you use Druid SQL and rely on null handling behavior, please read the information at https://druid.apache.org/docs/0.17.0/configuration/index.html#sql-compatible-null-handling and ensure that your Druid cluster is running in the SQL-compliant null handling mode before upgrading.</p>
+<p>https://github.com/apache/incubator-druid/pull/8566</p>
+<h2>Logging adjustments</h2>
+<p>Druid 0.17.0 has tidied up its lifecycle, querying, and ingestion logging.</p>
+<p>Please see https://github.com/apache/incubator-druid/pull/8889 for a detailed list of changes. If you relied on specific log messages for external integrations, please review the new logging changes before upgrading.</p>
+<p>The full set of log messages can still be seen when logging is set to DEBUG level. Template log4j2 configuration files that show how to enable per-package DEBUG logging are provided in the <code>_common</code> configuration folder in the example clusters under <code>conf/druid</code>.</p>
+<h2>Stateful auto-compaction changes</h2>
+<p>The auto-compaction scheduling logic in 0.17.0 tracks additional segment partitioning information in Druid's metadata store that is not present in older versions. This information is used to determine whether a set of segments has already been compacted under the cluster's current auto-compaction configurations.</p>
+<p>When this new metadata is not present, a set of segments will always be scheduled for an initial compaction and this new metadata will be created after they are compacted, allowing the scheduler to skip them later if auto-compaction config is unchanged.</p>
+<p>Since this additional segment partitioning metadata is not present before 0.17.0, the auto-compaction scheduling logic will re-compact all segments within a datasource once after the upgrade to 0.17.0.</p>
+<p>This re-compaction on the entire set of segments for each datasource that has auto-compaction enabled means that:</p>
+<ul>
+<li>There will be a transition period after the upgrade where more total compaction tasks will be queued than under normal conditions</li>
+<li>The deep storage usage will increase as the entire segment set is re-compacted (the old set of segments is still kept in deep storage unless explicitly removed).</li>
+</ul>
+<p>Users are advised to be aware of the temporary increase in scheduled compaction tasks and the impact on deep storage usage. Documentation on removing old segments is located at https://druid.apache.org/docs/0.17.0/ingestion/data-management.html#deleting-data</p>
+<h2><code>targetCompactionSizeBytes</code> property removed</h2>
+<p>The <code>targetCompactionSizeBytes</code> property has been removed from the compaction task and auto-compaction configuration. For auto-compaction, <code>maxRowsPerSegment</code> is now a mandatory configuration. For non-auto compaction tasks, any <code>partitionsSpec</code> can be used.</p>
+<p>https://github.com/apache/incubator-druid/pull/8573</p>
+<h2>Compaction task tuningConfig</h2>
+<p>Due to the parallel auto-compaction changes introduced by #8570, any manually submitted compaction task specs need to be updated to use an index_parallel type for the tuningConfig section instead of index. These spec changes should be applied after the cluster is upgraded to 0.17.0.</p>
+<p>Existing auto-compaction configs can remain unchanged after the update; the auto-compaction will create non-parallel compaction tasks until the auto-compaction configs are updated to use parallelism post-upgrade.</p>
+<p>To control the level of parallelism, the auto-compaction<code>tuningConfig</code> has new parameters, <code>maxNumConcurrentSubTasks</code> and <code>splitHintSpec</code>.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/configuration/index.html#compaction-dynamic-configuration for details.</p>
+<h2>Compaction task ioConfig</h2>
+<p>The compaction task now requires an <code>ioConfig</code> in the task spec.</p>
+<p>Please see https://druid.apache.org/docs/0.17.0/ingestion/data-management.html#compaction-ioconfig for details.</p>
+<p><code>ioConfig</code> does not have to be added to existing auto-compaction configurations, the coordinator after the upgrade will automatically create task specs with <code>ioConfig</code> sections.</p>
+<p>https://github.com/apache/incubator-druid/pull/8571</p>
+<h2>Renamed partition spec fields</h2>
+<p>The <code>targetPartitionSize</code> and <code>maxSegmentSize</code> fields in the partition specs have been deprecated. They have been renamed to <code>targetNumRowsPerSegment</code> and <code>maxRowsPerSegment</code> respectively.</p>
+<p>https://github.com/apache/incubator-druid/pull/8507</p>
+<h2>Cache metrics are off by default</h2>
+<p>Cache metrics are now disabled by default. To enable cache metrics, add <code>&quot;org.apache.druid.client.cache.CacheMonitor&quot;</code> to the <code>druid.monitoring.monitors</code> property.</p>
+<p>https://github.com/apache/incubator-druid/pull/8561</p>
+<h2>Supervisor API has changed to be consistent with task API</h2>
+<p>Supervisor task specs should now put the <code>dataSchema</code>, <code>tuningConfig</code>, and <code>ioConfig</code> sections as subfields of a <code>spec</code> field. Please see https://github.com/apache/incubator-druid/pull/8810 for examples.</p>
+<p>The old format is still accepted in 0.17.0.</p>
+<h2>Segments API semantics change</h2>
+<p>The <code>/datasources/{dataSourceName}/segments</code> endpoint on the Coordinator now returns all used segments (including overshadowed) on the specified intervals, rather than only visible ones.</p>
+<p>https://github.com/apache/incubator-druid/pull/8564</p>
+<h2>Password provider for basic authentication of HttpEmitterConfig</h2>
+<p>The <code>druid.emitter.http.basicAuthentication</code> property now accepts a <a href="https://druid.apache.org/docs/0.17.0/operations/password-provider.html">password provider</a>. We recommend updating your configurations to use a password provider if using the HTTP emitter.</p>
+<p>https://github.com/apache/incubator-druid/pull/8618</p>
+<h2>Multivalue expression transformation change</h2>
+<p>Reusing multi-valued columns in expressions will no longer result in unnecessary cartesian explosions. Please see the following links for details.</p>
+<p>https://github.com/apache/druid/issues/8947
+https://github.com/apache/incubator-druid/pull/8957</p>
+<h2>Kafka/Kinesis ingestion during rolling upgrades</h2>
+<p>During a rolling upgrade, if there are tasks running 0.17.0 and overlords running older versions, and a task made progress reading data from its stream but rejected all the records it saw (e.g., all were unparseable), you will see NullPointerExceptions on overlords running older versions when the task updates the overlord with its current stream offsets.</p>
+<p>Previously, there was a bug in this area (https://github.com/apache/incubator-druid/issues/8765) where such tasks would fail to communicate their current offsets to the overlord. The task/overlord publishing protocol has been updated to fix this, but older overlords do not recognize this protocol change.</p>
+<p>This condition should be fairly rare.</p>
+<h2>Default Hadoop version change</h2>
+<p>Druid 0.17.0 now bundles Hadoop 2.8.5 libraries instead of 2.8.3.</p>
+<p>If you were referencing the bundled 2.8.3 libraries in your configuration via the <code>druid.indexer.task.defaultHadoopCoordinates</code> property, or the <code>hadoopDependencyCoordinates</code> property in your Hadoop ingestion specs, you will need to update these references to point to the bundled 2.8.5 libraries instead.</p>
+<h2>ParseSpec.verify method removed</h2>
+<p>If you were maintaining a custom extension that provides an implementation for the <code>ParseSpec</code> interface, the <code>verify</code> method has been removed, and the <code>@Override</code> annotation on the method will need to be removed in any custom implementations.</p>
+<p>https://github.com/apache/druid/pull/8744</p>
+<h1>Known issues</h1>
+<h3>Filtering on long columns in SQL-compatible null handling mode</h3>
+<p>We are currently aware of a bug with applying certain filter types on null values from long columns when SQL-compatible null handling is enabled (https://github.com/apache/druid/issues/9255).</p>
+<p>Please file an issue if you encounter any other null handling problems.</p>
+<h3>Ingestion spec preview in web console</h3>
+<p>The preview specs shown for native batch ingestion tasks created in the Data Loader of the web console are not correctly formatted and will fail if you copy them and submit them manually. Submitting these specs through the Data Loader submits a correctly formatted spec, however.</p>
+<p>https://github.com/apache/druid/issues/9144</p>
+<h3>Other known issues</h3>
+<p>For a full list of open issues, please see https://github.com/apache/druid/labels/Bug</p>
+<h1>Credits</h1>
+<p>Thanks to everyone who contributed to this release!</p>
+<p>@a2l007
+@abhishekrb19
+@aditya-r-m
+@AlexanderSaydakov
+@asdf2014
+@capistrant
+@ccaominh
+@clintropolis
+@denever
+@elloooooo
+@FaxianZhao
+@fjy
+@Fokko
+@fstolba
+@gianm
+@gkc2104
+@glasser
+@GraceKoo
+@himanshug
+@jihoonson
+@jnaous
+@jon-wei
+@karthikbhat13
+@legendtkl
+@leventov
+@maytasm3
+@mcbrewster
+@mitchlloyd
+@mohammadjkhan
+@nishantmonu51
+@pdeva
+@pjain1
+@pzhdfy
+@QiuMM
+@qutang1
+@renevan10
+@richardstartin
+@samarthjain
+@SandishKumarHN
+@sashidhar
+@sekingme
+@SEKIRO-J
+@suneet-s
+@surekhasaharan
+@tijoparacka
+@vogievetsky
+@xingbowu
+@xvrl
+@yuanlihan
+@yunwan
+@yurmix
+@zhenxiao</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.17.0</code> · 2020-01-27 · <a href="https://github.com/apache/druid/releases/tag/druid-0.17.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/druid/0.17.1"> <span class="k">← Suivant</span> <span class="t">0.17.1</span> </a> <a href="/releases/druid/0.16.1-incubating"> <span class="k">Précédent →</span> <span class="t">0.16.1-incubating</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/druid/releases/tag/0.17.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span>apache/druid</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Améliorations de l&#39;ingestion par lots</a><a href="#" class="lv3">Partitionnement de plage à dimension unique pour l&#39;ingestion de lots natifs parallèles</a><a href="#" class>Modifications du compactage</a><a href="#" class="lv3">Conseils de répartition des tâches d&#39;index parallèle</a><a href="#" class="lv3">Compactage automatique parallèle</a><a href="#" class="lv3">Compaction automatique avec état</a><a href="#" class>Fusion de requêtes parallèles sur les courtiers</a><a href="#" class>Gestion des valeurs nulles compatible SQL</a><a href="#" class>Extension LDAP</a><a href="#" class>Émetteur Dropwizard</a><a href="#" class>Ressource de découverte de soi</a><a href="#" class>Table système des superviseurs</a><a href="#" class>Démarrage historique rapide avec chargement paresseux</a><a href="#" class>Modification de la distribution du cache des segments historiques</a><a href="#" class>Nouveaux points de terminaison de préparation</a><a href="#" class>Affectation des tâches de support en fonction des catégories MiddleManager</a><a href="#" class>Mises à jour des vulnérabilités de sécurité</a><a href="#" class>La requête native sélectionnée a été remplacée</a><a href="#" class>Les anciennes consoles ont été supprimées</a><a href="#" class>Mise à niveau de Calcite 1.21, gestion des valeurs nulles Druid SQL</a><a href="#" class>Ajustements de journalisation</a><a href="#" class>Modifications du compactage automatique avec état</a><a href="#" class>Propriété targetCompactionSizeBytes supprimée</a><a href="#" class>Réglage de la tâche de compactageConfig</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/druid/39.0.0"> <span class="v">39.0.0</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/druid/38.0.0"> <span class="v">38.0.0</span> <span class="d">26-10-01</span> </a> </li><li> <a href="/releases/druid/37.0.0"> <span class="v">37.0.0</span> <span class="d">26-05-08</span> </a> </li><li> <a href="/releases/druid/36.0.0"> <span class="v">36.0.0</span> <span class="d">26-02-09</span> </a> </li><li> <a href="/releases/druid/35.0.1"> <span class="v">35.0.1</span> <span class="d">25-12-15</span> </a> </li><li> <a href="/releases/druid/35.0.0"> <span class="v">35.0.0</span> <span class="d">25-11-18</span> </a> </li><li> <a href="/releases/druid/34.0.0"> <span class="v">34.0.0</span> <span class="d">25-08-11</span> </a> </li><li> <a href="/releases/druid/33.0.0"> <span class="v">33.0.0</span> <span class="d">25-04-29</span> </a> </li> </ul> <a href="/fr/releases/druid" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 71 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tempo v3.0.0 — STAGS NextStack</title><meta name="description" content="Tempo 3.0 is a major release that completes the transition to the new ingest/write architecture, removes deprecated 2.x components, graduates TraceQL metrics to general availability, and adds migration tooling for Tempo…"><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/tempo/3.0.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/tempo/3.0.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/tempo/3.0.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/tempo/3.0.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="tempo v3.0.0 — STAGS NextStack"><meta property="og:description" content="Tempo 3.0 is a major release that completes the transition to the new ingest/write architecture, removes deprecated 2.x components, graduates TraceQL metrics to general availability, and adds migration tooling for Tempo…"><meta property="og:url" content="https://www.stags.cn/pt/releases/tempo/3.0.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/tempo/3.0.0/#article","headline":"tempo v3.0.0 release notes","datePublished":"2026-05-28","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/grafana/tempo"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/tempo/3.0.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/tempo/tempo_v3.0.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/tempo/3.0.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/tempo/3.0.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/tempo/3.0.0/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/tempo/3.0.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/tempo/3.0.0/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/tempo">tempo</a> </nav> <h1 class="detail-title"> <span class="p">tempo</span> v3.0.0 </h1> <div class="detail-meta"> <span class="chip chip--major">Major</span> <span><span class="k">Publicado</span>28 de mai. de 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/grafana/tempo" target="_blank" rel="noopener"> <span class="k">Fonte</span>grafana/tempo </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/tempo/3.0.0/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/tempo/3.0.0/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><p>#tempo v3.0.0
+O Tempo 3.0 é uma versão principal que completa a transição para a nova arquitetura de ingestão/gravação, remove componentes 2.x obsoletos, gradua as métricas TraceQL para disponibilidade geral e adiciona ferramentas de migração para usuários do Tempo 2.x.
+Esta versão contém alterações significativas de configuração e implantação. Revise o guia de migração antes de atualizar, especialmente se você usar ingesters herdados, substituições legadas, blocos v2, OpenCensus, localblocks ou configurações personalizadas de loja ao vivo/frontend de consulta.</p>
+<h2>Destaques</h2>
+<ul>
+<li>A nova arquitetura de ingestão/gravação substitui os ingesters legados.</li>
+<li>As métricas TraceQL estão geralmente disponíveis; alertas sobre métricas TraceQL e o caminho de leitura mais rápido permanecem experimentais.</li>
+<li>Melhorias no vParquet5 e caminhos de consulta de métricas mais rápidos.</li>
+<li>Controles expandidos do gerador de métricas para gerenciamento de cardinalidade.</li>
+<li>Suporte para redação de rastreamento.</li>
+<li>Suporte para perfil de extensão via otelpiroscópio.</li>
+<li>Correções de correção e observabilidade da loja ao vivo e do construtor de blocos.
+Links úteis:</li>
+<li>Release notes: https://grafana.com/docs/tempo/latest/release-notes/v3-0/</li>
+<li>Guia de migração: https://grafana.com/docs/tempo/latest/set-up-for-tracing/setup-tempo/migrate-to-3/</li>
+<li>Guia de atualização: https://grafana.com/docs/tempo/latest/set-up-for-tracing/setup-tempo/upgrade/
+-Changelog: https://github.com/grafana/tempo/blob/v3.0.0/CHANGELOG.md#v300</li>
+</ul>
+<h2>Recursos</h2>
+<ul>
+<li>Torne as transformações AST individuais ignoráveis por meio de dicas de configuração e consulta de @stoewer em #7012</li>
+<li>Adicione suporte ao perfil de extensão via otelpiroscópio. Habilite com sinalizador <code>span_profiling: true</code> ou <code>-span-profiling</code> CLI para anexar rótulos pprof a extensões OTel por @simonswine em #7063</li>
+<li>Adicione o comando <code>tempo-cli migrate config</code> para migrar configurações do Tempo 2.x para 3.0 por @mapno em #6982</li>
+<li>jsonnet: Adicionar suporte de escalonamento automático de pod horizontal baseado em KEDA para implantação de microsserviços por @mapno em #6970</li>
+<li>Adicione suporte automemlimit para configuração automática de GOMEMLIMIT. Habilite com <code>memory.automemlimit_enabled: true</code> por @oleg-kozlyuk-grafana em #6313</li>
+<li>Suporte a operadores de comparação em consultas TraceQL Metrics por @ruslan-mikhailov em #6474</li>
+<li>gerador de métricas: adicione filtragem de extensão aos gráficos de serviço por meio de <code>filter_policies</code> por @javiermolinar em #6453</li>
+<li>Adicionada nova política de filtro <code>include_any</code> para filtro spanmetrics por @javiermolinar em #6392</li>
+<li>Adicione <code>span_multiplier_key</code> às substituições. Isso permite que os inquilinos especifiquem a chave de atributo usada para valores do multiplicador de amplitude para compensar a amostragem baseada em head por @carles-grafana em #6260</li>
+<li>gerador de métricas: adicione limitador por rótulo para controlar a cardinalidade por @electron0zero em # 6414
+<ul>
+<li>Adiciona substituição de <code>max_cardinality_per_label</code> por locatário e novas métricas para estimar a demanda de cardinalidade por rótulo.</li>
+</ul>
+</li>
+<li>Adicione um mecanismo de extensão para substituições por locatário por @stoewer em #6758</li>
+<li>Estenda a interface <code>TraceRedactor</code> para suportar a ocultação de traços completos via <code>ErrTraceHidden</code> por @stoewer em #6811</li>
+<li>Modo binário único: envie a ingestão local do distribuidor diretamente para a loja ao vivo e o gerador de métricas sem Kafka por @javiermolinar em #6729</li>
+<li>Adicionar limitador de drenagem experimental/sanitização de nome de span ao gerador de métricas para reduzir a cardinalidade de métricas agrupando nomes de span semelhantes por @Logiraptor em #6098</li>
+</ul>
+<h2>Melhorias</h2>
+<ul>
+<li>Frontend de consulta: divida a pesquisa transmitida e as respostas de métricas em pacotes gRPC menores para melhor compatibilidade padrão com client e corrija as atualizações finais de streaming depois que os limites da série de métricas forem atingidos por @mdisibio em #6607 / #7239</li>
+<li>live-store: leituras de blocos sem bloqueio via <code>atomic.Pointer[blockSnapshot]</code>; a exclusão de bloco é bifásica e segura contra falhas por @zhxiaogg em #7132</li>
+<li>Suporte a condições OR para preenchimento automático de nome e valor de tag (tags de pesquisa v2) por @ie-pham em #6827</li>
+<li>Exponha as configurações de nova tentativa do MinIO por meio da configuração do S3 por @rwhitty em #6561</li>
+<li>Reduza o tamanho padrão do WAL do livestore e alinhe os padrões de consulta: <code>max_block_duration</code> 1m a 30s, <code>max_block_bytes</code> 100MiB a 50MiB, <code>complete_block_timeout</code> 1h a 20m, métricas <code>query_backend_after</code> 30m a 15m por @zhxiaogg em #6974</li>
+<li>Habilitar emissão de histograma nativo para todos os histogramas registrados no promauto, incluindo <code>tempo_request_duration_seconds</code>. Os formatos clássico e nativo são emitidos simultaneamente; raspadores existentes não são afetados por @zalegrala em #6910</li>
+<li>tempo-cli: Adicione o sinalizador <code>--header</code> para consultar comandos api para cabeçalhos personalizados por @Nouuu em # 6768</li>
+<li>tempo-cli: adicione o comando <code>redact</code> para enviar trabalhos de redação de rastreamento para o agendador de backend por @zalegrala em #6832</li>
+<li>Construtor de blocos: desduplica intervalos dentro de rastreamentos durante a criação do bloco e rastreia duplicatas removidas por meio da métrica <code>tempo_block_builder_spans_deduped_total</code> de @zhxiaogg em #6539</li>
+<li>gerador de métricas: suporte à extração do multiplicador de span do limite de amostragem de probabilidade W3C tracestate OTel por meio da opção de configuração <code>enable_tracestate_span_multiplier</code> por @csmarchbanks em # 6684</li>
+<li>Adicione novos alertas e entradas de runbook por @javiermolinar em #6276</li>
+<li>Dobrar o número máximo de colunas de string dedicadas em vParquet5 e atualizar tempo-cli para determinar o número ideal para os dados por @mdisibio em #6282</li>
+<li>Métricas TraceQL: caminho de leitura experimental mais rápido para a maioria das consultas de métricas, acessível por trás da dica de consulta <code>spanonly_fetch=true</code> quando <code>unsafe_query_hints</code> é habilitado por @mdisibio em #6359</li>
+<li>Métricas TraceQL: adicione nova substituição por locatário para ativar ou desativar o novo caminho experimental de leitura mais rápida para a maioria das consultas de métricas por @mdisibio em #6849</li>
+<li>Vulture: estenda as verificações de consistência de dados para incluir mais strings, números inteiros e blobs, em escopos de recurso/intervalo/evento, e execute verificações mais profundas de conteúdo de rastreamento por @mdisibio em #6731</li>
+<li>Melhore a observabilidade do truncamento de atributos por @javiermolinar em #6400</li>
+<li>Registrar atributos superdimensionados truncados por @carles-grafana em #6467</li>
+<li>livestore: faça da linha de registro <code>trace_too_large</code> um insight de @carles-grafana em #6371</li>
+<li>Remova o proprietário da partição da loja ativa do anel no desligamento para evitar entradas de proprietário obsoletas por @oleg-kozlyuk-grafana em #6409</li>
+<li>Verificação de prontidão da loja ao vivo aprimorada e parâmetros de configuração <code>readiness_target_lag</code> e <code>readiness_max_wait</code> adicionados. A loja Live agora, se <code>readiness_target_lag</code> estiver definido, não reportará <code>/ready</code> até que o atraso de Kafka seja reduzido ao valor especificado por @oleg-kozlyuk-grafana e @ruslan-mikhailov em #6238 e #6405</li>
+<li>Expor uma nova métrica de histograma para rastrear a distribuição de empregos por consulta por @javiermolinar em #6343</li>
+<li>Faça validação profunda para políticas de filtro em substituições configuráveis pelo usuário API por @electron0zero em #6407</li>
+<li>Permitir que <code>span_name_sanitization</code> seja definido por meio de substituições configuráveis pelo usuário API por @Logiraptor em #6411</li>
+<li>Adicione o parâmetro <code>fail_on_high_lag</code> para permitir que o live-store falhe se for atrasado por @ruslan-mikhailov e @carles-grafana em #6363, #6567 e #7066</li>
+<li>Adicionado suporte para preenchimento à esquerda por locatário de IDs de rastreamento por @mapno em #6489</li>
+<li>Adicionada nova métrica para tamanho do anel gerador: <code>tempo_distributor_metrics_generator_tenant_ring_size</code> por @zalegrala em #5686</li>
+<li>Remova chamadas explícitas de <code>runtime.GC()</code> na criação do compactador/bloco vParquet5 e CLI por @oleg-kozlyuk-grafana em #6603</li>
+<li>Reduza as alocações no caminho de crescimento do <code>extendReuseSlice</code> durante gravações WAL e criação de blocos por @mapno em #6863</li>
+<li>Implementada anti-afinidade para pods na mesma zona de livestore por @zhxiaogg em #6757</li>
+<li>Livestore: operação completa do WAL ignorada durante desligamento por @zhxiaogg em #6839</li>
+<li>Adicionar métrica para rastrear motivos de corte de bloqueio ao vivo por @zhxiaogg em #6922</li>
+<li>Habilite o modo de leitura assíncrona em parquet para o caminho de conclusão do WAL por @zhxiaogg em #6967</li>
+<li>gerador de métricas: adicione <code>leave_consumer_group_on_shutdown</code> para enviar LeaveGroup no desligamento para reatribuição imediata de partição em vez de esperar pelo tempo limite da sessão por @zalegrala em #6575</li>
+</ul>
+<h2>Mudanças significativas</h2>
+<p>O Tempo 3.0 inclui várias remoções e alterações padrão que afetam o operador. Revise o guia de migração antes de atualizar.</p>
+<ul>
+<li>O caminho de gravação baseado em ingestão herdado foi removido. As implantações devem migrar para a arquitetura de ingestão/gravação 3.0.
+<ul>
+<li>Removido os ingeridores e o módulo de ingeridor por @javiermolinar em #6504 / #6959</li>
+<li>Removida a configuração restante do ingester do aplicativo e <code>ingest.enabled</code> por @javiermolinar em #6667/#6873</li>
+<li>Configuração do livestore do anel de partição removida por @javiermolinar em #6981</li>
+<li>Alertas de ingeridor e compactador removidos por @javiermolinar em #6369</li>
+</ul>
+</li>
+<li>Removida a codificação de bloco v2 e o componente compactador legado v2 por @joe-elliott em #6273
+<ul>
+<li>Removidos comandos CLI específicos da v2: <code>list block</code>, <code>list index</code>, <code>view index</code>, <code>gen index</code> e <code>gen bloom</code>.</li>
+</ul>
+</li>
+<li>Bloco centralizado e configuração WAL: <code>block_builder</code> e <code>live_store</code> agora utilizam sempre configurações de <code>storage.trace.block</code>; Os campos de configuração do bloco por módulo são removidos por @stoewer em #6647</li>
+<li>Consultas de dados recentes agora garantem resultados completos, falhando quando uma instância está atrasada. Padrão <code>query_frontend.query_end_cutoff</code> para <code>30s</code> e <code>live_store.fail_on_high_lag</code> para <code>true</code> por @mapno em #7210 / #7232</li>
+<li>Substituições herdadas (simples, sem escopo) desativadas por padrão. O Tempo se recusa a iniciar se substituições herdadas forem detectadas. Defina <code>enable_legacy_overrides: true</code> ou <code>-config.enable-legacy-overrides=true</code> para ativar novamente temporariamente. As substituições legadas serão removidas em uma versão futura por @electron0zero em #6741</li>
+<li>A configuração de substituições configuráveis pelo usuário <code>metrics_generator.processors</code> não se funde mais com substituições de tempo de execução. <code>metrics_generator.processors</code> agora tem precedência sobre substituições de tempo de execução, combinando todas as outras configurações em substituições configuráveis ​​pelo usuário. A configuração de <code>processors: []</code> desativa todos os processadores para o locatário por @electron0zero em #7176/#7185</li>
+<li>Habilitado RetryInfo por padrão. <code>distributor.retry_after_on_resource_exhausted</code> agora tem como padrão <code>5s</code> (era <code>0</code>), então OTLP clients recebe uma dica de nova tentativa sobre erros de ResourceExhausted por @electron0zero em #7088
+<ul>
+<li>Defina como <code>0</code> para desabilitar todo o cluster ou configure a substituição por locatário <code>ingestion.retry_info_enabled: false</code> para desabilitar para um único locatário.</li>
+</ul>
+</li>
+<li>Removido o prefixo <code>compaction</code> duplicado dos sinalizadores CompactorConfig CLI por @electron0zero em #6909
+-<code>compaction.compaction.block-retention</code>→<code>compaction.block-retention</code>
+-<code>compaction.compaction.max-objects-per-block</code> → <code>compaction.max-objects-per-block</code>
+-<code>compaction.compaction.max-block-bytes</code> → <code>compaction.max-block-bytes</code>
+-<code>compaction.compaction.compaction-window</code> → <code>compaction.compaction-window</code></li>
+<li>Receptor OpenCensus removido por @javiermolinar em #6523</li>
+<li>Removida a bandeira legada <code>mem-ballast-size-mbs</code> CLI de @orkhan-huseyn em #6403</li>
+<li>tempo-cli: Suporta tempo relativo (<code>now</code>, <code>now-1h</code>) para argumentos de início/fim e padroniza em RFC3339 em todos os comandos por @electron0zero em #6458
+<ul>
+<li>O comando <code>query search</code> não aceita mais timestamps sem fuso horário, por exemplo <code>2024-01-01T00:00:00</code>; use RFC3339, por exemplo <code>2024-01-01T00:00:00Z</code>, ou tempo relativo.</li>
+</ul>
+</li>
+<li>Configuração de leitura consolidada para corte de dados recente. <code>query_frontend.search.query_ingesters_until</code> foi removido em favor de apenas <code>query_frontend.search.query_backend_after</code> por @mapno em #6507</li>
+<li>Removida a configuração obsoleta do <code>querier.query_live_store</code>. Este campo deve ser removido das configurações na atualização por @javiermolinar em #7048</li>
+<li>TraceQL AST otimizado reescrevendo condições no mesmo atributo para seu array equivalente por @stoewer em #6353
+<ul>
+<li>Altera ligeiramente a semântica de correspondência de array dos operadores <code>!=</code> e <code>!~</code> e introduz regras mais rígidas para literais regex.</li>
+</ul>
+</li>
+<li>Removidas sobras de span-metrics e gerador de inicialização lenta clients por @javiermolinar em #6618</li>
+<li>Serviço de consulta MetricsGenerator do livestore desativado por @javiermolinar em #6615</li>
+<li>Removido o processador localblocks do gerador de métricas e o encanamento de armazenamento de bloco local relacionado por @javiermolinar em #6555</li>
+<li><code>SpanMetricsSummary</code> foi removido e o código do consultado foi simplificado por @javiermolinar em #6496 e #6510</li>
+<li>Defina o alvo <code>all</code> como 3.0-compatible e remova o alvo <code>scalable-single-binary</code> por @joe-elliott em #6283</li>
+<li>Empresa limpa jsonnet por @javiermolinar em #6505</li>
+</ul>
+<h2>Mudanças</h2>
+<ul>
+<li>Pare de publicar arquivos binários ARM de 32 bits. Os artefatos de lançamento continuam a incluir os binários amd64 e arm64 de @javiermolinar em #7106</li>
+<li>Atualize Tempo to Go 1.26.2 por @stoewer em #6443</li>
+<li>Permitir dimensões duplicadas para métricas de extensão e gráficos de serviço. Este é um caso de uso válido se estiver usando bibliotecas de instrumentação diferentes, com spans tendo <code>deployment.environment</code> e outros <code>deployment_environment</code>, por exemplo por @carles-grafana em #6288</li>
+<li>Atualize a duração máxima padrão para consultas de métricas TraceQL de até um dia por @javiermolinar em #6285</li>
+<li>Definir verificações de métricas de consulta TraceQL por padrão no Vulture por @javiermolinar em #6275</li>
+<li>Faça o exemplo de binário único do Tempo usar o backend local por @javiermolinar em #7033</li>
+<li>Aumente os limites de ingestão por @javiermolinar em #7034</li>
+<li>Exemplos de lançamento atualizados e configuração de operações geradas para <code>grafana/tempo:3.0.0</code> por @javiermolinar em #7291</li>
+<li>Métricas TraceQL: altere os intervalos de etapas padrão para alinhar com as novas colunas de carimbo de data/hora vParquet5 por @mdisibio em #6413</li>
+<li>Remova todos os vestígios de ingestão dos painéis por @javiermolinar em #6352</li>
+<li>jsonnet: Adicione o volume de dados emptyDir ao construtor de blocos StatefulSet por @mapno em #6648</li>
+<li>Adicione verificações rápidas ao runbook de mixin de tempo de @javiermolinar em #6696</li>
+<li>Descontinuar gerador de métricas no-local-blocks por @javiermolinar em #6707</li>
+<li>Próprios ajudantes de bloco local e anel de partição por @javiermolinar em #6808</li>
+<li>Rastreie rastreamentos inválidos e descartes de IDs de span por @javiermolinar em #6799</li>
+<li>Descontinuar <code>query_frontend.rf1_after</code> e consultar todos os blocos, independentemente do fator de replicação, para caminhos não métricos. Simplifica a migração 2.x para 3.0 por @mapno em #6969</li>
+<li>Liberar blocos para armazenamento de back-end da loja Live em modo binário único por @javiermolinar em #6941</li>
+<li>Remova a configuração obsoleta dos exemplos de @javiermolinar em #6980</li>
+<li>tempo-cli: Reescreva <code>migrate overrides-config</code> e adicione o comando <code>migrate overrides-per-tenant</code> para ajudar a migrar substituições planas herdadas para o novo formato com escopo definido por @electron0zero em #6793</li>
+<li>Desacoplar o livestore do gerador de métricas por @javiermolinar em #6506 e #6535</li>
+<li>Exponha as portas OTLP HTTP e gRPC para exemplos Docker por @javiermolinar em #6296</li>
+</ul>
+<h2>Correções de segurança</h2>
+<ul>
+<li><code>golang.org/x/net</code> atualizado para v0.55.0 por @renovate-sh-app[bot] em #7267</li>
+<li><code>golang.org/x/crypto</code> atualizado para v0.52.0 por @renovate-sh-app[bot] em #7266</li>
+<li><code>github.com/apache/thrift</code> atualizado para v0.23.0 por @renovate-sh-app[bot] em #7265</li>
+<li>Corrigido erro de divisão por zero em expressões TraceQL por @Proximyst em #6580</li>
+<li>Corrigido o travamento do <code>intPow</code> para determinadas entradas por @Proximyst em #6581</li>
+<li>Corrigido estouro de número inteiro em parâmetros de consulta usando <code>strconv.ParseUint</code> em vez de <code>strconv.Atoi</code>/<code>strconv.ParseInt</code> para campos inteiros não assinados por @ricardbejarano em #6612</li>
+</ul>
+<h2>Correções de bugs</h2>
+<ul>
+<li>Correção do pânico da loja ao vivo na pesquisa baseada em tags herdadas em blocos vParquet5 ao combinar atributos armazenados em colunas inteiras dedicadas por @mdisibio em #7135</li>
+<li>Correção do tratamento de pânico do livestore em caminhos por bloco <code>iterateBlocks</code> para que valores de parquet mal formados retornem um erro em vez de travar o processo por @zhxiaogg em #7134</li>
+<li>Corrigido o tempo-vulture ignorando a bandeira <code>-tempo-push-tls</code> no modo de operação normal por @zachfi em #6976</li>
+<li>livestore: verifique a prontidão antes do atraso para consultas SearchRecent e QueryRange por @zhxiaogg em #6911</li>
+<li>Corrigido o cache de disco SearchTagValuesV2 da loja ativa que nunca era preenchido em blocos completos por @mapno em #6858</li>
+<li>Correção de fallback de colunas dedicadas em <code>block_builder</code> e <code>live_store</code> para usar <code>storage.trace.block.parquet_dedicated_columns</code> quando não definido por meio de substituições por @stoewer em #6647</li>
+<li>Forçar a reidratação do live-store a partir do período de lookback do Kafka quando faltam dados locais, como limpeza de PVC ou novo nó, em vez de retomar a partir do grupo de consumidores comprometidos compensado por @oleg-kozlyuk-grafana em #6428</li>
+<li>Correção do recarregamento de substituições do <code>span_name_sanitization</code> durante o tempo de execução por @electron0zero em #6435</li>
+<li>live store honra as opções de configuração para versões de bloco e WAL por @mdisibio em #6509</li>
+<li>o construtor de blocos respeita a configuração de bloco de armazenamento global para versões de bloco e WAL por @Harry-kp em #6532</li>
+<li>Normalize os cabeçalhos da lista de permissões ao criar o mapa da lista de permissões por @javiermolinar em #6481</li>
+<li>Correção de bug relacionado à filtragem de coluna dedicada por @stoewer em #6586</li>
+<li>Corrija a métrica de vãos desduplicados do compactador usando o tipo errado, medidor em vez de contador, por @bejaratommy em #6576</li>
+<li>gerador de métricas: corrige o underflow do contador de série ativa no limitador de série local quando as séries de overflow são excluídas por @ carles-grafana em # 6568</li>
+<li>Ignorar limitador e higienizador por rótulo para métricas target_info e host_info no gerador de métricas por @electron0zero em #6660</li>
+<li>Corrija resultados de pesquisa incorretos para algumas consultas em novas colunas de blob por @mdisibio em #6815</li>
+<li>Corrigido bug de reutilização de buffer do vParquet5 onde atributos de eventos em colunas dedicadas poderiam ser persistidos em spans e eventos adicionais por @mdisibio em #6914</li>
+<li>Correção da condição de corrida em que o sinalizador <code>remove_owner_on_shutdown</code> foi definido tarde demais, fazendo com que o proprietário da partição permanecesse no ringue por @oleg-kozlyuk-grafana em #6693</li>
+<li>Retorna 400 em vez de 500 quando as solicitações query_range ou query_instant têm parâmetros de início/fim não analisáveis por @ruslan-mikhailov em #6694</li>
+<li>Métricas corretas de busca do construtor de blocos para usar contadores em vez de medidores por @WinterCabbage em #6578</li>
+<li>Registrar erros de push do inquilino no receptor por @javiermolinar em #6780</li>
+<li>Corrija as condições de corrida no bloco WAL por @ruslan-mikhailov em #6773</li>
+<li>gerador de métricas: Corrige target_info sendo ignorado quando atributos de recursos têm valores vazios por @carles-grafana em #6774</li>
+<li>gerador de métricas: Drene a série antiga na substituição da métrica para evitar vazamento do limitador e transbordamento permanente por @carles-grafana em #6653</li>
+<li>live-store: corrigido o cancelamento malsucedido de anéis de associação/partição durante o desligamento por @zhxiaogg em #6848</li>
+<li>Respeite o cancelamento de contexto ao ler o iterador de bloco WAL de @zhxiaogg em #6928</li>
+<li>Desligamento completo do ciclo de vida em caso de erros por @javiermolinar em #6906</li>
+<li>livestore: corrige gravações WAL simultâneas de liberações periódicas e de desligamento por @zhxiaogg em # 6972</li>
+<li>live-store: corrige condições de corrida para endpoint de valores de tag por @ruslan-mikhailov em #7000</li>
+<li>loja ao vivo: cálculo correto da duração da espera por @ruslan-mikhailov em #6999</li>
+<li>abutre: correção para rastros recentes quando <code>query_end_cutoff</code> é habilitado por @ruslan-mikhailov em #7018</li>
+<li>Correção de blocos WAL que produzem lojas ao vivo excedendo <code>max_block_bytes</code> ao liberar grandes lotes de rastreamentos ociosos por @ruslan-mikhailov em #6971</li>
+<li>live-store: pule a repetição de lookback quando a partição estiver inativa durante a redução por @zhxiaogg em #7101</li>
+</ul>
+<h2>Novos colaboradores</h2>
+<p>Obrigado aos seguintes colaboradores iniciantes:</p>
+<ul>
+<li>@evan361425 fez sua primeira contribuição em #5968</li>
+<li>@mihaelmiklec fez sua primeira contribuição em #6442</li>
+<li>@Harry-kp fez sua primeira contribuição em #6532</li>
+<li>@bejaratommy fez sua primeira contribuição em #6576</li>
+<li>@jasuade fez sua primeira contribuição em #6610</li>
+<li>@antonio-mazzini fez sua primeira contribuição em #6609</li>
+<li>@orkhan-huseyn fez sua primeira contribuição em #6403</li>
+<li>@ricardbejarano fez sua primeira contribuição em #6612</li>
+<li>@rwhitty fez sua primeira contribuição em #6561</li>
+<li>@WinterCabbage fez sua primeira contribuição em #6578</li>
+<li>@csmarchbanks fez sua primeira contribuição em #6684</li>
+<li>@gounthar fez sua primeira contribuição em #6756</li>
+<li>@Nouuu fez sua primeira contribuição em #6768</li>
+<li>@EoinTrial fez sua primeira contribuição em #6905</li>
+<li>@sethmccombs fez sua primeira contribuição em #7108
+Changelog completo: https://github.com/grafana/tempo/compare/v2.10.5...v3.0.0</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/grafana/tempo">grafana/tempo</a> · <code>v3.0.0</code> · 2026-05-28 · <a href="https://github.com/grafana/tempo/releases/tag/v3.0.0">lançamento upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>tempo v3.0.0</h1>
+<p>Tempo 3.0 is a major release that completes the transition to the new ingest/write architecture, removes deprecated 2.x components, graduates TraceQL metrics to general availability, and adds migration tooling for Tempo 2.x users.</p>
+<p>This release contains breaking configuration and deployment changes. Review the migration guide before upgrading, especially if you use legacy ingesters, legacy overrides, v2 blocks, OpenCensus, localblocks, or custom live-store/query-frontend settings.</p>
+<h2>Highlights</h2>
+<ul>
+<li>New ingest/write architecture replaces legacy ingesters.</li>
+<li>TraceQL metrics is generally available; alerting on TraceQL metrics and the faster read path remain experimental.</li>
+<li>vParquet5 improvements and faster metrics query paths.</li>
+<li>Expanded metrics-generator controls for cardinality management.</li>
+<li>Trace redaction support.</li>
+<li>Span profiling support via otelpyroscope.</li>
+<li>Live-store and block-builder correctness and observability fixes.</li>
+</ul>
+<p>Useful links:</p>
+<ul>
+<li>Release notes: https://grafana.com/docs/tempo/latest/release-notes/v3-0/</li>
+<li>Migration guide: https://grafana.com/docs/tempo/latest/set-up-for-tracing/setup-tempo/migrate-to-3/</li>
+<li>Upgrade guide: https://grafana.com/docs/tempo/latest/set-up-for-tracing/setup-tempo/upgrade/</li>
+<li>Changelog: https://github.com/grafana/tempo/blob/v3.0.0/CHANGELOG.md#v300</li>
+</ul>
+<h2>Features</h2>
+<ul>
+<li>Make individual AST transformations skippable via config and query hints by @stoewer in #7012</li>
+<li>Add span profiling support via otelpyroscope. Enable with <code>span_profiling: true</code> or <code>-span-profiling</code> CLI flag to attach pprof labels to OTel spans by @simonswine in #7063</li>
+<li>Add <code>tempo-cli migrate config</code> command for migrating Tempo 2.x configs to 3.0 by @mapno in #6982</li>
+<li>jsonnet: Add KEDA-based horizontal pod autoscaling support for microservices deployment by @mapno in #6970</li>
+<li>Add automemlimit support for automatic GOMEMLIMIT configuration. Enable with <code>memory.automemlimit_enabled: true</code> by @oleg-kozlyuk-grafana in #6313</li>
+<li>Support comparison operators in TraceQL Metrics queries by @ruslan-mikhailov in #6474</li>
+<li>metrics-generator: Add span filtering to service graphs through <code>filter_policies</code> by @javiermolinar in #6453</li>
+<li>Add new <code>include_any</code> filter policy for spanmetrics filter by @javiermolinar in #6392</li>
+<li>Add <code>span_multiplier_key</code> to overrides. This allows tenants to specify the attribute key used for span multiplier values to compensate for head-based sampling by @carles-grafana in #6260</li>
+<li>metrics-generator: Add per-label limiter to control cardinality by @electron0zero in #6414
+<ul>
+<li>Adds <code>max_cardinality_per_label</code> per tenant override and new metrics to estimate per-label cardinality demand.</li>
+</ul>
+</li>
+<li>Add an extension mechanism for per-tenant overrides by @stoewer in #6758</li>
+<li>Extend <code>TraceRedactor</code> interface to support hiding complete traces via <code>ErrTraceHidden</code> by @stoewer in #6811</li>
+<li>Single-binary mode: push distributor local ingest directly to live-store and metrics-generator without Kafka by @javiermolinar in #6729</li>
+<li>Add experimental drain limiter / span name sanitization to the metrics generator to reduce metrics cardinality by clustering similar span names by @Logiraptor in #6098</li>
+</ul>
+<h2>Enhancements</h2>
+<ul>
+<li>Query-frontend: split streamed search and metrics responses into smaller gRPC packets for better default client compatibility, and fix final streaming updates after metrics series limits are reached by @mdisibio in #6607 / #7239</li>
+<li>live-store: lock-free block reads via <code>atomic.Pointer[blockSnapshot]</code>; block deletion is two-phase and crash-safe by @zhxiaogg in #7132</li>
+<li>Support OR conditions for tag name and tag value autocomplete (search tags v2) by @ie-pham in #6827</li>
+<li>Expose MinIO retry settings via S3 config by @rwhitty in #6561</li>
+<li>Reduce default livestore WAL size and align query defaults: <code>max_block_duration</code> 1m to 30s, <code>max_block_bytes</code> 100MiB to 50MiB, <code>complete_block_timeout</code> 1h to 20m, metrics <code>query_backend_after</code> 30m to 15m by @zhxiaogg in #6974</li>
+<li>Enable native histogram emission for all promauto-registered histograms, including <code>tempo_request_duration_seconds</code>. Both classic and native formats are emitted simultaneously; existing scrapers are unaffected by @zalegrala in #6910</li>
+<li>tempo-cli: Add <code>--header</code> flag to query api commands for custom headers by @Nouuu in #6768</li>
+<li>tempo-cli: add <code>redact</code> command to submit trace redaction jobs to the backend scheduler by @zalegrala in #6832</li>
+<li>Block builder: deduplicate spans within traces during block creation and track removed duplicates via <code>tempo_block_builder_spans_deduped_total</code> metric by @zhxiaogg in #6539</li>
+<li>metrics-generator: Support extracting span multiplier from W3C tracestate OTel probability sampling threshold via <code>enable_tracestate_span_multiplier</code> config option by @csmarchbanks in #6684</li>
+<li>Add new alerts and runbook entries by @javiermolinar in #6276</li>
+<li>Double the maximum number of dedicated string columns in vParquet5 and update tempo-cli to determine the optimum number for the data by @mdisibio in #6282</li>
+<li>TraceQL metrics: experimental faster read path for most metrics queries, accessible behind the query hint <code>spanonly_fetch=true</code> when <code>unsafe_query_hints</code> is enabled by @mdisibio in #6359</li>
+<li>TraceQL metrics: add new per-tenant override to opt in or opt out of the new experimental faster read path for most metrics queries by @mdisibio in #6849</li>
+<li>Vulture: extend data consistency checks to include more strings, integers, and blobs, at resource/span/event scopes, and perform deeper trace content checks by @mdisibio in #6731</li>
+<li>Improve attribute truncating observability by @javiermolinar in #6400</li>
+<li>Log truncated oversized attributes by @carles-grafana in #6467</li>
+<li>livestore: make <code>trace_too_large</code> log line an insight by @carles-grafana in #6371</li>
+<li>Remove live-store partition owner from ring on shutdown to prevent stale owner entries by @oleg-kozlyuk-grafana in #6409</li>
+<li>Improved live store readiness check and added <code>readiness_target_lag</code> and <code>readiness_max_wait</code> config parameters. Live store will now, if <code>readiness_target_lag</code> is set, not report <code>/ready</code> until Kafka lag is brought under the specified value by @oleg-kozlyuk-grafana and @ruslan-mikhailov in #6238 and #6405</li>
+<li>Expose a new histogram metric to track the jobs per query distribution by @javiermolinar in #6343</li>
+<li>Do deep validation for filter policies in user configurable overrides API by @electron0zero in #6407</li>
+<li>Allow <code>span_name_sanitization</code> to be set via user-configurable overrides API by @Logiraptor in #6411</li>
+<li>Add <code>fail_on_high_lag</code> parameter to allow live-store to fail if it is lagged by @ruslan-mikhailov and @carles-grafana in #6363, #6567, and #7066</li>
+<li>Add support for per-tenant left-padding of trace IDs by @mapno in #6489</li>
+<li>Add new metric for generator ring size: <code>tempo_distributor_metrics_generator_tenant_ring_size</code> by @zalegrala in #5686</li>
+<li>Remove explicit <code>runtime.GC()</code> calls in vParquet5 compactor/block creation and CLI by @oleg-kozlyuk-grafana in #6603</li>
+<li>Reduce allocations in <code>extendReuseSlice</code> growth path during WAL writes and block creation by @mapno in #6863</li>
+<li>Implemented anti-affinity for pods in same livestore zone by @zhxiaogg in #6757</li>
+<li>Livestore: skipped WAL complete op during shutdown by @zhxiaogg in #6839</li>
+<li>Add metric to track livestore block cut reasons by @zhxiaogg in #6922</li>
+<li>Enable async parquet read mode for WAL completion path by @zhxiaogg in #6967</li>
+<li>metrics-generator: add <code>leave_consumer_group_on_shutdown</code> to send LeaveGroup on shutdown for immediate partition reassignment instead of waiting for session timeout by @zalegrala in #6575</li>
+</ul>
+<h2>Breaking Changes</h2>
+<p>Tempo 3.0 includes several operator-impacting removals and default changes. Review the migration guide before upgrading.</p>
+<ul>
+<li>The legacy ingester-based write path has been removed. Deployments must migrate to the 3.0 ingest/write architecture.
+<ul>
+<li>Removed ingesters and the ingester module by @javiermolinar in #6504 / #6959</li>
+<li>Removed remaining app ingester config and <code>ingest.enabled</code> by @javiermolinar in #6667 / #6873</li>
+<li>Removed partition ring livestore config by @javiermolinar in #6981</li>
+<li>Removed ingester and compactor alerts by @javiermolinar in #6369</li>
+</ul>
+</li>
+<li>Removed v2 block encoding and the legacy v2 compactor component by @joe-elliott in #6273
+<ul>
+<li>Removed v2-specific CLI commands: <code>list block</code>, <code>list index</code>, <code>view index</code>, <code>gen index</code>, and <code>gen bloom</code>.</li>
+</ul>
+</li>
+<li>Centralized block and WAL config: <code>block_builder</code> and <code>live_store</code> now always use <code>storage.trace.block</code> settings; per-module block config fields are removed by @stoewer in #6647</li>
+<li>Recent data queries now guarantee complete results by failing when an instance is lagging. Defaults <code>query_frontend.query_end_cutoff</code> to <code>30s</code> and <code>live_store.fail_on_high_lag</code> to <code>true</code> by @mapno in #7210 / #7232</li>
+<li>Disabled legacy (flat, unscoped) overrides by default. Tempo refuses to start if legacy overrides are detected. Set <code>enable_legacy_overrides: true</code> or <code>-config.enable-legacy-overrides=true</code> to opt back in temporarily. Legacy overrides will be removed in a future release by @electron0zero in #6741</li>
+<li>User-configurable overrides config <code>metrics_generator.processors</code> no longer merges with runtime overrides. <code>metrics_generator.processors</code> now takes precedence over runtime overrides, matching every other config in user-configurable overrides. Setting <code>processors: []</code> disables all processors for the tenant by @electron0zero in #7176 / #7185</li>
+<li>Enabled RetryInfo by default. <code>distributor.retry_after_on_resource_exhausted</code> now defaults to <code>5s</code> (was <code>0</code>) so OTLP clients receive a retry hint on ResourceExhausted errors by @electron0zero in #7088
+<ul>
+<li>Set to <code>0</code> to disable cluster-wide, or set the per-tenant override <code>ingestion.retry_info_enabled: false</code> to disable for a single tenant.</li>
+</ul>
+</li>
+<li>Removed duplicate <code>compaction</code> prefix from CompactorConfig CLI flags by @electron0zero in #6909
+<ul>
+<li><code>compaction.compaction.block-retention</code> → <code>compaction.block-retention</code></li>
+<li><code>compaction.compaction.max-objects-per-block</code> → <code>compaction.max-objects-per-block</code></li>
+<li><code>compaction.compaction.max-block-bytes</code> → <code>compaction.max-block-bytes</code></li>
+<li><code>compaction.compaction.compaction-window</code> → <code>compaction.compaction-window</code></li>
+</ul>
+</li>
+<li>Removed OpenCensus receiver by @javiermolinar in #6523</li>
+<li>Removed legacy <code>mem-ballast-size-mbs</code> CLI flag by @orkhan-huseyn in #6403</li>
+<li>tempo-cli: Support relative time (<code>now</code>, <code>now-1h</code>) for start/end args and standardize on RFC3339 in all commands by @electron0zero in #6458
+<ul>
+<li><code>query search</code> command no longer accepts timestamps without timezone, for example <code>2024-01-01T00:00:00</code>; use RFC3339, for example <code>2024-01-01T00:00:00Z</code>, or relative time instead.</li>
+</ul>
+</li>
+<li>Consolidated read configuration for recent data cutoff. <code>query_frontend.search.query_ingesters_until</code> is removed in favor of only <code>query_frontend.search.query_backend_after</code> by @mapno in #6507</li>
+<li>Removed deprecated <code>querier.query_live_store</code> config. This field must be removed from configs on upgrade by @javiermolinar in #7048</li>
+<li>Optimized TraceQL AST by rewriting conditions on the same attribute to their array equivalent by @stoewer in #6353
+<ul>
+<li>Slightly changes the array matching semantics of <code>!=</code> and <code>!~</code> operators and introduces stricter rules for regex literals.</li>
+</ul>
+</li>
+<li>Removed span-metrics leftovers and lazy-init generator clients by @javiermolinar in #6618</li>
+<li>Decommissioned livestore MetricsGenerator query service by @javiermolinar in #6615</li>
+<li>Removed metrics-generator localblocks processor and related local block storage plumbing by @javiermolinar in #6555</li>
+<li><code>SpanMetricsSummary</code> is removed and querier code simplified by @javiermolinar in #6496 and #6510</li>
+<li>Set the <code>all</code> target to be 3.0-compatible and removed the <code>scalable-single-binary</code> target by @joe-elliott in #6283</li>
+<li>Cleaned up enterprise jsonnet by @javiermolinar in #6505</li>
+</ul>
+<h2>Changes</h2>
+<ul>
+<li>Stop publishing 32-bit ARM binary archives. Release artifacts continue to include amd64 and arm64 binaries by @javiermolinar in #7106</li>
+<li>Upgrade Tempo to Go 1.26.2 by @stoewer in #6443</li>
+<li>Allow duplicate dimensions for span metrics and service graphs. This is a valid use case if using different instrumentation libraries, with spans having <code>deployment.environment</code> and others <code>deployment_environment</code>, for example by @carles-grafana in #6288</li>
+<li>Update default max duration for TraceQL metrics queries up to one day by @javiermolinar in #6285</li>
+<li>Set TraceQL query metrics checks by default in Vulture by @javiermolinar in #6275</li>
+<li>Make Tempo single-binary example use the local backend by @javiermolinar in #7033</li>
+<li>Bump ingestion limits by @javiermolinar in #7034</li>
+<li>Bumped release examples and generated operations config to <code>grafana/tempo:3.0.0</code> by @javiermolinar in #7291</li>
+<li>TraceQL metrics: change default step intervals to align with new vParquet5 timestamp columns by @mdisibio in #6413</li>
+<li>Remove all traces of ingesters from the dashboards by @javiermolinar in #6352</li>
+<li>jsonnet: Add emptyDir data volume to block-builder StatefulSet by @mapno in #6648</li>
+<li>Add quick checks to tempo mixin runbook by @javiermolinar in #6696</li>
+<li>Deprecate metrics-generator no-local-blocks by @javiermolinar in #6707</li>
+<li>Own local block and partition ring helpers by @javiermolinar in #6808</li>
+<li>Track invalid trace and span id discards by @javiermolinar in #6799</li>
+<li>Deprecate <code>query_frontend.rf1_after</code> and query all blocks regardless of replication factor for non-metrics paths. Simplifies 2.x to 3.0 migration by @mapno in #6969</li>
+<li>Flush blocks to backend storage from the Live store in single binary mode by @javiermolinar in #6941</li>
+<li>Remove stale config from the examples by @javiermolinar in #6980</li>
+<li>tempo-cli: Rewrite <code>migrate overrides-config</code> and add <code>migrate overrides-per-tenant</code> command to help migrate legacy flat overrides to the new scoped format by @electron0zero in #6793</li>
+<li>Decouple livestore from metrics-generator by @javiermolinar in #6506 and #6535</li>
+<li>Expose OTLP HTTP and gRPC ports for Docker examples by @javiermolinar in #6296</li>
+</ul>
+<h2>Security fixes</h2>
+<ul>
+<li>Updated <code>golang.org/x/net</code> to v0.55.0 by @renovate-sh-app[bot] in #7267</li>
+<li>Updated <code>golang.org/x/crypto</code> to v0.52.0 by @renovate-sh-app[bot] in #7266</li>
+<li>Updated <code>github.com/apache/thrift</code> to v0.23.0 by @renovate-sh-app[bot] in #7265</li>
+<li>Fixed division by zero error in TraceQL expressions by @Proximyst in #6580</li>
+<li>Fixed <code>intPow</code> hanging for certain inputs by @Proximyst in #6581</li>
+<li>Fixed integer overflow in query parameters by using <code>strconv.ParseUint</code> instead of <code>strconv.Atoi</code>/<code>strconv.ParseInt</code> for unsigned integer fields by @ricardbejarano in #6612</li>
+</ul>
+<h2>Bugfixes</h2>
+<ul>
+<li>Fixed live-store panic in legacy tag-based search against vParquet5 blocks when matching attributes stored in integer dedicated columns by @mdisibio in #7135</li>
+<li>Fixed livestore panic handling in <code>iterateBlocks</code> per-block paths so malformed parquet values return an error instead of crashing the process by @zhxiaogg in #7134</li>
+<li>Fixed tempo-vulture ignoring <code>-tempo-push-tls</code> flag in normal operating mode by @zachfi in #6976</li>
+<li>livestore: check readiness before lag for SearchRecent and QueryRange queries by @zhxiaogg in #6911</li>
+<li>Fix live-store SearchTagValuesV2 disk cache never being populated on complete blocks by @mapno in #6858</li>
+<li>Fix dedicated columns fallback in <code>block_builder</code> and <code>live_store</code> to use <code>storage.trace.block.parquet_dedicated_columns</code> when not set via overrides by @stoewer in #6647</li>
+<li>Force live-store to rehydrate from Kafka lookback period when local data is missing, such as PVC wipe or new node, instead of resuming from the committed consumer group offset by @oleg-kozlyuk-grafana in #6428</li>
+<li>Fix reload of <code>span_name_sanitization</code> overrides during runtime by @electron0zero in #6435</li>
+<li>live store honors the config options for block and WAL versions by @mdisibio in #6509</li>
+<li>block builder honors the global storage block config for block and WAL versions by @Harry-kp in #6532</li>
+<li>Normalize allowlist headers when building the allowlist map by @javiermolinar in #6481</li>
+<li>Fix bug related to dedicated column filtering by @stoewer in #6586</li>
+<li>Fix compactor deduped spans metric using the wrong type, gauge instead of counter, by @bejaratommy in #6576</li>
+<li>metrics-generator: Fix active-series counter underflow in local series limiter when overflow series are deleted by @carles-grafana in #6568</li>
+<li>Skip per-label limiter and sanitizer for target_info and host_info metrics in metrics-generator by @electron0zero in #6660</li>
+<li>Fix incorrect search results for some queries on new blob columns by @mdisibio in #6815</li>
+<li>Fix vParquet5 buffer-reuse bug where event attributes in dedicated columns could be persisted on additional spans and events by @mdisibio in #6914</li>
+<li>Fix race condition where <code>remove_owner_on_shutdown</code> flag was set too late, causing the partition owner to remain in the ring by @oleg-kozlyuk-grafana in #6693</li>
+<li>Return 400 instead of 500 when query_range or query_instant requests have unparseable start/end parameters by @ruslan-mikhailov in #6694</li>
+<li>Correct block-builder fetch metrics to use counters instead of gauges by @WinterCabbage in #6578</li>
+<li>Log tenant on receiver push errors by @javiermolinar in #6780</li>
+<li>Fix race conditions in WAL block by @ruslan-mikhailov in #6773</li>
+<li>metrics-generator: Fix target_info being skipped when resource attributes have empty values by @carles-grafana in #6774</li>
+<li>metrics-generator: Drain old series on metric replacement to prevent limiter leak and permanent overflow by @carles-grafana in #6653</li>
+<li>live-store: fixed unsuccessful deregistering from membership/partition rings during shutdown by @zhxiaogg in #6848</li>
+<li>Respect context cancellation when reading WAL block iterator by @zhxiaogg in #6928</li>
+<li>Complete lifecycler shutdown on errors by @javiermolinar in #6906</li>
+<li>livestore: fix concurrent WAL writes from periodic and shutdown flushes by @zhxiaogg in #6972</li>
+<li>live-store: fix race conditions for tag values endpoint by @ruslan-mikhailov in #7000</li>
+<li>live-store: correct backoff duration calculation by @ruslan-mikhailov in #6999</li>
+<li>vulture: fix for recent traces when <code>query_end_cutoff</code> is enabled by @ruslan-mikhailov in #7018</li>
+<li>Fix live-store producing WAL blocks exceeding <code>max_block_bytes</code> when flushing large batches of idle traces by @ruslan-mikhailov in #6971</li>
+<li>live-store: skip lookback replay when partition is Inactive during scaling down by @zhxiaogg in #7101</li>
+</ul>
+<h2>New Contributors</h2>
+<p>Thanks to the following first-time contributors:</p>
+<ul>
+<li>@evan361425 made their first contribution in #5968</li>
+<li>@mihaelmiklec made their first contribution in #6442</li>
+<li>@Harry-kp made their first contribution in #6532</li>
+<li>@bejaratommy made their first contribution in #6576</li>
+<li>@jasuade made their first contribution in #6610</li>
+<li>@antonio-mazzini made their first contribution in #6609</li>
+<li>@orkhan-huseyn made their first contribution in #6403</li>
+<li>@ricardbejarano made their first contribution in #6612</li>
+<li>@rwhitty made their first contribution in #6561</li>
+<li>@WinterCabbage made their first contribution in #6578</li>
+<li>@csmarchbanks made their first contribution in #6684</li>
+<li>@gounthar made their first contribution in #6756</li>
+<li>@Nouuu made their first contribution in #6768</li>
+<li>@EoinTrial made their first contribution in #6905</li>
+<li>@sethmccombs made their first contribution in #7108</li>
+</ul>
+<p>Full Changelog: https://github.com/grafana/tempo/compare/v2.10.5...v3.0.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/grafana/tempo">grafana/tempo</a> · <code>v3.0.0</code> · 2026-05-28 · <a href="https://github.com/grafana/tempo/releases/tag/v3.0.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/tempo/2.10.6"> <span class="k">← Próximo</span> <span class="t">v2.10.6</span> </a> <a href="/releases/tempo/2.9.2"> <span class="k">Anterior →</span> <span class="t">v2.9.2</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/grafana/tempo/releases/tag/v3.0.0" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/grafana/tempo" target="_blank" rel="noopener"> <span>grafana/tempo</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Nesta página</div> <nav> <a href="#" class>Destaques</a><a href="#" class>Recursos</a><a href="#" class>Melhorias</a><a href="#" class>Mudanças significativas</a><a href="#" class>Mudanças</a><a href="#" class>Correções de segurança</a><a href="#" class>Correções de bugs</a><a href="#" class>Novos colaboradores</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/tempo/3.1.1"> <span class="v">v3.1.1</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/3.0.5"> <span class="v">v3.0.5</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/2.10.10"> <span class="v">v2.10.10</span> <span class="d">26-10-21</span> </a> </li><li> <a href="/releases/tempo/2.10.9"> <span class="v">v2.10.9</span> <span class="d">26-10-20</span> </a> </li><li> <a href="/releases/tempo/3.0.4"> <span class="v">v3.0.4</span> <span class="d">26-10-16</span> </a> </li><li> <a href="/releases/tempo/3.1.0"> <span class="v">v3.1.0</span> <span class="d">26-09-29</span> </a> </li><li> <a href="/releases/tempo/3.0.3"> <span class="v">v3.0.3</span> <span class="d">26-08-13</span> </a> </li><li> <a href="/releases/tempo/2.9.5"> <span class="v">v2.9.5</span> <span class="d">26-08-13</span> </a> </li> </ul> <a href="/pt/releases/tempo" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

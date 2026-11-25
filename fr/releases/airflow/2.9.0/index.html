@@ -1,0 +1,569 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>airflow 2.9.0 — STAGS NextStack</title><meta name="description" content="on_starting · before_stopping"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/airflow/2.9.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/airflow/2.9.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/airflow/2.9.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/airflow/2.9.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="airflow 2.9.0 — STAGS NextStack"><meta property="og:description" content="on_starting · before_stopping"><meta property="og:url" content="https://www.stags.cn/fr/releases/airflow/2.9.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/airflow/2.9.0/#article","headline":"airflow 2.9.0 release notes","datePublished":"2024-04-08","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/airflow"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/airflow/2.9.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/airflow/airflow_2.9.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/airflow/2.9.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/airflow/2.9.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/airflow/2.9.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/airflow/2.9.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/airflow/2.9.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/airflow">airflow</a> </nav> <h1 class="detail-title"> <span class="p">airflow</span> 2.9.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>8 avr. 2024</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/airflow" target="_blank" rel="noopener"> <span class="k">Source</span>apache/airflow </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/airflow/2.9.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/airflow/2.9.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>débit d'air 2.9.0</h1>
+<h2>Changements importants</h2>
+<h2>Les méthodes suivantes de l'écouteur API sont considérées comme stables et peuvent être utilisées pour le système de production (il s'agissait d'une fonctionnalité expérimentale dans les anciennes versions d'Airflow) (#36376) :</h2>
+<p>Événements du cycle de vie :</p>
+<ul>
+<li><code>on_starting</code></li>
+<li><code>before_stopping</code>
+Événements de changement d'état DagRun :</li>
+<li><code>on_dag_run_running</code></li>
+<li><code>on_dag_run_success</code></li>
+<li><code>on_dag_run_failed</code>
+Événements de changement d’état de l’instance de tâche :</li>
+<li><code>on_task_instance_running</code></li>
+<li><code>on_task_instance_success</code></li>
+<li><code>on_task_instance_failed</code></li>
+</ul>
+<h2>La prise en charge de Microsoft SQL-Server pour la méta-base de données Airflow a été supprimée (#36514)</h2>
+<p>Après <code>discussion &lt;https://lists.apache.org/thread/r06j306hldg03g2my1pd4nyjxg78b3h4&gt;</code>__
+et un <code>voting process &lt;https://lists.apache.org/thread/pgcgmhf6560k8jbsmz8nlyoxosvltph2&gt;</code>__,
+Le PMC et les committers d'Airflow ont atteint une résolution pour ne plus maintenir MsSQL en tant que backend de base de données pris en charge.
+Depuis Airflow, la prise en charge de MsSQL par 2.9.0 a été supprimée pour le backend de la base de données Airflow.
+Un script de migration qui peut aider à migrer la base de données <em>avant</em> la mise à niveau vers Airflow 2.9.0 est disponible dans
+<code>airflow-mssql-migration repo on Github &lt;https://github.com/apache/airflow-mssql-migration&gt;</code>_.
+Notez que le script de migration est fourni sans support ni garantie.
+Cela n'affecte pas les packages de fournisseurs existants (opérateurs et hooks), les DAG peuvent toujours accéder et traiter les données de MsSQL.</p>
+<h2>Les URI des ensembles de données sont désormais validés en entrée (#37005)</h2>
+<p>Les ensembles de données doivent utiliser un URI conforme aux règles établies dans l'AIP-60 et la valeur
+sera automatiquement normalisé lorsque le fichier DAG sera analysé. Voir
+<code>documentation on Datasets &lt;https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/datasets.html&gt;</code>_ pour
+une description plus détaillée des règles.
+Vous devrez peut-être modifier vos identifiants d'ensemble de données s'ils ressemblent à un URI, mais sont
+utilisé d'une manière moins courante, comme en s'appuyant sur la section d'authentification de l'URI, ou
+avoir un nom de protocole sensible à la casse.</p>
+<h2>La méthode <code>get_permitted_menu_items</code> in <code>BaseAuthManager</code> has been renamed <code>filter_permitted_menu_items</code> (#37627)</h2>
+<h2>Ajouter des actions REST API aux événements du journal d'audit (#37734)</h2>
+<p>Le journal d'audit <code>event</code> name for REST API events will be prepended with <code>api.</code> or <code>ui.</code>, selon qu'il provient de l'interface utilisateur d'Airflow ou de l'extérieur.</p>
+<h2>Support officiel pour Python 3.12 (#38025)</h2>
+<p>Il y a cependant quelques mises en garde :</p>
+<ul>
+<li>Pendulum2 ne prend pas en charge Python 3.12. Pour Python 3.12, vous devez utiliser
+<code>Pendulum 3 &lt;https://pendulum.eustace.io/blog/announcing-pendulum-3-0-0.html&gt;</code>_</li>
+<li>La version minimale de SQLAlchemy prise en charge lorsque Pandas est installé pour Python 3.12 est <code>1.4.36</code> publié dans
+Avril 2022. Airflow 2.9.0 augmente la version minimale prise en charge de SQLAlchemy à « <code>1.4.36</code> » pour tous
+Versions Python.
+Tous les fournisseurs ne prennent pas en charge Python 3.12. Lors de la version initiale d'Airflow 2.9.0, les fournisseurs suivants
+sont publiés sans prise en charge de Python 3.12 :
+<ul>
+<li><code>apache.beam</code> - pending on <code>Prise en charge d'Apache Beam pour 3.12 &lt;https://github.com/apache/beam/issues/29149&gt;</code>_</li>
+<li><code>papermill</code> - en attente de sortie de la version Python 3.12 compatible avec la papeterie client
+<code>including this merged issue &lt;https://github.com/nteract/papermill/pull/771&gt;</code>_</li>
+</ul>
+</li>
+</ul>
+<h2>Empêcher le stockage d'objets chaîne volumineux dans les champs du modèle rendu (#38094)</h2>
+<p>Il existe désormais une limite à la longueur des données pouvant être stockées dans les champs du modèle rendu.
+La limite est fixée à 4 096 caractères. Si les données dépassent cette limite, elles seront tronquées. Vous pouvez modifier cette limite
+en définissant l'option de configuration « <code>[core]max_template_field_length</code> » dans votre configuration de flux d'air.</p>
+<h2>Changez le type de valeur de la colonne de la table xcom en longblob pour le backend MySQL (#38401)</h2>
+<p>Colonne du tableau Xcom <code>value</code> type has changed from <code>blob</code> to <code>longblob</code>. Cela vous permettra de stocker des données relativement volumineuses dans Xcom, mais le processus peut prendre beaucoup de temps si vous avez beaucoup de données volumineuses stockées dans Xcom.
+Pour rétrograder à partir de la révision : <code>b4078ac230a1</code>, ensure that you don't have Xcom values larger than 65,535 bytes. Otherwise, you'll need to clean those rows or run <code>airflow db clean xcom</code> pour nettoyer la table Xcom.</p>
+<h2>Nouvelles fonctionnalités</h2>
+<ul>
+<li>Autoriser les utilisateurs à écrire dag_id et task_id dans leurs caractères nationaux, ajout du nom d'affichage pour dag/tâche (v2) (#38446)</li>
+<li>Empêcher le stockage d'objets volumineux dans le RTIF (#38094)</li>
+<li>Utilisez l'heure actuelle pour calculer la durée lorsque la date de fin n'est pas présente. (#38375)</li>
+<li>Ajouter une ligne de marque de durée moyenne dans les graphiques de durée des tâches et des dagrun. (#38214, #38434)</li>
+<li>Bouton Ajouter pour créer manuellement des événements d'ensemble de données (#38305)</li>
+<li>Ajoutez <code>Matomo</code> comme option pour Analytics_tool. (#38221)</li>
+<li>Expérimental : prise en charge de l'implémentation personnalisée de Weight_rule pour calculer le TI Priority_weight (#38222)</li>
+<li>Ajout de la possibilité de désactiver automatiquement DAG après X fois d'échec séquentiel (# 36935)</li>
+<li>Ajouter des conditions d'ensemble de données au modal des ensembles de données de la prochaine exécution (# 38123)</li>
+<li>Ajouter un regroupement de journaux de tâches à l'interface utilisateur (#38021)</li>
+<li>Ajouter dataset_expression aux détails de la grille (#38121)</li>
+<li>Introduction d'un mécanisme pour prendre en charge la configuration de plusieurs exécuteurs (# 37635)</li>
+<li>Ajout d'un formatage des couleurs pour les caractères ANSI dans les journaux des exécutions de tâches (#37985)</li>
+<li>Ajoutez le dataset_expression dans le cadre de DagModel et DAGDetailSchema (#37826)</li>
+<li>Ajouter des entrées TaskFail au diagramme de Gantt (#37918)</li>
+<li>Autoriser render_map_index plus long (#37798)</li>
+<li>Hériter du run_ordering de DatasetTriggeredTimetable pour DatasetOrTimeSchedule (#37775)</li>
+<li>Implémenter les formats URI de l'ensemble de données AIP-60 (# 37005)</li>
+<li>Présentation des opérateurs logiques pour la logique conditionnelle des ensembles de données (#37101)</li>
+<li>Ajouter un point de terminaison de publication pour les événements d'ensemble de données (#37570)</li>
+<li>Afficher les noms d'instances personnalisés pour une tâche mappée dans l'interface utilisateur (#36797)</li>
+<li>Ajouter des événements exclus/inclus à get_event_logs api (#37641)</li>
+<li>Ajouter des ensembles de données au graphique journalier (#37604)</li>
+<li>Afficher les événements de l'ensemble de données au-dessus des détails de la tâche/exécution dans la vue grille (#37603)</li>
+<li>Introduire une nouvelle variable de configuration pour contrôler si le processeur DAG sort sur la sortie standard (#37439)</li>
+<li>Créer des ensembles de données <code>hashable</code> (#37465)</li>
+<li>Ajouter une logique conditionnelle pour le déclenchement de l'ensemble de données (#37016)</li>
+<li>Implémenter la page de durée de la tâche en réaction. (#35863)</li>
+<li>Ajoutez le point de terminaison <code>queuedEvent</code> pour obtenir/supprimer DatasetDagRunQueue (#37176)</li>
+<li>Prise en charge de plusieurs sorties XCom dans BaseOperator (#37297)</li>
+<li>AIP-58 : Ajouter un backend de stockage d'objets pour xcom (#37058)</li>
+<li>Présentation de <code>DatasetOrTimeSchedule</code> (#36710)</li>
+<li>Ajouter <code>on_skipped_callback</code> to <code>BaseOperator</code> (#36374)</li>
+<li>Autoriser le remplacement des couleurs de la barre de navigation survolée (#36631)</li>
+<li>Créer de nouvelles métriques avec le marquage (#36528)</li>
+<li>Ajout de la prise en charge d'openlineage à AFS et common.io (#36410)</li>
+<li>Présentation du décorateur TaskFlow <code>@task.bash</code> (#30176, #37875)</li>
+<li>Ajout d'une fonctionnalité pour ingérer automatiquement le fichier airflow.cfg personnalisé au démarrage (#36289)</li>
+</ul>
+<h2>Améliorations</h2>
+<ul>
+<li>Sortie &quot;show tables&quot; plus conviviale pour le nettoyage de la base de données (# 38654)</li>
+<li>Améliorer le déclencheur assign_unassigned en fusionnant les requêtes healthy_triggerer_ids et get_sorted_triggers (#38664)</li>
+<li>Ajouter des filtres d'événements d'exclusion/inclusion au journal d'audit (#38506)</li>
+<li>Nettoyer les déclencheurs inutilisés en une seule requête pour tous les dialectes sauf MySQL (#38663)</li>
+<li>Mettre à jour la logique de confirmation pour les modifications de configuration sur les environnements sensibles comme la production (#38299)</li>
+<li>Améliorer l'UX du graphique des ensembles de données (#38476)</li>
+<li>Afficher uniquement l'horodatage du dernier événement de l'ensemble de données après la dernière exécution (# 38340)</li>
+<li>Ajouter un bouton pour effacer uniquement les tâches ayant échoué dans un dagrun. (#38217)</li>
+<li>Supprimez toutes les anciennes pages du jour et redirigez vers la vue grille (#37988)</li>
+<li>Vérifiez l'attribut de la tâche avant utilisation dans sentry.add_tagging() (#37143)</li>
+<li>Mysql change le type de col de valeur xcom pour le backend MySQL (#38401)</li>
+<li><code>ExternalPythonOperator</code> use version from <code>sys.version_info</code> (#38377)</li>
+<li>Remplacer les exceptions trop larges dans le Core (#38344)</li>
+<li>Ajout du support CLI pour la pause et la reprise en bloc des DAG (#38265)</li>
+<li>Implémenter des méthodes sur TaskInstancePydantic et DagRunPydantic (#38295, #38302, #38303, #38297)</li>
+<li>Barre de filtres pliable et ajout d'une bascule plein écran (# 38296)</li>
+<li>Chiffrer tous les attributs du déclencheur (#38233, #38358, #38743)</li>
+<li>Mettre à niveau le package React-Table. Utiliser avec le tableau du journal d'audit (#38092)</li>
+<li>Afficher si les filtres de page quotidienne sont actifs (#38080)</li>
+<li>Ajouter un numéro d'essai à l'instance mappée (#38097)</li>
+<li>Ajouter des tentatives au rythme cardiaque du travail (#37541)</li>
+<li>Ajouter les événements REST API au journal d'audit (#37734)</li>
+<li>Créer le répertoire de travail actuel comme champ modélisé dans BashOperator (#37968)</li>
+<li>Ajouter une vue calendrier pour réagir (#37909)</li>
+<li>Ajouter la colonne <code>run_id</code> à la table de journalisation (#37731)</li>
+<li>Ajouter <code>tryNumber</code> à l'info-bulle de l'instance de tâche de grille (#37911)</li>
+<li>La session n'est pas utilisée dans _do_render_template_fields (#37856)</li>
+<li>Améliorer les types de propriétés MappedOperator (#37870)</li>
+<li>Supprimer le décorateur provide_session des méthodes TaskInstancePydantic (#37853)</li>
+<li>Assurez-vous que l'enregistreur &quot;airflow.task&quot; est utilisé pour TaskInstancePydantic et TaskInstance (#37857)</li>
+<li>Meilleur message d'erreur pour l'erreur d'appel interne api (#37852)</li>
+<li>Augmenter la taille de l'info-bulle de la vue de la grille quotidienne (#37782) (#37805)</li>
+<li>Utilisez des enregistreurs nommés au lieu de l'enregistreur racine (#37801)</li>
+<li>Ajouter la durée d'exécution dans React (#37735)</li>
+<li>Évitez toute utilisation non recommandée de la journalisation (#37792)</li>
+<li>Améliorer la saisie DateTimeTrigger (#37694)</li>
+<li>Assurez-vous que tous les run_ids uniques affichent une barre de durée de tâche (#37717)</li>
+<li>Ajouter le journal d'audit Dag à React (#37682)</li>
+<li>Ajouter un événement de journal pour la pause automatique (#38243)</li>
+<li>Meilleur message d'exception pour les champs d'opérateur de base modélisés (#37668)</li>
+<li>Nettoyer les points de terminaison du serveur Web en les ajoutant au journal d'audit (#37580)</li>
+<li>Filtrer le graphique des ensembles de données par dag_id (#37464)</li>
+<li>Utiliser un nouveau type d'exception héritant de BaseException pour les SIGTERM (#37613)</li>
+<li>Refactoriser l'héritage de classe d'ensemble de données (#37590)</li>
+<li>Simplifier les vérifications des versions de packages (#37585)</li>
+<li>Filtrer les ensembles de données par dag_ids associés (GET /datasets) (#37512)</li>
+<li>Activer le « test des tâches de flux d'air » pour exécuter l'opérateur différé (#37542)</li>
+<li>Rendre la liste des ensembles de données/la largeur du graphique réglable (#37425)</li>
+<li>L'accélération détermine la version du flux d'air installée dans <code>ExternalPythonOperator</code> (#37409)</li>
+<li>Ajouter plus de détails sur la tâche à partir du reste api (#37394)</li>
+<li>Ajouter une boîte de dialogue de confirmation pour les actions d'exécution du DAG (#35393)</li>
+<li>Ajout de la couleur d'arrêt au STATE_COLORS (#37295)</li>
+<li>Supprimer la page de détails du jour hérité et rediriger vers la grille (# 37232)</li>
+<li>Trier les entrées XCom par index de carte dans API (#37086)</li>
+<li>Ajoutez data_interval_start et data_interval_end dans dagrun pour créer le point de terminaison API (#36630)</li>
+<li>Création de liens dans les journaux de tâches sous forme d'hyperliens en empêchant l'injection HTML (#36829)</li>
+<li>Améliorer l'implémentation asynchrone d'ExternalTaskSensor (# 36916)</li>
+<li>Créer des ensembles de données <code>Pathlike</code> (#36947)</li>
+<li>Simplifier la requête pour les tâches orphelines (#36566)</li>
+<li>Ajouter un paramètre différé dans FileSensor (#36840)</li>
+<li>Run Trigger Page : nombre configurable de configurations récentes (# 36878)</li>
+<li>Fusionner <code>nowait</code> et skip_locked dans with_row_locks (#36889)</li>
+<li>Renvoie le champ spécifié lors de la récupération de <code>dag/dagRun</code> dans le REST API (#36641)</li>
+<li>Itérer uniquement sur les éléments si le débogage est activé pour DagFileProcessorManager (#36761)</li>
+<li>Ajouter une correspondance de modèle flou/regex pour les listes d'autorisation et de blocage des métriques (#36250)</li>
+<li>Autoriser les colonnes personnalisées dans la liste des jours cli (#35250)</li>
+<li>Permet de modifier le calendrier cron par défaut (#34851)</li>
+<li>Quelques améliorations du code Airflow IO (#36259)</li>
+<li>Améliorer les conseils de saisie de TaskInstance (#36487)</li>
+<li>Supprimer la dépendance de <code>Connexion</code> de l'interface du gestionnaire d'authentification (#36209)</li>
+<li>Refactoriser ExternalDagLink pour ne pas créer de TaskInstances ad hoc (#36135)</li>
+</ul>
+<h2>Corrections de bugs</h2>
+<ul>
+<li>Charger la configuration des fournisseurs au démarrage des Workers Gunicorn (#38795)</li>
+<li>Correction du rendu de l'en-tête de grille (#38720)</li>
+<li>Ajouter une dépendance d'instance de tâche pour les dépendances mappées (#37498)</li>
+<li>Améliorer la stabilité de la fonction remove_task_decorator (#38649)</li>
+<li>Marquer plus de champs sur API comme dump uniquement (#38616)</li>
+<li>Correction du nombre <code>total_entries</code> sur le point de terminaison des journaux d'événements (#38625)</li>
+<li>Ajoutez un remplissage au bas du bloc de journal. (#38610)</li>
+<li>Sérialiser correctement les classes attrs imbriquées (#38591)</li>
+<li>Correction du <code>tz</code> dans les informations d'identification de la prochaine exécution (#38482)</li>
+<li>Afficher les tâches abandonnées en mode Grille (# 38511)</li>
+<li>Appliquer le hook de mutation d'instance de tâche de manière cohérente (# 38440)</li>
+<li>Remplacer « <code>chakra`` styles to keep ``dropdowns</code> » dans la barre de filtre (#38456)</li>
+<li>Stocke la durée en secondes et l'échelle pour gérer le cas où une valeur de la série a une unité plus grande que les durées précédentes. (#38374)</li>
+<li>Ne pas autoriser les valeurs par défaut autres que None dans les paramètres contextuels et améliorer le message d'erreur (#38015)</li>
+<li>Rendre les arguments du moteur par défaut du postgresql conformes à SA 2.0 (#38362)</li>
+<li>Ajouter une instruction return pour rendement dans une boucle while dans les déclencheurs (#38389)</li>
+<li>Assurez-vous que <code>__exit__</code> est appelé dans les gestionnaires de contexte du décorateur (#38383)</li>
+<li>Rendre la méthode <code>BaseAuthManager.is_authorized_custom_view</code> abstraite (#37915)</li>
+<li>Ajouter une limite supérieure au calcul des événements du calendrier planifiés (#38310)</li>
+<li>Fix Scheduler en mode démon ne crée pas de PID à l'emplacement spécifié (#38117)</li>
+<li>Sérialiser correctement TaskInstancePydantic et DagRunPydantic (#37855)</li>
+<li>Correction de la couleur de la bordure de l'état de la tâche graphique (#38084)</li>
+<li>Rajouter les méthodes supprimées dans le gestionnaire de sécurité (#37997)</li>
+<li>Ne consignez pas « 403 » dans les journaux de service des travailleurs en tant que « Erreur inconnue ». (#37933)</li>
+<li>Correction d'une erreur de validation des données d'exécution dans le point de terminaison <code>/get_logs_with_metadata</code> (#37756)</li>
+<li>Correction de la sélection de la durée des tâches (#37630)</li>
+<li>S'abstenir de transmettre <code>encoding</code> au moteur SQL dans SQLAlchemy v2 (#37545)</li>
+<li>Correction de la contrainte implicite de l'objet SELECT vers une sous-requête scalaire dans la dernière instruction dag run (#37505)</li>
+<li>Nettoyer la saisie avec le générateur de requêtes max_execution_date (#36958)</li>
+<li>Optimiser la requête max_execution_date dans le cas d'un seul jour (#33242)</li>
+<li>Correction de la commande list dags pour get_dagmodel : Aucune (#36739)</li>
+<li>Chargez l'attr <code>consuming_dags</code> avec impatience avant l'écouteur de l'ensemble de données (#36247)</li>
+</ul>
+<h2>Divers</h2>
+<ul>
+<li>Supprimer l'affichage des paramètres de l'interface utilisateur (#38660)</li>
+<li>Mettre à jour le niveau de journalisation pour déboguer à partir de l'avertissement concernant la métrique selected_duration (#38180)</li>
+<li>Utilisez <code>importlib_metadata</code> with compat to Python 3.10/3.12 <code>stdlib</code> (#38366)</li>
+<li>Refactorisation de la méthode magique <code>__new__</code> de BaseOperatorMeta pour éviter un mauvais mélange des opérateurs classiques et décorés (#37937)</li>
+<li>Utilisez <code>sys.version_info</code> pour déterminer Python Major.Minor (#38372)</li>
+<li>Ajouter un gestionnaire d'authentification Fab obsolète et manquant (#38376)</li>
+<li>Supprimer la variable de boucle inutilisée du package de flux d'air (# 38308)</li>
+<li>Ajout d'informations sur le nombre maximum d'exécutions consécutives échouées dans l'interface utilisateur (# 38229)</li>
+<li>Augmenter la version minimale de <code>blinker</code> et l'ajouter là où cela est nécessaire (#38140)</li>
+<li>Bump follow-redirects de 1.15.4 vers 1.15.6 dans /airflow/www (#38156)</li>
+<li>Transférer la cryptographie vers <code>&gt; 39.0.0</code> (#38112)</li>
+<li>Ajout du support Python 3.12 (#36755, #38025, #36595)</li>
+<li>Évitez d'utiliser <code>assert</code> en dehors des tests (#37718)</li>
+<li>Mettre à jour ObjectStoragePath pour universal_pathlib&gt;=v0.2.2 (#37930)</li>
+<li>Résoudre G004 : l'instruction de journalisation utilise une f-string (#37873)</li>
+<li>Mettre à jour les dépendances de build et d'installation. (#37910)</li>
+<li>Bump sanitize-html de 2.11.0 à 2.12.1 dans /airflow/www (#37833)</li>
+<li>Mise à jour vers les dernières versions du programme d'installation. (#37754)</li>
+<li>Déprécier les configurations SMTP dans les paramètres de flux d'air / local_settings (#37711)</li>
+<li>Déprécier les constantes PY* dans le module de flux d'air (#37575)</li>
+<li>Supprimer l'utilisation de <code>flask._request_ctx_stack</code> obsolète (#37522)</li>
+<li>Supprimer <code>login</code> attribute in <code>airflow.__init__.py</code> redondant (# 37565)</li>
+<li>Mise à niveau vers FAB 4.3.11 (#37233)</li>
+<li>Supprimer SCHEDULED_DEPS qui n'est plus utilisé nulle part depuis 2.0.0 (#37140)</li>
+<li>Remplacer <code>datetime.datetime.utcnow</code> by <code>airflow.utils.timezone.utcnow</code> dans le noyau (#35448)</li>
+<li>Bump la version min d'aiohttp pour éviter CVE-2024-23829 et CVE-2024-23334 (#37110)</li>
+<li>Déplacer la configuration liée au gestionnaire d'authentification FAB vers le fournisseur FAB (#36232)</li>
+<li>Supprimer le formulaire de support MSSQL Airflow core (#36514)</li>
+<li>Supprimer <code>is_authorized_cluster_activity</code> du gestionnaire d'authentification (#36175)</li>
+<li>Créer un fournisseur FAB et y déplacer le gestionnaire d'authentification FAB (#35926)</li>
+</ul>
+<h2>Modifications apportées au document uniquement</h2>
+<ul>
+<li>Améliorer la documentation des horaires (#38505)</li>
+<li>Réorganiser les balises OpenAPI Spec par ordre alphabétique (# 38717)</li>
+<li>Mettre à jour les captures d'écran de l'interface utilisateur dans la documentation (#38680, #38403, #38438, #38435)</li>
+<li>Supprimer la section car elle n'est plus vraie avec les expressions d'ensemble de données PR (#38370)</li>
+<li>Documents sur le calendrier Refactor DatasetOrTimeSchedule (# 37771)</li>
+<li>Migrer les documents de l'exécuteur vers les fournisseurs respectifs (#37728)</li>
+<li>Ajouter une directive pour afficher une liste de schémas d'URI (#37700)</li>
+<li>Ajouter une page de documentation avec les dépréciations des fournisseurs (#37075)</li>
+<li>Ajouter une référence croisée à la politique de sécurité (#37004)</li>
+<li>Améliorer la documentation AIRFLOW__WEBSERVER__BASE_URL (#37003)</li>
+<li>Mettre à jour faq.rst avec (espérons-le) une description plus claire de start_date (#36846)</li>
+<li>Mise à jour de la documentation de l'interface publique concernant les opérateurs (#36767)</li>
+<li>Ajouter <code>exception</code> à la liste de références des modèles (#36656)</li>
+<li>Ajouter une interface de gestionnaire d'authentification comme interface publique (#36312)</li>
+<li>Documentation du fournisseur Fab de référence dans la documentation Airflow (# 36310)</li>
+<li>Créer la documentation du gestionnaire d'authentification (#36211)</li>
+<li>Mettre à jour les documents d'autorisation (#36120)</li>
+<li>Amélioration de Docstring pour _covers_every_hour (#36081)</li>
+<li>Ajout d'une note indiquant que les écouteurs d'instance de tâche, de dag et de cycle de vie ne sont pas expérimentaux (# 36376)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/airflow">apache/airflow</a> · <code>2.9.0</code> · 08/04/2024 · <a href="https://github.com/apache/airflow/releases/tag/2.9.0">version en amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>airflow 2.9.0</h1>
+<h2>Significant Changes</h2>
+<h2>Following Listener API methods are considered stable and can be used for production system (were experimental feature in older Airflow versions) (#36376):</h2>
+<p>Lifecycle events:</p>
+<ul>
+<li><code>on_starting</code></li>
+<li><code>before_stopping</code></li>
+</ul>
+<p>DagRun State Change Events:</p>
+<ul>
+<li><code>on_dag_run_running</code></li>
+<li><code>on_dag_run_success</code></li>
+<li><code>on_dag_run_failed</code></li>
+</ul>
+<p>TaskInstance State Change Events:</p>
+<ul>
+<li><code>on_task_instance_running</code></li>
+<li><code>on_task_instance_success</code></li>
+<li><code>on_task_instance_failed</code></li>
+</ul>
+<h2>Support for Microsoft SQL-Server for Airflow Meta Database has been removed (#36514)</h2>
+<p>After <code>discussion &lt;https://lists.apache.org/thread/r06j306hldg03g2my1pd4nyjxg78b3h4&gt;</code>__
+and a <code>voting process &lt;https://lists.apache.org/thread/pgcgmhf6560k8jbsmz8nlyoxosvltph2&gt;</code>__,
+the Airflow's PMC and Committers have reached a resolution to no longer maintain MsSQL as a supported Database Backend.</p>
+<p>As of Airflow 2.9.0 support of MsSQL has been removed for Airflow Database Backend.</p>
+<p>A migration script which can help migrating the database <em>before</em> upgrading to Airflow 2.9.0 is available in
+<code>airflow-mssql-migration repo on Github &lt;https://github.com/apache/airflow-mssql-migration&gt;</code>_.
+Note that the migration script is provided without support and warranty.</p>
+<p>This does not affect the existing provider packages (operators and hooks), DAGs can still access and process data from MsSQL.</p>
+<h2>Dataset URIs are now validated on input (#37005)</h2>
+<p>Datasets must use a URI that conform to rules laid down in AIP-60, and the value
+will be automatically normalized when the DAG file is parsed. See
+<code>documentation on Datasets &lt;https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/datasets.html&gt;</code>_ for
+a more detailed description on the rules.</p>
+<p>You may need to change your Dataset identifiers if they look like a URI, but are
+used in a less mainstream way, such as relying on the URI's auth section, or
+have a case-sensitive protocol name.</p>
+<h2>The method <code>get_permitted_menu_items</code> in <code>BaseAuthManager</code> has been renamed <code>filter_permitted_menu_items</code> (#37627)</h2>
+<h2>Add REST API actions to Audit Log events (#37734)</h2>
+<p>The Audit Log <code>event</code> name for REST API events will be prepended with <code>api.</code> or <code>ui.</code>, depending on if it came from the Airflow UI or externally.</p>
+<h2>Official support for Python 3.12 (#38025)</h2>
+<p>There are a few caveats though:</p>
+<ul>
+<li>
+<p>Pendulum2 does not support Python 3.12. For Python 3.12 you need to use
+<code>Pendulum 3 &lt;https://pendulum.eustace.io/blog/announcing-pendulum-3-0-0.html&gt;</code>_</p>
+</li>
+<li>
+<p>Minimum SQLAlchemy version supported when Pandas is installed for Python 3.12 is <code>1.4.36</code> released in
+April 2022. Airflow 2.9.0 increases the minimum supported version of SQLAlchemy to <code>1.4.36</code> for all
+Python versions.</p>
+</li>
+</ul>
+<p>Not all Providers support Python 3.12. At the initial release of Airflow 2.9.0 the following providers
+are released without support for Python 3.12:</p>
+<ul>
+<li><code>apache.beam</code> - pending on <code>Apache Beam support for 3.12 &lt;https://github.com/apache/beam/issues/29149&gt;</code>_</li>
+<li><code>papermill</code> - pending on Releasing Python 3.12 compatible papermill client version
+<code>including this merged issue &lt;https://github.com/nteract/papermill/pull/771&gt;</code>_</li>
+</ul>
+<h2>Prevent large string objects from being stored in the Rendered Template Fields (#38094)</h2>
+<p>There's now a limit to the length of data that can be stored in the Rendered Template Fields.
+The limit is set to 4096 characters. If the data exceeds this limit, it will be truncated. You can change this limit
+by setting the <code>[core]max_template_field_length</code> configuration option in your airflow config.</p>
+<h2>Change xcom table column value type to longblob for MySQL backend (#38401)</h2>
+<p>Xcom table column <code>value</code> type has changed from <code>blob</code> to <code>longblob</code>. This will allow you to store relatively big data in Xcom but process can take a significant amount of time if you have a lot of large data stored in Xcom.</p>
+<p>To downgrade from revision: <code>b4078ac230a1</code>, ensure that you don't have Xcom values larger than 65,535 bytes. Otherwise, you'll need to clean those rows or run <code>airflow db clean xcom</code> to clean the Xcom table.</p>
+<h2>New Features</h2>
+<ul>
+<li>Allow users to write dag_id and task_id in their national characters, added display name for dag / task (v2) (#38446)</li>
+<li>Prevent large objects from being stored in the RTIF (#38094)</li>
+<li>Use current time to calculate duration when end date is not present. (#38375)</li>
+<li>Add average duration mark line in task and dagrun duration charts. (#38214, #38434)</li>
+<li>Add button to manually create dataset events (#38305)</li>
+<li>Add <code>Matomo</code> as an option for analytics_tool. (#38221)</li>
+<li>Experimental: Support custom weight_rule implementation to calculate the TI priority_weight (#38222)</li>
+<li>Adding ability to automatically set DAG to off after X times it failed sequentially (#36935)</li>
+<li>Add dataset conditions to next run datasets modal (#38123)</li>
+<li>Add task log grouping to UI (#38021)</li>
+<li>Add dataset_expression to grid dag details (#38121)</li>
+<li>Introduce mechanism to support multiple executor configuration (#37635)</li>
+<li>Add color formatting for ANSI chars in logs from task executions (#37985)</li>
+<li>Add the dataset_expression as part of DagModel and DAGDetailSchema (#37826)</li>
+<li>Add TaskFail entries to Gantt chart (#37918)</li>
+<li>Allow longer rendered_map_index (#37798)</li>
+<li>Inherit the run_ordering from DatasetTriggeredTimetable for DatasetOrTimeSchedule (#37775)</li>
+<li>Implement AIP-60 Dataset URI formats (#37005)</li>
+<li>Introducing Logical Operators for dataset conditional logic (#37101)</li>
+<li>Add post endpoint for dataset events (#37570)</li>
+<li>Show custom instance names for a mapped task in UI (#36797)</li>
+<li>Add excluded/included events to get_event_logs api (#37641)</li>
+<li>Add datasets to dag graph (#37604)</li>
+<li>Show dataset events above task/run details in grid view (#37603)</li>
+<li>Introduce new config variable to control whether DAG processor outputs to stdout (#37439)</li>
+<li>Make Datasets <code>hashable</code> (#37465)</li>
+<li>Add conditional logic for dataset triggering (#37016)</li>
+<li>Implement task duration page in react. (#35863)</li>
+<li>Add <code>queuedEvent</code> endpoint to get/delete DatasetDagRunQueue (#37176)</li>
+<li>Support multiple XCom output in the BaseOperator (#37297)</li>
+<li>AIP-58: Add object storage backend for xcom (#37058)</li>
+<li>Introduce <code>DatasetOrTimeSchedule</code> (#36710)</li>
+<li>Add <code>on_skipped_callback</code> to <code>BaseOperator</code> (#36374)</li>
+<li>Allow override of hovered navbar colors (#36631)</li>
+<li>Create new Metrics with Tagging (#36528)</li>
+<li>Add support for openlineage to AFS and common.io (#36410)</li>
+<li>Introduce <code>@task.bash</code> TaskFlow decorator (#30176, #37875)</li>
+<li>Added functionality to automatically ingest custom airflow.cfg file upon startup (#36289)</li>
+</ul>
+<h2>Improvements</h2>
+<ul>
+<li>More human friendly &quot;show tables&quot; output for db cleanup (#38654)</li>
+<li>Improve trigger assign_unassigned by merging alive_triggerer_ids and get_sorted_triggers queries (#38664)</li>
+<li>Add exclude/include events filters to audit log (#38506)</li>
+<li>Clean up unused triggers in a single query for all dialects except MySQL (#38663)</li>
+<li>Update Confirmation Logic for Config Changes on Sensitive Environments Like Production (#38299)</li>
+<li>Improve datasets graph UX (#38476)</li>
+<li>Only show latest dataset event timestamp after last run (#38340)</li>
+<li>Add button to clear only failed tasks in a dagrun. (#38217)</li>
+<li>Delete all old dag pages and redirect to grid view (#37988)</li>
+<li>Check task attribute before use in sentry.add_tagging() (#37143)</li>
+<li>Mysql change xcom value col type for MySQL backend (#38401)</li>
+<li><code>ExternalPythonOperator</code> use version from <code>sys.version_info</code> (#38377)</li>
+<li>Replace too broad exceptions into the Core (#38344)</li>
+<li>Add CLI support for bulk pause and resume of DAGs (#38265)</li>
+<li>Implement methods on TaskInstancePydantic and DagRunPydantic (#38295, #38302, #38303, #38297)</li>
+<li>Made filters bar collapsible and add a full screen toggle (#38296)</li>
+<li>Encrypt all trigger attributes (#38233, #38358, #38743)</li>
+<li>Upgrade react-table package. Use with Audit Log table (#38092)</li>
+<li>Show if dag page filters are active (#38080)</li>
+<li>Add try number to mapped instance (#38097)</li>
+<li>Add retries to job heartbeat (#37541)</li>
+<li>Add REST API events to Audit Log (#37734)</li>
+<li>Make current working directory as templated field in BashOperator (#37968)</li>
+<li>Add calendar view to react (#37909)</li>
+<li>Add <code>run_id</code> column to log table (#37731)</li>
+<li>Add <code>tryNumber</code> to grid task instance tooltip (#37911)</li>
+<li>Session is not used in _do_render_template_fields (#37856)</li>
+<li>Improve MappedOperator property types (#37870)</li>
+<li>Remove provide_session decorator from TaskInstancePydantic methods (#37853)</li>
+<li>Ensure the &quot;airflow.task&quot; logger used for TaskInstancePydantic and TaskInstance (#37857)</li>
+<li>Better error message for internal api call error (#37852)</li>
+<li>Increase tooltip size of dag grid view (#37782) (#37805)</li>
+<li>Use named loggers instead of root logger (#37801)</li>
+<li>Add Run Duration in React (#37735)</li>
+<li>Avoid non-recommended usage of logging (#37792)</li>
+<li>Improve DateTimeTrigger typing (#37694)</li>
+<li>Make sure all unique run_ids render a task duration bar (#37717)</li>
+<li>Add Dag Audit Log to React (#37682)</li>
+<li>Add log event for auto pause (#38243)</li>
+<li>Better message for exception for templated base operator fields (#37668)</li>
+<li>Clean up webserver endpoints adding to audit log (#37580)</li>
+<li>Filter datasets graph by dag_id (#37464)</li>
+<li>Use new exception type inheriting BaseException for SIGTERMs (#37613)</li>
+<li>Refactor dataset class inheritance (#37590)</li>
+<li>Simplify checks for package versions (#37585)</li>
+<li>Filter Datasets by associated dag_ids (GET /datasets) (#37512)</li>
+<li>Enable &quot;airflow tasks test&quot; to run deferrable operator (#37542)</li>
+<li>Make datasets list/graph width adjustable (#37425)</li>
+<li>Speedup determine installed airflow version in <code>ExternalPythonOperator</code> (#37409)</li>
+<li>Add more task details from rest api (#37394)</li>
+<li>Add confirmation dialog box for DAG run actions (#35393)</li>
+<li>Added shutdown color to the STATE_COLORS (#37295)</li>
+<li>Remove legacy dag details page and redirect to grid (#37232)</li>
+<li>Order XCom entries by map index in API (#37086)</li>
+<li>Add data_interval_start and data_interval_end in dagrun create API endpoint (#36630)</li>
+<li>Making links in task logs as hyperlinks by preventing HTML injection (#36829)</li>
+<li>Improve ExternalTaskSensor Async Implementation (#36916)</li>
+<li>Make Datasets <code>Pathlike</code> (#36947)</li>
+<li>Simplify query for orphaned tasks (#36566)</li>
+<li>Add deferrable param in FileSensor (#36840)</li>
+<li>Run Trigger Page: Configurable number of recent configs (#36878)</li>
+<li>Merge <code>nowait</code> and skip_locked into with_row_locks (#36889)</li>
+<li>Return the specified field when get <code>dag/dagRun</code> in the REST API (#36641)</li>
+<li>Only iterate over the items if debug is enabled for DagFileProcessorManager (#36761)</li>
+<li>Add a fuzzy/regex pattern-matching for metric allow and block list (#36250)</li>
+<li>Allow custom columns in cli dags list (#35250)</li>
+<li>Make it possible to change the default cron timetable (#34851)</li>
+<li>Some improvements to Airflow IO code (#36259)</li>
+<li>Improve TaskInstance typing hints (#36487)</li>
+<li>Remove dependency of <code>Connexion</code> from auth manager interface (#36209)</li>
+<li>Refactor ExternalDagLink to not create ad hoc TaskInstances (#36135)</li>
+</ul>
+<h2>Bug Fixes</h2>
+<ul>
+<li>Load providers configuration when gunicorn workers start (#38795)</li>
+<li>Fix grid header rendering (#38720)</li>
+<li>Add a task instance dependency for mapped dependencies (#37498)</li>
+<li>Improve stability of remove_task_decorator function (#38649)</li>
+<li>Mark more fields on API as dump-only (#38616)</li>
+<li>Fix <code>total_entries</code> count on the event logs endpoint (#38625)</li>
+<li>Add padding to bottom of log block. (#38610)</li>
+<li>Properly serialize nested attrs classes (#38591)</li>
+<li>Fixing the <code>tz</code> in next run ID info (#38482)</li>
+<li>Show abandoned tasks in Grid View (#38511)</li>
+<li>Apply task instance mutation hook consistently (#38440)</li>
+<li>Override <code>chakra</code> styles to keep <code>dropdowns</code> in filter bar (#38456)</li>
+<li>Store duration in seconds and scale to handle case when a value in the series has a larger unit than the preceding durations. (#38374)</li>
+<li>Don't allow defaults other than None in context parameters, and improve error message (#38015)</li>
+<li>Make postgresql default engine args comply with SA 2.0 (#38362)</li>
+<li>Add return statement to yield within a while loop in triggers (#38389)</li>
+<li>Ensure <code>__exit__</code> is called in decorator context managers (#38383)</li>
+<li>Make the method <code>BaseAuthManager.is_authorized_custom_view</code> abstract (#37915)</li>
+<li>Add upper limit to planned calendar events calculation (#38310)</li>
+<li>Fix Scheduler in daemon mode doesn't create PID at the specified location (#38117)</li>
+<li>Properly serialize TaskInstancePydantic and DagRunPydantic (#37855)</li>
+<li>Fix graph task state border color (#38084)</li>
+<li>Add back methods removed in security manager (#37997)</li>
+<li>Don't log &quot;403&quot; from worker serve-logs as &quot;Unknown error&quot;. (#37933)</li>
+<li>Fix execution data validation error in <code>/get_logs_with_metadata</code> endpoint (#37756)</li>
+<li>Fix task duration selection (#37630)</li>
+<li>Refrain from passing <code>encoding</code> to the SQL engine in SQLAlchemy v2 (#37545)</li>
+<li>Fix 'implicitly coercing SELECT object to scalar subquery' in latest dag run statement (#37505)</li>
+<li>Clean up typing with max_execution_date query builder (#36958)</li>
+<li>Optimize max_execution_date query in single dag case (#33242)</li>
+<li>Fix list dags command for get_dagmodel is None (#36739)</li>
+<li>Load <code>consuming_dags</code> attr eagerly before dataset listener (#36247)</li>
+</ul>
+<h2>Miscellaneous</h2>
+<ul>
+<li>Remove display of param from the UI (#38660)</li>
+<li>Update log level to debug from warning about scheduled_duration metric (#38180)</li>
+<li>Use <code>importlib_metadata</code> with compat to Python 3.10/3.12 <code>stdlib</code> (#38366)</li>
+<li>Refactored <code>__new__</code> magic method of BaseOperatorMeta to avoid bad mixing classic and decorated operators (#37937)</li>
+<li>Use <code>sys.version_info</code> for determine Python Major.Minor (#38372)</li>
+<li>Add missing deprecated Fab auth manager (#38376)</li>
+<li>Remove unused loop variable from airflow package (#38308)</li>
+<li>Adding max consecutive failed dag runs info in UI (#38229)</li>
+<li>Bump minimum version of <code>blinker</code> add where it requires (#38140)</li>
+<li>Bump follow-redirects from 1.15.4 to 1.15.6 in /airflow/www (#38156)</li>
+<li>Bump Cryptography to <code>&gt; 39.0.0</code> (#38112)</li>
+<li>Add Python 3.12 support (#36755, #38025, #36595)</li>
+<li>Avoid use of <code>assert</code> outside of the tests (#37718)</li>
+<li>Update ObjectStoragePath for universal_pathlib&gt;=v0.2.2 (#37930)</li>
+<li>Resolve G004: Logging statement uses f-string (#37873)</li>
+<li>Update build and install dependencies. (#37910)</li>
+<li>Bump sanitize-html from 2.11.0 to 2.12.1 in /airflow/www (#37833)</li>
+<li>Update to latest installer versions. (#37754)</li>
+<li>Deprecate smtp configs in airflow settings / local_settings (#37711)</li>
+<li>Deprecate PY* constants into the airflow module (#37575)</li>
+<li>Remove usage of deprecated <code>flask._request_ctx_stack</code> (#37522)</li>
+<li>Remove redundant <code>login</code> attribute in <code>airflow.__init__.py</code> (#37565)</li>
+<li>Upgrade to FAB 4.3.11 (#37233)</li>
+<li>Remove SCHEDULED_DEPS which is no longer used anywhere since 2.0.0 (#37140)</li>
+<li>Replace <code>datetime.datetime.utcnow</code> by <code>airflow.utils.timezone.utcnow</code> in core (#35448)</li>
+<li>Bump aiohttp min version to avoid CVE-2024-23829 and CVE-2024-23334 (#37110)</li>
+<li>Move config related to FAB auth manager to FAB provider (#36232)</li>
+<li>Remove MSSQL support form Airflow core (#36514)</li>
+<li>Remove <code>is_authorized_cluster_activity</code> from auth manager (#36175)</li>
+<li>Create FAB provider and move FAB auth manager in it (#35926)</li>
+</ul>
+<h2>Doc Only Changes</h2>
+<ul>
+<li>Improve timetable documentation (#38505)</li>
+<li>Reorder OpenAPI Spec tags alphabetically (#38717)</li>
+<li>Update UI screenshots in the documentation (#38680, #38403, #38438, #38435)</li>
+<li>Remove section as it's no longer true with dataset expressions PR (#38370)</li>
+<li>Refactor DatasetOrTimeSchedule timetable docs (#37771)</li>
+<li>Migrate executor docs to respective providers (#37728)</li>
+<li>Add directive to render a list of URI schemes (#37700)</li>
+<li>Add doc page with providers deprecations (#37075)</li>
+<li>Add a cross reference to security policy (#37004)</li>
+<li>Improve AIRFLOW__WEBSERVER__BASE_URL docs (#37003)</li>
+<li>Update faq.rst with (hopefully) clearer description of start_date (#36846)</li>
+<li>Update public interface doc re operators (#36767)</li>
+<li>Add <code>exception</code> to templates ref list (#36656)</li>
+<li>Add auth manager interface as public interface (#36312)</li>
+<li>Reference fab provider documentation in Airflow documentation (#36310)</li>
+<li>Create auth manager documentation (#36211)</li>
+<li>Update permission docs (#36120)</li>
+<li>Docstring improvement to _covers_every_hour (#36081)</li>
+<li>Add note that task instance, dag and lifecycle listeners are non-experimental (#36376)</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/airflow">apache/airflow</a> · <code>2.9.0</code> · 2024-04-08 · <a href="https://github.com/apache/airflow/releases/tag/2.9.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/airflow/2.9.1"> <span class="k">← Suivant</span> <span class="t">2.9.1</span> </a> <a href="/releases/airflow/2.8.4"> <span class="k">Précédent →</span> <span class="t">2.8.4</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/airflow/releases/tag/2.9.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/airflow" target="_blank" rel="noopener"> <span>apache/airflow</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Changements importants</a><a href="#" class>Les méthodes suivantes de l&#39;écouteur API sont considérées comme stables et peuvent être utilisées pour le système de production (il s&#39;agissait d&#39;une fonctionnalité expérimentale dans les anciennes versions d&#39;Airflow) (#36376) :</a><a href="#" class>La prise en charge de Microsoft SQL-Server pour la méta-base de données Airflow a été supprimée (#36514)</a><a href="#" class>Les URI des ensembles de données sont désormais validés en entrée (#37005)</a><a href="#" class>La méthode getpermittedmenuitems in BaseAuthManager has been renamed filterpermittedmenuitems (#37627)</a><a href="#" class>Ajouter des actions REST API aux événements du journal d&#39;audit (#37734)</a><a href="#" class>Support officiel pour Python 3.12 (#38025)</a><a href="#" class>Empêcher le stockage d&#39;objets chaîne volumineux dans les champs du modèle rendu (#38094)</a><a href="#" class>Changez le type de valeur de la colonne de la table xcom en longblob pour le backend MySQL (#38401)</a><a href="#" class>Nouvelles fonctionnalités</a><a href="#" class>Améliorations</a><a href="#" class>Corrections de bugs</a><a href="#" class>Divers</a><a href="#" class>Modifications apportées au document uniquement</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/airflow/1.0.0"> <span class="v">v1.0.0</span> <span class="d">26-11-13</span> </a> </li><li> <a href="/releases/airflow/3.4.0"> <span class="v">3.4.0</span> <span class="d">26-11-06</span> </a> </li><li> <a href="/releases/airflow/3.3.2"> <span class="v">3.3.2</span> <span class="d">26-09-17</span> </a> </li><li> <a href="/releases/airflow/3.3.1"> <span class="v">3.3.1</span> <span class="d">26-08-12</span> </a> </li><li> <a href="/releases/airflow/3.3.0"> <span class="v">3.3.0</span> <span class="d">26-07-06</span> </a> </li><li> <a href="/releases/airflow/1.22.0"> <span class="v">1.22.0</span> <span class="d">26-06-13</span> </a> </li><li> <a href="/releases/airflow/0.1.5"> <span class="v">0.1.5</span> <span class="d">26-06-03</span> </a> </li><li> <a href="/releases/airflow/3.2.2"> <span class="v">3.2.2</span> <span class="d">26-05-29</span> </a> </li> </ul> <a href="/fr/releases/airflow" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 59 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

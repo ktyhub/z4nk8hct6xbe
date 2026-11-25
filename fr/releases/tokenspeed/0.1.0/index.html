@@ -1,0 +1,1296 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tokenspeed v0.1.0 — STAGS NextStack</title><meta name="description" content="Use CUDA routing gemm for LongCat · Update README · Add PyTorch index-url for rocm.txt requirements · [AMD]Avoid Exceeding LDS Limit"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/tokenspeed/0.1.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/tokenspeed/0.1.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/tokenspeed/0.1.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/tokenspeed/0.1.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="tokenspeed v0.1.0 — STAGS NextStack"><meta property="og:description" content="Use CUDA routing gemm for LongCat · Update README · Add PyTorch index-url for rocm.txt requirements · [AMD]Avoid Exceeding LDS Limit"><meta property="og:url" content="https://www.stags.cn/fr/releases/tokenspeed/0.1.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/tokenspeed/0.1.0/#article","headline":"tokenspeed v0.1.0 release notes","datePublished":"2026-07-24","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/lightseekorg/tokenspeed"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/tokenspeed/0.1.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/tokenspeed/tokenspeed_v0.1.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/tokenspeed/0.1.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/tokenspeed/0.1.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/tokenspeed/0.1.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/tokenspeed/0.1.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/tokenspeed/0.1.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/tokenspeed">tokenspeed</a> </nav> <h1 class="detail-title"> <span class="p">tokenspeed</span> v0.1.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>24 juil. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/lightseekorg/tokenspeed" target="_blank" rel="noopener"> <span class="k">Source</span>lightseekorg/tokenspeed </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/tokenspeed/0.1.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/tokenspeed/0.1.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>jeton vitesse v0.1.0</h1>
+<h2>Ce qui a changé</h2>
+<ul>
+<li>Utilisez gemm de routage CUDA pour LongCat par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/1</li>
+<li>Mettre à jour README par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/2</li>
+<li>Ajoutez l'URL d'index PyTorch pour les exigences rocm.txt par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/3</li>
+<li>[AMD] Évitez de dépasser la limite LDS par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/4</li>
+<li>Ignorer l'enregistrement FA4 sur B300 (SM 10.3) par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/5</li>
+<li>Mettez à jour README avec une nouvelle introduction et un nouveau diagramme de performances par @yubofredwang dans https://github.com/lightseekorg/tokenspeed/pull/9</li>
+<li>correctif : tuer le serveur par PID dans agentic_bench.sh par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/17</li>
+<li>Correction : évitez les grandes init FP32 pour les vérifications de référence MLA ignorées par @huangzhilin-hzl dans https://github.com/lightseekorg/tokenspeed/pull/12</li>
+<li>Prise en charge de l'analyse des scores du tableau de boîtes EvalScope par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/19</li>
+<li>decoder_layer : Python 3.10 compatible (remplacer les génériques PEP 695 par TypeVar/Generic) par @andyluo7 dans https://github.com/lightseekorg/tokenspeed/pull/23</li>
+<li>feat(PD) : support du cache mamba par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/14</li>
+<li>Plate-forme : taille de code en dur MI300/MI350 LDS ; sonde /sys/class/kfd pour la topologie xGMI par @andyluo7 dans https://github.com/lightseekorg/tokenspeed/pull/25</li>
+<li>perf(K2.5) : correction de la tokenisation lente et ajout d'un échauffement pour le banc agent par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/31</li>
+<li>perf(K2.5) : Ajustez num_tokens pour router_gemm et fused_a_gemm par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/33</li>
+<li>Ajouter la tâche CI de performance agent Kimi K2.5 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/29</li>
+<li>Correction des déclencheurs agentic perf CI par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/34</li>
+<li>[AMD] Ajoutez eval ci et corrigez l'adresse du magasin kv sur mi355 par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/36</li>
+<li>[AMD] Utiliser Iris Communication Ops par défaut par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/38</li>
+<li>perf : TF32 activé par défaut pour FP32 cuBLAS (routeur GEMM) par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/35</li>
+<li>correctif : cache de préfixe mamba par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/15</li>
+<li>Ajustez les valeurs par défaut du décodage spéculatif par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/40</li>
+<li>feat(deepseek-v4) : ajout de mega_moe et du chemin de performances KV compressé par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/30</li>
+<li>Correction du type d'échelle GPT-OSS MXFP4 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/42</li>
+<li>perf : optimisation du coût de préparation du runtime qwen3.5 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/32</li>
+<li>[AMD] Mettre à niveau le package triton_kernels par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/37</li>
+<li>correctif (planificateur) : garder host_node_ref actif dans les états FSM avancés par @roycho96 dans https://github.com/lightseekorg/tokenspeed/pull/41</li>
+<li>Optimisations MiniMax-M2 H100 FP8 par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/10</li>
+<li>perf(eviction) : expulsion O(k log N) via LRU persistant défini par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/18</li>
+<li>Déplacer les scripts de référence sous les tests d'exécution par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/44</li>
+<li>perf : évitez la synchronisation GPU dans l'extension des métadonnées pour restaurer le chevauchement pour trtllm mha par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/45</li>
+<li>[métriques] 1/N : renommer les collecteurs et nettoyer le code mort par @yubofredwang dans https://github.com/lightseekorg/tokenspeed/pull/7</li>
+<li>Ajouter un workflow pour mettre à jour FlashInfer tokenspeed-kernel par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/46</li>
+<li>Correction de la branche de flux de travail de mise à jour FlashInfer poussée par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/48</li>
+<li>Mettre à jour FlashInfer de tokenspeed-kernel vers 0.6.11 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/49</li>
+<li>Supprimer les journaux de débogage du cache FlashAttention JIT par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/50</li>
+<li>Quantification du brouillon spéculatif par défaut sur non quantifiée par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/52</li>
+<li>Budgets de jetons de pré-remplissage par défaut à 8k par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/53</li>
+<li>Alignez les étapes de jeton de configuration spéculative par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/54</li>
+<li>Utilisez l'index de roue FlashInfer pour le cache JIT par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/55</li>
+<li>Mettre à jour la dépendance tokenspeed-fa4 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/56</li>
+<li>eval : ajouter qwen3.5 aime25 eval par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/43</li>
+<li>Supprimer la dépendance DSL de Cutlass à l'exécution par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/59</li>
+<li>Déplacer la dépendance nvtx vers tokenspeed-kernel par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/60</li>
+<li>Mettre à jour les conseils sur les dépendances d'agent par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/61</li>
+<li>Supprimez les avertissements CUTLASS DSL bruyants par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/62</li>
+<li>Supprimer les journaux de démarrage TensorRT-LLM INFO par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/63</li>
+<li>Testez la parité CLI de la configuration spéculative MTP par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/64</li>
+<li>Supprimer les arguments de pré-remplissage d'évaluation par défaut par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/65</li>
+<li>test : couvrir les alias parallèles des tenseurs par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/66</li>
+<li>ci : utilisez l'alias tp dans les configurations d'évaluation par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/67</li>
+<li>Utiliser la dépendance packagée tokenspeed-triton-kernels par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/68</li>
+<li>Utiliser la dépendance tokenspeed-iris packagée par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/70</li>
+<li>Supprimer l'exigence de cache FlashInfer JIT par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/71</li>
+<li>Activer la tête de pré-remplissage FA4 dim 256 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/73</li>
+<li>eval : temp set seuil aime25 à 0.86 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/75</li>
+<li>perf(K2.5) : intégration de fusibles et norme cachée dans MLA eagle3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/78</li>
+<li>Correction de l'importation de protons tokenspeed par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/79</li>
+<li>feat(deepseek-v4) : ajout de groupes de cache à fenêtre coulissante gérés par le planificateur par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/51</li>
+<li>correctif (qwen3) : informations sur le tenseur parallèle à travers les couches MLP par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/80</li>
+<li>correctif : runtime_stats.py -&gt; runtime_states.py par @raayandhar dans https://github.com/lightseekorg/tokenspeed/pull/82</li>
+<li>Affiner les avis d'attribution de tiers par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/84</li>
+<li>exploit : support num_heads = 64 pour le décodage TokenSpeed MLA par @dishengbin dans https://github.com/lightseekorg/tokenspeed/pull/85</li>
+<li>Ajoutez des événements de cache KV au planificateur par @Aphoh dans https://github.com/lightseekorg/tokenspeed/pull/8</li>
+<li>Actualisez les chemins d'installation de Python pour exposer les packages du sous-processus pip par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/91</li>
+<li>Intégrez le backend attn avec la sélection du noyau attn par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/90</li>
+<li>Ajoutez l'alias --model-path pour --model par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/92</li>
+<li>Correction des performances de hachage parent de l'événement de cache KV par @Aphoh dans https://github.com/lightseekorg/tokenspeed/pull/87</li>
+<li>perf(K2.5) : désactivez l'intégration de TP et ignorez la concatération pour la boucle de rédaction EAGEL3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/94</li>
+<li>feat (deepseek-v4) : renforcer les chemins rapides de l'attention par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/93</li>
+<li>perf : optimiser les performances du cache de préfixe mamba par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/77</li>
+<li>feat (cli) : ts serve — passerelle smg + moteur gRPC par @lite-keke dans https://github.com/lightseekorg/tokenspeed/pull/97</li>
+<li>ci : installez smg deps à partir de l'index whl par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/99</li>
+<li>ci : pin smg install deps par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/100</li>
+<li>corvée : supprimer le serveur et les analyseurs obsolètes par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/98</li>
+<li>Mettre à jour les broches du package SMG par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/101</li>
+<li>fix(ci) : correction de l'analyseur de raisonnement pour ci par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/102</li>
+<li>Packager les objets binaires tokenspeed-mla par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/104</li>
+<li>Résoudre les objets binaires MLA spécifiques à la plate-forme par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/106</li>
+<li>Ajouter le workflow de mise à jour de la version tokenspeed-mla par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/107</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/108</li>
+<li>Ajouter le workflow de mise à jour MLA tokenspeed-kernel par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/109</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/110</li>
+<li>Testez le pré-remplissage binaire tokenspeed-mla par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/111</li>
+<li>Utilisez des liens bruts pour les images tokenspeed-mla de @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/112</li>
+<li>Port de service SMG par défaut sur 8000 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/114</li>
+<li>Analyseur de raisonnement SMG par défaut sur aucun par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/115</li>
+<li>Supprimer l'analyseur de raisonnement d'évaluation redondant aucun par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/116</li>
+<li>Nettoyer les références de démarrage de serveur obsolètes par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/117</li>
+<li>test : ajout des tests tokenspeed mla par @dishengbin dans https://github.com/lightseekorg/tokenspeed/pull/118</li>
+<li>[Correction] Correction de la taille du gfx950 LDS à 160 Ko par @benenzhu dans https://github.com/lightseekorg/tokenspeed/pull/119</li>
+<li>correctif : prise en charge de la désactivation du cache de préfixe KV tout en gardant le cache d'état Mamba fonctionnel par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/76</li>
+<li>correctif pour utiliser max_num_pages pour les tampons spec-decode topk page_table par @roycho96 dans https://github.com/lightseekorg/tokenspeed/pull/125</li>
+<li>perf(K2.5) : active la fusion AR-Norm et le décodage FP8 fusionné pour MLA Eagle3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/124</li>
+<li>perf : optimiser le backend d'échantillonnage flashinfer par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/105</li>
+<li>perf(K2.5) : Optimiser lm_head par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/126</li>
+<li>feat(cli) : imprimer la bannière TokenSpeed au démarrage de <code>ts serve</code> par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/127</li>
+<li>ci(cli) : exécutez les tests unitaires CLI dans <code>ut-runtime-1gpu</code> par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/129</li>
+<li>feat(cli) : accepter l'argument du modèle positionnel dans <code>ts serve</code> par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/128</li>
+<li>feat(cli) : désactivez le disjoncteur smg et réessayez par défaut par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/130</li>
+<li>Affiner les avis d'attribution de tiers par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/131</li>
+<li>Correction du backend d'échantillonnage par défaut sur les plates-formes non NVIDIA par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/135</li>
+<li>feat (cli) : niveau de journalisation de la passerelle smg par défaut à avertir par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/136</li>
+<li>corvée : supprimez l'ancien arbre agentic_benchmark par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/137</li>
+<li>corvée(ci) : supprimez <code>--stream</code> et Generation-config de gpt-oss gpqa eval par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/139</li>
+<li>Correction : suppression du nombre maximum de nouveaux jetons par défaut par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/141</li>
+<li>[AMD] Correction du backend d'échantillonnage de smg par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/143</li>
+<li>deps : basculez les packages de passerelle SMG vers <code>tokenspeed-smg</code> par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/144</li>
+<li>feat(xgrammar) : ramener les balises structurelles de xgrammar pour prendre en charge json avec le raisonnement de @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/138</li>
+<li>feat(deepseek-v4) : prise en charge des lots mixtes de pré-remplissage/décodage par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/122</li>
+<li>corvée : nettoyage noqa par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/147</li>
+<li>correctif (cli) : préchauffez le cache du tokenizer HF avant de lancer la passerelle smg par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/148</li>
+<li>perf(K2.5) : optimisation des petits noyaux dans la boucle Drafter EAGEL3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/142</li>
+<li>correctif (banc) : ajout du flux sock_read + délais d'attente par requête pour débloquer la collecte par @jasl dans https://github.com/lightseekorg/tokenspeed/pull/134</li>
+<li>exploit (modèles) : ajout du support LM dense Qwen2 / Qwen2.5 par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/39</li>
+<li>perf : grille de limites pour la copie h2d par couche par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/150</li>
+<li>correctif (cli) : épingler le port smg prometheus à 8413 par défaut par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/151</li>
+<li>ci(pipeline) : pkill <code>smg::router</code> lors du nettoyage de processus obsolètes par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/152</li>
+<li>correctif (spec-decode) : rejeter speculative_eagle_topk &gt; 1 au démarrage par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/155</li>
+<li>corvée : utilisez StreamFork dans DSv4 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/157</li>
+<li>correctif (server-args) : restreindre --speculative-eagle-topk à 1 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/158</li>
+<li>perf : active par défaut le cache du tokenizer. par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/160</li>
+<li>docs : mettre à jour les exemples de lancement de l'analyseur par @mmangkad dans https://github.com/lightseekorg/tokenspeed/pull/163</li>
+<li>Correction (exécution) : élargissement de la plage de réglage automatique du BF16 CUTLASS MoE par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/161</li>
+<li>[AMD] Prise en charge du modèle a-fp8-w-mxfp4 gpt-oss-120b par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/154</li>
+<li>refactor : consolidation en mode avancé par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/164</li>
+<li>fix(cache) : émet AllBlocksCleared lors de la réinitialisation uniquement, pas tous les match_prefix de @roycho96 dans https://github.com/lightseekorg/tokenspeed/pull/166</li>
+<li>perf(cache) : conserver les tenseurs d'identification de page sur le GPU via free_group_end par @roycho96 dans https://github.com/lightseekorg/tokenspeed/pull/167</li>
+<li>perf(sampling) : fuse min-p renorm dans le backend complet flashinfer par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/156</li>
+<li>feat(deepseek-v4) : ajout d'un chemin topk persistant par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/172</li>
+<li>perf : ajout du noyau de pré-remplissage du gluon fp16 par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/165</li>
+<li>correctif (deepseek-v4) : profilage corrigé pour estimer la capacité du cache.  par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/173</li>
+<li>test : utilisez la plate-forme mi350 pour désigner à la fois mi350x/mi355x par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/175</li>
+<li>correctif (server-args) : déplacez tp4 gpu_memory_utilization vers 0.95 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/177</li>
+<li>perf(qwen3) : réduction du temps de décodage du noyau H100 de -8 % avec des noyaux fusionnés compatibles avec la foulée par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/81</li>
+<li>Perf[Qwen3.5] : élimine la mémoire d'état intermédiaire Mamba dans la vérification de la cible MTP par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/159</li>
+<li>feat(mla) : pré-remplir le backend par défaut en binaire, passer à 0.1.3 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/180</li>
+<li>corvée : supprimer le LayerDoneCounte en double par @wtsung dans https://github.com/lightseekorg/tokenspeed/pull/185</li>
+<li>feat(qwen3) : ajout du support causal LM de Qwen3 MoE par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/181</li>
+<li>ci : ajouter un workflow pour supprimer les broches pyproject tokenspeed-smg* par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/186</li>
+<li>Mettre à jour les broches tokenspeed-smg* vers 1.4.1.post20260519 / 0.4.7.post20260519 / 0.5.3.post20260519 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/187</li>
+<li>corvée (cli) : supprimez la solution de contournement smg _overwrite_sampling_backend par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/188</li>
+<li>Correction d'une fuite d'affectation de déplacement de pool de demandes de planificateur par @curious-whq dans https://github.com/lightseekorg/tokenspeed/pull/182</li>
+<li>Correction de la disposition de l'échelle d'activation Qwen3 FP8 MoE par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/189</li>
+<li>test (inline-detokenizer) : accepte les sorties de référence de variante matérielle via multi-ref ROUGE-L par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/190</li>
+<li>exploit : utiliser le pré-remplissage fractionné pour le cache de préfixes dans le backend mha par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/178</li>
+<li>feat (deepseek-v4) : experts du MoE acheminés et partagés par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/192</li>
+<li>exploit : ajout du support de l'analyseur DeepSeek V4 par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/193</li>
+<li>perf(K2.5) : optimiser top_k_renorm_prob + top_p_renorm_prob par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/184</li>
+<li>Optimisation des performances du noyau de pré-remplissage Tokenspeed MLA par @dishengbin dans https://github.com/lightseekorg/tokenspeed/pull/197</li>
+<li>corvée(mla) : backend de pré-remplissage par défaut vers cutedsl par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/201</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.3 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/202</li>
+<li>feat(deepseek-v4) : mise en cache des préfixes d'implémentation côté appareil pour le cache hybride v4. par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/146</li>
+<li>refactor (deepseek-v4) : nettoyage des chemins d'assistance et du noyau par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/203</li>
+<li>perf : ajout du noyau de décodage gluon fp16 par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/191</li>
+<li>correctif : corrige le bug selon lequel la taille du pool de cache kv est trop petite. par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/194</li>
+<li>Évitez de vider le cache FlashInfer dans PR CI par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/209</li>
+<li>perf(qwen3.5) : fusionnez q/k GemmaRMSNorm en un seul lancement de triton par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/196</li>
+<li>corvée(ci) : acheminer les performances agentiques vers b300-4gpu par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/211</li>
+<li>feat(kernel) : ajout du noyau de corde api par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/208</li>
+<li>correctif (deepseek-v4) : affiner le dimensionnement du cache et la communication experte partagée par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/213</li>
+<li>perf : optimisation du noyau de décodage TokenSpeed MLA pour num_heads=16 par @dishengbin dans https://github.com/lightseekorg/tokenspeed/pull/212</li>
+<li>perf(K2.5) : intégrer cutedsl argmax par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/210</li>
+<li>perf(K2.5) : prend en charge le topk déterministe et supprime Maybe_broadcast par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/206</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.4 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/214</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.4 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/215</li>
+<li>Rétablir &quot;Mettre à jour le MLA de tokenspeed-kernel vers 0.1.4 (#215)&quot; par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/218</li>
+<li>NFC : déplacez les noyaux de référence MoE vers des valeurs numériques par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/219</li>
+<li>NFC : déplacez le wrapper NVFP4 SwiGLU GEMM vers cute_dsl par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/220</li>
+<li>feat(kernel) : ajout du noyau de quantification api par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/216</li>
+<li>test (noyau) : verrouille la sélection publique du noyau API par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/221</li>
+<li>Rétablir &quot;perf : optimisation du noyau de décodage TokenSpeed MLA pour num_heads=16 (#212)&quot; par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/222</li>
+<li>ci : tester tokenspeed-mla dans l'arborescence lorsque ses sources changent par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/223</li>
+<li>exploit : batching mixte pré-remplissage-décodage (partie 3 : compatibilité avec le décodage spéculatif pour les modèles MLA) par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/205</li>
+<li>perf(qwen3.5) : fuse attn_output_gate sigmoid+mul + drop gate reshape copie par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/198</li>
+<li>correctif (deepseek-v4) : activez les tests unitaires DeepSeek-V4 sur CI par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/224</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.5 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/225</li>
+<li>Mise à jour du tokenspeed-kernel MLA vers 0.1.5 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/226</li>
+<li>Ajouter la tâche qwen3.5-397b-a17b nvfp4 perf CI par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/195</li>
+<li>Perf[Qwen3.5] : quelques optimisations de fusibles du noyau. par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/228</li>
+<li>fix(hf_transformers_utils) : centraliser la résolution de l'architecture ; Aucun coffre-fort par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/231</li>
+<li>ci(pr-test) : passez HF_TOKEN aux tâches de tests unitaires par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/233</li>
+<li>feat(ci) : ajout d'un champ de priorité facultatif à la tâche yaml par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/234</li>
+<li>perf[Qwen3.5] : fusionne les petits noyaux dans le bloc MoE. par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/235</li>
+<li>perf(qwen3.5) : réduit la synchronisation de pré-remplissage de memcpy et la surcharge de mise à jour de mamba par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/229</li>
+<li>feat(ci) : imprimer le tableau de comparaison des performances avec % par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/237</li>
+<li>feat(kvstore) : prise en charge des transferts de cache mamba l2 par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/162</li>
+<li>correctif (env) : ajout des packages d'exécution manquants à PACKAGE_LIST par @yurekami dans https://github.com/lightseekorg/tokenspeed/pull/240</li>
+<li>refactor (deepseek-v4) : nettoyage des métadonnées d'attention et des assistants de cache par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/242</li>
+<li>corvée (qwen3.5) : ajuster le seuil de performance tps de qwen par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/241</li>
+<li>feat(runtime) : prise en charge du VLM multimodal par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/236</li>
+<li>ci(perf-qwen3.5-agentic) : route vers gb200-4gpu-perf runner par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/245</li>
+<li>correctif (noyau) : supprimez le chemin d'inclusion CUDA vendu par Triton depuis nvcc -I par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/247</li>
+<li>ci(perf) : ajout de la performance agent Qwen3.5-NVFP4 sur b200-8gpu par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/250</li>
+<li>correctif (logits) : évitez nan dans le softcap fusionné par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/183</li>
+<li>corvée (smg) : déplacer les deps vers post20260525 + utiliser l'analyseur passthrough de @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/252</li>
+<li>feat(moe) : autoriser Fp8FlashinferCutlassBackend sur ep_size=1 lorsqu'il est explicitement forcé par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/244</li>
+<li>Correction : correction d'un bug de blocage sur le serveur TP. par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/248</li>
+<li>correctif (deepseek-v4) : fragment attn_sink pour tensor-parallel &gt; 1 par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/254</li>
+<li>correctif (deepseek-v4) : correction du surcrédit d'admission pour les groupes de cache paginé famille-état par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/249</li>
+<li>refactor : nettoyer le backend du noyau Triton par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/267</li>
+<li>ci(eval) : utilisez --repeats 3 sur gpt-oss-120b gpqa-diamond pour supprimer le bruit de @qywu dans https://github.com/lightseekorg/tokenspeed/pull/278</li>
+<li>Correction : masque causal manquant pour attn extend kernel par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/271</li>
+<li>correctif (kvstore) : découpler le flux d'écriture et d'exécution par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/279</li>
+<li>perf(sampling) : fuse logits fp32 converti en argmax ou softmax par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/262</li>
+<li>correctif (vlm) : remplacez les identifiants de tampon mm dans le rédacteur avant le brouillon d'embed_tokens par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/265</li>
+<li>Mettre à jour les broches tokenspeed-smg* vers 1.4.1.post20260527 / 0.4.8.post20260527 / 0.5.3.post20260527 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/283</li>
+<li>Utiliser les signatures de format d'opérande pour la sélection du noyau par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/230</li>
+<li>Rendre explicite le filtrage des rôles dtype par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/289</li>
+<li>perf : fusible kv écrit pour décodage uniquement par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/281</li>
+<li>doc : Ajouter des nouvelles sur README.md par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/292</li>
+<li>correctif (vlm) : bloquez gpu_memory_utilization conditionnellement et ajoutez --langage-model-only par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/266</li>
+<li>ci(eval) : ajout de la tâche Kimi-K2.5-NVFP4 ocr_bench par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/253</li>
+<li>refactor (deepseek-v4) : natif deep_gemm FP8 GEMM + correctif d'instantané par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/288</li>
+<li>ci(perf) : ajout d'un banc de perf de 1 m pour qwen3.5 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/264</li>
+<li>perf (Spec Decode) : ignorer le calcul de la position morte dans l'étape de rattrapage (decode) par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/217</li>
+<li>ci(eval) : définissez kimi-k2.5 ocr-bench score_threshold sur 0.9 par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/299</li>
+<li>ci(perf) : ajout du cas qwen3.5 agentic perf ci bs16 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/257</li>
+<li>refactor : supprimez les anciens backends à l'attention de @borontion dans https://github.com/lightseekorg/tokenspeed/pull/307</li>
+<li>refactor : mettre à jour les métadonnées transférées dans le backend mha par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/303</li>
+<li>perf : optimisez la collecte des logits et parallélisez la projection d'entrée eagle3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/295</li>
+<li>Nettoyer les groupes de processus GPU CI obsolètes par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/316</li>
+<li>Compétences : ajoutez une compétence pour diviser en deux la libération du triton pour les régressions par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/322</li>
+<li>Documenter les conseils du backend tokenspeed-kernel par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/323</li>
+<li>deps(noyau) : épinglez triton sur 3.7.10.post20260505 par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/320</li>
+<li>Conseils sur les options de dépendance des documents par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/324</li>
+<li>deps(kernel) : mise à jour de triton vers 3.7.10.post20260531 par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/325</li>
+<li>Chargez les entrées produites en amont uniquement après gridDepSync par @wangbo981016 dans https://github.com/lightseekorg/tokenspeed/pull/327</li>
+<li>test : extension du banc agent par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/312</li>
+<li>correctif : vérifiez les lots mixtes dans le backend mha en fonction du mode forward par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/334</li>
+<li>exploit (points d'entrée) : ajoutez un side-car de serveur HTTP aux côtés de la passerelle smg par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/308</li>
+<li>correctif (deepseek-v4) : combler l'écart d'acceptation MTP par @Xiangyi1996 dans https://github.com/lightseekorg/tokenspeed/pull/207</li>
+<li>correctif (dp) : correction du bug de parallèle des données qwen 3.5. par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/309</li>
+<li>perf : Optimiser la petite opération inter-itération par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/291</li>
+<li>corvée : utilisez -O3 -use_fast_math pour la compilation tokenspeed_kernel par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/285</li>
+<li>correctif (PD) : correction de l'amorçage spéculatif des entrées d'amorçage PD par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/286</li>
+<li>Correction (décodage des spécifications) : rattrapage du bug de trim par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/335</li>
+<li>perf(kernel) : optimisation du noyau mha pour le cas des fenêtres coulissantes par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/336</li>
+<li>Différer le rapport d'échec de référence de performance par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/340</li>
+<li>perf(deepseek-v4) : décode les optimisations d'attention de @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/339</li>
+<li>perf : ajoutez les noyaux Gluon MoE pour GPT-OSS par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/314</li>
+<li>exploit : réduire les instantanés d'état du préfixe DeepSeek V4 avec la réutilisation de la relecture par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/329</li>
+<li>Mettre à jour FlashInfer de tokenspeed-kernel vers 0.6.11.post3 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/347</li>
+<li>[Perf] Optimise les charges dans le noyau de décodage gfx950 fp16 par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/313</li>
+<li>Correction : erreur NAN dans le cas dp à cause d'entrées/données factices par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/341</li>
+<li>Supprimez le cuda_${SM} supplémentaire inexistant de l'installation de TokenSpeed par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/350</li>
+<li>correctif (deepseek-v4) : reporter l'échauffement du méga-MoE et corriger le chargement du poids MoE TP par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/356</li>
+<li>perf(gdn) : utilisez le noyau de pré-remplissage flashinfer sm100 pour Qwen3.5 GDN par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/331</li>
+<li>[Perf] Paralléliser la réduction de split-k dans le noyau mha_decode_fp16_gfx950 par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/353</li>
+<li>corvée (logits) : supprimez le pré-remplissage rassemble_ids dans LogitsProcessor par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/352</li>
+<li>correctif (cute_dsl) : ignorez le noyau CuTe DSL argmax sur les GPU H20 par @botieking98 dans https://github.com/lightseekorg/tokenspeed/pull/311</li>
+<li>Mettre à jour les broches tokenspeed-smg* vers 1.4.1.post20260607 / 0.4.8.post20260607 / 0.5.3.post20260607 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/371</li>
+<li>exploit (moteur) : contrôle du planificateur de pause/reprise API par @HJSang dans https://github.com/lightseekorg/tokenspeed/pull/346</li>
+<li>perf(deepseek-v4) : décode la fusion du noyau et l'optimisation du routage par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/375</li>
+<li>Diviser les packages du noyau du fournisseur par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/367</li>
+<li>Rétablir les &quot;packages de noyau du fournisseur divisé&quot; par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/378</li>
+<li>correctif (cudagraph) : définissez ctx.global_bs lors de la capture pour le projet de collecte totale du MoE par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/369</li>
+<li>feat(deepseek-v4) : prise en charge de la réutilisation du cache de préfixe MTP par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/361</li>
+<li>ci(eval) : ajout de tâches CI d'évaluation DeepSeek V4-Flash par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/344</li>
+<li>[AMD] moe : chemin rapide de routage Gluon à noyau unique fusionné pour le décodage small-M (gfx950) par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/363</li>
+<li>correctif : course du tampon CPU pour l'échantillonnage. par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/376</li>
+<li>Supprimez le mini équilibreur de charge par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/384</li>
+<li>perf : optimisation du noyau de décodage TokenSpeed MLA pour num_heads=16 par @dishengbin dans https://github.com/lightseekorg/tokenspeed/pull/255</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.6 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/385</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.6 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/386</li>
+<li>Mettre à jour Tilelang vers 0.1.11 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/387</li>
+<li>correctif (ci) : relâchez les gardes du déterminisme mm25 pour tolérer la quasi-égalité -use_fast_math par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/388</li>
+<li>Ajouter un travailleur HTTP PD Qwen3.5 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/389</li>
+<li>correctif (planificateur) : supprimez le suivi de TreeNode de mamba_leaves_ avant que prune ne le libère par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/357</li>
+<li>feat(gdn) : remplacez gdn par h_track path par flashinfer prefill gdn par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/377</li>
+<li>Ajouter une dépendance tokenspeed mooncake par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/391</li>
+<li>Ajoutez l'échantillonnage AMD Gluon argmax par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/379</li>
+<li>Prise en charge de l'échantillonnage DP pour le décodage des spécifications par @yubofredwang dans https://github.com/lightseekorg/tokenspeed/pull/232</li>
+<li>Réessayez les installations de ROCm pip par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/396</li>
+<li>correctif (mamba) : budget du pool de jetons par projet sur spéculative_algorithm par @rucnyz dans https://github.com/lightseekorg/tokenspeed/pull/397</li>
+<li>feat(pd) : support tp hétérogène par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/345</li>
+<li>ci(qwen3.5) : ajout de qwen3.5 397b pd ci (1p1d) par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/400</li>
+<li>Limiter apache-tvm-ffi à 0.1.11 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/401</li>
+<li>Cap apache-tvm-ffi dans les exigences CUDA par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/402</li>
+<li>ci : ajout de gpt-oss perf ci sur mi350 par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/394</li>
+<li>exploit : ajout du backend et des noyaux mla par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/373</li>
+<li>perf(gdn) : noyau Triton divisé QKV fusionné pour le pré-remplissage du GDN par @elwhyjay dans https://github.com/lightseekorg/tokenspeed/pull/380</li>
+<li>Mettez à jour tokenspeed-deepgemm vers 2.5.0.post20260604 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/410</li>
+<li>[CI] Utiliser une nouvelle étiquette pour les tâches de référence gfx950 par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/408</li>
+<li>ci : changer l'étiquette du coureur AMD 2GPU par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/414</li>
+<li>Ajout du chemin MoE de décodage par chaîne small-M Gluon pour GPT-OSS par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/403</li>
+<li>Diviser le package des noyaux AMD Gluon par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/404</li>
+<li>Correction de l'installation du noyau ROCm CI AMD par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/417</li>
+<li>refactor(spec-decode) : simplifie le chemin d'attention de Llama Eagle3 pour #217 (1/3) par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/390</li>
+<li>correctif (moe) : correction du bug de division zéro et protection du flashinfer nvfp4 vers l'avant sur une entrée vide par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/415</li>
+<li>perf(gdn) : supprimez la copie h_state inutile du pré-remplissage gdn par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/409</li>
+<li>Ajoutez sm103a aux arches CUDA par défaut par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/420</li>
+<li>correctif (noyau) : Correction du bug numérique du gluon MoE GEMM par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/421</li>
+<li>perf(deepseek-v4) : précompiler les noyaux JIT deep_gemm au démarrage par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/398</li>
+<li>ci(gpt-oss) : remplacez le débit par le débit de sortie par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/422</li>
+<li>Mettre à jour le statut README par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/424</li>
+<li>Synchroniser la liste des packages d'environnement avec les dépendances par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/425</li>
+<li>Ajouter Qwen3.5 PD AIME25 eval CI par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/426</li>
+<li>feat(kernel) : introduction du noyau moe unifié api par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/374</li>
+<li>perf(deepseek-v4) : échauffement dense deep_gemm M-sweep + couverture fp8_einsum par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/427</li>
+<li>Mettre à jour les broches de dépendance tokenspeed-smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/428</li>
+<li>Ajouter les en-têtes de copyright tokenspeed manquants par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/430</li>
+<li>Supprimez les assistants d'exécution Python inutilisés par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/431</li>
+<li>perf(kernel) : optimisation du noyau de pré-remplissage de la fenêtre coulissante mha par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/432</li>
+<li>[AMD] améliorations warp_decode par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/423</li>
+<li>ci : afficher les informations sur le GPU AMD par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/435</li>
+<li>correctif : limite le trait de type d'activation interne pour le plan moe par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/436</li>
+<li>ci : mettre à jour les étiquettes du runner GPU AMD par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/438</li>
+<li>correctif (bug d'exécution) : dimensionnement collectif MoE et capture cachée aux sous TP hétérogène par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/419</li>
+<li>perf(qwen3.5) : utiliser nvfp4_gemm_swiglu_nvfp4_quant dans les experts partagés par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/433</li>
+<li>Mettez à niveau les transformateurs vers 5.12.0 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/440</li>
+<li>perf(kernel) : plafonner la grille d'écriture KV toutes couches pour éviter de priver les calculs simultanés de @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/439</li>
+<li>Mettez à niveau xgrammar vers 0.2.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/441</li>
+<li>Détendez la limite inférieure de la dépendance openai par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/442</li>
+<li>Supprimer la dépendance Tilelang inutilisée par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/443</li>
+<li>feat(moe) : ajout du chemin MoE trtllm mxint4 (INT4 W4A16 groupe-32) pour Kimi-K2.x par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/444</li>
+<li>correctif (cudagraph) : préchauffage de seq_lens vers q_len pour éviter NAN par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/446</li>
+<li>feat(engine) : Sleep / Wake Up API (release/resume_memory_occupation) par @HJSang dans https://github.com/lightseekorg/tokenspeed/pull/393</li>
+<li>corvée (licence) : utilisez l'en-tête LightSeek sur les fichiers veille/réveil par @HJSang dans https://github.com/lightseekorg/tokenspeed/pull/449</li>
+<li>Correction des bugs de décodage pd TP4-&gt;DP4EP4 par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/448</li>
+<li>feat(mla) : prise en charge du décodage-context-parallel (DCP) dans le noyau de décodage MLA par @RomaA2000 dans https://github.com/lightseekorg/tokenspeed/pull/364</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.7 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/451</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.7 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/452</li>
+<li>Ajoutez le chargeur de poids InstantTensor (--load-format instanttensor) par @gongwei-130 dans https://github.com/lightseekorg/tokenspeed/pull/418</li>
+<li>Mettez à jour tokenspeed-flashmla vers 1.0.0.post20260615 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/458</li>
+<li>docs : déplacer DeepSeek V4 dans des recettes de modèles (Flash + Pro, MTP) par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/463</li>
+<li>revenir en arrière : supprimer le chargeur Instanttensor par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/462</li>
+<li>[AMD] Supporte Kimi K2.5 MXFP4 servi par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/454</li>
+<li>exploit : prise en charge des fonctionnalités backend trtllm dans le backend mha par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/445</li>
+<li>nettoyage : supprimez les assistants d'attention linéaire inutilisés par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/467</li>
+<li>refactor(spec-decode) : simplifie le chemin d'attention Qwen3.5 NextN pour #217 (2/3) par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/429</li>
+<li>feat (runtime) : améliore la détection, l'assainissement et l'isolation de NaN par requête par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/434</li>
+<li>corvée(deps) : mise à jour des packages smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/471</li>
+<li>corvée(deps) : mise à jour des packages smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/475</li>
+<li>exploit : adopter le décodage des spécifications de style trtllm api dans le backend mha par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/465</li>
+<li>corvée(deps) : mise à jour de tokenspeed-fa4 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/481</li>
+<li>feat(kernel) : enregistrez FA4 pour SM 103 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/474</li>
+<li>ci : utiliser le backend mha et moe par défaut pour gpt-oss ci par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/479</li>
+<li>perf (Réduire la dispersion) : mettre à l'échelle dynamiquement le nombre de CTA à réduction de dispersion par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/457</li>
+<li>ci : utilisez l'attention FA4 mm pour l'évaluation Kimi OCR par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/482</li>
+<li>Supprimer le remplacement forcé du flux d'enregistrement NCCL par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/483</li>
+<li>Utilisez le champ de configuration du type de transformateur par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/484</li>
+<li>correctif (deepseek-v4) : publication d'instantanés d'état de continuation intérieurs remplacés par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/460</li>
+<li>perf(kernel) : Optimiser Kimi Vision FA4 QKV + RoPE par @qimcis dans https://github.com/lightseekorg/tokenspeed/pull/477</li>
+<li>perf(kernel) : optimisez les GEMM de pré-remplissage MoE pour gfx950 par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/464</li>
+<li>Désinfectez les paramètres de la corde Qwen3.5 par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/485</li>
+<li>correctif (log) : empêche le blocage TP dû à la contre-pression du canal de journalisation sous un volume de journal de requêtes élevé par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/486</li>
+<li>ci : ajouter le banc de performances mi350 1gpu gpt-oss par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/487</li>
+<li>Mettre à jour les broches tokenspeed-smg vers 20260620 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/488</li>
+<li>ci : dédupliquer le banc gpt-oss mi350/mi355 yaml par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/489</li>
+<li>correctif (vlm) : concaténer les grilles par élément dans calculate_mrope_positions par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/490</li>
+<li>Mettre à jour les broches tokenspeed-smg vers 20260621 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/492</li>
+<li>feat(serve) : ts par défaut sert à la politique de routage passthrough smg par @slin1237 dans https://github.com/lightseekorg/tokenspeed/pull/491</li>
+<li>correctif (cudagraph) : supprimez la capture bs=0 à max_num_seqs=1 par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/493</li>
+<li>Correction des accès W2 OOB préréorganisés par gfx950 Gluon MoE par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/495</li>
+<li>feat(logprobs) : sortie des logprobs de jetons aux formats vLLM et SGLang par @HJSang dans https://github.com/lightseekorg/tokenspeed/pull/337</li>
+<li>perf(kernel) : décodage en lots moyens par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/470</li>
+<li>Mise à jour obsolète par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/496</li>
+<li>[Modèle] Prise en charge de GLM-5 : attention éparse DSA, décodage spéculatif MTP, décodage de graphe CUDA par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/348</li>
+<li>Mettre à jour les dépendances smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/497</li>
+<li>corvée : rendre cuda arch configurable par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/498</li>
+<li>feat(video) Généraliser la prise en charge du runtime multimodal et ajouter la vidéo Qwen3.5 de @yechank-nvidia dans https://github.com/lightseekorg/tokenspeed/pull/354</li>
+<li>correctif (mla) : appliquer le masque causal MTP dans le noyau de décodage BF16/FP16 par @zcnrex dans https://github.com/lightseekorg/tokenspeed/pull/469</li>
+<li>correctif (mla) : le garde LSE écrit lorsque return_lse=False dans le décodage BF16 par @zcnrex dans https://github.com/lightseekorg/tokenspeed/pull/468</li>
+<li>correctif (cache) : élargir loc à int64 dans les noyaux Triton MLA KV-buffer pour empêcher le débordement d'adresse int32 par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/501</li>
+<li>Mettez à jour tokenspeed-mla vers 0.1.8 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/504</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.1.8 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/505</li>
+<li>Ajouter le workflow de publication tokenspeed-kernel-amd par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/507</li>
+<li>Correction des cibles de publication tokenspeed-kernel-amd par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/508</li>
+<li>correctif (spécification) : suppression des modes de transfert spéciaux V4 MTP par @Xiangyi1996 dans https://github.com/lightseekorg/tokenspeed/pull/503</li>
+<li>Correction de la recherche d'environnement du coureur b200 avec remplacement d'étiquette par @zhyncs dans https://github.com/lightseekorg/tokenspeed/pull/511</li>
+<li>feat(kernel) : Liez les préprocesseurs de poids aux noyaux par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/480</li>
+<li>Abaisser le seuil d'évaluation GPQA Diamond par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/514</li>
+<li>Correction : erreur IMA GLM5 DSA MTP TP4 par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/509</li>
+<li>Correction : réutilisation de l'espace de travail de collecte totale des logits par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/515</li>
+<li>feat(dflash) : Ajout du support DFlash par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/472</li>
+<li>fix(pd) : correction du transfert du point de contrôle Mamba par @XucSh dans https://github.com/lightseekorg/tokenspeed/pull/516</li>
+<li>Créez CODE_OF_CONDUCT par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/517</li>
+<li>Créez la SÉCURITÉ par @torchspec-bot dans https://github.com/lightseekorg/tokenspeed/pull/518</li>
+<li>perf(kernel) : optimisation de la disposition rotative Qwen vision QKV par @qimcis dans https://github.com/lightseekorg/tokenspeed/pull/456</li>
+<li>Mise à jour du README News par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/523</li>
+<li>correctif (noyau) : décalage hors plage pour le cache kv par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/522</li>
+<li>Correction du nettoyage du cache d'action obsolète par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/524
+* Bump tokenspeed-kernel-amd vers 0.1.1 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/525</li>
+<li>perf(deepseek-v4) : transfert du CMH à état différé pour la fusion inter-couches par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/529</li>
+<li>correctif (attention) : utilisez l'adressage paginé-KV int64 dans les noyaux MHA Triton par @raikonenfnu dans https://github.com/lightseekorg/tokenspeed/pull/530
+*exploit : argmax distribué pour l'échantillonnage gourmand EAGLE par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/519</li>
+<li>Ajouter le travail AMD Kimi MXFP4 CI par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/476</li>
+<li>correctif (glm5.2) : correction des paramètres indexer_topk_prefil pour le pré-remplissage long par lots IMA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/533</li>
+<li>correctif : décomposez PrecisionConfig à partir de tokenspeed-kernel-amd gluon moe par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/535</li>
+<li>fix(quant) : honorer l'exclusion de quantification par couche pour les experts du MoE par @jaywme dans https://github.com/lightseekorg/tokenspeed/pull/527</li>
+<li>correctif (dflash) : correction du problème de blocage du serveur pour dflash et ajout d'une évaluation ci par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/531</li>
+<li>Divisez AMD et NVIDIA PR CI par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/537</li>
+<li>correctif (spécification) : pilotez les couches de capture aux EAGLE3 à partir du brouillon de configuration par @jaywme dans https://github.com/lightseekorg/tokenspeed/pull/526</li>
+<li>correctif (échantillonnage) : course PDL fused_topk_topp provoquant IMA par @jaywme dans https://github.com/lightseekorg/tokenspeed/pull/536</li>
+<li>ci : passer temporairement à l'utilisation de mi355-1gpu-bench pour 1gpu ci par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/538</li>
+<li>ci : remettez le MI35x au CI 1GPU standard par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/540</li>
+<li>docs : ajoutez un blog et parlez du lien README par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/541</li>
+<li>feat(log) : ajout de --log-request-stats journalisation des statistiques par requête par @LorrinWWW dans https://github.com/lightseekorg/tokenspeed/pull/512</li>
+<li>correctif (nvfp4) : utiliser des échelles globales par demi-porte/haut pour le MoE fusionné trtllm par @jaywme dans https://github.com/lightseekorg/tokenspeed/pull/543</li>
+<li>Correction : correction de cutedsl argmax pour les entrées NaN et suppression des gardes désormais redondantes par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/552</li>
+<li>correctif (glm-5.2) : supprimez le cache KV DSA inutile et le chemin flashmla DSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/554</li>
+<li>correctif (exécution) : renforce le chemin de décodage MTP contre NaN, le débordement et la corruption d'état par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/506</li>
+<li>Créez une CONTRIBUTION par @torchspec-bot dans https://github.com/lightseekorg/tokenspeed/pull/559</li>
+<li>Mettre à jour les broches de dépendance tokenspeed-smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/561</li>
+<li>Créer une gouvernance par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/564</li>
+<li>correctif (planificateur) : prise en compte des points de contrôle d'état terminaux lors de l'admission par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/562</li>
+<li>corvée (noyau) : déplacez flashinfer vers 0.6.13, ajoutez &lt;cfloat&gt; include par @jaywme dans https://github.com/lightseekorg/tokenspeed/pull/539</li>
+<li>Paralléliser le planificateur C++ lint par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/566</li>
+<li>correctif (planificateur) : bloquez l'alignement de la page TakeFirst hybride pour empêcher OwnedP… par @khushgx dans https://github.com/lightseekorg/tokenspeed/pull/565</li>
+<li>Correction des échelles d'activation MXFP4 rassemblées dans Gluon MoE par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/534</li>
+<li>Correction de la synchronisation du cache GB200 FlashInfer JIT par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/567</li>
+<li>Ajoutez GLM NVFP4 AIME26 CI par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/569</li>
+<li>correctif (ci) : résolution de l'erreur de cache GB200 CI FlashInfer JIT par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/570</li>
+<li>Prise en charge initiale du glm 5.2 sur amd par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/528</li>
+<li>feat(glm-5.2) : prise en charge du cache KV hiérarchique (hôte/L2) pour DSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/572</li>
+<li>correctif (échantillonnage) : CuteDSL argmax plante le serveur lors d'une entrée de ligne vide par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/545</li>
+<li>correctif (attention) : émet un log LSE naturel à partir du pré-remplissage de gluon mha par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/571</li>
+<li>Utilisez tokenspeed-spdlog pour les builds du planificateur par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/576</li>
+<li>Correction de l'importation mathématique du test LSE par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/577</li>
+<li>[GLM] perf : Optimiser le décodage GLM DSA top-k par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/573</li>
+<li>correctif (attention) : traiter window_left comme exclusif par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/578
+*test : banc agentique glm-5.2 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/532</li>
+<li>Correction du dimensionnement du cache DP par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/574</li>
+<li>Ajoutez les backends d'échantillonnage Triton aux côtés de FlashInfer par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/280</li>
+<li>test : ajout du cas dp4ep4 dans CI par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/453</li>
+<li>test : correction du banc agentique glm-5.2 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/581</li>
+<li>ci : désactiver distribué_argmax sur le rédacteur qwen3.5 MTP par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/582</li>
+<li>perf(glm-5.2) : supprimez le chemin complet et la transformation hadamard, utilisez flashinfer LayerNorm pour le chemin de décodage DSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/586</li>
+<li>Diviser les tests NVIDIA ARM PR par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/588</li>
+<li>Ajouter les attributions de source SPDX par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/591</li>
+<li>corvée (glm-5.2) : nettoyage du cache bf16 index_k pour DSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/590</li>
+<li>Correction de la vérification des fraises par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/593</li>
+<li>perf(deepseek-v4) : active la planification de chevauchement MTP avec le cache paginé par @dongjiyingdjy dans https://github.com/lightseekorg/tokenspeed/pull/583</li>
+<li>fix(perf) : correction de la régression des performances ci agentiques qwen3.5 tp8 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/594</li>
+<li>correctif (spécification) : correction du blocage en étapes mixtes de Kimi DP EAGLE3 par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/596</li>
+<li>exploit (attention) : ajout du noyau d'extension gluon MHA pour gfx950 par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/587
+*exploit : graphique CUDA sécable pour les transferts de pré-remplissage par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/597</li>
+<li>correctif (deepseek-v3) : acheminer l'état de fusion DeepSeek via un backend unifié par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/602</li>
+<li>perf(glm-5.2) : suppression de l'extension par jeton de seq_lens et block_table pour le chemin de décodage DSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/599</li>
+<li>Mettre à jour les broches de dépendance smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/606</li>
+<li>correctif (noyau) : correction des accès hors limites dans l'implémentation de gluon MoE topk par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/605</li>
+<li>Mettre à jour CODEOWNERS par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/607</li>
+<li>feat(gdn) : prise en charge initiale du pré-remplissage de morceaux de routage via le registre du noyau par @raikonenfnu dans https://github.com/lightseekorg/tokenspeed/pull/595</li>
+<li>Correction (deepseek-v4) : taille de la capture de la fenêtre coulissante du graphique CUDA en pleine fenêtre. par @SimonCqk dans https://github.com/lightseekorg/tokenspeed/pull/613</li>
+<li>exploit (désagrégation) : ajout d'un pipeline d'encodage EPD par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/548</li>
+<li>Ajout du support MoE fusionné Gluon pour les activations dynamiques MXFP4 par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/603</li>
+<li>Mettre à jour les dépendances smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/615</li>
+<li>Ajoutez gfx950 Gluon dense16 GEMM par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/598</li>
+<li>perf(deepseek-v4) : nettoie le mappage des emplacements SWA une fois par étape par @Xiangyi1996 dans https://github.com/lightseekorg/tokenspeed/pull/614</li>
+<li>correctif (planificateur) : conserver la correspondance hybride mamba sur le chemin de l'appareil par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/612</li>
+<li>Mettre à jour les broches de dépendance smg par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/619</li>
+<li>Ajouter la publication du planificateur PyPI par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/623</li>
+<li>Correction de la publication de la roue PyPI du planificateur par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/624</li>
+<li>refactor(spec-decode) : simplifie le chemin d'attention deepseekV3/GLM pour #217 (3/3) par @rjzhb dans https://github.com/lightseekorg/tokenspeed/pull/544</li>
+<li>ci : déposez mi350-1gpu-bench par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/629</li>
+<li>ci : publication gate tokenspeed-kernel par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/628</li>
+<li>exploit (attention) : ajout du support fp8 aux noyaux gfx950 gluon MHA par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/625</li>
+<li>(noyau) : Noyau Gluon pour BF16 MoE sur GFX950 par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/626</li>
+<li>ci : nouvelle tentative échouée des dernières tâches principales de @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/633</li>
+<li>ci : réactivez mi350-1gpu-bench et prenez en charge les tâches facultatives de @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/632</li>
+<li>refactor (attention) : consolider les mises en page du gluon MHA gfx950 dans l'assistant partagé par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/635</li>
+<li>Mettre à jour triton vers &gt;= 3.8.10.post20260709 par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/636</li>
+<li>ci : réessayez les tâches de relations publiques approuvées par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/637</li>
+<li>ci : abandonnez la porte d'adhésion à l'organisation pour les rediffusions de relations publiques approuvées par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/638</li>
+<li>Ajouter des résumés de workflow de nouvelle tentative par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/639</li>
+<li>KV-Cache Refactor Partie 1 : Présentation du pool de blocs unifié par @wangbo981016 dans https://github.com/lightseekorg/tokenspeed/pull/447</li>
+<li>Libérez tokenspeed-mla 0.1.9 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/641</li>
+<li>Prise en charge de block_size hétérogène par @wangbo981016 dans https://github.com/lightseekorg/tokenspeed/pull/647</li>
+<li>exploit(attention) : le backend trtllm consomme des tables de cache KV plates par groupe par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/642</li>
+<li>Mettez à niveau CuTeDSL vers 4.6.0 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/640</li>
+<li>correctif (noyau) : évitez de mélanger les en-têtes de la boîte à outils CUDA par @lucifer1004 dans https://github.com/lightseekorg/tokenspeed/pull/644</li>
+<li>Nettoyer les tests de cache KV plat par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/650</li>
+<li>feat(spec) : décodage spéculatif EAGLE3/MTP sur le chemin plat KV-cache par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/649</li>
+<li>correctif (noyau) : utiliser la quantification Triton FP8 sur SM120 par @lucifer1004 dans https://github.com/lightseekorg/tokenspeed/pull/646</li>
+<li>build(deps) : déplacez tokenspeed-deepgemm vers 2.5.0.post20260629 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/653</li>
+<li>Actualiser la bannière de la marque en actif transparent haute résolution par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/656</li>
+<li>Mettre à jour README par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/657</li>
+<li>feat (multimodal) : support ASR et Omni thinker par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/654
+*exploit : activer le pré-remplissage du graphe CUDA par défaut par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/611</li>
+<li>Correctif [AMD] (gluon) : prise en charge de la combinaison dynamique MXFP4 K=256 par @raikonenfnu dans https://github.com/lightseekorg/tokenspeed/pull/658</li>
+<li>[GLM] perf : Intégrer TRT-LLM cutedsl topk par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/634</li>
+<li>ci : autoriser l'exclusion des étiquettes de coureur indisponibles par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/663</li>
+<li>correctif (noyau) : préchargements du masque gluon MoE tail-k par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/666</li>
+<li>feat(rl) : plan de contrôle de transfert de poids pour la synchronisation du poids en ligne RL par @qywu dans https://github.com/lightseekorg/tokenspeed/pull/546</li>
+<li>feat(profile) : pilotez Proton via le plan de contrôle /start_profile par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/655</li>
+<li>correctif (planificateur) : compte les pages actives dans les groupes par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/669</li>
+<li>Ajoutez une bascule de cache KV plate au flux de travail de publication du planificateur par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/673
+* Bump tokenspeed-scheduler vers 0.1.1 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/674</li>
+<li>correctif (prefill-graph) : accès mémoire illégal sur le chemin du cache KV plat par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/667</li>
+<li>feat(kernel) : ajoutez a4w4 gluon moe pour le top-k précalculé par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/671</li>
+<li>La route MLA RoPE KV écrit via l'intégration de API par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/643</li>
+<li>refactor (noyau) : utilisez les comptes d'experts du routeur d'exécution par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/675</li>
+<li>refactor : abandonnez l'utilisation ad hoc de is hip par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/676</li>
+<li>ci : autoriser les référentiels configurés à exécuter des workflows GPU par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/677</li>
+<li>[AMD] Prise en charge initiale de qwen3.5-397b-a17b-mxfp4 sur le matériel AMD par @raikonenfnu dans https://github.com/lightseekorg/tokenspeed/pull/592</li>
+<li>build(deps) : déplacer les packages tokenspeed-smg vers post20260714 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/679</li>
+<li>Ajoutez des noyaux de charlatan aux exigences tierces de CUDA par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/680</li>
+<li>Ajouter des arguments d'échelle backend MHA par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/682</li>
+<li>correctif (échantillonnage) : correction d'un crash d'adresse mal alignée de fused_topk_topp sans perdre le débit float4 par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/683</li>
+<li>perf : export pagetable plate par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/681
+* Bump tokenspeed-scheduler vers 0.1.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/684</li>
+<li>feat(kernel) : ajoutez le décodage gfx950 Gluon mxfp4 MoE et pré-remplissez les noyaux par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/670</li>
+<li>Ajoutez les fichiers NVIDIA et AMD Docker par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/685</li>
+<li>ci : correction de l'espace de noms d'image AMD par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/686
+*exploit : support de Qwen3.5 DFlash et ses optimisations par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/510</li>
+<li>Ajouter les en-têtes de copyright manquants par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/687</li>
+<li>Ajoutez les recettes Inkling de @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/690</li>
+<li>Mettre à jour le lien Inkling par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/691</li>
+<li>Ajouter les nouvelles de support Inkling day 0 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/692</li>
+<li>feat(kernel) : Ajout d'un noyau de gluons pour DSA par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/627</li>
+<li>perf (noyau) : réglage du gfx950 A4W4 MXFP4 MoE pour Kimi-K2.5 (capuchon de décodage + tuile de pré-remplissage) par @panditsa dans https://github.com/lightseekorg/tokenspeed/pull/698</li>
+<li>Ajout du support TML Inkling par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/689</li>
+<li>ci : supprimer m2 ui par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/704</li>
+<li>Mise à jour des broches du package SMG par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/705</li>
+<li>Mettez à jour tokenspeed-mla vers 0.2.0 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/707</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.2.0 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/708</li>
+<li>feat(kernel) : Ajouter le batch matmul API par @qedawkins dans https://github.com/lightseekorg/tokenspeed/pull/668</li>
+<li>ci : ajoutez une idée d'eval ci par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/703</li>
+<li>ci : mise à jour de FlashInfer vers 0.6.15 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/713</li>
+<li>correctif (idée) : nécessite les analyseurs SMG au démarrage par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/712</li>
+<li>fix(kvcache) : acheminer les pages négatives vers la page factice dans flat_decode_locs par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/709</li>
+<li>Correction : conversion des poids de route différés NVFP4 vers bf16 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/716</li>
+<li>feat(kernel) : ajout du noyau mxfp MoE Gluon sur gfx1250 par @knwng dans https://github.com/lightseekorg/tokenspeed/pull/710</li>
+<li>feat(kernel) : ajoutez le décodage gfx950 Gluon bf16 MLA et pré-remplissez les noyaux par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/664</li>
+<li>[AMD] Ajout de la prise en charge initiale du pré-remplissage GFX1250 Gluon MHA en pipeline par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/719</li>
+<li>correctif (runtime) : restaurez la précision de Qwen3.5 OCRBench pour débloquer CI par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/715</li>
+<li>ci(eval) : ajout de l'agrégat Qwen3.5 et de la couverture EPD OCRBench par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/549</li>
+<li>perf(kernel) : optimisation du noyau d'extension du gluon MHA du gfx950 par @Yu-Zhewen dans https://github.com/lightseekorg/tokenspeed/pull/717</li>
+<li>correctif (profil) : barrière aux pairs TP avant de répondre à un Proton /stop_profile par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/722</li>
+<li>Stabiliser l'exécution agentique du B200 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/725</li>
+<li>exploit (profil) : fusionner les traces Proton et VizTracer sur une seule chronologie par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/662</li>
+<li>build : supprime l'exigence de noyaux de charlatan en double par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/726</li>
+<li>corvée : ajouter les en-têtes de copyright tokenspeed-kernel-amd par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/727</li>
+<li>build : déplacer les packages du noyau tokenspeed vers 0.1.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/728</li>
+<li>build : pin tokenspeed-kernel-amd 0.1.2 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/729</li>
+<li>ci : réactivez le mi355x et supprimez le banc mi350x 1gpu par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/732</li>
+<li>refactor(spec) : MTP multicouche séparé d'Eagle par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/730</li>
+<li>feat (multimodal) : ajout du parallélisme des données de l'encodeur au niveau des éléments par @chenht2022 dans https://github.com/lightseekorg/tokenspeed/pull/731</li>
+<li>test (kernel) : vérifiez la sélection du noyau sur plusieurs plates-formes et supprimez Expected_kernel_name par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/659</li>
+<li>feat(profile) : Ajout du support de fusion de traces multi-rangs par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/734</li>
+<li>corvée : supprimez l'ancien package spec_decode et le chemin ScheduleBatch mort par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/739</li>
+<li>refactor (epd) : promotion du package epd et du module de transfert split mooncake par @FC-Li dans https://github.com/lightseekorg/tokenspeed/pull/743</li>
+<li>Mettre à jour les broches tokenspeed-smg* vers 1.8.0.post20260720 / 0.4.14.post20260720 / 0.7.0.post20260720 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/744</li>
+<li>[GLM] perf : optimisation des petits noyaux de l'indexeur par @yweng0828 dans https://github.com/lightseekorg/tokenspeed/pull/742</li>
+<li>perf(gdn) : utilisez le noyau gdn de décodage flashinfer par @tuanzhangCS dans https://github.com/lightseekorg/tokenspeed/pull/700</li>
+<li>exploit : ajout du support de base du MiniMax M3 par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/733</li>
+<li>feat(m3) : prise en charge des points de contrôle du projet Eagle3.1 par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/751</li>
+<li>feat(m3) : prise en charge des points de contrôle de précision mixte NVFP4 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/749</li>
+<li>correctif (noyau) : élargissement des décalages du cache du noyau RoPE KV triton fusionné vers i64 par @Max191 dans https://github.com/lightseekorg/tokenspeed/pull/748</li>
+<li>Correction : effacement des transferts de graphiques cassables rembourrés par @FlamingoPg dans https://github.com/lightseekorg/tokenspeed/pull/741</li>
+<li>deps : mettre à jour les dépendances de TokenSpeed Triton par @antiagainst dans https://github.com/lightseekorg/tokenspeed/pull/753</li>
+<li>Mettez à jour tokenspeed-mla vers 0.2.1 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/755</li>
+<li>Mettre à jour le tokenspeed-kernel MLA vers 0.2.1 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/754</li>
+<li>Mettez à jour FlashInfer vers 0.6.15.post1 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/757</li>
+<li>ci : ajouter les workflows du cycle de vie des versions tokenspeed-kernel-amd par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/756</li>
+<li>build : mise à jour de tokenspeed-kernel-amd vers 0.1.3 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/760</li>
+<li>build : synchronisation du tokenspeed-kernel avec AMD 0.1.3 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/761</li>
+<li>feat(m3) : prise en charge du cache FP8 KV par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/759</li>
+<li>refactor(cache) : faire de BlockRef un handle partagé par @wangbo981016 dans https://github.com/lightseekorg/tokenspeed/pull/762</li>
+<li>correctif (qwen3.5) : Correction du chargement du poids Qwen3.5 FP8 par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/766</li>
+<li>feat(m3) : adoptez le pré-remplissage clairsemé MiniMax MSA CuTe-DSL sur SM100 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/764</li>
+<li>correctif (idée) : fusionner la recherche dMel + la somme pour lier la mémoire d'encodage audio par @nperrin-fr dans https://github.com/lightseekorg/tokenspeed/pull/771
+* Bump tokenspeed-scheduler vers 0.1.3 par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/772</li>
+<li>ci : supprimez les fichiers de version hérités de Docker par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/773</li>
+<li>ci : prise en charge des versions datées de tokenspeed-kernel par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/774</li>
+<li>perf(m3) : backend flashinfer cute-dsl pour MXFP8 (1,32) GEMM dense par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/765</li>
+<li>perf(m3) : intégrer les noyaux CuTeDSL MSA block-score par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/775</li>
+<li>ci : désactivez la réflexion et autorisez un contexte plus long pour les cas qwen3.5 eval/pd par @minedec dans https://github.com/lightseekorg/tokenspeed/pull/776</li>
+<li>Correction des métadonnées de dépendance d'exécution tokenspeed-kernel par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/778</li>
+<li>perf(m3) : optimiser MiniMax M3 MoE et MSA par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/779</li>
+<li>perf(m3) : optimisation du module d'attention MiniMax M3 par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/781</li>
+<li>build : déclarer les dépendances d'exécution de TokenSpeed par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/783</li>
+<li>ci : utilisez la publication trusted pour PyPI par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/784</li>
+<li>test(m3) : activez MiniMax-M3 CI (en remplacement de M2.7) et ajoutez un benchmark agent par @syuoni dans https://github.com/lightseekorg/tokenspeed/pull/785</li>
+<li>ci : ajout de la release Docker publiée par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/788</li>
+<li>ci : ajout du workflow de publication du noyau tokenspeed-kernel ROCm 7.2 par @borontion dans https://github.com/lightseekorg/tokenspeed/pull/787</li>
+<li>ci : ajout du workflow de publication TokenSpeed par @lightseek-bot dans https://github.com/lightseekorg/tokenspeed/pull/792</li>
+</ul>
+<h2>Nouveaux contributeurs</h2>
+<ul>
+<li>@zhyncs a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/1</li>
+<li>@antiagainst a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/3</li>
+<li>@knwng a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/4</li>
+<li>@yubofredwang a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/9</li>
+<li>@syuoni a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/17</li>
+<li>@huangzhilin-hzl a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/12</li>
+<li>@andyluo7 a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/23</li>
+<li>@XucSh a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/14</li>
+<li>@LorrinWWW a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/35</li>
+<li>@tuanzhangCS a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/15</li>
+<li>@dongjiyingdjy a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/30</li>
+<li>@minedec a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/32</li>
+<li>@roycho96 a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/41</li>
+<li>@FlamingoPg a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/10</li>
+<li>@SimonCqk a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/51</li>
+<li>@raayandhar a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/82</li>
+<li>@Aphoh a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/8</li>
+<li>@lite-keke a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/97</li>
+<li>@benenzhu a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/119</li>
+<li>@yweng0828 a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/126</li>
+<li>@jasl a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/134</li>
+<li>@elwhyjay a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/155</li>
+<li>@mmangkad a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/163</li>
+<li>@wtsung a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/185</li>
+<li>@curious-whq a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/182</li>
+<li>@yurekami a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/240</li>
+<li>@rjzhb a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/217</li>
+<li>@wangbo981016 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/327</li>
+<li>@Xiangyi1996 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/207</li>
+<li>@Yu-Zhewen a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/313</li>
+<li>@botieking98 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/311</li>
+<li>@HJSang a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/346</li>
+<li>@panditsa a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/363</li>
+<li>@rucnyz a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/397</li>
+<li>@Max191 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/421</li>
+<li>@RomaA2000 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/364</li>
+<li>@gongwei-130 a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/418</li>
+<li>@qedawkins a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/454</li>
+<li>@slin1237 a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/491</li>
+<li>@yechank-nvidia a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/354</li>
+<li>@zcnrex a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/469</li>
+<li>@torchspec-bot a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/518</li>
+<li>@jaywme a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/527</li>
+<li>@khushgx a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/565</li>
+<li>@nperrin-fr a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/597</li>
+<li>@lucifer1004 a fait sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/644</li>
+<li>@FC-Li a apporté sa première contribution dans https://github.com/lightseekorg/tokenspeed/pull/743
+<strong>Changelog complet</strong> : https://github.com/lightseekorg/tokenspeed/commits/v0.1.0</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/lightseekorg/tokenspeed">lightseekorg/tokenspeed</a> · <code>v0.1.0</code> · 2026-07-24 · <a href="https://github.com/lightseekorg/tokenspeed/releases/tag/v0.1.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>tokenspeed v0.1.0</h1>
+<h2>What's Changed</h2>
+<ul>
+<li>Use CUDA routing gemm for LongCat by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/1</li>
+<li>Update README by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/2</li>
+<li>Add PyTorch index-url for rocm.txt requirements by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/3</li>
+<li>[AMD]Avoid Exceeding LDS Limit by @knwng in https://github.com/lightseekorg/tokenspeed/pull/4</li>
+<li>Skip FA4 registration on B300 (SM 10.3) by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/5</li>
+<li>Update README with new intro and performance diagram by @yubofredwang in https://github.com/lightseekorg/tokenspeed/pull/9</li>
+<li>fix: Kill server by PID in agentic_bench.sh by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/17</li>
+<li>fix: Avoid large FP32 init for skipped MLA ref checks by @huangzhilin-hzl in https://github.com/lightseekorg/tokenspeed/pull/12</li>
+<li>Support EvalScope box table score parsing by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/19</li>
+<li>decoder_layer: Python 3.10 compat (replace PEP 695 generics with TypeVar/Generic) by @andyluo7 in https://github.com/lightseekorg/tokenspeed/pull/23</li>
+<li>feat(PD): support mamba cache by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/14</li>
+<li>platform: hardcode MI300/MI350 LDS size; probe /sys/class/kfd for xGMI topology by @andyluo7 in https://github.com/lightseekorg/tokenspeed/pull/25</li>
+<li>perf(K2.5): fix slow tokenize and add warmup for agentic bench by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/31</li>
+<li>perf(K2.5): Tune num_tokens for router_gemm and fused_a_gemm by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/33</li>
+<li>Add Kimi K2.5 agentic perf CI task by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/29</li>
+<li>Fix agentic perf CI triggers by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/34</li>
+<li>[AMD] Add eval ci and fix kv store addr on mi355 by @borontion in https://github.com/lightseekorg/tokenspeed/pull/36</li>
+<li>[AMD]Use Iris Communication Ops by Default by @knwng in https://github.com/lightseekorg/tokenspeed/pull/38</li>
+<li>perf: default TF32 on for FP32 cuBLAS (router GEMMs) by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/35</li>
+<li>fix: mamba prefix cache by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/15</li>
+<li>Tune speculative decoding defaults by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/40</li>
+<li>feat(deepseek-v4): add mega_moe and compressed KV perf path by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/30</li>
+<li>Fix GPT-OSS MXFP4 scale dtype by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/42</li>
+<li>perf: optimize qwen3.5 runtime prepare cost by @minedec in https://github.com/lightseekorg/tokenspeed/pull/32</li>
+<li>[AMD]Upgrade triton_kernels Package by @knwng in https://github.com/lightseekorg/tokenspeed/pull/37</li>
+<li>fix(scheduler): keep host_node_ref alive across forward FSM states by @roycho96 in https://github.com/lightseekorg/tokenspeed/pull/41</li>
+<li>MiniMax-M2 H100 FP8 optimizations by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/10</li>
+<li>perf(eviction): O(k log N) eviction via persistent LRU set by @qywu in https://github.com/lightseekorg/tokenspeed/pull/18</li>
+<li>Move benchmark scripts under runtime tests by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/44</li>
+<li>perf: avoid GPU sync in extend metadata to restore overlap for trtllm mha by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/45</li>
+<li>[metrics] 1/N: rename collectors and clean up dead code by @yubofredwang in https://github.com/lightseekorg/tokenspeed/pull/7</li>
+<li>Add workflow to update tokenspeed-kernel FlashInfer by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/46</li>
+<li>Fix FlashInfer update workflow branch push by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/48</li>
+<li>Update tokenspeed-kernel FlashInfer to 0.6.11 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/49</li>
+<li>Suppress FlashAttention JIT cache debug logs by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/50</li>
+<li>Default speculative draft quantization to unquantized by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/52</li>
+<li>Default prefill token budgets to 8k by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/53</li>
+<li>Align speculative config token steps by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/54</li>
+<li>Use FlashInfer wheel index for JIT cache by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/55</li>
+<li>Update tokenspeed-fa4 dependency by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/56</li>
+<li>eval: add qwen3.5 aime25 eval by @minedec in https://github.com/lightseekorg/tokenspeed/pull/43</li>
+<li>Remove runtime cutlass DSL dependency by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/59</li>
+<li>Move nvtx dependency to tokenspeed-kernel by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/60</li>
+<li>Update agent dependency guidance by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/61</li>
+<li>Suppress noisy CUTLASS DSL warnings by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/62</li>
+<li>Suppress TensorRT-LLM INFO startup logs by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/63</li>
+<li>Test MTP speculative config CLI parity by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/64</li>
+<li>Remove default eval prefill args by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/65</li>
+<li>test: cover tensor parallel aliases by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/66</li>
+<li>ci: use tp alias in eval configs by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/67</li>
+<li>Use packaged tokenspeed-triton-kernels dependency by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/68</li>
+<li>Use packaged tokenspeed-iris dependency by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/70</li>
+<li>Remove FlashInfer JIT cache requirement by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/71</li>
+<li>Enable FA4 prefill head dim 256 by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/73</li>
+<li>eval: temp set aime25 threshold to 0.86 by @minedec in https://github.com/lightseekorg/tokenspeed/pull/75</li>
+<li>perf(K2.5): fuse embeds and hidden norm in MLA eagle3 by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/78</li>
+<li>Fix tokenspeed proton import by @borontion in https://github.com/lightseekorg/tokenspeed/pull/79</li>
+<li>feat(deepseek-v4): add scheduler-managed sliding-window cache groups by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/51</li>
+<li>fix(qwen3): plumb tensor-parallel info through MLP layers by @qywu in https://github.com/lightseekorg/tokenspeed/pull/80</li>
+<li>fix: runtime_stats.py -&gt; runtime_states.py by @raayandhar in https://github.com/lightseekorg/tokenspeed/pull/82</li>
+<li>Refine third-party attribution notices by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/84</li>
+<li>feat: support num_heads = 64 for TokenSpeed MLA decode by @dishengbin in https://github.com/lightseekorg/tokenspeed/pull/85</li>
+<li>Add KV cache events to scheduler by @Aphoh in https://github.com/lightseekorg/tokenspeed/pull/8</li>
+<li>Refresh Python install paths to expose packages from subprocess pip by @borontion in https://github.com/lightseekorg/tokenspeed/pull/91</li>
+<li>Integrate attn backend with attn kernel selection by @borontion in https://github.com/lightseekorg/tokenspeed/pull/90</li>
+<li>Add --model-path alias for --model by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/92</li>
+<li>Fix KV cache event parent hash performance by @Aphoh in https://github.com/lightseekorg/tokenspeed/pull/87</li>
+<li>perf(K2.5): disable embedding TP and skip concat for EAGEL3 drafter loop by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/94</li>
+<li>feat(deepseek-v4): harden attention fast paths by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/93</li>
+<li>perf: optimize mamba prefix cache performance by @minedec in https://github.com/lightseekorg/tokenspeed/pull/77</li>
+<li>feat(cli): ts serve — smg gateway + gRPC engine by @lite-keke in https://github.com/lightseekorg/tokenspeed/pull/97</li>
+<li>ci: install smg deps from whl index by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/99</li>
+<li>ci: pin smg install deps by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/100</li>
+<li>chore: remove stale server and parsers by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/98</li>
+<li>Update SMG package pins by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/101</li>
+<li>fix(ci): fix reasoning parser for ci by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/102</li>
+<li>Package tokenspeed-mla binary objects by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/104</li>
+<li>Resolve platform-specific MLA binary objects by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/106</li>
+<li>Add tokenspeed-mla version update workflow by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/107</li>
+<li>Update tokenspeed-mla to 0.1.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/108</li>
+<li>Add tokenspeed-kernel MLA update workflow by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/109</li>
+<li>Update tokenspeed-kernel MLA to 0.1.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/110</li>
+<li>Test tokenspeed-mla binary prefill by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/111</li>
+<li>Use raw links for tokenspeed-mla images by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/112</li>
+<li>Default SMG serve port to 8000 by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/114</li>
+<li>Default SMG reasoning parser to none by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/115</li>
+<li>Remove redundant eval reasoning parser none by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/116</li>
+<li>Clean up stale server startup references by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/117</li>
+<li>test: add tokenspeed mla tests by @dishengbin in https://github.com/lightseekorg/tokenspeed/pull/118</li>
+<li>[fix] Correct gfx950 LDS size to 160 KB by @benenzhu in https://github.com/lightseekorg/tokenspeed/pull/119</li>
+<li>fix: support disabling KV prefix cache while keeping Mamba state cache functional by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/76</li>
+<li>fix to use max_num_pages for spec-decode topk page_table buffers by @roycho96 in https://github.com/lightseekorg/tokenspeed/pull/125</li>
+<li>perf(K2.5): enable AR-Norm fusion and fused FP8 decode for MLA Eagle3 by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/124</li>
+<li>perf: optimize flashinfer sampling backend by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/105</li>
+<li>perf(K2.5): Optimize lm_head by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/126</li>
+<li>feat(cli): print TokenSpeed banner on <code>ts serve</code> startup by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/127</li>
+<li>ci(cli): run CLI unit tests in <code>ut-runtime-1gpu</code> by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/129</li>
+<li>feat(cli): accept positional model arg in <code>ts serve</code> by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/128</li>
+<li>feat(cli): disable smg circuit breaker and retries by default by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/130</li>
+<li>Refine third-party attribution notices by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/131</li>
+<li>Fix sampling backend default on non-NVIDIA platforms by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/135</li>
+<li>feat(cli): default smg gateway log level to warn by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/136</li>
+<li>chore: drop legacy agentic_benchmark tree by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/137</li>
+<li>chore(ci): drop <code>--stream</code> and generation-config from gpt-oss gpqa eval by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/139</li>
+<li>fix: unset default max new tokens by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/141</li>
+<li>[AMD] Fix sampling backend from smg by @borontion in https://github.com/lightseekorg/tokenspeed/pull/143</li>
+<li>deps: switch SMG gateway packages to <code>tokenspeed-smg</code> by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/144</li>
+<li>feat(xgrammar): bring back structural tags of xgrammar to support json with reasoning by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/138</li>
+<li>feat(deepseek-v4): support mixed prefill/decode batches by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/122</li>
+<li>chore: cleanup noqa by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/147</li>
+<li>fix(cli): prewarm HF tokenizer cache before launching smg gateway by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/148</li>
+<li>perf(K2.5): optimize small kernels in EAGEL3 drafter loop by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/142</li>
+<li>fix(bench): add stream sock_read + per-request timeouts to unblock gather by @jasl in https://github.com/lightseekorg/tokenspeed/pull/134</li>
+<li>feat(models): add Qwen2 / Qwen2.5 dense LM support by @qywu in https://github.com/lightseekorg/tokenspeed/pull/39</li>
+<li>perf: limit grid for per-layer h2d copy by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/150</li>
+<li>fix(cli): pin smg prometheus port to 8413 by default by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/151</li>
+<li>ci(pipeline): pkill <code>smg::router</code> in stale-process cleanup by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/152</li>
+<li>fix(spec-decode): reject speculative_eagle_topk &gt; 1 at startup by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/155</li>
+<li>chore: use StreamFork in DSv4 by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/157</li>
+<li>fix(server-args): restrict --speculative-eagle-topk to 1 by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/158</li>
+<li>perf: default turn on tokenizer cache. by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/160</li>
+<li>docs: update parser launch examples by @mmangkad in https://github.com/lightseekorg/tokenspeed/pull/163</li>
+<li>fix(runtime): widen BF16 CUTLASS MoE autotune range by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/161</li>
+<li>[AMD]Support a-fp8-w-mxfp4 gpt-oss-120b model by @knwng in https://github.com/lightseekorg/tokenspeed/pull/154</li>
+<li>refactor: forward mode consolidation by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/164</li>
+<li>fix(cache): emit AllBlocksCleared on reset only, not every match_prefix by @roycho96 in https://github.com/lightseekorg/tokenspeed/pull/166</li>
+<li>perf(cache): keep page-id tensors on GPU through free_group_end by @roycho96 in https://github.com/lightseekorg/tokenspeed/pull/167</li>
+<li>perf(sampling): fuse min-p renorm in flashinfer full backend by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/156</li>
+<li>feat(deepseek-v4): add persistent topk path by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/172</li>
+<li>perf: add gluon fp16 prefill kernel by @borontion in https://github.com/lightseekorg/tokenspeed/pull/165</li>
+<li>fix(deepseek-v4): corrected profiling to estimate cache capacity.  by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/173</li>
+<li>test: use mi350 platform to mean both mi350x/mi355x by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/175</li>
+<li>fix(server-args): bump tp4 gpu_memory_utilization to 0.95 by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/177</li>
+<li>perf(qwen3): cut H100 decode kernel time -8% with fused stride-aware kernels by @qywu in https://github.com/lightseekorg/tokenspeed/pull/81</li>
+<li>Perf[Qwen3.5]: eliminate Mamba intermediate state memcpy in MTP target-verify by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/159</li>
+<li>feat(mla): default prefill backend to binary, bump to 0.1.3 by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/180</li>
+<li>chore: remove duplicate LayerDoneCounte by @wtsung in https://github.com/lightseekorg/tokenspeed/pull/185</li>
+<li>feat(qwen3): add Qwen3 MoE causal LM support by @qywu in https://github.com/lightseekorg/tokenspeed/pull/181</li>
+<li>ci: add workflow to bump tokenspeed-smg* pyproject pins by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/186</li>
+<li>Update tokenspeed-smg* pins to 1.4.1.post20260519 / 0.4.7.post20260519 / 0.5.3.post20260519 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/187</li>
+<li>chore(cli): drop _overwrite_sampling_backend smg workaround by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/188</li>
+<li>fix scheduler req pool move assignment leak by @curious-whq in https://github.com/lightseekorg/tokenspeed/pull/182</li>
+<li>Fix Qwen3 FP8 MoE activation scale layout by @qywu in https://github.com/lightseekorg/tokenspeed/pull/189</li>
+<li>test(inline-detokenizer): accept hardware-variant reference outputs via multi-ref ROUGE-L by @qywu in https://github.com/lightseekorg/tokenspeed/pull/190</li>
+<li>feat: use split prefill for prefix cache in mha backend by @borontion in https://github.com/lightseekorg/tokenspeed/pull/178</li>
+<li>feat(deepseek-v4): overlap routed and shared MoE experts by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/192</li>
+<li>feat: add DeepSeek V4 parser support by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/193</li>
+<li>perf(K2.5): optimize top_k_renorm_prob + top_p_renorm_prob by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/184</li>
+<li>Tokenspeed MLA prefill kernel perf optimization by @dishengbin in https://github.com/lightseekorg/tokenspeed/pull/197</li>
+<li>chore(mla): default prefill backend back to cutedsl by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/201</li>
+<li>Update tokenspeed-kernel MLA to 0.1.3 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/202</li>
+<li>feat(deepseek-v4): device-side implement prefix caching for v4 hybrid cache. by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/146</li>
+<li>refactor(deepseek-v4): clean up helper and kernel paths by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/203</li>
+<li>perf: add gluon fp16 decode kernel  by @borontion in https://github.com/lightseekorg/tokenspeed/pull/191</li>
+<li>fix: fix the bug that kv cache pool size is too small. by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/194</li>
+<li>Avoid clearing FlashInfer cache in PR CI by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/209</li>
+<li>perf(qwen3.5): fuse q/k GemmaRMSNorm into one triton launch by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/196</li>
+<li>chore(ci): route agentic perf to b300-4gpu by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/211</li>
+<li>feat(kernel): add rope kernel api by @borontion in https://github.com/lightseekorg/tokenspeed/pull/208</li>
+<li>fix(deepseek-v4): refine cache sizing and shared expert comm by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/213</li>
+<li>perf: TokenSpeed MLA decode kernel optimization for num_heads=16 by @dishengbin in https://github.com/lightseekorg/tokenspeed/pull/212</li>
+<li>perf(K2.5): integrate cutedsl argmax by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/210</li>
+<li>perf(K2.5): support deterministic topk and remove maybe_broadcast by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/206</li>
+<li>Update tokenspeed-mla to 0.1.4 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/214</li>
+<li>Update tokenspeed-kernel MLA to 0.1.4 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/215</li>
+<li>Revert &quot;Update tokenspeed-kernel MLA to 0.1.4 (#215)&quot; by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/218</li>
+<li>NFC: Move MoE reference kernels to numerics by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/219</li>
+<li>NFC: Move NVFP4 SwiGLU GEMM wrapper to cute_dsl by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/220</li>
+<li>feat(kernel): add quantization kernel api by @borontion in https://github.com/lightseekorg/tokenspeed/pull/216</li>
+<li>test(kernel): lock public API kernel selection by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/221</li>
+<li>Revert &quot;perf: TokenSpeed MLA decode kernel optimization for num_heads=16 (#212)&quot; by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/222</li>
+<li>ci: test in-tree tokenspeed-mla when its sources change by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/223</li>
+<li>feat: mixed prefill-decode batching (part 3: compatibility with speculative decoding for MLA models) by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/205</li>
+<li>perf(qwen3.5): fuse attn_output_gate sigmoid+mul + drop gate reshape copy by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/198</li>
+<li>fix(deepseek-v4): enable DeepSeek-V4 unit tests on CI by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/224</li>
+<li>Update tokenspeed-mla to 0.1.5 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/225</li>
+<li>Update tokenspeed-kernel MLA to 0.1.5 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/226</li>
+<li>Add qwen3.5-397b-a17b nvfp4 perf CI task by @minedec in https://github.com/lightseekorg/tokenspeed/pull/195</li>
+<li>Perf[Qwen3.5]: some kernel fuse optimizations. by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/228</li>
+<li>fix(hf_transformers_utils): centralize architecture resolution; None-safe by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/231</li>
+<li>ci(pr-test): pass HF_TOKEN to unit-test jobs by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/233</li>
+<li>feat(ci): add optional priority field to task yaml by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/234</li>
+<li>perf[Qwen3.5]: fuse small kernels in MoE block. by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/235</li>
+<li>perf(qwen3.5): reduce prefill memcpy sync and mamba update overhead by @minedec in https://github.com/lightseekorg/tokenspeed/pull/229</li>
+<li>feat(ci): print perf-reference comparison table with % by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/237</li>
+<li>feat(kvstore): support mamba l2 cache transfers by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/162</li>
+<li>fix(env): add missing runtime packages to PACKAGE_LIST by @yurekami in https://github.com/lightseekorg/tokenspeed/pull/240</li>
+<li>refactor(deepseek-v4): clean up attention metadata and cache helpers by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/242</li>
+<li>chore(qwen3.5): adjust qwen perf tps threshold by @minedec in https://github.com/lightseekorg/tokenspeed/pull/241</li>
+<li>feat(runtime): support multimodal VLM  by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/236</li>
+<li>ci(perf-qwen3.5-agentic): route to gb200-4gpu-perf runner by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/245</li>
+<li>fix(kernel): drop Triton vendored CUDA include path from nvcc -I by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/247</li>
+<li>ci(perf): add Qwen3.5-NVFP4 agentic perf on b200-8gpu by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/250</li>
+<li>fix(logits): avoid nan in fused softcap by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/183</li>
+<li>chore(smg): bump deps to post20260525 + use passthrough parser by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/252</li>
+<li>feat(moe): allow Fp8FlashinferCutlassBackend on ep_size=1 when explicitly forced by @qywu in https://github.com/lightseekorg/tokenspeed/pull/244</li>
+<li>Fix: fix a hang bug in tp server. by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/248</li>
+<li>fix(deepseek-v4): shard attn_sink for tensor-parallel &gt; 1 by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/254</li>
+<li>fix(deepseek-v4): correct admission over-credit for state-family paged-cache groups by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/249</li>
+<li>refactor: clean up triton kernel moe backend by @borontion in https://github.com/lightseekorg/tokenspeed/pull/267</li>
+<li>ci(eval): use --repeats 3 on gpt-oss-120b gpqa-diamond to suppress noise by @qywu in https://github.com/lightseekorg/tokenspeed/pull/278</li>
+<li>fix: missing causal mask for attn extend kernel by @borontion in https://github.com/lightseekorg/tokenspeed/pull/271</li>
+<li>fix(kvstore): decouple write and execute stream by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/279</li>
+<li>perf(sampling): fuse logits fp32 cast to argmax or softmax by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/262</li>
+<li>fix(vlm): substitute mm pad ids in drafter before draft embed_tokens by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/265</li>
+<li>Update tokenspeed-smg* pins to 1.4.1.post20260527 / 0.4.8.post20260527 / 0.5.3.post20260527 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/283</li>
+<li>Use operand format signatures for kernel selection by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/230</li>
+<li>Make dtype-role filtering explicit by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/289</li>
+<li>perf: fuse kv write for decode only by @borontion in https://github.com/lightseekorg/tokenspeed/pull/281</li>
+<li>doc: Add news on README.md by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/292</li>
+<li>fix(vlm): clamp gpu_memory_utilization conditionally and add --language-model-only by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/266</li>
+<li>ci(eval): add Kimi-K2.5-NVFP4 ocr_bench task by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/253</li>
+<li>refactor(deepseek-v4): native deep_gemm FP8 GEMM + snapshot fix by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/288</li>
+<li>ci(perf): add 1m perf bench for qwen3.5 by @minedec in https://github.com/lightseekorg/tokenspeed/pull/264</li>
+<li>perf(Spec Decode): skip dead-position compute in draft catch-up step(decode) by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/217</li>
+<li>ci(eval): set kimi-k2.5 ocr-bench score_threshold to 0.9 by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/299</li>
+<li>ci(perf): add qwen3.5 agentic perf ci bs16 case by @minedec in https://github.com/lightseekorg/tokenspeed/pull/257</li>
+<li>refactor: drop legacy attn backends by @borontion in https://github.com/lightseekorg/tokenspeed/pull/307</li>
+<li>refactor: update forward metadata in mha backend by @borontion in https://github.com/lightseekorg/tokenspeed/pull/303</li>
+<li>perf: optimize logits allgather and parallelize eagle3 input projection by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/295</li>
+<li>Clean up stale GPU CI process groups by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/316</li>
+<li>skills: Add a skill to bisect triton release for regressions by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/322</li>
+<li>Document tokenspeed-kernel backend guidance by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/323</li>
+<li>deps(kernel): pin triton to 3.7.10.post20260505 by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/320</li>
+<li>Document dependency optionality guidance by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/324</li>
+<li>deps(kernel): update triton to 3.7.10.post20260531 by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/325</li>
+<li>Load upstream-produced inputs only after gridDepSync by @wangbo981016 in https://github.com/lightseekorg/tokenspeed/pull/327</li>
+<li>test: extend agentic bench by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/312</li>
+<li>fix: check mixed batch in mha backend based on forward mode by @borontion in https://github.com/lightseekorg/tokenspeed/pull/334</li>
+<li>feat(entrypoints): add HTTP server sidecar alongside smg gateway by @qywu in https://github.com/lightseekorg/tokenspeed/pull/308</li>
+<li>fix(deepseek-v4): close MTP acceptance gap by @Xiangyi1996 in https://github.com/lightseekorg/tokenspeed/pull/207</li>
+<li>fix(dp): fix qwen 3.5 data parallel bug. by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/309</li>
+<li>perf: Optimize inter-iteration small op by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/291</li>
+<li>chore: use -O3 -use_fast_math for tokenspeed_kernel compilation by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/285</li>
+<li>fix(PD): fix PD speculative bootstrap input seeding by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/286</li>
+<li>Fix(spec decode): catch up trim bug by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/335</li>
+<li>perf(kernel): optimize mha kernel for sliding window case by @borontion in https://github.com/lightseekorg/tokenspeed/pull/336</li>
+<li>Defer perf reference failure reporting by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/340</li>
+<li>perf(deepseek-v4): decode attention optimizations by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/339</li>
+<li>perf: add Gluon MoE kernels for GPT-OSS by @knwng in https://github.com/lightseekorg/tokenspeed/pull/314</li>
+<li>feat: reduce DeepSeek V4 prefix state snapshots with replay reuse by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/329</li>
+<li>Update tokenspeed-kernel FlashInfer to 0.6.11.post3 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/347</li>
+<li>[Perf] Optimizes loads in gfx950 fp16 decode kernel by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/313</li>
+<li>fix: NAN error in dp case cause of dummy input/data by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/341</li>
+<li>Drop nonexistent cuda_${SM} extra from TokenSpeed install by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/350</li>
+<li>fix(deepseek-v4): defer mega-MoE warmup and fix MoE TP weight loading by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/356</li>
+<li>perf(gdn): use flashinfer sm100 prefill kernel for Qwen3.5 GDN by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/331</li>
+<li>[Perf] Parallelize split-k reduce in mha_decode_fp16_gfx950 kernel by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/353</li>
+<li>chore(logits): drop prefill gather_ids fallback in LogitsProcessor by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/352</li>
+<li>fix(cute_dsl): skip CuTe DSL argmax kernel on H20 GPUs by @botieking98 in https://github.com/lightseekorg/tokenspeed/pull/311</li>
+<li>Update tokenspeed-smg* pins to 1.4.1.post20260607 / 0.4.8.post20260607 / 0.5.3.post20260607 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/371</li>
+<li>feat(engine): pause/resume scheduler control API by @HJSang in https://github.com/lightseekorg/tokenspeed/pull/346</li>
+<li>perf(deepseek-v4): decode kernel fusion and routing optimization by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/375</li>
+<li>Split vendor kernel packages by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/367</li>
+<li>Revert &quot;Split vendor kernel packages&quot; by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/378</li>
+<li>fix(cudagraph): set ctx.global_bs at capture for draft MoE all-gather by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/369</li>
+<li>feat(deepseek-v4): support MTP prefix cache reuse by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/361</li>
+<li>ci(eval): add DeepSeek V4-Flash eval CI tasks by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/344</li>
+<li>[AMD] moe: fused single-kernel Gluon routing fast path for small-M decode (gfx950) by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/363</li>
+<li>fix: cpu buffer racing for sampling. by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/376</li>
+<li>Remove mini load balancer by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/384</li>
+<li>perf: TokenSpeed MLA decode kernel optimization for num_heads=16 by @dishengbin in https://github.com/lightseekorg/tokenspeed/pull/255</li>
+<li>Update tokenspeed-mla to 0.1.6 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/385</li>
+<li>Update tokenspeed-kernel MLA to 0.1.6 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/386</li>
+<li>Update tilelang to 0.1.11 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/387</li>
+<li>fix(ci): relax mm25 determinism guards to tolerate the -use_fast_math near-tie by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/388</li>
+<li>Add PD Qwen3.5 HTTP worker by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/389</li>
+<li>fix(scheduler): untrack TreeNode from mamba_leaves_ before prune frees it by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/357</li>
+<li>feat(gdn): replace gdn use h_track path with flashinfer prefill gdn by @minedec in https://github.com/lightseekorg/tokenspeed/pull/377</li>
+<li>Add tokenspeed mooncake dependency by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/391</li>
+<li>Add AMD Gluon sampling argmax by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/379</li>
+<li>Support DP sampling for spec decode by @yubofredwang in https://github.com/lightseekorg/tokenspeed/pull/232</li>
+<li>Retry ROCm pip installs by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/396</li>
+<li>fix(mamba): gate per-draft-token pool budget on speculative_algorithm by @rucnyz in https://github.com/lightseekorg/tokenspeed/pull/397</li>
+<li>feat(pd): heterogeneous tp support by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/345</li>
+<li>ci(qwen3.5): add qwen3.5 397b pd ci (1p1d) by @minedec in https://github.com/lightseekorg/tokenspeed/pull/400</li>
+<li>Limit apache-tvm-ffi to 0.1.11 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/401</li>
+<li>Cap apache-tvm-ffi in CUDA requirements by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/402</li>
+<li>ci: add gpt-oss perf ci on mi350 by @borontion in https://github.com/lightseekorg/tokenspeed/pull/394</li>
+<li>feat: add mla backend and kernels by @borontion in https://github.com/lightseekorg/tokenspeed/pull/373</li>
+<li>perf(gdn): fused QKV split Triton kernel for GDN prefill by @elwhyjay in https://github.com/lightseekorg/tokenspeed/pull/380</li>
+<li>Update tokenspeed-deepgemm to 2.5.0.post20260604 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/410</li>
+<li>[CI] Use new label for gfx950 benchmark jobs by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/408</li>
+<li>ci: switch AMD 2GPU runner label by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/414</li>
+<li>Add small-M Gluon warp-decode MoE path for GPT-OSS by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/403</li>
+<li>Split AMD Gluon kernels package by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/404</li>
+<li>Fix ROCm CI AMD kernel install by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/417</li>
+<li>refactor(spec-decode):  simplify Llama Eagle3 attention path for #217 (1/3) by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/390</li>
+<li>fix(moe): fix divide zero bug and guard nvfp4 flashinfer forward on empty input by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/415</li>
+<li>perf(gdn): remove gdn prefill unnecessary h_state copy by @minedec in https://github.com/lightseekorg/tokenspeed/pull/409</li>
+<li>Add sm103a to default CUDA archs by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/420</li>
+<li>fix(kernel): Fix gluon MoE GEMM numerical bug by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/421</li>
+<li>perf(deepseek-v4): pre-compile deep_gemm JIT kernels at startup by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/398</li>
+<li>ci(gpt-oss): replace throughput to output throughput by @borontion in https://github.com/lightseekorg/tokenspeed/pull/422</li>
+<li>Update README status by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/424</li>
+<li>Sync env package list with dependencies by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/425</li>
+<li>Add Qwen3.5 PD AIME25 eval CI by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/426</li>
+<li>feat(kernel): introduce unified moe kernel api by @borontion in https://github.com/lightseekorg/tokenspeed/pull/374</li>
+<li>perf(deepseek-v4): dense deep_gemm warmup M-sweep + fp8_einsum coverage by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/427</li>
+<li>Update tokenspeed-smg dependency pins by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/428</li>
+<li>Add missing tokenspeed copyright headers by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/430</li>
+<li>Remove unused Python runtime helpers by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/431</li>
+<li>perf(kernel): optimize mha sliding window prefill kernel by @borontion in https://github.com/lightseekorg/tokenspeed/pull/432</li>
+<li>[AMD] warp_decode improvements by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/423</li>
+<li>ci: show AMD GPU information by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/435</li>
+<li>fix: limit internal activation dtype trait for moe plan by @borontion in https://github.com/lightseekorg/tokenspeed/pull/436</li>
+<li>ci: update AMD GPU runner labels by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/438</li>
+<li>fix(runtime bug): MoE collective sizing and aux hidden capture under heterogeneous TP by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/419</li>
+<li>perf(qwen3.5): use nvfp4_gemm_swiglu_nvfp4_quant in shared experts by @minedec in https://github.com/lightseekorg/tokenspeed/pull/433</li>
+<li>Upgrade transformers to 5.12.0 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/440</li>
+<li>perf(kernel): cap all-layer KV writeback grid to avoid starving concurrent compute by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/439</li>
+<li>Upgrade xgrammar to 0.2.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/441</li>
+<li>Relax openai dependency lower bound by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/442</li>
+<li>Remove unused tilelang dependency by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/443</li>
+<li>feat(moe): add trtllm mxint4 (INT4 W4A16 group-32) MoE path for Kimi-K2.x by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/444</li>
+<li>fix(cudagraph): seed warmup seq_lens to q_len to avoid NAN by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/446</li>
+<li>feat(engine): Sleep / Wake Up API (release/resume_memory_occupation) by @HJSang in https://github.com/lightseekorg/tokenspeed/pull/393</li>
+<li>chore(license): use LightSeek header on sleep/wake files by @HJSang in https://github.com/lightseekorg/tokenspeed/pull/449</li>
+<li>fix pd decode TP4-&gt;DP4EP4 bugs by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/448</li>
+<li>feat(mla): decode-context-parallel (DCP) support in the MLA decode kernel by @RomaA2000 in https://github.com/lightseekorg/tokenspeed/pull/364</li>
+<li>Update tokenspeed-mla to 0.1.7 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/451</li>
+<li>Update tokenspeed-kernel MLA to 0.1.7 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/452</li>
+<li>Add InstantTensor weight loader (--load-format instanttensor) by @gongwei-130 in https://github.com/lightseekorg/tokenspeed/pull/418</li>
+<li>Update tokenspeed-flashmla to 1.0.0.post20260615 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/458</li>
+<li>docs: move DeepSeek V4 into model recipes (Flash + Pro, MTP) by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/463</li>
+<li>revert: remove instanttensor loader by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/462</li>
+<li>[AMD] Support Kimi K2.5 MXFP4 serving by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/454</li>
+<li>feat: support trtllm backend features in mha backend by @borontion in https://github.com/lightseekorg/tokenspeed/pull/445</li>
+<li>cleanup: remove unused linear attention helpers by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/467</li>
+<li>refactor(spec-decode): simplify Qwen3.5 NextN attention path for #217 (2/3) by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/429</li>
+<li>feat(runtime): enhance per-request NaN detect, sanitize, and isolate numerically corrupted requests by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/434</li>
+<li>chore(deps): update smg packages by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/471</li>
+<li>chore(deps): update smg packages by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/475</li>
+<li>feat: adopt trtllm-style spec decode api in mha backend by @borontion in https://github.com/lightseekorg/tokenspeed/pull/465</li>
+<li>chore(deps): update tokenspeed-fa4 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/481</li>
+<li>feat(kernel): register FA4 for SM 103 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/474</li>
+<li>ci: use default mha and moe backend for gpt-oss ci by @borontion in https://github.com/lightseekorg/tokenspeed/pull/479</li>
+<li>perf(Reduce Scatter): Scale reduce-scatter CTA count dynamically by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/457</li>
+<li>ci: use FA4 mm attention for Kimi OCR eval by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/482</li>
+<li>Remove forced NCCL record stream override by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/483</li>
+<li>Use transformers dtype config field by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/484</li>
+<li>fix(deepseek-v4): release superseded interior continuation-state snapshots by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/460</li>
+<li>perf(kernel): Optimize Kimi Vision FA4 QKV + RoPE by @qimcis in https://github.com/lightseekorg/tokenspeed/pull/477</li>
+<li>perf(kernel): Optimize MoE prefill GEMMs for gfx950 by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/464</li>
+<li>Sanitize Qwen3.5 rope parameters by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/485</li>
+<li>fix(log): prevent TP deadlock from log-pipe backpressure under high request-log volume by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/486</li>
+<li>ci: add mi350 1gpu gpt-oss perf bench by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/487</li>
+<li>Update tokenspeed-smg pins to 20260620 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/488</li>
+<li>ci: deduplicate mi350/mi355 gpt-oss bench yaml by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/489</li>
+<li>fix(vlm): concat per-item grids in compute_mrope_positions by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/490</li>
+<li>Update tokenspeed-smg pins to 20260621 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/492</li>
+<li>feat(serve): default ts serve to smg passthrough routing policy by @slin1237 in https://github.com/lightseekorg/tokenspeed/pull/491</li>
+<li>fix(cudagraph): drop bs=0 capture at max_num_seqs=1 by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/493</li>
+<li>Fix gfx950 Gluon MoE preshuffled W2 OOB accesses by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/495</li>
+<li>feat(logprobs): output token logprobs in vLLM and SGLang formats by @HJSang in https://github.com/lightseekorg/tokenspeed/pull/337</li>
+<li>perf(kernel): decode at medium batch sizes by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/470</li>
+<li>Update stale by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/496</li>
+<li>[Model] GLM-5 support: DSA sparse attention, MTP speculative decoding, CUDA graph decode by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/348</li>
+<li>Update smg dependencies by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/497</li>
+<li>chore: make cuda arch configurable by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/498</li>
+<li>feat(video) Generalize multimodal runtime support and add Qwen3.5 video by @yechank-nvidia in https://github.com/lightseekorg/tokenspeed/pull/354</li>
+<li>fix(mla): apply MTP causal mask in BF16/FP16 decode kernel by @zcnrex in https://github.com/lightseekorg/tokenspeed/pull/469</li>
+<li>fix(mla): guard LSE writes when return_lse=False in BF16 decode by @zcnrex in https://github.com/lightseekorg/tokenspeed/pull/468</li>
+<li>fix(cache): widen loc to int64 in MLA KV-buffer Triton kernels to prevent int32 address overflow by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/501</li>
+<li>Update tokenspeed-mla to 0.1.8 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/504</li>
+<li>Update tokenspeed-kernel MLA to 0.1.8 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/505</li>
+<li>Add tokenspeed-kernel-amd release workflow by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/507</li>
+<li>Fix tokenspeed-kernel-amd publishing targets by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/508</li>
+<li>fix(spec): remove V4 MTP special forward modes by @Xiangyi1996 in https://github.com/lightseekorg/tokenspeed/pull/503</li>
+<li>Fix b200 runner env lookup with label overrides by @zhyncs in https://github.com/lightseekorg/tokenspeed/pull/511</li>
+<li>feat(kernel): Tie weight preprocessors to kernels by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/480</li>
+<li>Lower GPQA Diamond eval threshold by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/514</li>
+<li>Fix: GLM5 DSA MTP TP4 IMA Error by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/509</li>
+<li>fix: reuse logits all-gather workspace by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/515</li>
+<li>feat(dflash): Add DFlash support by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/472</li>
+<li>fix(pd): fix Mamba checkpoint handoff by @XucSh in https://github.com/lightseekorg/tokenspeed/pull/516</li>
+<li>Create CODE_OF_CONDUCT by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/517</li>
+<li>Create SECURITY by @torchspec-bot in https://github.com/lightseekorg/tokenspeed/pull/518</li>
+<li>perf(kernel): optimize Qwen vision QKV rotary layout by @qimcis in https://github.com/lightseekorg/tokenspeed/pull/456</li>
+<li>Update README News by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/523</li>
+<li>fix(kernel): out of range offset for kv cache by @borontion in https://github.com/lightseekorg/tokenspeed/pull/522</li>
+<li>Fix stale action cache cleanup by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/524</li>
+<li>Bump tokenspeed-kernel-amd to 0.1.1 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/525</li>
+<li>perf(deepseek-v4): deferred-state MHC forward for cross-layer fusion by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/529</li>
+<li>fix(attention): use int64 paged-KV addressing in MHA Triton kernels by @raikonenfnu in https://github.com/lightseekorg/tokenspeed/pull/530</li>
+<li>feat: distributed argmax for EAGLE greedy sampling by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/519</li>
+<li>Add AMD Kimi MXFP4 CI job by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/476</li>
+<li>fix(glm5.2): fix indexer_topk_prefil params for batched long prefill IMA by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/533</li>
+<li>fix: decompose PrecisionConfig from tokenspeed-kernel-amd gluon moe by @borontion in https://github.com/lightseekorg/tokenspeed/pull/535</li>
+<li>fix(quant): honor layer-wise quantization exclusion for MoE experts by @jaywme in https://github.com/lightseekorg/tokenspeed/pull/527</li>
+<li>fix(dflash): fix serverl hang issue for dflash and add ci eval by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/531</li>
+<li>Split AMD and NVIDIA PR CI by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/537</li>
+<li>fix(spec): drive EAGLE3 aux capture layers from the draft config by @jaywme in https://github.com/lightseekorg/tokenspeed/pull/526</li>
+<li>fix(sampling): fused_topk_topp PDL race causing IMA by @jaywme in https://github.com/lightseekorg/tokenspeed/pull/536</li>
+<li>ci: temporarily switch to use mi355-1gpu-bench for 1gpu ci by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/538</li>
+<li>ci: switch MI35x back to standard 1GPU CI by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/540</li>
+<li>docs: add blog and talk README link by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/541</li>
+<li>feat(log): add --log-request-stats per-request statistics logging by @LorrinWWW in https://github.com/lightseekorg/tokenspeed/pull/512</li>
+<li>fix(nvfp4): use per-half gate/up global scales for trtllm fused MoE by @jaywme in https://github.com/lightseekorg/tokenspeed/pull/543</li>
+<li>fix: fix cutedsl argmax for NaN inputs and drop now-redundant guards by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/552</li>
+<li>fix(glm-5.2): remove unnecessary DSA KV-cache and flashmla DSA path by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/554</li>
+<li>fix(runtime): harden MTP decode path against NaN, overflow, and state corruption by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/506</li>
+<li>Create CONTRIBUTING by @torchspec-bot in https://github.com/lightseekorg/tokenspeed/pull/559</li>
+<li>Update tokenspeed-smg dependency pins by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/561</li>
+<li>Create Governance by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/564</li>
+<li>fix(scheduler): account for terminal state checkpoints in admission by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/562</li>
+<li>chore(kernel): bump flashinfer to 0.6.13, add &lt;cfloat&gt; include by @jaywme in https://github.com/lightseekorg/tokenspeed/pull/539</li>
+<li>Parallelize scheduler C++ lint by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/566</li>
+<li>fix(scheduler): clamp hybrid TakeFirst page-aligned to prevent OwnedP… by @khushgx in https://github.com/lightseekorg/tokenspeed/pull/565</li>
+<li>Fix gathered MXFP4 activation scales in Gluon MoE by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/534</li>
+<li>Fix GB200 FlashInfer JIT cache sync by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/567</li>
+<li>Add GLM NVFP4 AIME26 CI by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/569</li>
+<li>fix(ci): resolve GB200 CI FlashInfer JIT cache error by @minedec in https://github.com/lightseekorg/tokenspeed/pull/570</li>
+<li>Initial glm 5.2 support on amd by @borontion in https://github.com/lightseekorg/tokenspeed/pull/528</li>
+<li>feat(glm-5.2): support hierarchical (host/L2) KV cache for DSA by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/572</li>
+<li>fix(sampling): CuteDSL argmax crashes the server on empty-row input by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/545</li>
+<li>fix(attention): emit natural-log LSE from gluon mha prefill by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/571</li>
+<li>Use tokenspeed-spdlog for scheduler builds by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/576</li>
+<li>Fix attention LSE test math import by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/577</li>
+<li>[GLM] perf: Optimize GLM DSA decode top-k by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/573</li>
+<li>fix(attention): treat window_left as exclusive by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/578</li>
+<li>test: glm-5.2 agentic bench by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/532</li>
+<li>Fix DP cache sizing by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/574</li>
+<li>Add Triton sampling backends alongside FlashInfer by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/280</li>
+<li>test: add dp4ep4 case in CI by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/453</li>
+<li>test: fix glm-5.2 agentic bench by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/581</li>
+<li>ci: disable distributed_argmax on qwen3.5 MTP drafter by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/582</li>
+<li>perf(glm-5.2): drop full-topk path and hadamard transform, use flashinfer LayerNorm for DSA decode path by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/586</li>
+<li>Split NVIDIA ARM PR tests by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/588</li>
+<li>Add SPDX source attributions by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/591</li>
+<li>chore(glm-5.2): cleanup bf16 index_k cache for DSA by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/590</li>
+<li>Fix ruff check by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/593</li>
+<li>perf(deepseek-v4): enable MTP overlap scheduling with paged cache by @dongjiyingdjy in https://github.com/lightseekorg/tokenspeed/pull/583</li>
+<li>fix(perf): fix qwen3.5 tp8 agentic ci perf regression by @minedec in https://github.com/lightseekorg/tokenspeed/pull/594</li>
+<li>fix(spec): fix Kimi DP EAGLE3 mixed-step hang by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/596</li>
+<li>feat(attention): add gluon MHA extend kernel for gfx950 by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/587</li>
+<li>feat: breakable CUDA graph for prefill forwards by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/597</li>
+<li>fix(deepseek-v3): Route DeepSeek merge state through unified backend by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/602</li>
+<li>perf(glm-5.2): remove per-token expansion of seq_lens and block_table for DSA decode path by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/599</li>
+<li>Update smg dependency pins by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/606</li>
+<li>fix(kernel): Fix out of bounds accesses in gluon MoE topk implementation by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/605</li>
+<li>Update CODEOWNERS by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/607</li>
+<li>feat(gdn): Initial support for routing chunk prefill through kernel registry by @raikonenfnu in https://github.com/lightseekorg/tokenspeed/pull/595</li>
+<li>fix(deepseek-v4): size CUDA graph sliding-window capture to full window. by @SimonCqk in https://github.com/lightseekorg/tokenspeed/pull/613</li>
+<li>feat(disaggregation): add EPD encode pipeline by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/548</li>
+<li>Add Gluon fused MoE support for dynamic MXFP4 activations by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/603</li>
+<li>Update smg dependencies by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/615</li>
+<li>Add gfx950 Gluon dense16 GEMM by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/598</li>
+<li>perf(deepseek-v4): sanitize SWA slot mapping once per step by @Xiangyi1996 in https://github.com/lightseekorg/tokenspeed/pull/614</li>
+<li>fix(scheduler): keep hybrid mamba match on device path by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/612</li>
+<li>Update smg dependency pins by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/619</li>
+<li>Add scheduler PyPI publishing by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/623</li>
+<li>Fix scheduler PyPI wheel publishing by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/624</li>
+<li>refactor(spec-decode): simplify deepseekV3/GLM attention path for #217 (3/3) by @rjzhb in https://github.com/lightseekorg/tokenspeed/pull/544</li>
+<li>ci: drop mi350-1gpu-bench by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/629</li>
+<li>ci: gate tokenspeed-kernel publishing by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/628</li>
+<li>feat(attention): add fp8 support to gfx950 gluon MHA kernels by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/625</li>
+<li>(kernel) : Gluon kernel for BF16 MoE on GFX950 by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/626</li>
+<li>ci: retry failed latest main jobs by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/633</li>
+<li>ci: reenable mi350-1gpu-bench and support optional jobs by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/632</li>
+<li>refactor(attention): consolidate gfx950 gluon MHA layouts into shared helper by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/635</li>
+<li>Update triton to &gt;= 3.8.10.post20260709 by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/636</li>
+<li>ci: retry failed approved PR jobs by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/637</li>
+<li>ci: drop org-membership gate for approved PR reruns by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/638</li>
+<li>Add retry workflow summaries by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/639</li>
+<li>KV-Cache Refactor Part 1: Introduce Unified Block Pool by @wangbo981016 in https://github.com/lightseekorg/tokenspeed/pull/447</li>
+<li>Release tokenspeed-mla 0.1.9 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/641</li>
+<li>Support Heterogeneous block_size by @wangbo981016 in https://github.com/lightseekorg/tokenspeed/pull/647</li>
+<li>feat(attention): trtllm backend consumes flat per-group KV-cache tables by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/642</li>
+<li>Upgrade CuTeDSL to 4.6.0 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/640</li>
+<li>fix(kernel): avoid mixing CUDA toolkit headers by @lucifer1004 in https://github.com/lightseekorg/tokenspeed/pull/644</li>
+<li>Clean up Flat KV-cache tests by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/650</li>
+<li>feat(spec): EAGLE3/MTP speculative decoding on the flat KV-cache path by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/649</li>
+<li>fix(kernel): use Triton FP8 quantization on SM120 by @lucifer1004 in https://github.com/lightseekorg/tokenspeed/pull/646</li>
+<li>build(deps): bump tokenspeed-deepgemm to 2.5.0.post20260629 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/653</li>
+<li>Refresh brand banner to high-res transparent asset by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/656</li>
+<li>Update README by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/657</li>
+<li>feat(multimodal): support ASR and Omni thinker by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/654</li>
+<li>feat: enable the prefill CUDA graph by default by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/611</li>
+<li>[AMD] fix(gluon): support dynamic MXFP4 combine K=256 by @raikonenfnu in https://github.com/lightseekorg/tokenspeed/pull/658</li>
+<li>[GLM] perf: Integrate TRT-LLM cutedsl topk by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/634</li>
+<li>ci: allow excluding unavailable runner labels by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/663</li>
+<li>fix(kernel): Mask gluon MoE tail-k preloads by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/666</li>
+<li>feat(rl): weight-transfer control plane for RL online weight sync by @qywu in https://github.com/lightseekorg/tokenspeed/pull/546</li>
+<li>feat(profile): drive Proton via the /start_profile control plane by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/655</li>
+<li>fix(scheduler): count active pages across groups by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/669</li>
+<li>Add flat KV-cache toggle to scheduler release workflow by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/673</li>
+<li>Bump tokenspeed-scheduler to 0.1.1 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/674</li>
+<li>fix(prefill-graph): illegal memory access on the flat KV-cache path by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/667</li>
+<li>feat(kernel): add a4w4 gluon moe for precomputed top-k by @borontion in https://github.com/lightseekorg/tokenspeed/pull/671</li>
+<li>Route MLA RoPE KV writes through embedding API by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/643</li>
+<li>refactor(kernel): use runtime router expert counts by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/675</li>
+<li>refactor: drop ad-hoc usage of is hip by @borontion in https://github.com/lightseekorg/tokenspeed/pull/676</li>
+<li>ci: allow configured repositories to run GPU workflows by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/677</li>
+<li>[AMD] Initial support for qwen3.5-397b-a17b-mxfp4 on AMD hardware by @raikonenfnu in https://github.com/lightseekorg/tokenspeed/pull/592</li>
+<li>build(deps): bump tokenspeed-smg packages to post20260714 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/679</li>
+<li>Add quack-kernels to CUDA third-party requirements by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/680</li>
+<li>Add MHA backend scale arguments by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/682</li>
+<li>fix(sampling): fix fused_topk_topp misaligned-address crash without losing float4 throughput by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/683</li>
+<li>perf: flat pagetable export by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/681</li>
+<li>Bump tokenspeed-scheduler to 0.1.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/684</li>
+<li>feat(kernel): add gfx950 Gluon mxfp4 MoE decode and prefill kernels by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/670</li>
+<li>Add NVIDIA and AMD runner Dockerfiles by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/685</li>
+<li>ci: fix AMD image namespace by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/686</li>
+<li>feat: support Qwen3.5 DFlash and its optimizations by @minedec in https://github.com/lightseekorg/tokenspeed/pull/510</li>
+<li>Add missing copyright headers by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/687</li>
+<li>Add Inkling recipes by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/690</li>
+<li>Update Inkling link by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/691</li>
+<li>Add Inkling day 0 support news by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/692</li>
+<li>feat(kernel): Add gluon kernel for DSA by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/627</li>
+<li>perf(kernel): tune gfx950 A4W4 MXFP4 MoE for Kimi-K2.5 (decode cap + prefill tile) by @panditsa in https://github.com/lightseekorg/tokenspeed/pull/698</li>
+<li>Add TML Inkling support  by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/689</li>
+<li>ci: remove m2 ui by @borontion in https://github.com/lightseekorg/tokenspeed/pull/704</li>
+<li>Update SMG package pins by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/705</li>
+<li>Update tokenspeed-mla to 0.2.0 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/707</li>
+<li>Update tokenspeed-kernel MLA to 0.2.0 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/708</li>
+<li>feat(kernel): Add batch matmul API by @qedawkins in https://github.com/lightseekorg/tokenspeed/pull/668</li>
+<li>ci: add inkling eval ci by @borontion in https://github.com/lightseekorg/tokenspeed/pull/703</li>
+<li>ci: update FlashInfer to 0.6.15 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/713</li>
+<li>fix(inkling): require SMG parsers at startup by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/712</li>
+<li>fix(kvcache): route negative pages to the dummy page in flat_decode_locs by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/709</li>
+<li>fix: cast NVFP4 deferred route weights to bf16 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/716</li>
+<li>feat(kernel): add mxfp MoE Gluon kernel on gfx1250 by @knwng in https://github.com/lightseekorg/tokenspeed/pull/710</li>
+<li>feat(kernel): add gfx950 Gluon bf16 MLA decode and prefill kernels by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/664</li>
+<li>[AMD] Add initial support for pipelined GFX1250 Gluon MHA prefill by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/719</li>
+<li>fix(runtime): restore Qwen3.5 OCRBench accuracy to unblock CI by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/715</li>
+<li>ci(eval): add Qwen3.5 aggregate and EPD OCRBench coverage by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/549</li>
+<li>perf(kernel): optimize gfx950 gluon MHA extend kernel by @Yu-Zhewen in https://github.com/lightseekorg/tokenspeed/pull/717</li>
+<li>fix(profile): barrier TP peers before replying to a Proton /stop_profile by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/722</li>
+<li>Stabilize B200 agentic execution by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/725</li>
+<li>feat(profile): merge Proton and VizTracer traces onto one timeline by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/662</li>
+<li>build: remove duplicate quack-kernels requirement by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/726</li>
+<li>chore: add tokenspeed-kernel-amd copyright headers by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/727</li>
+<li>build: bump tokenspeed kernel packages to 0.1.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/728</li>
+<li>build: pin tokenspeed-kernel-amd 0.1.2 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/729</li>
+<li>ci: Reenable mi355x and drop mi350x 1gpu bench by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/732</li>
+<li>refactor(spec): separate multi-layer MTP from Eagle by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/730</li>
+<li>feat(multimodal): add item-level encoder data parallelism by @chenht2022 in https://github.com/lightseekorg/tokenspeed/pull/731</li>
+<li>test(kernel): verify kernel selection cross-platform and drop expected_kernel_name by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/659</li>
+<li>feat(profile): Add multi-rank trace merge support by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/734</li>
+<li>chore: remove legacy spec_decode package and dead ScheduleBatch path by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/739</li>
+<li>refactor(epd): promote epd package and split mooncake transfer module by @FC-Li in https://github.com/lightseekorg/tokenspeed/pull/743</li>
+<li>Update tokenspeed-smg* pins to 1.8.0.post20260720 / 0.4.14.post20260720 / 0.7.0.post20260720 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/744</li>
+<li>[GLM] perf: optimize indexer small kernels by @yweng0828 in https://github.com/lightseekorg/tokenspeed/pull/742</li>
+<li>perf(gdn): use flashinfer decode gdn kernel by @tuanzhangCS in https://github.com/lightseekorg/tokenspeed/pull/700</li>
+<li>feat: add basic MiniMax M3 support by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/733</li>
+<li>feat(m3): support Eagle3.1 draft checkpoints by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/751</li>
+<li>feat(m3): NVFP4 mixed-precision checkpoint support by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/749</li>
+<li>fix(kernel): Widen fused RoPE KV triton kernel cache offsets to i64 by @Max191 in https://github.com/lightseekorg/tokenspeed/pull/748</li>
+<li>fix: clear padded breakable graph handoffs by @FlamingoPg in https://github.com/lightseekorg/tokenspeed/pull/741</li>
+<li>deps: update TokenSpeed Triton dependencies by @antiagainst in https://github.com/lightseekorg/tokenspeed/pull/753</li>
+<li>Update tokenspeed-mla to 0.2.1 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/755</li>
+<li>Update tokenspeed-kernel MLA to 0.2.1 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/754</li>
+<li>Update FlashInfer to 0.6.15.post1 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/757</li>
+<li>ci: add tokenspeed-kernel-amd release lifecycle workflows by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/756</li>
+<li>build: update tokenspeed-kernel-amd to 0.1.3 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/760</li>
+<li>build: sync tokenspeed-kernel with AMD 0.1.3 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/761</li>
+<li>feat(m3): support FP8 KV cache by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/759</li>
+<li>refactor(cache): make BlockRef a shared handle by @wangbo981016 in https://github.com/lightseekorg/tokenspeed/pull/762</li>
+<li>fix(qwen3.5): Fix Qwen3.5 FP8 weight loading by @minedec in https://github.com/lightseekorg/tokenspeed/pull/766</li>
+<li>feat(m3): adopt MiniMax MSA CuTe-DSL sparse prefill attend on SM100 by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/764</li>
+<li>fix(inkling): fuse dMel lookup+sum to bound audio encode memory by @nperrin-fr in https://github.com/lightseekorg/tokenspeed/pull/771</li>
+<li>Bump tokenspeed-scheduler to 0.1.3 by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/772</li>
+<li>ci: remove legacy Docker release files by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/773</li>
+<li>ci: support dated tokenspeed-kernel releases by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/774</li>
+<li>perf(m3): flashinfer cute-dsl backend for MXFP8 (1,32) dense GEMM by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/765</li>
+<li>perf(m3): integrate CuTeDSL MSA block-score kernels by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/775</li>
+<li>ci: disable thinking and allow longer context for qwen3.5 eval/pd cases by @minedec in https://github.com/lightseekorg/tokenspeed/pull/776</li>
+<li>Fix tokenspeed-kernel runtime dependency metadata by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/778</li>
+<li>perf(m3): optimize MiniMax M3 MoE and MSA by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/779</li>
+<li>perf(m3): optimize MiniMax M3 attention module by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/781</li>
+<li>build: declare TokenSpeed runtime dependencies by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/783</li>
+<li>ci: use trusted publishing for PyPI by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/784</li>
+<li>test(m3): enable MiniMax-M3 CI (replacing M2.7) and add agentic benchmark by @syuoni in https://github.com/lightseekorg/tokenspeed/pull/785</li>
+<li>ci: add release Docker publishing by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/788</li>
+<li>ci: add ROCm 7.2 tokenspeed-kernel release workflow by @borontion in https://github.com/lightseekorg/tokenspeed/pull/787</li>
+<li>ci: add TokenSpeed release workflow by @lightseek-bot in https://github.com/lightseekorg/tokenspeed/pull/792</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@zhyncs made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/1</li>
+<li>@antiagainst made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/3</li>
+<li>@knwng made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/4</li>
+<li>@yubofredwang made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/9</li>
+<li>@syuoni made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/17</li>
+<li>@huangzhilin-hzl made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/12</li>
+<li>@andyluo7 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/23</li>
+<li>@XucSh made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/14</li>
+<li>@LorrinWWW made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/35</li>
+<li>@tuanzhangCS made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/15</li>
+<li>@dongjiyingdjy made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/30</li>
+<li>@minedec made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/32</li>
+<li>@roycho96 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/41</li>
+<li>@FlamingoPg made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/10</li>
+<li>@SimonCqk made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/51</li>
+<li>@raayandhar made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/82</li>
+<li>@Aphoh made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/8</li>
+<li>@lite-keke made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/97</li>
+<li>@benenzhu made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/119</li>
+<li>@yweng0828 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/126</li>
+<li>@jasl made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/134</li>
+<li>@elwhyjay made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/155</li>
+<li>@mmangkad made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/163</li>
+<li>@wtsung made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/185</li>
+<li>@curious-whq made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/182</li>
+<li>@yurekami made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/240</li>
+<li>@rjzhb made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/217</li>
+<li>@wangbo981016 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/327</li>
+<li>@Xiangyi1996 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/207</li>
+<li>@Yu-Zhewen made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/313</li>
+<li>@botieking98 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/311</li>
+<li>@HJSang made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/346</li>
+<li>@panditsa made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/363</li>
+<li>@rucnyz made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/397</li>
+<li>@Max191 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/421</li>
+<li>@RomaA2000 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/364</li>
+<li>@gongwei-130 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/418</li>
+<li>@qedawkins made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/454</li>
+<li>@slin1237 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/491</li>
+<li>@yechank-nvidia made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/354</li>
+<li>@zcnrex made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/469</li>
+<li>@torchspec-bot made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/518</li>
+<li>@jaywme made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/527</li>
+<li>@khushgx made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/565</li>
+<li>@nperrin-fr made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/597</li>
+<li>@lucifer1004 made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/644</li>
+<li>@FC-Li made their first contribution in https://github.com/lightseekorg/tokenspeed/pull/743</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/lightseekorg/tokenspeed/commits/v0.1.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/lightseekorg/tokenspeed">lightseekorg/tokenspeed</a> · <code>v0.1.0</code> · 2026-07-24 · <a href="https://github.com/lightseekorg/tokenspeed/releases/tag/v0.1.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/tokenspeed/0.1.1"> <span class="k">← Suivant</span> <span class="t">v0.1.1</span> </a> <span></span> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/lightseekorg/tokenspeed/releases/tag/v0.1.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/lightseekorg/tokenspeed" target="_blank" rel="noopener"> <span>lightseekorg/tokenspeed</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/tokenspeed/0.1.1"> <span class="v">v0.1.1</span> <span class="d">26-10-06</span> </a> </li><li> <a href="/releases/tokenspeed/0.1.0" aria-current="true"> <span class="v">v0.1.0</span> <span class="d">26-07-24</span> </a> </li> </ul> <a href="/fr/releases/tokenspeed" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 2 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

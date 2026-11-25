@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>faiss v1.14.3 — STAGS NextStack</title><meta name="description" content="Metal GPU backend expansion — new MetalIndexIVFFlat with IVF scan/merge kernels and expanded top-k support (#5202); Metal now enabled by default on Apple Silicon machines (#5280)"><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/faiss/1.14.3/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/faiss/1.14.3/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/faiss/1.14.3/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/faiss/1.14.3/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="faiss v1.14.3 — STAGS NextStack"><meta property="og:description" content="Metal GPU backend expansion — new MetalIndexIVFFlat with IVF scan/merge kernels and expanded top-k support (#5202); Metal now enabled by default on Apple Silicon machines (#5280)"><meta property="og:url" content="https://www.stags.cn/pt/releases/faiss/1.14.3/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/faiss/1.14.3/#article","headline":"faiss v1.14.3 release notes","datePublished":"2026-06-13","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/facebookresearch/faiss"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/faiss/1.14.3/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/faiss/faiss_v1.14.3" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/faiss/1.14.3/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/faiss/1.14.3/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/faiss/1.14.3/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/faiss/1.14.3/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/faiss/1.14.3/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/faiss">faiss</a> </nav> <h1 class="detail-title"> <span class="p">faiss</span> v1.14.3 </h1> <div class="detail-meta"> <span class="chip chip--patch">Patch</span> <span><span class="k">Publicado</span>13 de jun. de 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener"> <span class="k">Fonte</span>facebookresearch/faiss </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/faiss/1.14.3/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/faiss/1.14.3/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><p>#faiss v1.14.3</p>
+<h2>Destaques</h2>
+<ul>
+<li><strong>Expansão de back-end de GPU Metal</strong> — novo <code>MetalIndexIVFFlat</code> com kernels de varredura/mesclagem de fertilização in vitro e suporte expandido para top-k (#5202); Metal agora habilitado por padrão em máquinas Apple Silicon (#5280)</li>
+<li><strong>TurboQuant em ScalarQuantizer</strong> — Algoritmo 2 completo (estágio QJL) com SIMD e otimizações (#5170)</li>
+<li><strong>Otimizações Sapphire Rapids (SPR)</strong> — ScalarQuantizer L2/IP (#5173), HammingComputer baseado em VPOPCNTDQ (#5183) e kernel RaBitQ baseado em VPOPCNTDQ (#5149)</li>
+<li><strong>faiss-gpu pipwheels</strong> — novo pacote de roda GPU (#5131); rodas musllinux reativadas para faiss-cpu (#5299)</li>
+<li><strong>Suporte a vamana estático SVS</strong> (#5224)</li>
+<li><strong>Modo HNSW <code>is_similarity</code></strong> para métricas de IP/similaridade (#5246, #5226)</li>
+<li><strong>Desempenho de pesquisa HNSW</strong> — reserve a capacidade do <code>VisitedTableSet</code> para evitar rehashes (#5290), <code>search_from_candidate_unbounded</code> modelado para desvirtualização do <code>VisitedTable</code> (#5270) e verificações de tempo de execução evitadas no <code>VisitedTable</code> (#5234)</li>
+<li><strong>NEON FINE_SIZE=2 especializações</strong> para <code>Index2LevelDecoderImpl</code> e <code>IndexPQDecoder</code> (#5255)</li>
+<li><strong>cuVS atualizado para 26.06</strong> (#5240); CI atualizado para <strong>ROCm 7</strong> (#5196)</li>
+<li><strong>Reforço de desserialização</strong> — validação de campo bool (#5279) e rejeição de índice interno nulo em IDMap / BinaryFromFloat (#5239)</li>
+<li><strong>Robustez de construção</strong> — correção de importação não-AVX2 SIGILL por meio de tabelas de particionamento <code>.rodata</code> (#5298), correção de compilação NEON do Windows ARM64 (MSVC) (#5274) e correção de despacho AVX512_SPR em AMD (#5281)</li>
+</ul>
+<h2>Changelog completo</h2>
+<p>Adicionado</p>
+<ul>
+<li>261d8f25aac03c980f1faf5df775248eff96cb6d Adicione IVFSQTurboQSearchParameters ao stub <strong>init</strong>.pyi (#5304)</li>
+<li>684a32d0404758bddd4f7fb9ec76db54252819e0 Adicionar envio manual do fluxo de trabalho noturno Faiss (#5300)</li>
+<li>10b6b2a1e554afc4cbd66fe73d864728ff9e310c Adicione MetalIndexIVFFlat com kernels de varredura/mesclagem de fertilização in vitro e suporte expandido para top-k (#5202)</li>
+<li>74d36198faac528fce715aa8731bf589727bef6d TurboQuant em ScalarQuantizer: Algoritmo 2 completo (estágio QJL) com SIMD e otimizações (#5170)</li>
+<li>506600962f8a58926710edd24715bc9002eb18e9 Adicionar tutorial Python HNSW (#5260)</li>
+<li>3cff0f419c459bdc7c4f56ea49effb6d7da1475c Adicionar otimizações Sapphire Rapids para ScalarQuantizer (L2, IP) (#5173)</li>
+<li>46ef80db639e4de03720e3c404065636846ed47e Suporte IndexIDMap/IndexIDMap2 em reverse_index_factory (#5266)</li>
+<li>420158b10e0136228ff634d464fa90c4370a1ead Adicionar HammingComputer baseado em VPOPCNTDQ para Sapphire Rapids+ (#5183)</li>
+<li>d8f1c2716d9c2c070c0d7e4e0c1017331e9e9e8a Implementar especializações FINE_SIZE=2 baseadas em NEON para Index2LevelDecoderImpl e IndexPQDecoder (#5262)</li>
+<li>0951b5337b72755ade5c02705396fb7d7cedceac Biblioteca blas fornecida pelo usuário de suporte (#5189)</li>
+<li>215740ecc3add92d7c27e24436b2dffd8fdb157c Suporte a vamana estático SVS (#5224)</li>
+<li>d24ad6ef5b3e40c0e4cf8b695923cbcd674d2573 Adicionar modo is_similarity a HNSW (#5246)</li>
+<li>aa332cd5f0d6984075c849b32c387fffe067a49a Implementar especializações FINE_SIZE=2 baseadas em NEON para Index2LevelDecoderImpl e IndexPQDecoder (#5255)</li>
+<li>5d9aae6ee81078d33ff3c4e2fc97f7583e2e450d Adicionar embalagem de roda pip faiss-gpu (#5131)</li>
+<li>6f1cf64531130db04843737d1f538999fc295583 Adicionar kernel RaBitQ baseado em VPOPCNTDQ para Sapphire Rapids+ (#5149)
+Alterado</li>
+<li>262fc3c7a2ec099cdd0cd21482931702171c60eb Reativar rodas musllinux para faiss-cpu (#5299)</li>
+<li>1cdc3709c656eea41ce3725024070f2516e3b30b Execute CI ao enviar para principal para atualizar o cache do ccache (#5291)</li>
+<li>379ee758b1bb49cd167c6ed86e80be331e94c593 Reserve a capacidade VisitedTableSet para evitar rehashes durante a pesquisa HNSW (#5290)</li>
+<li>6513a2497cbc29f5c0c74c0d17bbe8b9f6ff3230 Habilite Metal por padrão em máquinas Apple (#5280)</li>
+<li>fe46c3c804296cc04238c2e17b02c671887791a8 Validar campos bool durante a desserialização (#5279)</li>
+<li>480f91790080c8daa92fcb1941c5e8d0f56de237 Digite desequilíbrio_factor e conecte o stub .pyi ao build buck (#5269)</li>
+<li>e60baeb7b61e617a483310fccb239ba204458c7b Modelo search_from_candidate_unbounded para desvirtualização VisitedTable (#5270)</li>
+<li>c000190dc07c161898093a72a16f3918bd9fd621 Acelere ScalarQuantizer::QT_bf16 com AVX512-BF16. (#4889)</li>
+<li>7504fc8ddebdade7fcabd9dacd9861318d475b50 Atualização da versão CUVS para 26.06 (#5240)</li>
+<li>d12683c3b00247ca6333ac717f3a8af49aa835e3 facebook-unused-include-check in IndexBinaryIVF.cpp (#5263)</li>
+<li>99d9013e1fbe232356759d3abedbe20df0e8dba1 facebook-unused-include-check in distances_simd.cpp (#5264)</li>
+<li>2f0368b6205c92d910ae772417e71b68dde216aa facebook-unused-include-check in hamming_avx2.cpp (#5265)</li>
+<li>0c72755eccff39f903d58ed1f46d6c278a914cae Remover inclusão não utilizada de platform_macros.h em partitioning.cpp</li>
+<li>e6b8f6de5380aed85c2450abd31ecdb749770bbe IndexHNSW: use HNSW::is_similarity para métricas de IP/similaridade + testes (#5226)</li>
+<li>c0575f2c1319a702fa4ca615e2354014c42b3e67 evita verificações de tempo de execução em VisitedTable (#5234)</li>
+<li>1cb760182917697677fe100f8a1cc2b4d0b9f751 Elimine a desnormalização por código no cálculo uniforme de distância SQ (#5166)</li>
+<li>f29d8621fa4250b381d1bfb1d8362c4867ee3de3 Reverter D106693266: implementar especializações FINE_SIZE = 2 baseadas em NEON para Index2LevelDecoderImpl e IndexPQDecoder</li>
+<li>ef96e3d25ecbfaa52894b0f361e9d156ee92254a Atualizando CI para ROCm 7 (#5196)</li>
+<li>f5217d74960ead3a1d2c0b69baa63479b6f49ea2 facebook-unused-include-check in IndexBinaryHNSW.cpp (#5251)</li>
+<li>3e6ed99bbb6cfb8daf98cadf904da449a4aaea48 facebook-unused-include-check in IndexBinaryIVF.cpp (#5252)</li>
+<li>108868bfac5ad7e0ce1b4e46857d4724a62a309e Rejeitar índice interno nulo na desserialização IDMap e BinaryFromFloat (#5239)</li>
+<li>a64b5496762a93cb7836d013c2283c6da479f717 Adicionar limite IndexLattice r2 para limitar o custo de construção do cache de decodificação (#5238)</li>
+<li>09937153dc55f64321ed7d96730fc3d673a9092d faiss: Substitua as chamadas get_single_code restantes por ScopedCodes (#5248)</li>
+<li>910e435bccafedfac5aa69f87863085ce6d90a3c facebook-unused-include-check in hamming_avx2.cpp (#5242)</li>
+<li>d581f2f8406f8794f58794124b650ab7402ac848 Use varredura TU por SIMD para PQ autônomo (inlining de coleta AVX2) (#5233)
+Corrigido</li>
+<li>20afed0fa3aefe2d4f5bf6a5f6ab1d1459efec05 torna intencional cudaGetLastError() limpeza de erros explícita ((void)) para clang21 - corrige S674096 (#5302)</li>
+<li>e420e94ce694213a8338ac975d565f81d7251d96 Mover tabelas de deslocamentos de particionamento para .rodata para corrigir importação não AVX2 SIGILL (#5298)</li>
+<li>15bd8238375a1650156dc6e4b8ea54def3a3dc23 Corrigir cuVS todas as noites (#5273)</li>
+<li>17cc967d711c2647495370a09469e3a710b527ae Correção do despacho AVX512_SPR na AMD: requer CPUID AVX512_FP16 (#5281)</li>
+<li>e69bfeed087fd70a4708d4c92c4e0bf5e5b888a6 Estabilize testes RaBitQ em AVX512_SPR mudando para equivalência de nível cruzado (#5277)</li>
+<li>c4c651453b5a7d73919458c6209573c4c11ddadc Correções de stub: sobrecarga da tocha knn, ctor ResidualCoarseQuantizer, remover definições de E/S duplicadas (# 5283)</li>
+<li>eb4c1eafe2f2e9d77d0fc152e331f5a0c8d77e13 Corrigir compilação do Windows ARM64 (MSVC) quebrada pela templatização NEON SIMD (#5274)</li>
+<li>ab632382d3d0531fc6c744e0948544aa358bc850 Instale o cabeçalho InvertedListScannerStats.h ausente (#5268)</li>
+<li>140541590e9beac7f3d81d3dce79af9c42777906 Corrigir fbcode quebrado //faiss/tests:test_index_binary - test_replicas (test_index_binary.TestReplicasAndS (#5258)</li>
+<li>Correção 34eb98936f5c0079ec4e65c712c0c2f38931c80e (python): coerções int64 para cadeia MapLong2Long + InvertedLists DOWNCAST (#5257)</li>
+<li>d492af446e847a59bcfa6e35e42f1be1318c40fa faiss: inicialize ids_tab para -1 em Top1BlockResultHandler::begin_multiple (#5249)</li>
+<li>a4e417fed77705e7918458c8b1caad5efbd506ce Correção: o envio SIMD estático cai para escalar para compilações avx512_spr/avx512/arm_sve (#5057)</li>
+<li>3edc6e164973f619589ef4c7ea0cce5443e34ecf Guard Panorama autovec pragmas contra frontend nvcc (#5241)</li>
+<li>c7689c4d0c4e71eed1e43639e5f9973f89a016b9 Corrija a violação de ODR no ScannerMixIn adicionando o parâmetro de modelo SIMDLevel (#5148)</li>
+<li>ca87f41dfe58336245a013118e38ddaad0f7cab3 Abra dados de demonstração SIFT em modo binário (#5213)
+<strong>Diferença completa</strong>: https://github.com/facebookresearch/faiss/compare/v1.14.2...v1.14.3</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/facebookresearch/faiss">facebookresearch/faiss</a> · <code>v1.14.3</code> · 2026-06-13 · <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.3">lançamento upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>faiss v1.14.3</h1>
+<h2>Highlights</h2>
+<ul>
+<li><strong>Metal GPU backend expansion</strong> — new <code>MetalIndexIVFFlat</code> with IVF scan/merge kernels and expanded top-k support (#5202); Metal now enabled by default on Apple Silicon machines (#5280)</li>
+<li><strong>TurboQuant in ScalarQuantizer</strong> — full Algorithm 2 (QJL stage) with SIMD and optimizations (#5170)</li>
+<li><strong>Sapphire Rapids (SPR) optimizations</strong> — ScalarQuantizer L2/IP (#5173), VPOPCNTDQ-based HammingComputer (#5183), and VPOPCNTDQ-based RaBitQ kernel (#5149)</li>
+<li><strong>faiss-gpu pip wheels</strong> — new GPU wheel packaging (#5131); musllinux wheels re-enabled for faiss-cpu (#5299)</li>
+<li><strong>SVS static vamana support</strong> (#5224)</li>
+<li><strong>HNSW <code>is_similarity</code> mode</strong> for IP/similarity metrics (#5246, #5226)</li>
+<li><strong>HNSW search performance</strong> — reserve <code>VisitedTableSet</code> capacity to avoid rehashes (#5290), <code>search_from_candidate_unbounded</code> templatized for <code>VisitedTable</code> devirtualization (#5270), and runtime checks avoided in <code>VisitedTable</code> (#5234)</li>
+<li><strong>NEON FINE_SIZE=2 specializations</strong> for <code>Index2LevelDecoderImpl</code> and <code>IndexPQDecoder</code> (#5255)</li>
+<li><strong>cuVS upgraded to 26.06</strong> (#5240); CI updated to <strong>ROCm 7</strong> (#5196)</li>
+<li><strong>Deserialization hardening</strong> — bool-field validation (#5279) and null inner-index rejection in IDMap / BinaryFromFloat (#5239)</li>
+<li><strong>Build robustness</strong> — fix non-AVX2 import SIGILL via <code>.rodata</code> partitioning tables (#5298), Windows ARM64 (MSVC) NEON build fix (#5274), and AVX512_SPR dispatch fix on AMD (#5281)</li>
+</ul>
+<h2>Full Changelog</h2>
+<p>Added</p>
+<ul>
+<li>261d8f25aac03c980f1faf5df775248eff96cb6d Add IVFSQTurboQSearchParameters to <strong>init</strong>.pyi stub (#5304)</li>
+<li>684a32d0404758bddd4f7fb9ec76db54252819e0 Add manual Faiss nightly workflow dispatch (#5300)</li>
+<li>10b6b2a1e554afc4cbd66fe73d864728ff9e310c Add MetalIndexIVFFlat with IVF scan/merge kernels and expanded top-k support (#5202)</li>
+<li>74d36198faac528fce715aa8731bf589727bef6d TurboQuant in ScalarQuantizer: full Algorithm 2 (QJL stage) with SIMD and optimizations (#5170)</li>
+<li>506600962f8a58926710edd24715bc9002eb18e9 Add Python HNSW tutorial (#5260)</li>
+<li>3cff0f419c459bdc7c4f56ea49effb6d7da1475c Add Sapphire Rapids optimizations for ScalarQuantizer (L2, IP) (#5173)</li>
+<li>46ef80db639e4de03720e3c404065636846ed47e Support IndexIDMap/IndexIDMap2 in reverse_index_factory (#5266)</li>
+<li>420158b10e0136228ff634d464fa90c4370a1ead Add VPOPCNTDQ-based HammingComputer for Sapphire Rapids+ (#5183)</li>
+<li>d8f1c2716d9c2c070c0d7e4e0c1017331e9e9e8a Implement NEON-based FINE_SIZE=2 specializations for Index2LevelDecoderImpl and IndexPQDecoder (#5262)</li>
+<li>0951b5337b72755ade5c02705396fb7d7cedceac Support user provided blas library (#5189)</li>
+<li>215740ecc3add92d7c27e24436b2dffd8fdb157c SVS static vamana support (#5224)</li>
+<li>d24ad6ef5b3e40c0e4cf8b695923cbcd674d2573 Add is_similarity mode to HNSW (#5246)</li>
+<li>aa332cd5f0d6984075c849b32c387fffe067a49a Implement NEON-based FINE_SIZE=2 specializations for Index2LevelDecoderImpl and IndexPQDecoder (#5255)</li>
+<li>5d9aae6ee81078d33ff3c4e2fc97f7583e2e450d Add faiss-gpu pip wheel packaging (#5131)</li>
+<li>6f1cf64531130db04843737d1f538999fc295583 Add VPOPCNTDQ-based RaBitQ kernel for Sapphire Rapids+ (#5149)</li>
+</ul>
+<p>Changed</p>
+<ul>
+<li>262fc3c7a2ec099cdd0cd21482931702171c60eb Re-enable musllinux wheels for faiss-cpu (#5299)</li>
+<li>1cdc3709c656eea41ce3725024070f2516e3b30b Run CI on push to main to refresh ccache cache (#5291)</li>
+<li>379ee758b1bb49cd167c6ed86e80be331e94c593 Reserve VisitedTableSet capacity to avoid rehashes during HNSW search (#5290)</li>
+<li>6513a2497cbc29f5c0c74c0d17bbe8b9f6ff3230 Enable Metal by default on Apple machines (#5280)</li>
+<li>fe46c3c804296cc04238c2e17b02c671887791a8 Validate bool fields during deserialization (#5279)</li>
+<li>480f91790080c8daa92fcb1941c5e8d0f56de237 Type imbalance_factor and wire the .pyi stub into the buck build (#5269)</li>
+<li>e60baeb7b61e617a483310fccb239ba204458c7b Templatize search_from_candidate_unbounded for VisitedTable devirtualization (#5270)</li>
+<li>c000190dc07c161898093a72a16f3918bd9fd621 Accelerate ScalarQuantizer::QT_bf16 with AVX512-BF16. (#4889)</li>
+<li>7504fc8ddebdade7fcabd9dacd9861318d475b50 Upgrade CUVS Version to 26.06 (#5240)</li>
+<li>d12683c3b00247ca6333ac717f3a8af49aa835e3 facebook-unused-include-check in IndexBinaryIVF.cpp (#5263)</li>
+<li>99d9013e1fbe232356759d3abedbe20df0e8dba1 facebook-unused-include-check in distances_simd.cpp (#5264)</li>
+<li>2f0368b6205c92d910ae772417e71b68dde216aa facebook-unused-include-check in hamming_avx2.cpp (#5265)</li>
+<li>0c72755eccff39f903d58ed1f46d6c278a914cae Remove unused include of platform_macros.h in partitioning.cpp</li>
+<li>e6b8f6de5380aed85c2450abd31ecdb749770bbe IndexHNSW: use HNSW::is_similarity for IP/similarity metrics + tests (#5226)</li>
+<li>c0575f2c1319a702fa4ca615e2354014c42b3e67 avoid runtime checks in VisitedTable (#5234)</li>
+<li>1cb760182917697677fe100f8a1cc2b4d0b9f751 Eliminate per-code denormalization in uniform SQ distance computation (#5166)</li>
+<li>f29d8621fa4250b381d1bfb1d8362c4867ee3de3 Revert D106693266: Implement NEON-based FINE_SIZE=2 specializations for Index2LevelDecoderImpl and IndexPQDecoder</li>
+<li>ef96e3d25ecbfaa52894b0f361e9d156ee92254a Updating CI to ROCm 7 (#5196)</li>
+<li>f5217d74960ead3a1d2c0b69baa63479b6f49ea2 facebook-unused-include-check in IndexBinaryHNSW.cpp (#5251)</li>
+<li>3e6ed99bbb6cfb8daf98cadf904da449a4aaea48 facebook-unused-include-check in IndexBinaryIVF.cpp (#5252)</li>
+<li>108868bfac5ad7e0ce1b4e46857d4724a62a309e Reject null inner index in IDMap and BinaryFromFloat deserialization (#5239)</li>
+<li>a64b5496762a93cb7836d013c2283c6da479f717 Add IndexLattice r2 limit to cap decode-cache build cost (#5238)</li>
+<li>09937153dc55f64321ed7d96730fc3d673a9092d faiss: Replace remaining get_single_code calls with ScopedCodes (#5248)</li>
+<li>910e435bccafedfac5aa69f87863085ce6d90a3c facebook-unused-include-check in hamming_avx2.cpp (#5242)</li>
+<li>d581f2f8406f8794f58794124b650ab7402ac848 Use per-SIMD TU scan for standalone PQ (AVX2 gather inlining) (#5233)</li>
+</ul>
+<p>Fixed</p>
+<ul>
+<li>20afed0fa3aefe2d4f5bf6a5f6ab1d1459efec05 make intentional cudaGetLastError() error-clears explicit ((void)) for clang21 -- fixes S674096 (#5302)</li>
+<li>e420e94ce694213a8338ac975d565f81d7251d96 Move partitioning shifts tables to .rodata to fix non-AVX2 import SIGILL (#5298)</li>
+<li>15bd8238375a1650156dc6e4b8ea54def3a3dc23 Fix cuVS nightly (#5273)</li>
+<li>17cc967d711c2647495370a09469e3a710b527ae Fix AVX512_SPR dispatch on AMD: require AVX512_FP16 CPUID (#5281)</li>
+<li>e69bfeed087fd70a4708d4c92c4e0bf5e5b888a6 Stabilize RaBitQ tests on AVX512_SPR by switching to cross-level equivalence (#5277)</li>
+<li>c4c651453b5a7d73919458c6209573c4c11ddadc Stub fixes: knn torch overload, ResidualCoarseQuantizer ctor, remove duplicate I/O defs (#5283)</li>
+<li>eb4c1eafe2f2e9d77d0fc152e331f5a0c8d77e13 Fix Windows ARM64 (MSVC) build broken by NEON SIMD templatization (#5274)</li>
+<li>ab632382d3d0531fc6c744e0948544aa358bc850 Install missing InvertedListScannerStats.h header (#5268)</li>
+<li>140541590e9beac7f3d81d3dce79af9c42777906 Fix broken fbcode//faiss/tests:test_index_binary - test_replicas (test_index_binary.TestReplicasAndS (#5258)</li>
+<li>34eb98936f5c0079ec4e65c712c0c2f38931c80e fix(python): int64 coercions for MapLong2Long + InvertedLists DOWNCAST chain (#5257)</li>
+<li>d492af446e847a59bcfa6e35e42f1be1318c40fa faiss: initialize ids_tab to -1 in Top1BlockResultHandler::begin_multiple (#5249)</li>
+<li>a4e417fed77705e7918458c8b1caad5efbd506ce Fix: static SIMD dispatch falls to scalar for avx512_spr/avx512/arm_sve builds (#5057)</li>
+<li>3edc6e164973f619589ef4c7ea0cce5443e34ecf Guard Panorama autovec pragmas against nvcc frontend (#5241)</li>
+<li>c7689c4d0c4e71eed1e43639e5f9973f89a016b9 Fix ODR violation in ScannerMixIn by adding SIMDLevel template parameter (#5148)</li>
+<li>ca87f41dfe58336245a013118e38ddaad0f7cab3 Open SIFT demo data in binary mode (#5213)</li>
+</ul>
+<p><strong>Full diff</strong>: https://github.com/facebookresearch/faiss/compare/v1.14.2...v1.14.3</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/facebookresearch/faiss">facebookresearch/faiss</a> · <code>v1.14.3</code> · 2026-06-13 · <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.3">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/faiss/1.15.0"> <span class="k">← Próximo</span> <span class="t">v1.15.0</span> </a> <a href="/releases/faiss/1.14.2"> <span class="k">Anterior →</span> <span class="t">v1.14.2</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.3" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener"> <span>facebookresearch/faiss</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/faiss/1.16.0"> <span class="v">v1.16.0</span> <span class="d">26-11-10</span> </a> </li><li> <a href="/releases/faiss/1.15.1"> <span class="v">v1.15.1</span> <span class="d">26-09-16</span> </a> </li><li> <a href="/releases/faiss/1.15.0"> <span class="v">v1.15.0</span> <span class="d">26-08-03</span> </a> </li><li> <a href="/releases/faiss/1.14.3" aria-current="true"> <span class="v">v1.14.3</span> <span class="d">26-06-13</span> </a> </li><li> <a href="/releases/faiss/1.14.2"> <span class="v">v1.14.2</span> <span class="d">26-05-22</span> </a> </li><li> <a href="/releases/faiss/1.14.1"> <span class="v">v1.14.1</span> <span class="d">26-03-06</span> </a> </li><li> <a href="/releases/faiss/1.14.0"> <span class="v">v1.14.0</span> <span class="d">26-03-03</span> </a> </li><li> <a href="/releases/faiss/1.13.2"> <span class="v">v1.13.2</span> <span class="d">25-12-19</span> </a> </li> </ul> <a href="/pt/releases/faiss" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

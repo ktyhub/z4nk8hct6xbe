@@ -1,0 +1,480 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>trl v1.13.0 — STAGS NextStack</title><meta name="description" content="A new long-context guide plus a runnable example that trains a book-length sequence per step on a single 8×H100 node."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/trl/1.13.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/trl/1.13.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/trl/1.13.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/trl/1.13.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="trl v1.13.0 — STAGS NextStack"><meta property="og:description" content="A new long-context guide plus a runnable example that trains a book-length sequence per step on a single 8×H100 node."><meta property="og:url" content="https://www.stags.cn/fr/releases/trl/1.13.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/trl/1.13.0/#article","headline":"trl v1.13.0 release notes","datePublished":"2026-09-10","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/huggingface/trl"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/trl/1.13.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/trl/trl_v1.13.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/trl/1.13.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/trl/1.13.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/trl/1.13.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/trl/1.13.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/trl/1.13.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/trl">trl</a> </nav> <h1 class="detail-title"> <span class="p">trl</span> v1.13.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>10 sept. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener"> <span class="k">Source</span>huggingface/trl </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/trl/1.13.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/trl/1.13.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>trl v1.13.0</h1>
+<h2>Fonctionnalités</h2>
+<h3>Formation au-delà de 1 million de jetons</h3>
+&lt;img width=&quot;1672&quot; height=&quot;941&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/806f9153-d098-4a45-bef4-5d4119b7ef25&quot; /&gt;
+Un nouveau [guide à contexte long] (https://huggingface.co/docs/trl/long_context_training) plus un exemple exécutable qui entraîne une séquence de la longueur d'un livre par étape sur un seul nœud 8 × H100.
+Mesuré : **Qwen3-8B à 1 048 576 jetons, 380 s/pas, 56.2 Go par GPU** (bf16, `per_device_train_batch_size=1`, `loss_type=&quot;chunked_nll&quot;`). Fonctionne de bout en bout et enregistre. Le guide documente les leviers dans l'ordre dans lequel vous les appuyez (`chunked_nll`, point de contrôle de gradient `offload`, YaRN RoPE) et les contraintes (pleine attention uniquement, pas d'emballage). Nécessite `transformers &gt;= 5.16` pour le point de contrôle `offload`.
+* Documentez la formation 1M-token et ajoutez un exemple de contexte-parallélisme par @qgallouedec dans https://github.com/huggingface/trl/pull/6846
+* Réécrivez le long guide contextuel de @qgallouedec dans https://github.com/huggingface/trl/pull/7003
+### La projection Chunked-CE `lm_head` s'exécute désormais sur des cœurs tenseurs
+La boucle interne du `loss_type=&quot;chunked_nll&quot;` par défaut faisait `h.float() @ w.float().t()`. Les deux opérandes sont déjà bf16, donc le upcast n'a acheté aucune information : il a déplacé le GEMM des noyaux tenseurs sur le chemin fp32 SIMT et a matérialisé une copie fp32 de l'ensemble du poids `lm_head` (2.03 Go pour un vocabulaire de 248 Ko), reconstruite pour chaque morceau et encore à chaque recalcul de point de contrôle de gradient. Dans un profil 8 × H100 de `trl sft` sur Qwen3.6-35B-A3B, ces deux SIMT GEMM fp32 représentaient **21.6% de tout le temps du noyau GPU**.
+Un morceau, 256 jetons × vocabulaire 248 320 × caché 2048, 1 × H100, bf16, fwd+bwd :
+| | avant+arrière | mémoire de pointe |
+| --- | --- | --- |
+| avant | 23.37 ms | 5.99 FR |
+| après | **3.86 ms (6.0×)** | **3.03 FR** |
+De bout en bout, 16 384 jetons par étape, jetons/s/GPU :
+| modèle | mode | avant | après | |
+| --- | --- | --- | --- | --- |
+| gemma-3-270m (vocabulaire 262k) | plein FT, 1×H100 | 24036 | **31609** | 1.32× |
+| Qwen3-0.6B (vocabulaire 152k) | plein FT, 1×H100 | 21276 | **26641** | 1.25× |
+| Qwen3-8B | plein FT, 2×H100 FSDP2 | 3554 | **6009** | **1.69×** |
+| Qwen3-8B | LoRA r16, 2×H100 FSDP2 | 4531 | **7125** | **1.57×** |
+| Qwen3-30B-A3B (MoE) | Attention LoRA, 2×H100 FSDP2 | 4251 | **5101** | 1.20× |
+Même correctif appliqué aux formateurs en distillation (qui le payaient deux fois par morceau, étudiant et professeur). Sous accélération de la précision mixte, les chiffres sont identiques en termes de bits (la diffusion automatique rediffusait déjà les opérandes vers le bas) ; sans diffusion automatique sur la projection, le GEMM passe aux noyaux tenseurs bf16, ce qui est exactement ce que fait déjà `loss_type=&quot;nll&quot;`.
+par @qgallouedec dans https://github.com/huggingface/trl/pull/6863
+### Pertes linéaires fusionnées vendues dans `trl.losses`
+La seule importation de TRL depuis `liger-kernel` était `liger_kernel.chunked_loss` (les pertes linéaires fusionnées DPO / KTO / GRPO / JSD). Ce module est du pur PyTorch, et la plupart des variantes GRPO et DPO qu'il contient ont été écrites pour TRL. Les révisions en amont étaient au point mort, donc le code revient à la maison sous la forme `trl.losses` : `FusedLinearDPOLoss`, `FusedLinearKTOLoss`, `FusedLinearGRPOLoss`, `FusedLinearJSDLoss` (copié à partir du Liger-Kernel v0.8.2, avis BSD-2 conservé, identique au niveau du bit au Liger installé sur des entrées aléatoires).
+Pas de nouvel indicateur de configuration : `use_liger_kernel=True` continue de sélectionner la perte fusionnée exactement comme avant et nécessite toujours l'installation de `liger-kernel` car le `Trainer` des transformateurs corrige les noyaux du modèle avec.
+* Vendez les pertes linéaires fusionnées de Liger-Kernel dans `trl.losses` par @qgallouedec dans https://github.com/huggingface/trl/pull/7059
+* Correction des écarts de perte DPO et KTO Liger par @kashif dans https://github.com/huggingface/trl/pull/7062
+* Renforcez les probabilités des journaux fragmentés par @kashif dans https://github.com/huggingface/trl/pull/7065
+* Supprimez le JSD fusionné de `DistillationTrainer` par @kashif dans https://github.com/huggingface/trl/pull/7064
+* Testez la parité de perte GRPO liger vs non-liger par @kashif dans https://github.com/huggingface/trl/pull/6814
+* Exécutez les suites de parité de perte vendues sous forme de tests lents uniquement par @qgallouedec dans https://github.com/huggingface/trl/pull/7067
+### Compétences des contributeurs chez `.agents/skills`
+Les compétences d'agent pour contribuer à TRL sont désormais disponibles dans le dépôt sur `.agents/skills`.
+par @qgallouedec dans https://github.com/huggingface/trl/pull/6901
+### Docs : taxonomie stable ou expérimentale, et comment modifier l'objectif
+* ** Diviser la taxonomie des documents en entraîneurs stables et expérimentaux ** par @qgallouedec dans https://github.com/huggingface/trl/pull/7022
+* **Documenter comment changer l'objectif d'entraînement en sous-classant un entraîneur** par @sergiopaniego dans https://github.com/huggingface/trl/pull/6918
+* **Document comment choisir et épingler une version du noyau Hub** par @albertvillanova dans https://github.com/huggingface/trl/pull/6998
+* Ajouter les articles de blog TRL manquants à la page de destination des documents par @qgallouedec dans https://github.com/huggingface/trl/pull/7023
+### QLoRA sur l'argument `quantization_config`
+Les suites de tests QLoRA passent à l'argument d'entraînement `quantization_config` ajouté dans v1.8 et bénéficient d'une couverture sur les chemins VLM.
+* Ajoutez un test QLoRA aux suites de tests GRPO et RLOO VLM par @albertvillanova dans https://github.com/huggingface/trl/pull/6909
+* Ajoutez un test QLoRA aux formateurs prenant en charge `quantization_config` par @albertvillanova dans https://github.com/huggingface/trl/pull/6910
+* Convertissez les tests QLoRA en argument d'entraînement `quantization_config` par @albertvillanova dans https://github.com/huggingface/trl/pull/6927
+### Étages de dépendances surélevés
+* Nécessite `peft&gt;=0.13.0` et supprimez les gardes de la version 0.12 par @qgallouedec dans https://github.com/huggingface/trl/pull/7102
+* Nécessite `deepspeed&gt;=0.18.6` et déposez la garde 0.16.4 par @albertvillanova dans https://github.com/huggingface/trl/pull/7118
+* Garde `target_parameters` utilisé pour `peft&lt;0.17.0` par @albertvillanova dans https://github.com/huggingface/trl/pull/7119
+* Ajout du support pour vLLM 0.28.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7001
+* Supprimez le support de vLLM 0.19.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7002
+### Autre
+* **Comptez chaque jeton une fois dans `num_tokens` sous parallélisme tensoriel** par @qgallouedec dans https://github.com/huggingface/trl/pull/7101
+* **Perf XPO / NashMD** : évitez `output_hidden_states` lorsque seul `last_hidden_state` est utilisé par @ciaoyizhen dans https://github.com/huggingface/trl/pull/4755
+* Synchronisez l'identifiant du jeton du pavé de configuration du modèle avec le tokenizer dans les entraîneurs de @albertvillanova dans https://github.com/huggingface/trl/pull/7097 et (expérimental) https://github.com/huggingface/trl/pull/7128
+* Transférer la révision du modèle au `processing_class` chargé automatiquement par @kashif dans https://github.com/huggingface/trl/pull/6978
+* Injectez également la révision du modèle dans les charges de configuration concrètes par @albertvillanova dans https://github.com/huggingface/trl/pull/7099
+* Faites correspondre les noyaux du hub par identifiant de dépôt lors de la vérification de l'implémentation de l'attention par @albertvillanova dans https://github.com/huggingface/trl/pull/6985
+* Rattrapez `AsyncDistillationTrainer` avec les récentes modifications AsyncGRPO par @kashif dans https://github.com/huggingface/trl/pull/6823 et https://github.com/huggingface/trl/pull/6987
+* Supprimez le module `dataset_formatting` restant par @albertvillanova dans https://github.com/huggingface/trl/pull/7117
+* Supprimez la constante `FLASH_ATTENTION_VARIANTS` inutilisée du formateur DPO par @albertvillanova dans https://github.com/huggingface/trl/pull/7013
+* Document indiquant que le remplissage sans rembourrage est temporairement indisponible dans DPO par @albertvillanova dans https://github.com/huggingface/trl/pull/7014
+* Réaligner les commentaires dupliqués sur les formateurs par @qgallouedec dans https://github.com/huggingface/trl/pull/7145
+## Rupture
+### ⚠️ Le PPO est supprimé
+`PPOTrainer`, `PPOConfig` et `modeling_value_head.py` (`PreTrainedModelWrapper`, `AutoModelForCausalLMWithValueHead`, `AutoModelForSeq2SeqLMWithValueHead`) ont disparu, avec leurs tests, leur page de documentation et leurs exemples.
+Petit moment pour TRL : `PPOTrainer` est antérieur à chaque PR de ce dépôt. Il a atterri dans `dfb6a580` le 2020-03-28, le commit qui a ajouté pour la première fois la bibliothèque, à l'époque où le package s'appelait `lm_ppo`. C'était la chose la plus ancienne de TRL et le dernier élément de la base de code originale.
+Pourquoi maintenant : non maintenu (aucune fonctionnalité n'a fonctionné depuis plus d'un an, chaque commit PPO depuis #4482 est un correctif drive-by), le seul entraîneur jamais aligné sur le format d'entrée (il fallait toujours un `input_ids` tokenisé), une utilisation enregistrée proche de zéro et un aimant pour les chasseurs de bugs automatisés qui déposent de vrais rapports sur le code que personne n'exécute. Personne ne perd rien : `from trl import PPOTrainer` a déjà cessé de fonctionner dans v1.10, donc toute personne exécutant réellement PPO est épinglée sur un ancien TRL et ces installations continuent de se résoudre exactement comme elles le font aujourd'hui.
+`create_reference_model` reste (BCO, A2PO et Online DPO l'utilisent).
+par @qgallouedec dans https://github.com/huggingface/trl/pull/7020
+## Correctifs
+* **Correction du gradient d'entropie manquant dans `_ChunkedLogProbFunction` vers l'arrière** — `backward` a accepté `grad_entropy` mais ne l'a jamais utilisé, donc toute perte se propageant via la sortie `entropy` a silencieusement obtenu un gradient nul à partir de ce terme, sans erreur ni avertissement. Seul `AsyncGRPOTrainer` lit `entropy` (sous `no_grad`, pour la journalisation), donc pas de régression face à l'utilisateur aujourd'hui, mais il s'agit d'un code non expérimental exporté et un terme de perte de bonus d'entropie l'aurait frappé silencieusement. Par @verma8076 dans https://github.com/huggingface/trl/pull/6625
+* **La synchronisation du poids vLLM échoue désormais au lieu de se bloquer** par @AmineDiro dans https://github.com/huggingface/trl/pull/6913
+* **Échec rapide sur vLLM incompatible pour le transfert de poids Async GRPO par défaut** par @DimensionSTP dans https://github.com/huggingface/trl/pull/6830
+* **Correction du support VLM dans AsyncGRPO** par @AmineDiro dans https://github.com/huggingface/trl/pull/6839
+* Correction de la référence variable dans la documentation BCO par @albertvillanova dans https://github.com/huggingface/trl/pull/7046
+* Correction de l'assertion de perte d'autodistillation IW-OPD dans les tests de @albertvillanova dans https://github.com/huggingface/trl/pull/7123
+* Correction de fautes de frappe dans les chaînes d'aide et les messages d'erreur par @qgallouedec dans https://github.com/huggingface/trl/pull/7146
+* Correction de deux messages décrivant le mauvais comportement de @qgallouedec dans https://github.com/huggingface/trl/pull/7147
+* Correction de trois liens doc brisés par @qgallouedec dans https://github.com/huggingface/trl/pull/7155
+* Correction des exemples de commandes dans les docstrings du script par @qgallouedec dans https://github.com/huggingface/trl/pull/7156
+* Corrigez ce que fournit l'image TRL Docker dans le guide des tâches de @albertvillanova dans https://github.com/huggingface/trl/pull/7054
+* Corrigez les chemins `paper_index` et ajoutez la télémétrie GOLD, IW-OPD et AsyncDistillation par @YeonwooSung dans https://github.com/huggingface/trl/pull/7051
+*Qualifier les références doc aux classes expérimentales par @qgallouedec dans https://github.com/huggingface/trl/pull/7158
+##Documents
+Une cohérence docstring et docs est transmise à travers le dépôt, le tout par @qgallouedec :
+* Correction des spécifications de type docstring (#7148), reformatage de cinq docstrings selon le style du dépôt (#7149), correction de la dérive du contenu de la docstring (#7150), correspondance de l'ordre des champs de configuration à l'ordre des docstrings (#7151), redistribution de deux docstrings à la largeur du générateur de documents (#7153), correction des annotations de signature `DistillationTrainer` (#7152), passage du formatage des documents. (#7154), pyproject bien rangé / Makefile / .gitignore (#7157)
+* Documentez les balises d'image TRL Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/7055
+##CI
+**Images Docker** : les versions publiées et de développement sont désormais des flux de travail distincts, la version de l'image provient de la balise de version et la version TRL installée est épinglée :
+* Divisez l'image Docker publiée et de développement en flux de travail séparés par @albertvillanova dans https://github.com/huggingface/trl/pull/6990
+* Lisez la version image du Docker à partir de la balise de publication de @albertvillanova dans https://github.com/huggingface/trl/pull/6991
+* Épinglez la version TRL installée dans l'image Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/6992
+* Ajoutez la nouvelle ligne de fin manquante au fichier dev Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/7030
+* corvée : mise à jour de `docker-build.yml` par @hf-security-analysis[bot] dans https://github.com/huggingface/trl/pull/6997
+**Alignement de la configuration sur un petit modèle** — un balayage aligne la configuration de chaque petit modèle de test avec son modèle de référence, le tout par @albertvillanova :
+* Qwen2.5 (#7098), Qwen3 tiny+small (#7106), Qwen3 Instruct-2507 (#7107), GptOss (#7108), GPTNeoX / pythia-14m (#7109), Lama 3.2 + Télécommande (#7110), Lama 3 (#7112), Lama 3.1 (#7113)
+* Pin `layer_types` pour que les minuscules Gemma3 / Olmo3 couvrent les deux types d'attention (#6962) et la minuscule Cohere2 (#6963)
+* Afficher les longueurs de liste et marquer la troncature dans le diff de configuration du petit modèle (#7105)
+**Autres CI**, principalement par @albertvillanova :
+* Utilisez le hook de pré-commit de doc-builder (#6799), modifiez sa révision (#6969, #7078)
+* Réessayer les tests ayant échoué en raison d'erreurs d'allocation cuBLAS, le filtre de réexécution a manqué (#6916)
+* Utilisez ruff `select` au lieu de `extend-select` pour garder l'ensemble de règles explicite (#6964), empêcher le robot dépendant d'ouvrir les bosses de pré-commit de ruff (#6965), reformater les fonctions lambda pour plus de clarté du code (#7092)
+* Supprimez les marqueurs flash-attn2 xfail maintenant que les tests sans remplissage réussissent (#7057), corrigez les instructions d'enregistrement de la suite invariante (#7058)
+* Épinglez le noyau du hub FA2 de la suite invariante à la branche v2 par @qgallouedec dans https://github.com/huggingface/trl/pull/6979
+* Filtrer l'avertissement de collecte scalaire DataParallel de la torche bénigne (#7019)
+* Correction des métadonnées d'entrée de l'action composite post-slack (#7029)
+* Regroupez les actions Dependabot GitHub et les mises à jour de pré-validation dans un seul PR (#7088), fusionnez les deux entrées d'actions Dependabot github en une seule (#7091)
+* Dependabot bosse dans #6958, #7000, #7079, #7089
+## Nouveaux contributeurs
+* @ciaoyizhen a apporté sa première contribution dans https://github.com/huggingface/trl/pull/4755
+* @DimensionSTP a apporté sa première contribution dans https://github.com/huggingface/trl/pull/6830
+* @YeonwooSung a apporté sa première contribution dans https://github.com/huggingface/trl/pull/7051
+## Ce qui a changé
+* ⬆️ Correction de la version dev par @qgallouedec dans https://github.com/huggingface/trl/pull/6939
+* ⬆️ Version dev Bump par @qgallouedec dans https://github.com/huggingface/trl/pull/6940
+* Ajoutez un test QLoRA aux suites de tests GRPO et RLOO VLM par @albertvillanova dans https://github.com/huggingface/trl/pull/6909
+* Ajoutez un test QLoRA aux formateurs prenant en charge quantization_config par @albertvillanova dans https://github.com/huggingface/trl/pull/6910
+* Convertissez les tests QLoRA en argument d'entraînement quantization_config par @albertvillanova dans https://github.com/huggingface/trl/pull/6927
+* Correction du gradient d'entropie manquant dans _ChunkedLogProbFunction en arrière par @verma8076 dans https://github.com/huggingface/trl/pull/6625
+* Documentez comment changer l'objectif de formation en sous-classant un entraîneur par @sergiopaniego dans https://github.com/huggingface/trl/pull/6918
+* Utilisez le hook de pré-commit doc-builder de @albertvillanova dans https://github.com/huggingface/trl/pull/6799
+* Réessayer les tests ayant échoué en raison d'erreurs d'allocation cuBLAS, le filtre de réexécution a manqué par @albertvillanova dans https://github.com/huggingface/trl/pull/6916
+* Correction : la synchronisation du poids vLLM échoue au lieu d'être suspendue par @AmineDiro dans https://github.com/huggingface/trl/pull/6913
+* Déplacez le groupe d'actions sur 1 répertoire avec 5 mises à jour par @dependabot[bot] dans https://github.com/huggingface/trl/pull/6958
+* Bump https://github.com/huggingface/doc-builder de 0ab9ea03baf111ed8dd83e88233430b663127368 à 1b16dac5e33043af565fdf4c1b5b0fe81d0891c8 par @dependabot[bot] dans https://github.com/huggingface/trl/pull/6969
+* Épinglez layer_types pour que les minuscules modèles Gemma3 et Olmo3 couvrent les deux types d'attention par @albertvillanova dans https://github.com/huggingface/trl/pull/6962
+* Épinglez layer_types pour que le petit modèle Cohere2 couvre les deux types d'attention par @albertvillanova dans https://github.com/huggingface/trl/pull/6963
+* Utilisez ruff `select` au lieu de `extend-select` pour garder la règle définie explicitement par @albertvillanova dans https://github.com/huggingface/trl/pull/6964
+* Correction du support vlm asyncgrpo par @AmineDiro dans https://github.com/huggingface/trl/pull/6839
+* Divisez l'image Docker publiée et de développement en flux de travail séparés par @albertvillanova dans https://github.com/huggingface/trl/pull/6990
+* corvée : mise à jour de docker-build.yml par @hf-security-analysis[bot] dans https://github.com/huggingface/trl/pull/6997
+* Empêchez dependabot d'ouvrir les bosses de pré-commit de ruff par @albertvillanova dans https://github.com/huggingface/trl/pull/6965
+* Lisez la version image du Docker à partir de la balise de publication de @albertvillanova dans https://github.com/huggingface/trl/pull/6991
+* Épinglez la version TRL installée dans l'image Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/6992
+* Bump trufflesecurity/trufflehog de 3.97.0 à 3.97.1 dans le groupe d'actions par @dependabot[bot] dans https://github.com/huggingface/trl/pull/7000
+* Faites correspondre les noyaux du hub par identifiant de dépôt lors de la vérification de l'implémentation de l'attention par @albertvillanova dans https://github.com/huggingface/trl/pull/6985
+* Supprimez la constante FLASH_ATTENTION_VARIANTS inutilisée du formateur DPO par @albertvillanova dans https://github.com/huggingface/trl/pull/7013
+* Document indiquant que le remplissage sans rembourrage est temporairement indisponible dans DPO par @albertvillanova dans https://github.com/huggingface/trl/pull/7014
+* Supprimez le support de vLLM 0.19.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7002
+* Épinglez le noyau du hub FA2 de la suite invariante à la branche v2 par @qgallouedec dans https://github.com/huggingface/trl/pull/6979
+* Filtrer l'avertissement de collecte scalaire DataParallel de la torche bénigne dans CI par @albertvillanova dans https://github.com/huggingface/trl/pull/7019
+* Testez la parité de perte GRPO liger vs non-liger par @kashif dans https://github.com/huggingface/trl/pull/6814
+* Ajoutez la nouvelle ligne de fin manquante au fichier dev Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/7030
+* Correction des métadonnées d'entrée de l'action composite post-slack par @albertvillanova dans https://github.com/huggingface/trl/pull/7029
+* Découvrez AsyncDistillationTrainer avec les récentes modifications AsyncGRPO par @kashif dans https://github.com/huggingface/trl/pull/6823
+* Documentez la formation 1M-token et ajoutez un exemple de contexte-parallélisme par @qgallouedec dans https://github.com/huggingface/trl/pull/6846
+* Réécrire le long guide contextuel de @qgallouedec dans https://github.com/huggingface/trl/pull/7003
+* Documentez comment choisir et épingler une version du noyau Hub par @albertvillanova dans https://github.com/huggingface/trl/pull/6998
+* Correction de la référence variable dans la documentation BCO par @albertvillanova dans https://github.com/huggingface/trl/pull/7046
+* Supprimer PPOTrainer par @qgallouedec dans https://github.com/huggingface/trl/pull/7020
+* Corrigez ce que fournit l'image TRL Docker dans le guide des tâches de @albertvillanova dans https://github.com/huggingface/trl/pull/7054
+* Documentez les balises d'image TRL Docker par @albertvillanova dans https://github.com/huggingface/trl/pull/7055
+* Faites la projection chunked-CE `lm_head` sur des noyaux tenseurs au lieu d'en fp32 par @qgallouedec dans https://github.com/huggingface/trl/pull/6863
+* Ajoutez des compétences de contributeur à `.agents/skills` par @qgallouedec dans https://github.com/huggingface/trl/pull/6901
+* Divisez la taxonomie des documents en entraîneurs stables et expérimentaux par @qgallouedec dans https://github.com/huggingface/trl/pull/7022
+* Vendez les pertes linéaires fusionnées de Liger-Kernel dans `trl.losses` par @qgallouedec dans https://github.com/huggingface/trl/pull/7059
+* Déposez le JSD fusionné de DistillationTrainer par @kashif dans https://github.com/huggingface/trl/pull/7064
+* Correction des écarts de perte DPO et KTO Liger par @kashif dans https://github.com/huggingface/trl/pull/7062
+* Renforcez les probabilités des journaux fragmentés par @kashif dans https://github.com/huggingface/trl/pull/7065
+* Exécutez les suites de parité de perte vendues sous forme de tests lents uniquement par @qgallouedec dans https://github.com/huggingface/trl/pull/7067
+* Perf XPO/NashMD : évitez `output_hidden_states` lorsque seul `last_hidden_state` est utilisé par @ciaoyizhen dans https://github.com/huggingface/trl/pull/4755
+* Bump https://github.com/huggingface/doc-builder de 1b16dac5e33043af565fdf4c1b5b0fe81d0891c8 à c2d27f6f231df3d1b07f3a7ea54fe3d0f8bc3e27 par @dependabot[bot] dans https://github.com/huggingface/trl/pull/7078
+* Augmentez le groupe d'actions avec 5 mises à jour par @dependabot[bot] dans https://github.com/huggingface/trl/pull/7079
+* Groupe Dependabot GitHub Actions et mises à jour de pré-validation dans un seul PR par @albertvillanova dans https://github.com/huggingface/trl/pull/7088
+* Correction des instructions d'enregistrement de la suite invariante par @albertvillanova dans https://github.com/huggingface/trl/pull/7058
+* Supprimez les marqueurs flash-attn2 xfail maintenant que les tests sans remplissage passent par @albertvillanova dans https://github.com/huggingface/trl/pull/7057
+* Bump le groupe &quot;github-actions-and-pre-commit&quot; avec 2 mises à jour sur plusieurs écosystèmes par @dependabot[bot] dans https://github.com/huggingface/trl/pull/7089
+* Fusionner les deux entrées d'actions Dependabot github en une seule par @albertvillanova dans https://github.com/huggingface/trl/pull/7091
+* Reformater les fonctions lambda pour la clarté du code par @albertvillanova dans https://github.com/huggingface/trl/pull/7092
+* Échec rapide sur vLLM incompatible pour le transfert de poids Async GRPO par défaut par @DimensionSTP dans https://github.com/huggingface/trl/pull/6830
+* Injectez également la révision du modèle dans les charges de configuration concrètes par @albertvillanova dans https://github.com/huggingface/trl/pull/7099
+* Alignez la petite/petite configuration Qwen2.5 avec Qwen/Qwen2.5-32B-Instruct par @albertvillanova dans https://github.com/huggingface/trl/pull/7098
+* Synchronisez la distribution asynchrone. formateurs avec les modifications récentes d'AsyncGRPO par @kashif dans https://github.com/huggingface/trl/pull/6987
+* Alignez les petites et petites configurations Qwen3 avec leurs modèles de référence par @albertvillanova dans https://github.com/huggingface/trl/pull/7106
+* Alignez la petite configuration Qwen3 Instruct-2507 avec Qwen/Qwen3-4B-Instruct-2507 par @albertvillanova dans https://github.com/huggingface/trl/pull/7107
+* Nécessite peft&gt;=0.13.0 et supprimez les gardes de la version 0.12 par @qgallouedec dans https://github.com/huggingface/trl/pull/7102
+* Alignez la petite configuration GptOss avec openai/gpt-oss-20b par @albertvillanova dans https://github.com/huggingface/trl/pull/7108
+* Nécessite deepspeed&gt;=0.18.6 et déposez la garde 0.16.4 par @albertvillanova dans https://github.com/huggingface/trl/pull/7118
+* Supprimez le module dataset_formatting restant par @albertvillanova dans https://github.com/huggingface/trl/pull/7117
+* Alignez la petite configuration GPTNeoX avec EleutherAI/pythia-14m par @albertvillanova dans https://github.com/huggingface/trl/pull/7109
+* Alignez le petit lama 3.2 et les configurations distantes avec le méta-llama/Llama-3.2-1B-Instruct de @albertvillanova dans https://github.com/huggingface/trl/pull/7110
+* Alignez la petite configuration de Llama 3 avec meta-llama/Meta-Llama-3-8B-Instruct de @albertvillanova dans https://github.com/huggingface/trl/pull/7112
+* Alignez la petite configuration de Llama 3.1 avec le méta-llama/Llama-3.1-8B-Instruct de @albertvillanova dans https://github.com/huggingface/trl/pull/7113
+* Afficher les longueurs de liste et marquer la troncature dans la configuration du petit modèle par @albertvillanova dans https://github.com/huggingface/trl/pull/7105
+* Correction de l'assertion de perte d'autodistillation IW-OPD dans les tests de @albertvillanova dans https://github.com/huggingface/trl/pull/7123
+* Synchronisez l'identifiant du jeton du pavé de configuration du modèle avec le tokenizer dans les entraîneurs de @albertvillanova dans https://github.com/huggingface/trl/pull/7097
+* Synchronisez l'identifiant du jeton du pavé de configuration du modèle avec le tokenizer dans les entraîneurs expérimentaux de @albertvillanova dans https://github.com/huggingface/trl/pull/7128
+* Guard target_parameters utilisé pour peft&lt;0.17.0 par @albertvillanova dans https://github.com/huggingface/trl/pull/7119
+* Transférer la révision du modèle à la classe de traitement chargée automatiquement par @kashif dans https://github.com/huggingface/trl/pull/6978
+* Ajouter les articles de blog TRL manquants à la page de destination des documents par @qgallouedec dans https://github.com/huggingface/trl/pull/7023
+* Ajout du support pour vLLM 0.28.0 par @qgallouedec dans https://github.com/huggingface/trl/pull/7001
+* Comptez chaque jeton une fois dans num_tokens sous parallélisme tensoriel par @qgallouedec dans https://github.com/huggingface/trl/pull/7101
+* Réaligner les commentaires dupliqués sur les formateurs par @qgallouedec dans https://github.com/huggingface/trl/pull/7145
+* Correction de fautes de frappe dans les chaînes d'aide et les messages d'erreur par @qgallouedec dans https://github.com/huggingface/trl/pull/7146
+* Correction de deux messages décrivant le mauvais comportement de @qgallouedec dans https://github.com/huggingface/trl/pull/7147
+* Correction des spécifications de type docstring par @qgallouedec dans https://github.com/huggingface/trl/pull/7148
+* Reformater cinq docstrings au style repo par @qgallouedec dans https://github.com/huggingface/trl/pull/7149
+* Correction de la dérive du contenu docstring par @qgallouedec dans https://github.com/huggingface/trl/pull/7150
+* Faire correspondre l'ordre des champs de configuration à l'ordre des docstrings de @qgallouedec dans https://github.com/huggingface/trl/pull/7151
+* Redistribuez deux docstrings à la largeur du doc-builder par @qgallouedec dans https://github.com/huggingface/trl/pull/7153
+* Correction des annotations de signature DistillationTrainer par @qgallouedec dans https://github.com/huggingface/trl/pull/7152
+* Le formatage des documents est effectué par @qgallouedec dans https://github.com/huggingface/trl/pull/7154
+* Tidy pyproject, Makefile et .gitignore par @qgallouedec dans https://github.com/huggingface/trl/pull/7157
+* Correction des exemples de commandes dans les docstrings du script par @qgallouedec dans https://github.com/huggingface/trl/pull/7156
+* Correction de trois liens doc brisés par @qgallouedec dans https://github.com/huggingface/trl/pull/7155
+* Corrigez les chemins paper_index et ajoutez la télémétrie GOLD, IW-OPD et AsyncDistillation par @YeonwooSung dans https://github.com/huggingface/trl/pull/7051
+*Qualifier les références doc aux classes expérimentales par @qgallouedec dans https://github.com/huggingface/trl/pull/7158
+* Sortie : v1.13 par @qgallouedec dans https://github.com/huggingface/trl/pull/7159
+**Changelog complet** : https://github.com/huggingface/trl/compare/v1.12.0...v1.13.0
+---
+&gt; **Source** [huggingface/trl](https://github.com/huggingface/trl) · `v1.13.0` · 2026-09-10 · [version en amont](https://github.com/huggingface/trl/releases/tag/v1.13.0)
+*Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.*</div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>trl v1.13.0</h1>
+<h2>Features</h2>
+<h3>Training beyond 1M tokens</h3>
+&lt;img width=&quot;1672&quot; height=&quot;941&quot; alt=&quot;image&quot; src=&quot;https://github.com/user-attachments/assets/806f9153-d098-4a45-bef4-5d4119b7ef25&quot; /&gt;
+<p>A new <a href="https://huggingface.co/docs/trl/long_context_training">long-context guide</a> plus a runnable example that trains a book-length sequence per step on a single 8×H100 node.</p>
+<p>Measured: <strong>Qwen3-8B at 1,048,576 tokens, 380 s/step, 56.2 GB per GPU</strong> (bf16, <code>per_device_train_batch_size=1</code>, <code>loss_type=&quot;chunked_nll&quot;</code>). Runs end to end and saves. The guide documents the levers in the order you hit them (<code>chunked_nll</code>, gradient-checkpointing <code>offload</code>, YaRN RoPE) and the constraints (full attention only, no packing). Needs <code>transformers &gt;= 5.16</code> for checkpointing <code>offload</code>.</p>
+<ul>
+<li>Document 1M-token training and add a context-parallelism example by @qgallouedec in https://github.com/huggingface/trl/pull/6846</li>
+<li>Rewrite the long context guide by @qgallouedec in https://github.com/huggingface/trl/pull/7003</li>
+</ul>
+<h3>Chunked-CE <code>lm_head</code> projection now runs on tensor cores</h3>
+<p>The inner loop of the default <code>loss_type=&quot;chunked_nll&quot;</code> was doing <code>h.float() @ w.float().t()</code>. Both operands are already bf16, so the upcast bought no information: it moved the GEMM off the tensor cores onto the fp32 SIMT path and materialized an fp32 copy of the whole <code>lm_head</code> weight (2.03 GB for a 248k vocabulary), rebuilt for every chunk and again on every gradient-checkpoint recompute. In an 8×H100 profile of <code>trl sft</code> on Qwen3.6-35B-A3B those two fp32 SIMT GEMMs were <strong>21.6% of all GPU kernel time</strong>.</p>
+<p>One chunk, 256 tokens × vocab 248,320 × hidden 2048, 1×H100, bf16, fwd+bwd:</p>
+<p>| | fwd+bwd | peak mem |
+| --- | --- | --- |
+| before | 23.37 ms | 5.99 GB |
+| after | <strong>3.86 ms (6.0×)</strong> | <strong>3.03 GB</strong> |</p>
+<p>End to end, 16,384 tokens per step, tokens/s/GPU:</p>
+<p>| model | mode | before | after | |
+| --- | --- | --- | --- | --- |
+| gemma-3-270m (vocab 262k) | full FT, 1×H100 | 24036 | <strong>31609</strong> | 1.32× |
+| Qwen3-0.6B (vocab 152k) | full FT, 1×H100 | 21276 | <strong>26641</strong> | 1.25× |
+| Qwen3-8B | full FT, 2×H100 FSDP2 | 3554 | <strong>6009</strong> | <strong>1.69×</strong> |
+| Qwen3-8B | LoRA r16, 2×H100 FSDP2 | 4531 | <strong>7125</strong> | <strong>1.57×</strong> |
+| Qwen3-30B-A3B (MoE) | LoRA attn, 2×H100 FSDP2 | 4251 | <strong>5101</strong> | 1.20× |</p>
+<p>Same fix applied to the distillation trainers (which paid it twice per chunk, student and teacher). Under accelerate mixed precision the numerics are bit-identical (autocast was already casting the operands back down); without autocast over the projection the GEMM moves to bf16 tensor cores, which is exactly what <code>loss_type=&quot;nll&quot;</code> already does.</p>
+<p>by @qgallouedec in https://github.com/huggingface/trl/pull/6863</p>
+<h3>Fused linear losses vendored into <code>trl.losses</code></h3>
+<p>TRL's only import from <code>liger-kernel</code> was <code>liger_kernel.chunked_loss</code> (the fused linear DPO / KTO / GRPO / JSD losses). That module is pure PyTorch, and most of the GRPO and DPO variants in it were written for TRL. Upstream reviews had stalled, so the code comes home as <code>trl.losses</code>: <code>FusedLinearDPOLoss</code>, <code>FusedLinearKTOLoss</code>, <code>FusedLinearGRPOLoss</code>, <code>FusedLinearJSDLoss</code> (copied from Liger-Kernel v0.8.2, BSD-2 notice kept, bitwise identical to the installed Liger on random inputs).</p>
+<p>No new config flag: <code>use_liger_kernel=True</code> keeps selecting the fused loss exactly as before, and still needs <code>liger-kernel</code> installed because transformers' <code>Trainer</code> patches the model kernels with it.</p>
+<ul>
+<li>Vendor the fused linear losses from Liger-Kernel into <code>trl.losses</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7059</li>
+<li>Fix DPO and KTO Liger loss gaps by @kashif in https://github.com/huggingface/trl/pull/7062</li>
+<li>Harden chunked log probabilities by @kashif in https://github.com/huggingface/trl/pull/7065</li>
+<li>Drop fused JSD from <code>DistillationTrainer</code> by @kashif in https://github.com/huggingface/trl/pull/7064</li>
+<li>Test liger vs non-liger GRPO loss parity by @kashif in https://github.com/huggingface/trl/pull/6814</li>
+<li>Run the vendored loss parity suites as slow tests only by @qgallouedec in https://github.com/huggingface/trl/pull/7067</li>
+</ul>
+<h3>Contributor skills at <code>.agents/skills</code></h3>
+<p>Agent skills for contributing to TRL now ship in the repo at <code>.agents/skills</code>.</p>
+<p>by @qgallouedec in https://github.com/huggingface/trl/pull/6901</p>
+<h3>Docs: stable vs experimental taxonomy, and how to change the objective</h3>
+<ul>
+<li><strong>Split the docs taxonomy into stable and experimental trainers</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7022</li>
+<li><strong>Document how to change the training objective by subclassing a trainer</strong> by @sergiopaniego in https://github.com/huggingface/trl/pull/6918</li>
+<li><strong>Document how to choose and pin a Hub kernel version</strong> by @albertvillanova in https://github.com/huggingface/trl/pull/6998</li>
+<li>Add missing TRL blog posts to the docs landing page by @qgallouedec in https://github.com/huggingface/trl/pull/7023</li>
+</ul>
+<h3>QLoRA on the <code>quantization_config</code> argument</h3>
+<p>The QLoRA test suites move onto the <code>quantization_config</code> trainer argument added in v1.8, and gain coverage on the VLM paths.</p>
+<ul>
+<li>Add a QLoRA test to the GRPO and RLOO VLM test suites by @albertvillanova in https://github.com/huggingface/trl/pull/6909</li>
+<li>Add a QLoRA test to the trainers that support <code>quantization_config</code> by @albertvillanova in https://github.com/huggingface/trl/pull/6910</li>
+<li>Convert the QLoRA tests to the <code>quantization_config</code> trainer argument by @albertvillanova in https://github.com/huggingface/trl/pull/6927</li>
+</ul>
+<h3>Dependency floors raised</h3>
+<ul>
+<li>Require <code>peft&gt;=0.13.0</code> and drop the 0.12 version guards by @qgallouedec in https://github.com/huggingface/trl/pull/7102</li>
+<li>Require <code>deepspeed&gt;=0.18.6</code> and drop the 0.16.4 guard by @albertvillanova in https://github.com/huggingface/trl/pull/7118</li>
+<li>Guard <code>target_parameters</code> use for <code>peft&lt;0.17.0</code> by @albertvillanova in https://github.com/huggingface/trl/pull/7119</li>
+<li>Add support for vLLM 0.28.0 by @qgallouedec in https://github.com/huggingface/trl/pull/7001</li>
+<li>Drop vLLM 0.19.0 support by @qgallouedec in https://github.com/huggingface/trl/pull/7002</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li><strong>Count each token once in <code>num_tokens</code> under tensor parallelism</strong> by @qgallouedec in https://github.com/huggingface/trl/pull/7101</li>
+<li><strong>XPO / NashMD perf</strong>: avoid <code>output_hidden_states</code> when only <code>last_hidden_state</code> is used by @ciaoyizhen in https://github.com/huggingface/trl/pull/4755</li>
+<li>Sync the model config pad token id with the tokenizer in the trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7097 and (experimental) https://github.com/huggingface/trl/pull/7128</li>
+<li>Forward model revision to the auto-loaded <code>processing_class</code> by @kashif in https://github.com/huggingface/trl/pull/6978</li>
+<li>Inject the model revision into concrete config loads too by @albertvillanova in https://github.com/huggingface/trl/pull/7099</li>
+<li>Match hub kernels by repo id when checking the attention implementation by @albertvillanova in https://github.com/huggingface/trl/pull/6985</li>
+<li>Catch <code>AsyncDistillationTrainer</code> up with recent AsyncGRPO changes by @kashif in https://github.com/huggingface/trl/pull/6823 and https://github.com/huggingface/trl/pull/6987</li>
+<li>Remove the leftover <code>dataset_formatting</code> module by @albertvillanova in https://github.com/huggingface/trl/pull/7117</li>
+<li>Remove the unused <code>FLASH_ATTENTION_VARIANTS</code> constant from the DPO trainer by @albertvillanova in https://github.com/huggingface/trl/pull/7013</li>
+<li>Document that padding-free is temporarily unavailable in DPO by @albertvillanova in https://github.com/huggingface/trl/pull/7014</li>
+<li>Realign duplicated comments across the trainers by @qgallouedec in https://github.com/huggingface/trl/pull/7145</li>
+</ul>
+<h2>Breaking</h2>
+<h3>⚠️ PPO is removed</h3>
+<p><code>PPOTrainer</code>, <code>PPOConfig</code>, and <code>modeling_value_head.py</code> (<code>PreTrainedModelWrapper</code>, <code>AutoModelForCausalLMWithValueHead</code>, <code>AutoModelForSeq2SeqLMWithValueHead</code>) are gone, along with their tests, doc page, and examples.</p>
+<p>Bit of a moment for TRL: <code>PPOTrainer</code> predates every PR in this repo. It landed in <code>dfb6a580</code> on 2020-03-28, the commit that first added the library, back when the package was called <code>lm_ppo</code>. It was the oldest thing in TRL and the last piece of the original codebase.</p>
+<p>Why now: unmaintained (no feature work in over a year, every PPO commit since #4482 a drive-by fix), the only trainer never aligned on the input format (it still took tokenized <code>input_ids</code>), near-zero recorded usage, and a magnet for automated bug hunters filing real reports against code nobody runs. Nobody loses anything: <code>from trl import PPOTrainer</code> already stopped working in v1.10, so anyone actually running PPO is pinned to an older TRL and those installs keep resolving exactly as they do today.</p>
+<p><code>create_reference_model</code> stays (BCO, A2PO and Online DPO use it).</p>
+<p>by @qgallouedec in https://github.com/huggingface/trl/pull/7020</p>
+<h2>Fixes</h2>
+<ul>
+<li><strong>Fix missing entropy gradient in <code>_ChunkedLogProbFunction</code> backward</strong> — <code>backward</code> accepted <code>grad_entropy</code> but never used it, so any loss backpropagating through the <code>entropy</code> output silently got zero gradient from that term, with no error or warning. Only <code>AsyncGRPOTrainer</code> read <code>entropy</code> (under <code>no_grad</code>, for logging), so no user-facing regression today, but this is exported non-experimental code and an entropy-bonus loss term would have hit it silently. By @verma8076 in https://github.com/huggingface/trl/pull/6625</li>
+<li><strong>vLLM weight sync now fails instead of hanging</strong> by @AmineDiro in https://github.com/huggingface/trl/pull/6913</li>
+<li><strong>Fail fast on incompatible vLLM for default Async GRPO weight transfer</strong> by @DimensionSTP in https://github.com/huggingface/trl/pull/6830</li>
+<li><strong>Fix VLM support in AsyncGRPO</strong> by @AmineDiro in https://github.com/huggingface/trl/pull/6839</li>
+<li>Fix variable reference in BCO docs by @albertvillanova in https://github.com/huggingface/trl/pull/7046</li>
+<li>Fix the IW-OPD self-distillation loss assertion in tests by @albertvillanova in https://github.com/huggingface/trl/pull/7123</li>
+<li>Fix typos in help strings and error messages by @qgallouedec in https://github.com/huggingface/trl/pull/7146</li>
+<li>Fix two messages that describe the wrong behaviour by @qgallouedec in https://github.com/huggingface/trl/pull/7147</li>
+<li>Fix three broken doc links by @qgallouedec in https://github.com/huggingface/trl/pull/7155</li>
+<li>Fix the example commands in the script docstrings by @qgallouedec in https://github.com/huggingface/trl/pull/7156</li>
+<li>Correct what the TRL Docker image provides in the Jobs guide by @albertvillanova in https://github.com/huggingface/trl/pull/7054</li>
+<li>Fix <code>paper_index</code> paths and add GOLD, IW-OPD, and AsyncDistillation telemetry by @YeonwooSung in https://github.com/huggingface/trl/pull/7051</li>
+<li>Qualify doc references to experimental classes by @qgallouedec in https://github.com/huggingface/trl/pull/7158</li>
+</ul>
+<h2>Documentation</h2>
+<p>A docstring and docs consistency pass across the repo, all by @qgallouedec:</p>
+<ul>
+<li>Fix docstring type specs (#7148), reformat five docstrings to the repo style (#7149), fix docstring content drift (#7150), match config field order to the docstring order (#7151), reflow two docstrings to the doc-builder width (#7153), fix the <code>DistillationTrainer</code> signature annotations (#7152), docs formatting pass (#7154), tidy pyproject / Makefile / .gitignore (#7157)</li>
+<li>Document the TRL Docker image tags by @albertvillanova in https://github.com/huggingface/trl/pull/7055</li>
+</ul>
+<h2>CI</h2>
+<p><strong>Docker images</strong> — released and dev builds are now separate workflows, the image version comes from the release tag, and the installed TRL version is pinned:</p>
+<ul>
+<li>Split the released and dev Docker image builds into separate workflows by @albertvillanova in https://github.com/huggingface/trl/pull/6990</li>
+<li>Read the Docker image version from the release tag by @albertvillanova in https://github.com/huggingface/trl/pull/6991</li>
+<li>Pin the TRL version installed in the Docker image by @albertvillanova in https://github.com/huggingface/trl/pull/6992</li>
+<li>Add the missing trailing newline to the dev Dockerfile by @albertvillanova in https://github.com/huggingface/trl/pull/7030</li>
+<li>chore: update <code>docker-build.yml</code> by @hf-security-analysis[bot] in https://github.com/huggingface/trl/pull/6997</li>
+</ul>
+<p><strong>Tiny-model config alignment</strong> — a sweep bringing every tiny test model's config in line with its reference model, all by @albertvillanova:</p>
+<ul>
+<li>Qwen2.5 (#7098), Qwen3 tiny+small (#7106), Qwen3 Instruct-2507 (#7107), GptOss (#7108), GPTNeoX / pythia-14m (#7109), Llama 3.2 + Remote (#7110), Llama 3 (#7112), Llama 3.1 (#7113)</li>
+<li>Pin <code>layer_types</code> so tiny Gemma3 / Olmo3 cover both attention types (#6962) and tiny Cohere2 (#6963)</li>
+<li>Show list lengths and mark truncation in the tiny-model config diff (#7105)</li>
+</ul>
+<p><strong>Other CI</strong>, mostly by @albertvillanova:</p>
+<ul>
+<li>Use the doc-builder pre-commit hook (#6799), bump its revision (#6969, #7078)</li>
+<li>Retry tests failing on cuBLAS allocation errors the rerun filter missed (#6916)</li>
+<li>Use ruff <code>select</code> instead of <code>extend-select</code> to keep the rule set explicit (#6964), stop dependabot from opening ruff pre-commit bumps (#6965), reformat lambda functions for code clarity (#7092)</li>
+<li>Remove the flash-attn2 xfail markers now that the padding-free tests pass (#7057), fix the invariant suite recording instructions (#7058)</li>
+<li>Pin the invariant suite's FA2 hub kernel to the v2 branch by @qgallouedec in https://github.com/huggingface/trl/pull/6979</li>
+<li>Filter the benign torch DataParallel scalar-gather warning (#7019)</li>
+<li>Fix the input metadata of the post-slack composite action (#7029)</li>
+<li>Group Dependabot GitHub Actions and pre-commit updates in a single PR (#7088), merge the two Dependabot github-actions entries into one (#7091)</li>
+<li>Dependabot bumps in #6958, #7000, #7079, #7089</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@ciaoyizhen made their first contribution in https://github.com/huggingface/trl/pull/4755</li>
+<li>@DimensionSTP made their first contribution in https://github.com/huggingface/trl/pull/6830</li>
+<li>@YeonwooSung made their first contribution in https://github.com/huggingface/trl/pull/7051</li>
+</ul>
+<h2>What's Changed</h2>
+<ul>
+<li>⬆️ Fix dev version by @qgallouedec in https://github.com/huggingface/trl/pull/6939</li>
+<li>⬆️ Bump dev version by @qgallouedec in https://github.com/huggingface/trl/pull/6940</li>
+<li>Add a QLoRA test to the GRPO and RLOO VLM test suites by @albertvillanova in https://github.com/huggingface/trl/pull/6909</li>
+<li>Add a QLoRA test to the trainers that support quantization_config by @albertvillanova in https://github.com/huggingface/trl/pull/6910</li>
+<li>Convert the QLoRA tests to the quantization_config trainer argument by @albertvillanova in https://github.com/huggingface/trl/pull/6927</li>
+<li>Fix missing entropy gradient in _ChunkedLogProbFunction backward by @verma8076 in https://github.com/huggingface/trl/pull/6625</li>
+<li>Document how to change the training objective by subclassing a trainer by @sergiopaniego in https://github.com/huggingface/trl/pull/6918</li>
+<li>Use the doc-builder pre-commit hook by @albertvillanova in https://github.com/huggingface/trl/pull/6799</li>
+<li>Retry tests failing on cuBLAS allocation errors the rerun filter missed by @albertvillanova in https://github.com/huggingface/trl/pull/6916</li>
+<li>Fix:  vLLM weight sync fails instead of hanging by @AmineDiro in https://github.com/huggingface/trl/pull/6913</li>
+<li>Bump the actions group across 1 directory with 5 updates by @dependabot[bot] in https://github.com/huggingface/trl/pull/6958</li>
+<li>Bump https://github.com/huggingface/doc-builder from 0ab9ea03baf111ed8dd83e88233430b663127368 to 1b16dac5e33043af565fdf4c1b5b0fe81d0891c8 by @dependabot[bot] in https://github.com/huggingface/trl/pull/6969</li>
+<li>Pin layer_types so the tiny Gemma3 and Olmo3 models cover both attention types by @albertvillanova in https://github.com/huggingface/trl/pull/6962</li>
+<li>Pin layer_types so the tiny Cohere2 model covers both attention types by @albertvillanova in https://github.com/huggingface/trl/pull/6963</li>
+<li>Use ruff <code>select</code> instead of <code>extend-select</code> to keep the rule set explicit by @albertvillanova in https://github.com/huggingface/trl/pull/6964</li>
+<li>fix vlm support asyncgrpo by @AmineDiro in https://github.com/huggingface/trl/pull/6839</li>
+<li>Split the released and dev Docker image builds into separate workflows by @albertvillanova in https://github.com/huggingface/trl/pull/6990</li>
+<li>chore: update docker-build.yml by @hf-security-analysis[bot] in https://github.com/huggingface/trl/pull/6997</li>
+<li>Stop dependabot from opening ruff pre-commit bumps by @albertvillanova in https://github.com/huggingface/trl/pull/6965</li>
+<li>Read the Docker image version from the release tag by @albertvillanova in https://github.com/huggingface/trl/pull/6991</li>
+<li>Pin the TRL version installed in the Docker image by @albertvillanova in https://github.com/huggingface/trl/pull/6992</li>
+<li>Bump trufflesecurity/trufflehog from 3.97.0 to 3.97.1 in the actions group by @dependabot[bot] in https://github.com/huggingface/trl/pull/7000</li>
+<li>Match hub kernels by repo id when checking the attention implementation by @albertvillanova in https://github.com/huggingface/trl/pull/6985</li>
+<li>Remove the unused FLASH_ATTENTION_VARIANTS constant from the DPO trainer by @albertvillanova in https://github.com/huggingface/trl/pull/7013</li>
+<li>Document that padding-free is temporarily unavailable in DPO by @albertvillanova in https://github.com/huggingface/trl/pull/7014</li>
+<li>Drop vLLM 0.19.0 support by @qgallouedec in https://github.com/huggingface/trl/pull/7002</li>
+<li>Pin the invariant suite's FA2 hub kernel to the v2 branch by @qgallouedec in https://github.com/huggingface/trl/pull/6979</li>
+<li>Filter the benign torch DataParallel scalar-gather warning in CI by @albertvillanova in https://github.com/huggingface/trl/pull/7019</li>
+<li>Test liger vs non-liger GRPO loss parity by @kashif in https://github.com/huggingface/trl/pull/6814</li>
+<li>Add the missing trailing newline to the dev Dockerfile by @albertvillanova in https://github.com/huggingface/trl/pull/7030</li>
+<li>Fix the input metadata of the post-slack composite action by @albertvillanova in https://github.com/huggingface/trl/pull/7029</li>
+<li>Catch AsyncDistillationTrainer up with recent AsyncGRPO changes by @kashif in https://github.com/huggingface/trl/pull/6823</li>
+<li>Document 1M-token training and add a context-parallelism example by @qgallouedec in https://github.com/huggingface/trl/pull/6846</li>
+<li>Rewrite the long context guide by @qgallouedec in https://github.com/huggingface/trl/pull/7003</li>
+<li>Document how to choose and pin a Hub kernel version by @albertvillanova in https://github.com/huggingface/trl/pull/6998</li>
+<li>Fix variable reference in BCO docs by @albertvillanova in https://github.com/huggingface/trl/pull/7046</li>
+<li>Remove PPOTrainer by @qgallouedec in https://github.com/huggingface/trl/pull/7020</li>
+<li>Correct what the TRL Docker image provides in the Jobs guide by @albertvillanova in https://github.com/huggingface/trl/pull/7054</li>
+<li>Document the TRL Docker image tags by @albertvillanova in https://github.com/huggingface/trl/pull/7055</li>
+<li>Do the chunked-CE <code>lm_head</code> projection on tensor cores instead of in fp32 by @qgallouedec in https://github.com/huggingface/trl/pull/6863</li>
+<li>Add contributor skills at <code>.agents/skills</code> by @qgallouedec in https://github.com/huggingface/trl/pull/6901</li>
+<li>Split the docs taxonomy into stable and experimental trainers by @qgallouedec in https://github.com/huggingface/trl/pull/7022</li>
+<li>Vendor the fused linear losses from Liger-Kernel into <code>trl.losses</code> by @qgallouedec in https://github.com/huggingface/trl/pull/7059</li>
+<li>Drop fused JSD from DistillationTrainer by @kashif in https://github.com/huggingface/trl/pull/7064</li>
+<li>Fix DPO and KTO Liger loss gaps by @kashif in https://github.com/huggingface/trl/pull/7062</li>
+<li>Harden chunked log probabilities by @kashif in https://github.com/huggingface/trl/pull/7065</li>
+<li>Run the vendored loss parity suites as slow tests only by @qgallouedec in https://github.com/huggingface/trl/pull/7067</li>
+<li>XPO/NashMD perf: avoid <code>output_hidden_states</code> when only <code>last_hidden_state</code> is used by @ciaoyizhen in https://github.com/huggingface/trl/pull/4755</li>
+<li>Bump https://github.com/huggingface/doc-builder from 1b16dac5e33043af565fdf4c1b5b0fe81d0891c8 to c2d27f6f231df3d1b07f3a7ea54fe3d0f8bc3e27 by @dependabot[bot] in https://github.com/huggingface/trl/pull/7078</li>
+<li>Bump the actions group with 5 updates by @dependabot[bot] in https://github.com/huggingface/trl/pull/7079</li>
+<li>Group Dependabot GitHub Actions and pre-commit updates in a single PR by @albertvillanova in https://github.com/huggingface/trl/pull/7088</li>
+<li>Fix the invariant suite recording instructions by @albertvillanova in https://github.com/huggingface/trl/pull/7058</li>
+<li>Remove the flash-attn2 xfail markers now that the padding-free tests pass by @albertvillanova in https://github.com/huggingface/trl/pull/7057</li>
+<li>Bump the &quot;github-actions-and-pre-commit&quot; group with 2 updates across multiple ecosystems by @dependabot[bot] in https://github.com/huggingface/trl/pull/7089</li>
+<li>Merge the two Dependabot github-actions entries into one by @albertvillanova in https://github.com/huggingface/trl/pull/7091</li>
+<li>Reformat lambda functions for code clarity by @albertvillanova in https://github.com/huggingface/trl/pull/7092</li>
+<li>Fail fast on incompatible vLLM for default Async GRPO weight transfer by @DimensionSTP in https://github.com/huggingface/trl/pull/6830</li>
+<li>Inject the model revision into concrete config loads too by @albertvillanova in https://github.com/huggingface/trl/pull/7099</li>
+<li>Align tiny/small Qwen2.5 config with Qwen/Qwen2.5-32B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7098</li>
+<li>Sync the async dist. trainers with recent AsyncGRPO changes by @kashif in https://github.com/huggingface/trl/pull/6987</li>
+<li>Align tiny and small Qwen3 configs with their reference models by @albertvillanova in https://github.com/huggingface/trl/pull/7106</li>
+<li>Align tiny Qwen3 Instruct-2507 config with Qwen/Qwen3-4B-Instruct-2507 by @albertvillanova in https://github.com/huggingface/trl/pull/7107</li>
+<li>Require peft&gt;=0.13.0 and drop the 0.12 version guards by @qgallouedec in https://github.com/huggingface/trl/pull/7102</li>
+<li>Align tiny GptOss config with openai/gpt-oss-20b by @albertvillanova in https://github.com/huggingface/trl/pull/7108</li>
+<li>Require deepspeed&gt;=0.18.6 and drop the 0.16.4 guard by @albertvillanova in https://github.com/huggingface/trl/pull/7118</li>
+<li>Remove the leftover dataset_formatting module by @albertvillanova in https://github.com/huggingface/trl/pull/7117</li>
+<li>Align tiny GPTNeoX config with EleutherAI/pythia-14m by @albertvillanova in https://github.com/huggingface/trl/pull/7109</li>
+<li>Align tiny Llama 3.2 and Remote configs with meta-llama/Llama-3.2-1B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7110</li>
+<li>Align tiny Llama 3 config with meta-llama/Meta-Llama-3-8B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7112</li>
+<li>Align tiny Llama 3.1 config with meta-llama/Llama-3.1-8B-Instruct by @albertvillanova in https://github.com/huggingface/trl/pull/7113</li>
+<li>Show list lengths and mark truncation in the tiny-model config diff by @albertvillanova in https://github.com/huggingface/trl/pull/7105</li>
+<li>Fix the IW-OPD self-distillation loss assertion in tests by @albertvillanova in https://github.com/huggingface/trl/pull/7123</li>
+<li>Sync the model config pad token id with the tokenizer in the trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7097</li>
+<li>Sync the model config pad token id with the tokenizer in the experimental trainers by @albertvillanova in https://github.com/huggingface/trl/pull/7128</li>
+<li>Guard target_parameters use for peft&lt;0.17.0 by @albertvillanova in https://github.com/huggingface/trl/pull/7119</li>
+<li>Forward model revision to the auto-loaded processing_class by @kashif in https://github.com/huggingface/trl/pull/6978</li>
+<li>Add missing TRL blog posts to the docs landing page by @qgallouedec in https://github.com/huggingface/trl/pull/7023</li>
+<li>Add support for vLLM 0.28.0 by @qgallouedec in https://github.com/huggingface/trl/pull/7001</li>
+<li>Count each token once in num_tokens under tensor parallelism by @qgallouedec in https://github.com/huggingface/trl/pull/7101</li>
+<li>Realign duplicated comments across the trainers by @qgallouedec in https://github.com/huggingface/trl/pull/7145</li>
+<li>Fix typos in help strings and error messages by @qgallouedec in https://github.com/huggingface/trl/pull/7146</li>
+<li>Fix two messages that describe the wrong behaviour by @qgallouedec in https://github.com/huggingface/trl/pull/7147</li>
+<li>Fix docstring type specs by @qgallouedec in https://github.com/huggingface/trl/pull/7148</li>
+<li>Reformat five docstrings to the repo style by @qgallouedec in https://github.com/huggingface/trl/pull/7149</li>
+<li>Fix docstring content drift by @qgallouedec in https://github.com/huggingface/trl/pull/7150</li>
+<li>Match config field order to the docstring order by @qgallouedec in https://github.com/huggingface/trl/pull/7151</li>
+<li>Reflow two docstrings to the doc-builder width by @qgallouedec in https://github.com/huggingface/trl/pull/7153</li>
+<li>Fix the DistillationTrainer signature annotations by @qgallouedec in https://github.com/huggingface/trl/pull/7152</li>
+<li>Docs formatting pass by @qgallouedec in https://github.com/huggingface/trl/pull/7154</li>
+<li>Tidy pyproject, Makefile and .gitignore by @qgallouedec in https://github.com/huggingface/trl/pull/7157</li>
+<li>Fix the example commands in the script docstrings by @qgallouedec in https://github.com/huggingface/trl/pull/7156</li>
+<li>Fix three broken doc links by @qgallouedec in https://github.com/huggingface/trl/pull/7155</li>
+<li>Fix paper_index paths and add GOLD, IW-OPD, and AsyncDistillation telemetry by @YeonwooSung in https://github.com/huggingface/trl/pull/7051</li>
+<li>Qualify doc references to experimental classes by @qgallouedec in https://github.com/huggingface/trl/pull/7158</li>
+<li>Release: v1.13 by @qgallouedec in https://github.com/huggingface/trl/pull/7159</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/huggingface/trl/compare/v1.12.0...v1.13.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/huggingface/trl">huggingface/trl</a> · <code>v1.13.0</code> · 2026-09-10 · <a href="https://github.com/huggingface/trl/releases/tag/v1.13.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/trl/1.14.0"> <span class="k">← Suivant</span> <span class="t">v1.14.0</span> </a> <a href="/releases/trl/1.12.0"> <span class="k">Précédent →</span> <span class="t">v1.12.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/huggingface/trl/releases/tag/v1.13.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/huggingface/trl" target="_blank" rel="noopener"> <span>huggingface/trl</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Fonctionnalités</a><a href="#" class="lv3">Formation au-delà de 1 million de jetons</a><a href="#" class="lv3">La projection Chunked-CE lmhead s&#39;exécute désormais sur des cœurs tenseurs</a><a href="#" class="lv3">Pertes linéaires fusionnées vendues dans trl.losses</a><a href="#" class="lv3">Compétences des contributeurs chez .agents/skills</a><a href="#" class="lv3">Docs : taxonomie stable ou expérimentale, et comment modifier l&#39;objectif</a><a href="#" class="lv3">QLoRA sur l&#39;argument quantizationconfig</a><a href="#" class="lv3">Étages de dépendances surélevés</a><a href="#" class="lv3">Autre</a><a href="#" class>Rupture</a><a href="#" class="lv3">⚠️ Le PPO est supprimé</a><a href="#" class>Correctifs</a><a href="#" class>Nouveaux contributeurs</a><a href="#" class>Ce qui a changé</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/trl/1.18.2"> <span class="v">v1.18.2</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/trl/1.18.1"> <span class="v">v1.18.1</span> <span class="d">26-11-17</span> </a> </li><li> <a href="/releases/trl/1.18.0"> <span class="v">v1.18.0</span> <span class="d">26-11-13</span> </a> </li><li> <a href="/releases/trl/1.17.1"> <span class="v">v1.17.1</span> <span class="d">26-10-30</span> </a> </li><li> <a href="/releases/trl/1.17.0"> <span class="v">v1.17.0</span> <span class="d">26-10-29</span> </a> </li><li> <a href="/releases/trl/1.16.0"> <span class="v">v1.16.0</span> <span class="d">26-10-15</span> </a> </li><li> <a href="/releases/trl/1.15.0"> <span class="v">v1.15.0</span> <span class="d">26-10-08</span> </a> </li><li> <a href="/releases/trl/1.14.2"> <span class="v">v1.14.2</span> <span class="d">26-10-06</span> </a> </li> </ul> <a href="/fr/releases/trl" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

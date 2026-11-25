@@ -1,0 +1,788 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TensorRT-LLM v1.0.0 — STAGS NextStack</title><meta name="description" content="TensorRT LLM 1.0 brings 2 major changes: the PyTorch-based architecture is now stable and the default experience, and the LLM API is now stable. For more details on new developments in 1.0, please see below."><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/tensorrt-llm/1.0.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/tensorrt-llm/1.0.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/tensorrt-llm/1.0.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/tensorrt-llm/1.0.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="TensorRT-LLM v1.0.0 — STAGS NextStack"><meta property="og:description" content="TensorRT LLM 1.0 brings 2 major changes: the PyTorch-based architecture is now stable and the default experience, and the LLM API is now stable. For more details on new developments in 1.0, please see below."><meta property="og:url" content="https://www.stags.cn/pt/releases/tensorrt-llm/1.0.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/tensorrt-llm/1.0.0/#article","headline":"TensorRT-LLM v1.0.0 release notes","datePublished":"2025-09-24","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/NVIDIA/TensorRT-LLM"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/tensorrt-llm/1.0.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/TensorRT-LLM/TensorRT-LLM_v1.0.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/tensorrt-llm/1.0.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/tensorrt-llm/1.0.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/tensorrt-llm/1.0.0/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/tensorrt-llm/1.0.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/tensorrt-llm/1.0.0/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/tensorrt-llm">TensorRT-LLM</a> </nav> <h1 class="detail-title"> <span class="p">TensorRT-LLM</span> v1.0.0 </h1> <div class="detail-meta"> <span class="chip chip--major">Major</span> <span><span class="k">Publicado</span>24 de set. de 2025</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank" rel="noopener"> <span class="k">Fonte</span>NVIDIA/TensorRT-LLM </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/tensorrt-llm/1.0.0/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/tensorrt-llm/1.0.0/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><h1>TensorRT-LLM v1.0.0</h1>
+<h2>TensorRT LLM versão 1.0</h2>
+<p>TensorRT LLM 1.0 traz 2 mudanças principais: a arquitetura baseada em PyTorch agora está estável e a experiência padrão, e o LLM API agora está estável. Para mais detalhes sobre os novos desenvolvimentos no 1.0, veja abaixo.</p>
+<h3>Principais recursos e melhorias</h3>
+<ul>
+<li><strong>Suporte ao modelo</strong>
+<ul>
+<li>Adicionar suporte ao modelo Mistral3.1 VLM</li>
+<li>Adicionar suporte ao modelo TensorRT-Engine Qwen3 (denso)</li>
+<li>Adicionar suporte ao modelo multimodal phi-4</li>
+<li>Adicionar suporte ao modelo EXAONE 4.0</li>
+<li>Adicionar suporte Qwen3 MoE ao back-end do TensorRT</li>
+</ul>
+</li>
+<li><strong>Recursos</strong>
+<ul>
+<li>Adicionar suporte para sm121</li>
+<li>Adicionar suporte LoRA para Gemma3</li>
+<li>Suporte para despejo do adaptador PyTorch LoRA</li>
+<li>Adicionar suporte LoRA para backend PyTorch em trtllm-serve</li>
+<li>Adicionar suporte para agendamento de solicitação de atenção dp</li>
+<li>Remova o preenchimento do FusedMoE com atenção DP</li>
+<li>Suporte à compilação da tocha para atenção dp</li>
+<li>Adicionar suporte a eventos KV para atenção de janela deslizante</li>
+<li>Adicionar cubins TRTLLM MoE nvfp4 para simultaneidade média-alta; atenção_dp para TRTLLM MoE</li>
+<li>Adicionar suporte ao gráfico Piecewise CUDA para MLA</li>
+<li>Suporte mutliCtasKvMode para kernels MLA de alto rendimento</li>
+<li>Habilite que o kvcache seja reutilizado durante a geração da solicitação</li>
+<li>Adicionar otimização de saldo de cronograma ADP</li>
+<li>Adicionar suporte de pré-preenchimento fragmentado para MLA (Blackwell)</li>
+<li>Ativar o modo multibloco para o kernel Hopper spec dec XQA</li>
+<li>Adicionar suporte ao vLLM KV Pool para o kernel XQA</li>
+<li>Permitir o envio de mais de 2GiB através de MPI usando mpi4py.util.pkl5</li>
+<li>Adicionar suporte para escalas gate_up_proj fundidas para FP8 em bloco</li>
+<li>Suporta GEMM denso em linha FP8 no fluxo da tocha</li>
+<li>Habilite fp8 SwiGLU para minimizar a sobrecarga do host</li>
+<li>Adicionar suporte Deepseek R1 FP8 na Blackwell</li>
+<li>Adicionar suporte para MXFP8xMXFP4 em pytorch</li>
+<li>Suporte ao modelo nvfp4 e cache fp8 kv para pré-preenchimento em partes do MLA (Blackwell)</li>
+<li>Implementação de código aberto MOE MXFP8-MXFP4</li>
+<li>Adicionar suporte para esquema de quantização Modelopt fp8_pb_wo</li>
+<li>Suporte para envio deepEP fp4 pós quant all2all</li>
+<li>Fusível w4a8 moe escala pré-quantitativa no Hopper</li>
+<li>Suporte para quantização somente de peso no fluxo de trabalho PyTorch</li>
+<li>Adicionar suporte para fatores de escalonamento de ativação por especialista</li>
+<li>Adicionar suporte ReDrafter para Qwen</li>
+<li>Habilitar gráfico CUDA para Nemotron-H</li>
+<li>Adicionar suporte para YARN nos modelos NemotronNAS</li>
+<li>Mudar para a versão interna do MMProjector no Gemma3</li>
+<li>Desativar adição de tokens especiais para Llama3.3 70B</li>
+<li>Habilitar automaticamente o ngram com simultaneidade &lt;= 32</li>
+<li>Suporte para ativar/desativar a decodificação de especificações dinamicamente</li>
+<li>Suporta tag estrutural em tempo de execução C++ e atualiza xgrammar para 0.1.21</li>
+<li>Adicionar suporte para embeddings multimodais externos</li>
+<li>Adicionar suporte para desagregação com pp com backend pytorch</li>
+<li>Adicionar tags de status à referência LLM API</li>
+<li>Suporte ao esquema JSON em API compatível com OpenAI</li>
+<li>Suporte ao pré-preenchimento fragmentado no modelo de decodificação de especificação 2</li>
+<li>Adicionar suporte à reutilização de cache KV para modelos multimodais</li>
+<li>Suporta ligações nanobind</li>
+<li>Adicionar suporte para reutilização de cache KV de mecanismo de dois modelos</li>
+<li>Adicionar suporte Eagle-3 para modelo denso qwen3</li>
+<li>Migrar Eagle-3 e especulação de rascunho/alvo para Drafter</li>
+<li>Habilite a decodificação guiada com agendador de sobreposição</li>
+<li>Suporta decodificação especulativa de n-gram com disagg</li>
+<li>Adicionar suporte de pesquisa de feixe ao fluxo de trabalho PyTorch</li>
+<li>Adicionar suporte LLGuidance para backend PyTorch</li>
+<li>Adicionar suporte para NGrams V2</li>
+<li>Adicionar suporte MTP para EPLB online</li>
+<li>Suporte para veiculação desagregada no TRTLLM Sampler</li>
+<li>Adicione infraestrutura central para permitir o carregamento de formatos de pontos de verificação personalizados</li>
+</ul>
+</li>
+<li>Suporte TRTLLM_DEEP_EP_TOKEN_LIMIT para permitir execução profunda em GPUs com memória restrita
+<ul>
+<li>Use mapeamento de página enorme para memória acessível ao host no GB200</li>
+<li>Adicionar suporte de decodificação especulativa fornecido pelo usuário</li>
+<li>Adicionar suporte para streaming scaffolding_llm.generate_async</li>
+<li>Opção de destokenização na solicitação /v1/completions</li>
+<li>Integrar MoE de escala de bloco TRT-LLM Gen FP4 com autotuner de kernel de fluxo de trabalho Pytorch</li>
+<li>Remover suporte para backend llmapi + TRT no Triton</li>
+<li>Adicionar request_perf_metrics ao backend triton LLMAPI</li>
+<li>Adicionar suporte para cancelamento de solicitação Triton</li>
+</ul>
+</li>
+<li>Referência:
+<ul>
+<li>Adicionar suporte para benchmarking de gemas individuais no benchmark MOE (#6080)</li>
+<li>Adicionar métricas especulativas para trtllm-bench</li>
+<li>Adicionada a capacidade de escrever um cronograma de solicitação para trtllm-bench</li>
+<li>Adicionar opção no_kv_cache_reuse e suporte de streaming para banco trtllm-serve</li>
+<li>Adicionar suporte de latência para trtllm-bench</li>
+<li>Adicionar cálculo da taxa de aceitação a benchmark_serving</li>
+<li>Adicionar scripts de benchmarking de grande porte</li>
+<li>Atualize o trtllm-bench para suportar o novo padrão Pytorch</li>
+<li>Adicionar suporte para TRTLLM CustomDataset</li>
+<li>Tornar benchmark_serving parte da biblioteca</li>
+</ul>
+</li>
+<li>Documentação:
+<ul>
+<li>Refatoração da estrutura do documento para focar no fluxo de trabalho do PyTorch.</li>
+<li>Melhorada a documentação de referência LLMAPI e API. APIs estáveis ​​agora estão protegidos e permanecerão consistentes nas versões subsequentes após v1.0.</li>
+<li>Remoção da documentação legada relacionada ao fluxo de trabalho do TensorRT.</li>
+</ul>
+</li>
+</ul>
+<h3>Mudanças na infraestrutura</h3>
+<ul>
+<li>A imagem base Docker para TensorRT-LLM é atualizada para <code>nvcr.io/nvidia/pytorch:25.06-py3</code>.</li>
+<li>A imagem base Docker para TensorRT-LLM Backend foi atualizada para <code>nvcr.io/nvidia/tritonserver:25.06-py3</code>.</li>
+<li>A versão dependente do NVIDIA ModelOpt foi atualizada para 0.33.</li>
+<li>A versão dependente do xgrammar foi atualizada para 0.1.21.</li>
+<li>A versão dos transformadores dependentes é atualizada para 4.53.1.</li>
+</ul>
+<h3>Mudanças no API</h3>
+<ul>
+<li><strong>BREAKING CHANGE</strong> Promova o PyTorch como o back-end padrão do LLM</li>
+<li><strong>BREAKING CHANGE</strong> Altere o backend padrão para PyTorch em trtllm-serve</li>
+<li><strong>BREAKING CHANGE</strong> Unifique KvCacheConfig na classe LLM para backend pytorch</li>
+<li><strong>BREAKING CHANGE</strong> Renomeie o campo cuda_graph_config padding_enabled</li>
+<li><strong>BREAKING MUDANÇA</strong> Renomeie mixed_sampler para enable_mixed_sampler</li>
+<li><strong>MUDANÇA DE QUEBRA</strong> Renomeie LLM.autotuner_enabled para enable_autotuner</li>
+<li>Adicionar novamente o parâmetro allreduce_strategy ao TorchLlmArgs</li>
+<li>Adicionar opção LLmArgs para forçar o uso de quantização dinâmica</li>
+<li>Altere os tamanhos de cache LoRA padrão e altere os campos de tamanho de cache peft_cache_config para entrarem em vigor quando não forem explicitamente definidos em lora_config</li>
+<li>Remova argumentos LoRA LLM obsoletos, que já estão especificados em lora_config</li>
+<li>Adicionar request_perf_metrics a LLMAPI</li>
+<li>Remova batch_manager::KvCacheConfig e use executor::KvCacheConfig em vez disso</li>
+<li>Remover TrtGptModelOptionalParams</li>
+<li>Remova os botões de ajuste do TorchLlmArgs</li>
+</ul>
+<h3>Problemas corrigidos</h3>
+<ul>
+<li>Corrigir acesso ilegal à memória no MLA (#6437)</li>
+<li>Corrigido o carregamento do nemotronNAS para TP&gt;1 (#6447)</li>
+<li>Corrija EP amplo ao usar DeepEP com EPLB online (#6429)</li>
+<li>Correção de bugs causados por None Attention_bias durante o mecanismo de conversão do modelo Qwen3 (#6344)</li>
+<li>Corrigido problema de precisão do agendador de PD + MTP + sobreposição (#6136)</li>
+<li>Corrigido bug do Qwen3 ao usar fp4 no sm120 (#6065)</li>
+<li>Corrigir erro de TMA com GEMM+AR em TP=2 (#6075)</li>
+<li>Correção do teste de andaime em test_e2e (#6140)</li>
+<li>Corrigir substituições de cache KV no trtllm-bench (#6103)</li>
+<li>Correção do benchmark MOE para girar buffers para evitar a reutilização do cache L2 (#4135)</li>
+<li>Correção do teste de serviço desagregado de dois modelos eagle3 (#6014)</li>
+<li>Corrigir pré-preenchimento fragmentado + agendamento de sobreposição (#5761)</li>
+<li>Corrigir erro de pós-processamento mgmn (#5835)</li>
+<li>Fallback para cubins para kernels fmha fp8 em Ada (#5779)</li>
+<li>Corrigir decodificação disagg + especulativa (#5558)</li>
+<li>Corrigir falha de CI test_generate_with_seed. (#5772)</li>
+<li>Corrigir caso do adaptador de prompt TP2 (#5782)</li>
+<li>Corrija a veiculação desagregada com atenção DP (#4993)</li>
+<li>Corrija um erro de cotação introduzido em #5534 (#5816)</li>
+<li>Corrigido o problema de precisão quando a redução_fusão está habilitada para o modelo GEMMA. (#5801)</li>
+<li>Corrigir solicitações perdidas para veiculação desagregada (#5815)</li>
+<li>Atualizar testes de unidade: ignorar a declaração all_close para perda de atenção, aumentar a tolerância para teste de operação de corda (#5855)</li>
+<li>Corrigir a fusão GEMM+AR no blackwell (#5563)</li>
+<li>Corrigir suporte multimodal llama4 (#5809)</li>
+<li>Corrigir problema de travamento do Llama4 Scout FP4 (#5925)</li>
+<li>Corrigir o tamanho máximo do lote e o máximo de tokens nas estimativas de cache kv para Nemotron-H (#5371)</li>
+<li>Corrigir regressão moe para sm120 (#5823)</li>
+<li>Correção do suporte Qwen2.5VL FP8 (#5029)</li>
+<li>Corrigido o problema de acesso ilegal à memória em moe gemm no SM120 (#5636)</li>
+<li>Corrigir o tileN não pode% 16==0 e suportar sm89 deepgemm bmm (#5531)</li>
+<li>Corrigir destokenização incremental (#5825)</li>
+<li>Corrija as informações do espaço de trabalho do MoE armazenando o próprio tensor Torch em vez de data_ptr (#5900)</li>
+<li>Corrigido testes de unidade mistral devido à atualização dos transformadores (#5904)</li>
+<li>Corrigido o problema de suspensão do Llama3.1 405B. (#5698) (#5925)</li>
+<li>Correção de testes de unidade Gemma3 devido à atualização dos transformadores (#5921)</li>
+<li>Corrigir alltoall para llama4 (apply_router_weight_on_input=True) (#5902)</li>
+<li>Remova SpecConfig e corrija problemas de vazamento de thread (#5931)</li>
+<li>Detecção rápida de redux no kernel de roteamento trtllm gen (#5941)</li>
+<li>Correção da lógica de solicitação de cancelamento (#5800)</li>
+<li>Corrigir erros em scripts wide-ep (#5992)</li>
+<li>Corrigir erro em testes pós-mesclagem (#5949)</li>
+<li>Corrija o argumento ausente em alltoall_prepare_maybe_dispatch (#5669)</li>
+<li>Corrija a atenção que o DP não funciona com a incorporação de TP (#5642)</li>
+<li>Corrigir detecção de referência cyclic quebrada (#5417)</li>
+<li>Correção de permissão para problemas de usuários locais no contêiner NGC docker. (#5373)</li>
+<li>Corrigir entradas de rascunho mtp vanilla (#5568)</li>
+<li>Correção da alocação de mPtrExpertCounts no back-end MoE TRT-LLM (nvfp4) (#5519)</li>
+<li>Correção do suporte fp8 em escala de bloco para deepseek v3 na Blackwell. (#5514)</li>
+<li>Corrigido o problema de falha do fallback de ajuste automático do MoE ao consultar a heurística padrão (#5520)</li>
+<li>Corrija o argumento inesperado da palavra-chave 'streaming' (#5436)</li>
+</ul>
+<h3>Problemas conhecidos</h3>
+<ul>
+<li>Ao usar o serviço desagregado com paralelismo de pipeline e reutilização de cache KV, pode ocorrer um travamento. Isso será corrigido em uma versão futura. Enquanto isso, desabilitar a reutilização do cache KV corrigirá esse problema.</li>
+<li>A execução de casos de vários nós em que cada nó tem apenas uma GPU pode falhar. Isso será abordado em uma versão futura.</li>
+<li>Para os modelos Llama 3.xe Llama 4, há um problema com o paralelismo do pipeline ao usar pesos FP8 e NVFP4. Como solução alternativa, você pode definir a variável de ambiente <code>export TRTLLM_LLAMA_EAGER_FUSION_DISABLED=1</code>.</li>
+</ul>
+<h2>O que mudou</h2>
+<ul>
+<li>Qwen3: Corrija estados ocultos de águia por @IzzyPutterman em https://github.com/NVIDIA/TensorRT-LLM/pull/6199</li>
+<li>[Nenhum][corrigir] Atualize a versão das dependências para evitar vulnerabilidade de segurança por @yibinl-nvidia em https://github.com/NVIDIA/TensorRT-LLM/pull/6506</li>
+<li>[None][chore] leia-me de atualização para teste de lançamento de desempenho por @ruodil em https://github.com/NVIDIA/TensorRT-LLM/pull/6664</li>
+<li>[None][test] remove casos de back-end trt no teste de desempenho de lançamento e move casos NIM para llm_perf_nim.yml por @ruodil em https://github.com/NVIDIA/TensorRT-LLM/pull/6662</li>
+<li>[Nenhum] [corrigir] Adicione tiktoken explicitamente conforme exigido por kimi k2 por @pengbowang-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6663</li>
+<li>[Nenhum][doc]: remova os recursos desatualizados marcados como Experimentais por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/5995</li>
+<li>[https://nvbugs/5375966][chore] Liberar test_disgregated_deepseek_v3_lite_fp8_attention_dp_one por @yweng0828 em https://github.com/NVIDIA/TensorRT-LLM/pull/6658</li>
+<li>[TRTLLM-6892][infra] Execute a verificação de palavras de guarda primeiro no estágio Release Check por @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6659</li>
+<li>[None][chore] otimiza a transferência de cache kv para contexto TEP e gen DEP por @chuangz0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6657</li>
+<li>[None][chore] Versão Bump para 1.0.0 por @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6652</li>
+<li>[Nenhum] [teste] Adicione o teste de precisão Mistral Small 3.1 24B à lista de testes de controle de qualidade por @ StanleySun639 em https://github.com/NVIDIA/TensorRT-LLM/pull/6682</li>
+<li>[None][test] cherry-pick: corrija o contexto test-db para o arquivo perf yaml e adicione casos mistral por @ruodil em https://github.com/NVIDIA/TensorRT-LLM/pull/6688</li>
+<li>[Nenhum][pacote] Fixe a versão cuda-python em &gt;=12,&lt;13 por @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6703</li>
+<li>[TRTLLM-6656][chore] Valide o suporte FP8 para Gemma3 por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6678</li>
+<li>[TRTLLM-5574][teste] Adicionar teste multi-gpu de modelos VLM necessários para NIM por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/6687</li>
+<li>[TRTLLM-6675][infra] Conclusão do teste Nixl por @bo-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6623</li>
+<li>[None][test] corrige erro de condição yml na pasta qa por @ruodil em https://github.com/NVIDIA/TensorRT-LLM/pull/6733</li>
+<li>[Nenhum][doc] Adicionar documento para matriz de suporte de recursos multimodais (#6619) por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/6739</li>
+<li>[https://nvbugs/5344910][corrigir] Posição de memória corrigida ao definir buffers para 0 em standalone_stable_radix_topk_ por @stnie em https://github.com/NVIDIA/TensorRT-LLM/pull/6712</li>
+<li>[https://nvbugs/5442608][corrigir] Atualizar configuração do gráfico CUDA para get_model_yaml_config. por @yuxianq em https://github.com/NVIDIA/TensorRT-LLM/pull/6693</li>
+<li>[TRTLLM-4721][test] Adicionado teste qa para llm-api por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6727</li>
+<li>[https://nvbugs/5409420][corrigir] Corrigido test_ptp_star_attention_example por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6584</li>
+<li>[https://nvbugs/5444624][corrigir] Correção de LLM_ROOT em triton_backend build.sh por @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6744</li>
+<li>[https://nvbugs/5429689][corrigir] Corrigida atualização da estrutura do modelo mllama com problema de transformadores por @dominicshanshan em https://github.com/NVIDIA/TensorRT-LLM/pull/6699</li>
+<li>[None][chore] remove comentário desatualizado no teste de atenção estelar de @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6773</li>
+<li>[https://nvbugs/5431127][corrigir] Execute test_disgregated_deepseek_v3_lite_fp8_nixl[DeepSeek-V3-Lite-fp8] apenas no hopper de @bo-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6737</li>
+<li>[Nenhum][infra] Isenção de testes com falha no branch de lançamento 0811 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/6782</li>
+<li>[https://nvbugs/5444095][infra] dispensa test_ptp_quickstart_multimodal llava test por @yechank-nvidia em https://github.com/NVIDIA/TensorRT-LLM/pull/6795</li>
+<li>[TRTLLM-5252][corrigir] Propagar mapeamento para camadas intermediárias (#6611) por @2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/6765</li>
+<li>[TRTLLM-6683] [feat] Suporte ao adaptador LoRA para recarregar o cache da CPU removido por @amitz-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6786</li>
+<li>[None][feat] adicionando suporte para testes desagregados de múltiplas instâncias por @raayandhar em https://github.com/NVIDIA/TensorRT-LLM/pull/6674</li>
+<li>[Nenhum][infra] Evite acesso intermitente quebrado ao nvcr.io por @chzblych em https://github.com/NVIDIA/TensorRT-LLM/pull/6715</li>
+<li>[https://nvbugs/5383702][corrigir] propagação de erro em GenerationExecutor por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6793</li>
+<li>[https://nvbugs/5445774] [correção] Cancelamento do teste Gemma3 27B fp8 por @ brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6799</li>
+<li>[Nenhum] [correção] corrige a configuração do gráfico CUDA para test_llm_api_pytorch.py. por @yuxianq em https://github.com/NVIDIA/TensorRT-LLM/pull/6826</li>
+<li>[TRTLLM-6975][test] Adicione casos de teste multivoltas para modelos VLM por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/6749</li>
+<li>[None][chore] dispensa problemas conhecidos do GB300 por @xinhe-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6812</li>
+<li>[Nenhum] [corrigir] corrigir caso de teste Llama3 eagle3 OOM por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/6832</li>
+<li>[https://nvbugs/5375594] [corrigir] corrigir problema de oom no caso de teste estrutural_tag por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/6838</li>
+<li>[https://nvbugs/5401114][corrigir] Cancelamento de testes Gemma3 por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6870</li>
+<li>[TRTLLM-5252][feat] Adicionado suporte fp8 para Mistral Small 3.1 por @ 2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/6731</li>
+<li>[None][infra] Configure a regra de revisão de código no branch de lançamento de @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6725</li>
+<li>[TRTLLM-6308][feat] Suporte ao modo agregado para phi4-mm por @Wanli-Jiang em https://github.com/NVIDIA/TensorRT-LLM/pull/6820</li>
+<li>[Nenhum] [corrigir] Corrigido bug de lote no modelo Mistral3 por @ 2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/6841</li>
+<li>[Nenhum] [corrigir] Reverter modo agregado phi4-mm por @amukkara em https://github.com/NVIDIA/TensorRT-LLM/pull/6907</li>
+<li>[Nenhum][consertar] Conclua a última operação allreduce ausente em Llama3/4. por @hyukn em https://github.com/NVIDIA/TensorRT-LLM/pull/6850</li>
+<li>[None][chore] Adicionar documentos para Gemma3 VLMs por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6880</li>
+<li>[None][doc] adiciona seção legada para mecanismo tensorrt por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6724</li>
+<li>[TRTLLM-7048][feat] adicionar teste de fluxo TRT de benchmark para MIG por @xinhe-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6884</li>
+<li>[https://nvbugs/5451434][conserto] Corrigido triton docker construído por @Tabrizian em https://github.com/NVIDIA/TensorRT-LLM/pull/6898</li>
+<li>[TRTLLM-6481][corrigir] Corrigido problema de precisão do deepseek r1 por @pengbowang-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6868</li>
+<li>[None][ci] não renuncia test_ptp_star_attention_example por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6943</li>
+<li>[https://nvbugs/5455836][consertar] Corrigir lhama 4 FP4 por @mikeiovine em https://github.com/NVIDIA/TensorRT-LLM/pull/6911</li>
+<li>[Nenhum][infra] atualização CODEOWNERS para lançamento por @venkywonka em https://github.com/NVIDIA/TensorRT-LLM/pull/6905</li>
+<li>[https://nvbugs/5453667] [correção] revertendo uma alteração significativa: torne os padrões do trtllm-bench <code>enable_chunked_context</code> dependentes do backend por @venkywonka em https://github.com/NVIDIA/TensorRT-LLM/pull/6956</li>
+<li>[https://nvbugs/5405041][corrigir] Atualização do documento do EP de @ qiaoxj07 em https://github.com/NVIDIA/TensorRT-LLM/pull/6950</li>
+<li>[https://nvbugs/5412562][feat] Alocar espaço de trabalho MoE somente quando necessário (lançamento/1.0 redirecionado) por @nv-yilinf em https://github.com/NVIDIA/TensorRT-LLM/pull/6955</li>
+<li>[TRTLLM-6835][corrigir] Corrigido possível travamento causado pelo multiprocessamento python ao pré-buscar pesos por @lancelly em https://github.com/NVIDIA/TensorRT-LLM/pull/6927</li>
+<li>[https://nvbugs/5448525] [corrigir] testes de precisão Mistral Small 3.1 por @ 2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/6909</li>
+<li>[https://nvbugs/5375646][corrigir] atualização waives.txt para nvbug 5375646 por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/6847</li>
+<li>[Nenhum] [correção] atualização ignora configuração por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/6891</li>
+<li>[https://nvbugs/5449218][corrigir] Corrigido erro KvCacheConfig em test_perf por @peaceh-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6937</li>
+<li>[Nenhum][infra] Isenção de testes com falha para o branch de lançamento 0818 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/6993</li>
+<li>[None][chore] Remova dispensas de teste duplicadas por @yiqingy0 em https://github.com/NVIDIA/TensorRT-LLM/pull/6999</li>
+<li>[None][infra] Escolha #6836 do branch principal e melhore a conexão SSH por @chzblych em https://github.com/NVIDIA/TensorRT-LLM/pull/6971</li>
+<li>[https://nvbugs/5462007][ci] Cancelar teste Mistral Small 3.1 FP8 por @ 2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/7008</li>
+<li>[https://nvbugs/5449155][corrigir] Corrigido o carregamento de peso do DeepSeek R1 para TP16 por @achartier em https://github.com/NVIDIA/TensorRT-LLM/pull/6913</li>
+<li>[https://nvbugs/5374016][corrigir] mensagem de erro melhorada por @QiJune em https://github.com/NVIDIA/TensorRT-LLM/pull/6893</li>
+<li>[https://nvbugs/5394685][corrigir] correção adequada para o problema de precisão nos kernels 2CTA MLA (lançamento 1.0) por @PerkzZheng em https://github.com/NVIDIA/TensorRT-LLM/pull/6946</li>
+<li>[https://nvbugs/5451028][corrigir] Restringir parâmetros de teste NemotronSuper… por @Naveassaf em https://github.com/NVIDIA/TensorRT-LLM/pull/6987</li>
+<li>[https://nvbugs/5448579][corrigir] Correção de bug no teste de precisão EXAONE-4.0 por @yechank-nvidia em https://github.com/NVIDIA/TensorRT-LLM/pull/6888</li>
+<li>[Nenhum][chore] Isenção de testes E2E GB200 para Gemma3 27B por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6916</li>
+<li>[https://nvbugs/5451296][bug] Corrigido um vazamento de thread em test_llm_args.py por @Tabrizian em https://github.com/NVIDIA/TensorRT-LLM/pull/7017</li>
+<li>[Nenhum][infra] Isenção de testes com falha para branch de lançamento 19/08 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/7036</li>
+<li>[None][doc] adiciona rótulos de status à referência api da classe LLM por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6899</li>
+<li>[https://nvbugs/5448437][consertar] corrigir alguns testes de nixl feitos por @bo-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6940</li>
+<li>[https://nvbugs/5427801][corrigir] Suporte de compilação do Torch para Llama4 e Ea… por @liji-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/6978</li>
+<li>[https://nvbugs/5394392][corrigir] Aumentar a capacidade do agendador em disagg bs == 1 por @yifeizhang-c em https://github.com/NVIDIA/TensorRT-LLM/pull/6975</li>
+<li>[TRTLLM-7263][corrigir] Impedir a recriação de identificadores de cublas em lora_grouped_gemm a cada chamada de @amitz-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7053</li>
+<li>[Nenhum][corrigir] Corrigida a compilação da imagem tritonbuild/tritonrelease por @dbari em https://github.com/NVIDIA/TensorRT-LLM/pull/7003</li>
+<li>[Nenhum] [doc] atualização do documento v1.0 para trtllm-serve por @hchings em https://github.com/NVIDIA/TensorRT-LLM/pull/7056</li>
+<li>[https://nvbugs/5440241] [corrigir] Correção da queda de precisão de 70B GSM8K por @ chenfeiz0326 em https://github.com/NVIDIA/TensorRT-LLM/pull/7075</li>
+<li>[https://nvbugs/5451296][corrigir] bug sem bloqueio zmq com nova tentativa por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7019</li>
+<li>[https://nvbugs/5383702][corrigir] test_llm_api_pytorch.py::TestLlama3_1_8BInstruct::test_fp8_4gpus por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/6889</li>
+<li>[https://nvbugs/5392414] [conserto] Para o lançamento da escolha cereja 1.0. Adicionar método de roteamento padrão personalizado por @ChristinaZ em https://github.com/NVIDIA/TensorRT-LLM/pull/7068</li>
+<li>[https://nvbugs/5464088] [conserto] Proteção contra ativações de fp8 em lora forward; atualizar configuração de teste de desempenho por @venkywonka em https://github.com/NVIDIA/TensorRT-LLM/pull/7014</li>
+<li>[None][infra] Ignorar testes com falha para branch de lançamento 21/08 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/7130</li>
+<li>[https://nvbugs/5448442][corrigir] Pular backend trtllm moe para sm120 por @pamelap-nvidia em https://github.com/NVIDIA/TensorRT-LLM/pull/7010</li>
+<li>[https://nvbugs/5449032][corrigir] Adicione mais llm-args a llm_mgmn_trtllm_bench.sh por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7144</li>
+<li>[https://nvbugs/5410391][bug] Suporte para compartilhar buffers de dispositivos na meta de atenção por @HuiGao-NV em https://github.com/NVIDIA/TensorRT-LLM/pull/6557</li>
+<li>[https://nvbugs/5467062][corrigir] passa logitsPostProcessorBatched por referência por @milesial em https://github.com/NVIDIA/TensorRT-LLM/pull/7110</li>
+<li>[https://nvbugs/5450074][corrigir] Reduza os requisitos de memória do dispositivo para testes por @Shixiaowei02 no https://github.com/NVIDIA/TensorRT-LLM/pull/6990</li>
+<li>[https://nvbugs/5474037][corrigir] Corrigida a construção de imagens tritonbuild/tritonrelease por @dbari em https://github.com/NVIDIA/TensorRT-LLM/pull/7157</li>
+<li>[https://nvbugs/5433545][corrigir] TestPhi4MiniInstruct::test_auto_dtype - Use max_seq_len=4096 para retornar ao fator RoPE curto de @moraxu em https://github.com/NVIDIA/TensorRT-LLM/pull/6895</li>
+<li>[https://nvbugs/5461712] [correção] Desative deep_gemm para Qwen3 devido a problemas de precisão de @DomBrown em https://github.com/NVIDIA/TensorRT-LLM/pull/7170</li>
+<li>[TRTLLM-6825][corrigir] Atualização lora para phi4-mm por @Wanli-Jiang em https://github.com/NVIDIA/TensorRT-LLM/pull/7149</li>
+<li>[https://nvbugs/5448426][corrigir] Corrige acesso ilegal à memória no gráfico cuda por @peaceh-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7127</li>
+<li>[Nenhum] [corrigir] Alternar local de exemplo de início rápido do llm api por fluxo de trabalho. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7182</li>
+<li>[https://nvbugs/5467232][corrigir] Corrigido load_torch_hf_lora para substituir lora_config.trtllm_modules_to_hf_modules pelo padrão somente quando não tiver valor por @Wanli-Jiang em https://github.com/NVIDIA/TensorRT-LLM/pull/7168</li>
+<li>[Nenhum] [doc] corrige a página de início rápido herdada do tensorrt por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7190</li>
+<li>[TRTLLM-7030][corrigir] MUDANÇA DE QUEBRA: Incompatibilidade entre documentos e comandos reais por @Shixiaowei02 em https://github.com/NVIDIA/TensorRT-LLM/pull/7191</li>
+<li>[https://nvbugs/5470840][corrigir] Manipulação de inicialização MPI de teste de unidade desagregado por @pcastonguay em https://github.com/NVIDIA/TensorRT-LLM/pull/7139</li>
+<li>[Nenhum][teste] adiciona tamanho de cache kv na métrica de bancada e corrige casos com falha por @ruodil em https://github.com/NVIDIA/TensorRT-LLM/pull/7211</li>
+<li>[Nenhum] [corrigir] caso de salto de atualização por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/7193</li>
+<li>[https://nvbugs/5409416][corrigir] test_openai_multi_chat_example por @Linda-Stadter em https://github.com/NVIDIA/TensorRT-LLM/pull/7174</li>
+<li>[https://nvbugs/5473789][bug] instale o cuda-toolkit para corrigir a verificação de integridade por @HuiGao-NV em https://github.com/NVIDIA/TensorRT-LLM/pull/7159</li>
+<li>[Nenhum][corrigir] corrige o uso de log_once por @yuxianq em https://github.com/NVIDIA/TensorRT-LLM/pull/7210</li>
+<li>[Nenhum][infra] Isenção de casos com falha para lançamento/1.0 26/08 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/7258</li>
+<li>[https://nvbugs/5451342][corrigir] Use o tempo de execução max_batch_size quando cuda_graph_config.max_batch_size não for fornecido no trtllm-bench por @jiaganc em https://github.com/NVIDIA/TensorRT-LLM/pull/7031</li>
+<li>[None][feat] Ignorar a pré-busca de tensores de segurança consolidados quando apropriado por @ 2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/7225</li>
+<li>[https://nvbugs/5430125][ci] Caso de teste não renunciado para mistral 3.1 pequeno por @2ez4bz em https://github.com/NVIDIA/TensorRT-LLM/pull/7265</li>
+<li>[https://nvbugs/5478151][corrigir] Adicionada especificação ausente para Llama-3.3 70B por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7267</li>
+<li>[https://nvbugs/5451426][corrigir] Evite compilação da tocha no trabalho full eagle3 por @liji-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7245</li>
+<li>[https://nvbugs/5448767][corrigir] corrigir impasses mpi4py no loop de eventos pp por @reasonsolo em https://github.com/NVIDIA/TensorRT-LLM/pull/6976</li>
+<li>[https://nvbugs/5463720][corrigir] tp-split o <code>mlp_hidden_size</code> inferido para nemotron-nas por @venkywonka em https://github.com/NVIDIA/TensorRT-LLM/pull/7231</li>
+<li>[https://nvbugs/5480550][corrigir] Aumento do tempo limite para teste Gemma3 27B por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7271</li>
+<li>[https://nvbugs/5434320][bug] Corrigido bug disagg pp por @Tabrizian em https://github.com/NVIDIA/TensorRT-LLM/pull/7099</li>
+<li>[https://nvbugs/5480415][corrigir] Corrigido teste multi-gpu phi4mm de @Wanli-Jiang em https://github.com/NVIDIA/TensorRT-LLM/pull/7275</li>
+<li>[TRTLLM-7346][corrigir] Melhorar o desempenho de PyTorchModelEngine._get_lora_params_from_requests por @amitz-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7203</li>
+<li>[https://nvbugs/5467548][corrigir] acesso ilegal à memória do DeepSeek. por @bobboli em https://github.com/NVIDIA/TensorRT-LLM/pull/7298</li>
+<li>[https://nvbugs/5448767][corrigir] desativar reutilização de cache kv para disagg pp&gt;1 testes por @reasonsolo em https://github.com/NVIDIA/TensorRT-LLM/pull/7354</li>
+<li>[https://nvbugs/5445466][corrigir] Eliminar corrida ao carregar módulos dinâmicos HF (#7268) por @chang-l em https://github.com/NVIDIA/TensorRT-LLM/pull/7379</li>
+<li>[https://nvbugs/5474169][corrigir]Ajuste max seq len para kvcache para estimativa de memória por @HuiGao-NV em https://github.com/NVIDIA/TensorRT-LLM/pull/7391</li>
+<li>[https://nvbugs/5448754][corrigir] Baixe o modelo HF para todos os nós. por @yuxianq em https://github.com/NVIDIA/TensorRT-LLM/pull/6824</li>
+<li>[Nenhum][infra] Isenção de testes com falha no branch de lançamento 0901 por @EmmaQiaoCh em https://github.com/NVIDIA/TensorRT-LLM/pull/7448</li>
+<li>[Nenhum][doc] adiciona informações de blackwell na matriz de suporte por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/6740</li>
+<li>[TRTLLM-7008][corrigir] correção cherrypick para 1.0 Adicionar exclusão automática de memória compartilhada se já existir por @ dongxuy04 em https://github.com/NVIDIA/TensorRT-LLM/pull/7433</li>
+<li>[https://nvbugs/5351244][corrigir] test_mpi_session por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7501</li>
+<li>[https://nvbugs/5461761][corrigir] Remova a isenção de @ziyixiong-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7427</li>
+<li>[TRTLLM-5930][doc] Documentação 1.0. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/6696</li>
+<li>[https://nvbugs/5496960][corrigir] Corrige o modelo Gemma adiante. por @hyukn em https://github.com/NVIDIA/TensorRT-LLM/pull/7509</li>
+<li>[Nenhum][doc] Atualizar parte do kvcache por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7549</li>
+<li>[Nenhum][doc] Renomeie TensorRT-LLM para TensorRT LLM. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7554</li>
+<li>[https://nvbugs/5416501][doc] adiciona problemas conhecidos ao documento llmapi de @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7560</li>
+<li>[Nenhum][doc] Corrija um link inválido. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7617</li>
+<li>[https://nvbugs/5474169][corrigir] incompatibilidade de seq_len entre o gerenciador de cache kv e os metadados de attn do gráfico por @HuiGao-NV em https://github.com/NVIDIA/TensorRT-LLM/pull/7606</li>
+<li>[https://nvbugs/5503423] [dispensa] Teste Llama3.1-70B-FP8 em RTX PRO 6000 por @peaceh-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7603</li>
+<li>[https://nvbugs/5455140][consertar] lançamento não renunciado/Casos de teste 1.0 DS R1 com bug já corrigido por @lancelly em https://github.com/NVIDIA/TensorRT-LLM/pull/7432</li>
+<li>[https://nvbugs/5470782][chore] Remova a instrução skip em 1.0 rele… por @SimengLiu-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7573</li>
+<li>[Nenhum][doc] Corrija um link inválido e um erro de digitação. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7634</li>
+<li>[Nenhum][doc] Use hash id para link externo por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7641</li>
+<li>[https://nvbugs/5477730][consertar] Corrija o caso alltoall quando tp_size grande… por @WeiHaocheng em https://github.com/NVIDIA/TensorRT-LLM/pull/7671</li>
+<li>[https://nvbugs/5436461][corrigir] Ajuste free_gpu_memory_fraction de test_eagle3 por @leslie-fang25 em https://github.com/NVIDIA/TensorRT-LLM/pull/7673</li>
+<li>[https://nvbugs/5474409][corrigir] Desative o carregamento simultâneo por padrão por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7663</li>
+<li>[https://nvbugs/5501557][corrigir] Corrigido acesso vetorial fora dos limites para modelo com vários tipos de camada por @brb-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7636</li>
+<li>[https://nvbugs/5398180][feat] Melhore o desempenho do Llama4 para pequenos casos max_seqlen por @nv-yilinf em https://github.com/NVIDIA/TensorRT-LLM/pull/7681</li>
+<li>[Nenhum][ci] Teste dispensado para o lançamento/ramificação 1.0 15/09 por @chzblych em https://github.com/NVIDIA/TensorRT-LLM/pull/7700</li>
+<li>[Nenhum][doc] Adicionar nota de descrição de rótulos na seção llm api por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7696</li>
+<li>[https://nvbugs/5437405] [consertar] escolha cereja PR 7000 (qwen3 235b eagle3 ci) por @byshiue em https://github.com/NVIDIA/TensorRT-LLM/pull/7702</li>
+<li>[https://nvbugs/5512734][corrigir] Atualização da configuração do cache kv para maverick por @crazydemo em https://github.com/NVIDIA/TensorRT-LLM/pull/7710</li>
+<li>[https://nvbugs/5355219] [corrigir] Corrigir configuração de teste de back-end trtllm moe e multi nó Qwen3 MoE por @ yizhang-nv em https://github.com/NVIDIA/TensorRT-LLM/pull/7724</li>
+<li>[Nenhum][doc] Corrija o link no documento de @Shixiaowei02 em https://github.com/NVIDIA/TensorRT-LLM/pull/7754</li>
+<li>[https://nvbugs/5519525][corrigir] corrigir link inválido do documento para bug 5519525 por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7753</li>
+<li>[https://nvbugs/5509024][corrigir] Imprimir resultados analisados completos e atualizar palavras-chave para modelo multimodal por @Wanli-Jiang em https://github.com/NVIDIA/TensorRT-LLM/pull/7670</li>
+<li>[Nenhum] [doc] Melhore o documento de referência do api rotulando APIs estáveis por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7751</li>
+<li>[https://nvbugs/5468897][corrigir] corrigir expressão inválida para desabilitar pa… por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7762</li>
+<li>[https://nvbugs/5517023] [consertar] Passe a estratégia de redução e force NCCL no arco pré-Blackwell por @hyukn em https://github.com/NVIDIA/TensorRT-LLM/pull/7768</li>
+<li>[TRTLLM-7958][doc] adicione 1.0 release notes por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7605</li>
+<li>[https://nvbugs/5522332][corrigir] Pin versão entorpecida para Gemma. por @yuxianq em https://github.com/NVIDIA/TensorRT-LLM/pull/7783</li>
+<li>[Nenhum] [doc] Atualize o cmd do docker no guia de início rápido e trtllm-serve… por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7787</li>
+<li>[https://nvbugs/1234567][corrigir] Reverter https://github.com/NVIDIA/TensorRT-LLM/pull/7768/files por @litaotju em https://github.com/NVIDIA/TensorRT-LLM/pull/7813</li>
+<li>[https://nvbugs/5516710][consertar] consertar caixa Llama 3.3 TP PP por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7717</li>
+<li>[None][doc] Substitua o main no link dos exemplos pelo commit id. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7837</li>
+<li>[Nenhum][doc] Renomeie TensorRT-LLM para TensorRT LLM para página inicial e… por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7850</li>
+<li>[None][doc] adiciona um guia para modificar APIs por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7866</li>
+<li>[Nenhum][doc] Atualizar Perf-Overview.md para lançamento/1.0 por @zbpatel em https://github.com/NVIDIA/TensorRT-LLM/pull/7848</li>
+<li>[None][doc] adiciona rótulo estável a todos os argumentos não rotulados na classe LLM por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7863</li>
+<li>[Nenhum] [corrigir] bug de estabilidade do api no rótulo de status por @Superjomn no https://github.com/NVIDIA/TensorRT-LLM/pull/7861</li>
+<li>[https://nvbugs/5427043][corrigir] cherrypick: o comprimento da solicitação excede max_num_tokens por @Superjomn em https://github.com/NVIDIA/TensorRT-LLM/pull/7718</li>
+<li>[https://nvbugs/5531963][consertar] escolha cereja #7725 por @QiJune em https://github.com/NVIDIA/TensorRT-LLM/pull/7907</li>
+<li>[Nenhum][chroe] Renomeie TensorRT-LLM para TensorRT LLM para código-fonte. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7851</li>
+<li>[Nenhum][doc] corrige links inválidos no benchmarking de desempenho. por @nv-guomingz em https://github.com/NVIDIA/TensorRT-LLM/pull/7933
+<strong>Changelog completo</strong>: https://github.com/NVIDIA/TensorRT-LLM/compare/v1.0.0rc6...v1.0.0</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM">NVIDIA/TensorRT-LLM</a> · <code>v1.0.0</code> · 24/09/2025 · <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.0.0">versão upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>TensorRT-LLM v1.0.0</h1>
+<h2>Highlights</h2>
+<ul>
+<li>
+<p><strong>PyTorch is now the default</strong> — TensorRT-LLM 1.0 makes the stable PyTorch architecture the default for both <code>LLM</code> and <code>trtllm-serve</code>, while the LLM API receives compatibility guarantees for subsequent releases. Existing TensorRT workflows may silently follow a different execution path after upgrading; explicitly select the backend where behavior must remain unchanged and revalidate accuracy and performance.</p>
+</li>
+<li>
+<p><strong>Configuration APIs require migration</strong> — Rename <code>mixed_sampler</code> to <code>enable_mixed_sampler</code> and <code>LLM.autotuner_enabled</code> to <code>enable_autotuner</code>, and update references to the renamed <code>cuda_graph_config.padding_enabled</code> field. PyTorch KV-cache configuration is consolidated under <code>LLM</code>/<code>executor::KvCacheConfig</code>, replacing <code>batch_manager::KvCacheConfig</code>. Deprecated LoRA arguments, <code>TrtGptModelOptionalParams</code>, and Torch ptuning knobs are removed; the Triton <code>llmapi</code> + TensorRT backend integration is also no longer supported.</p>
+</li>
+<li>
+<p><strong>Serving APIs gain finer control</strong> — The OpenAI-compatible endpoint adds JSON Schema support, <code>/v1/completions</code> gains a <code>detokenize</code> option, and request-level performance metrics are exposed through LLMAPI and Triton. Triton also gains request cancellation. Dynamic speculative-decoding toggles and guided decoding with overlap scheduling give operators more control over throughput/latency trade-offs without restarting workers.</p>
+</li>
+<li>
+<p><strong>LoRA becomes more practical under memory pressure</strong> — PyTorch LoRA is supported in <code>trtllm-serve</code>, with adapter eviction and CPU-cache reload support (#6786). This enables serving more adapters without retaining every one in GPU memory, but changed default cache sizes and <code>peft_cache_config</code> behavior mean existing deployments should review capacity and eviction expectations.</p>
+</li>
+<li>
+<p><strong>KV-cache reuse expands, with an important caveat</strong> — Cache reuse now covers in-flight generation, multimodal models, and two-model engines, alongside PyTorch pipeline-parallel disaggregation and disaggregated n-gram speculation. These features can reduce repeated prefill and improve utilization. However, disaggregated serving combined with pipeline parallelism and KV-cache reuse has a known hang; disable KV-cache reuse until it is fixed.</p>
+</li>
+<li>
+<p><strong>Model coverage expands, but hardware qualification matters</strong> — New support includes Mistral 3.1 VLM, Phi-4-multimodal, EXAONE 4.0, Qwen3 dense/MoE, and Gemma3 LoRA. Blackwell gains DeepSeek R1 FP8 and MLA chunked prefill, Hopper gains additional MLA/XQA paths, and PyTorch adds MXFP8×MXFP4 support. Rebuild custom images against the new PyTorch/Triton 25.06 containers and updated ModelOpt 0.33/transformers 4.53.1 dependencies. Critical fixes include MLA illegal memory access (#6437), DeepEP with online EPLB (#6429), and PD + MTP + overlap accuracy (#6136); single-GPU-per-node multinode remains known-broken, and Llama 3.x/4 pipeline parallelism with FP8/NVFP4 requires <code>TRTLLM_LLAMA_EAGER_FUSION_DISABLED=1</code>.</p>
+</li>
+</ul>
+<h2>TensorRT LLM Release 1.0</h2>
+<p>TensorRT LLM 1.0 brings 2 major changes: the PyTorch-based architecture is now stable and the default experience, and the LLM API is now stable. For more details on new developments in 1.0, please see below.</p>
+<h3>Key Features and Enhancements</h3>
+<ul>
+<li>
+<p><strong>Model Support</strong></p>
+<ul>
+<li>Add Mistral3.1 VLM model support</li>
+<li>Add TensorRT-Engine Qwen3 (dense) model support</li>
+<li>Add phi-4-multimodal model support</li>
+<li>Add EXAONE 4.0 model support</li>
+<li>Add Qwen3 MoE support to TensorRT backend</li>
+</ul>
+</li>
+<li>
+<p><strong>Features</strong></p>
+<ul>
+<li>Add support for sm121</li>
+<li>Add LoRA support for Gemma3</li>
+<li>Support PyTorch LoRA adapter eviction</li>
+<li>Add LoRA support for PyTorch backend in trtllm-serve</li>
+<li>Add support of scheduling attention dp request</li>
+<li>Remove padding of FusedMoE in attention DP</li>
+<li>Support torch compile for attention dp</li>
+<li>Add KV events support for sliding window attention</li>
+<li>Add TRTLLM MoE nvfp4 cubins for mid-high concurrency; attention_dp for TRTLLM MoE</li>
+<li>Add Piecewise CUDA Graph support for MLA</li>
+<li>Support mutliCtasKvMode for high-throughput MLA kernels</li>
+<li>Enable kvcache to be reused during request generation</li>
+<li>Add ADP schedule balance optimization</li>
+<li>Add chunked prefill support for MLA (Blackwell)</li>
+<li>Enable Multi-block mode for Hopper spec dec XQA kernel</li>
+<li>Add vLLM KV Pool support for XQA kernel</li>
+<li>Allow sending more than 2GiB through MPI by using mpi4py.util.pkl5</li>
+<li>Add support for fused gate_up_proj scales for FP8 blockwise</li>
+<li>Support FP8 row-wise dense GEMM in torch flow</li>
+<li>Enable fp8 SwiGLU to minimize host overhead</li>
+<li>Add Deepseek R1 FP8 Support on Blackwell</li>
+<li>Add support for MXFP8xMXFP4 in pytorch</li>
+<li>Support nvfp4 model and fp8 kv cache for MLA chunked prefill (Blackwell)</li>
+<li>Opensource MOE MXFP8-MXFP4 implementation</li>
+<li>Add support for Modelopt fp8_pb_wo quantization scheme</li>
+<li>Support deepEP fp4 post quant all2all dispatch</li>
+<li>Fuse w4a8 moe pre-quant scale on Hopper</li>
+<li>Support Weight-Only-Quantization in PyTorch Workflow</li>
+<li>Add support for per expert activation scaling factors</li>
+<li>Add ReDrafter support for Qwen</li>
+<li>Enable CUDA Graph for Nemotron-H</li>
+<li>Add support for YARN in NemotronNAS models</li>
+<li>Switch to internal version of MMProjector in Gemma3</li>
+<li>Disable add special tokens for Llama3.3 70B</li>
+<li>Auto-enable ngram with concurrency &lt;= 32</li>
+<li>Support turning on/off spec decoding dynamically</li>
+<li>Support structural tag in C++ runtime and upgrade xgrammar to 0.1.21</li>
+<li>Add support for external multimodal embeddings</li>
+<li>Add support for disaggregation with pp with pytorch backend</li>
+<li>Add status tags to LLM API reference</li>
+<li>Support JSON Schema in OpenAI-Compatible API</li>
+<li>Support chunked prefill on spec decode 2 model</li>
+<li>Add KV cache reuse support for multimodal models</li>
+<li>Support nanobind bindings</li>
+<li>Add support for two-model engine KV cache reuse</li>
+<li>Add Eagle-3 support for qwen3 dense model</li>
+<li>Migrate Eagle-3 and draft/target speculation to Drafter</li>
+<li>Enable guided decoding with overlap scheduler</li>
+<li>Support n-gram speculative decoding with disagg</li>
+<li>Add beam search support to the PyTorch Workflow</li>
+<li>Add LLGuidance Support for PyTorch Backend</li>
+<li>Add NGrams V2 support</li>
+<li>Add MTP support for Online EPLB</li>
+<li>Support disaggregated serving in TRTLLM Sampler</li>
+<li>Add core infrastructure to enable loading of custom checkpoint formats</li>
+<li>Support TRTLLM_DEEP_EP_TOKEN_LIMIT to allow run deep-ep on memory-constrained GPUs</li>
+<li>Use huge page mapping for host accessible memory on GB200</li>
+<li>Add user-provided speculative decoding support</li>
+<li>Add streaming scaffolding_llm.generate_async support</li>
+<li>Detokenize option in /v1/completions request</li>
+<li>Integrate TRT-LLM Gen FP4 block scale MoE with Pytorch workflow kernel autotuner</li>
+<li>Remove support for llmapi + TRT backend in Triton</li>
+<li>Add request_perf_metrics to triton LLMAPI backend</li>
+<li>Add support for Triton request cancellation</li>
+</ul>
+</li>
+<li>
+<p>Benchmark:</p>
+<ul>
+<li>Add support for benchmarking individual gemms in MOE benchmark (#6080)</li>
+<li>Add speculative metrics for trtllm-bench</li>
+<li>Add the ability to write a request timeline for trtllm-bench</li>
+<li>Add no_kv_cache_reuse option and streaming support for trtllm-serve bench</li>
+<li>Add latency support for trtllm-bench</li>
+<li>Add Acceptance Rate calculation to benchmark_serving</li>
+<li>Add wide-ep benchmarking scripts</li>
+<li>Update trtllm-bench to support new Pytorch default</li>
+<li>Add support for TRTLLM CustomDataset</li>
+<li>Make benchmark_serving part of the library</li>
+</ul>
+</li>
+<li>
+<p>Documentation:</p>
+<ul>
+<li>Refactored the doc structure to focus on the PyTorch workflow.</li>
+<li>Improved the LLMAPI and API reference documentation. Stable APIs are now protected and will remain consistent in subsequent versions following v1.0.</li>
+<li>Removed legacy documentation related to the TensorRT workflow.</li>
+</ul>
+</li>
+</ul>
+<h3>Infrastructure Changes</h3>
+<ul>
+<li>The base Docker image for TensorRT-LLM is updated to <code>nvcr.io/nvidia/pytorch:25.06-py3</code>.</li>
+<li>The base Docker image for TensorRT-LLM Backend is updated to <code>nvcr.io/nvidia/tritonserver:25.06-py3</code>.</li>
+<li>The dependent NVIDIA ModelOpt version is updated to 0.33.</li>
+<li>The dependent xgrammar version is updated to 0.1.21.</li>
+<li>The dependent transformers version is updated to 4.53.1.</li>
+</ul>
+<h3>API Changes</h3>
+<ul>
+<li><strong>BREAKING CHANGE</strong> Promote PyTorch to be the default LLM backend</li>
+<li><strong>BREAKING CHANGE</strong> Change default backend to PyTorch in trtllm-serve</li>
+<li><strong>BREAKING CHANGE</strong> Unify KvCacheConfig in LLM class for pytorch backend</li>
+<li><strong>BREAKING CHANGE</strong> Rename cuda_graph_config padding_enabled field</li>
+<li><strong>BREAKING CHANGE</strong> Rename mixed_sampler to enable_mixed_sampler</li>
+<li><strong>BREAKING CHANGE</strong> Rename LLM.autotuner_enabled to enable_autotuner</li>
+<li>Add back allreduce_strategy parameter into TorchLlmArgs</li>
+<li>Add LLmArgs option to force using dynamic quantization</li>
+<li>Change default LoRA cache sizes and change peft_cache_config cache size fields to take effect when not explicitly set in lora_config</li>
+<li>Remove deprecated LoRA LLM args, that are already specified in lora_config</li>
+<li>Add request_perf_metrics to LLMAPI</li>
+<li>Remove batch_manager::KvCacheConfig and use executor::KvCacheConfig instead</li>
+<li>Remove TrtGptModelOptionalParams</li>
+<li>Remove ptuning knobs from TorchLlmArgs</li>
+</ul>
+<h3>Fixed Issues</h3>
+<ul>
+<li>Fix illegal memory access in MLA (#6437)</li>
+<li>Fix nemotronNAS loading for TP&gt;1 (#6447)</li>
+<li>Fix wide EP when using DeepEP with online EPLB (#6429)</li>
+<li>Fix bugs caused by None attention_bias during Qwen3 model convert engine (#6344)</li>
+<li>Fix PD + MTP + overlap scheduler accuracy issue (#6136)</li>
+<li>Fix bug of Qwen3 when using fp4 on sm120 (#6065)</li>
+<li>Fix TMA error with GEMM+AR on TP=2 (#6075)</li>
+<li>Fix scaffolding aime test in test_e2e (#6140)</li>
+<li>Fix KV Cache overrides in trtllm-bench (#6103)</li>
+<li>Fix MOE benchmark to rotate buffers to prevent L2 cache reuse (#4135)</li>
+<li>Fix eagle3 two model disaggregated serving test (#6014)</li>
+<li>Fix chunked prefill + overlap scheduling (#5761)</li>
+<li>Fix mgmn postprocess error (#5835)</li>
+<li>Fallback to cubins for fp8 fmha kernels on Ada (#5779)</li>
+<li>Fix disagg + speculative decoding (#5558)</li>
+<li>Fix test_generate_with_seed CI failure. (#5772)</li>
+<li>Fix prompt adapter TP2 case (#5782)</li>
+<li>Fix disaggregate serving with attention DP (#4993)</li>
+<li>Fix a quote error introduced in #5534 (#5816)</li>
+<li>Fix the accuracy issue when reduce_fusion is enabled for GEMMA model. (#5801)</li>
+<li>Fix lost requests for disaggregated serving (#5815)</li>
+<li>Update unit tests: skip all_close assert for dropout in attention, increase tolerance for rope op test (#5855)</li>
+<li>Fix GEMM+AR fusion on blackwell (#5563)</li>
+<li>Fix llama4 multimodal support (#5809)</li>
+<li>Fix Llama4 Scout FP4 crash issue (#5925)</li>
+<li>Fix max batch size and max tokens in kv cache estimations for Nemotron-H (#5371)</li>
+<li>Fix moe regression for sm120 (#5823)</li>
+<li>Fix Qwen2.5VL FP8 support (#5029)</li>
+<li>Fix the illegal memory access issue in moe gemm on SM120 (#5636)</li>
+<li>Fix tileN cannot % 16==0 &amp; support sm89 deepgemm bmm (#5531)</li>
+<li>Fix incremental detokenization (#5825)</li>
+<li>Fix MoE workspace info by storing Torch tensor itself instead of data_ptr (#5900)</li>
+<li>Fix mistral unit tests due to transformers upgrade (#5904)</li>
+<li>Fix the Llama3.1 405B hanging issue. (#5698) (#5925)</li>
+<li>Fix Gemma3 unit tests due to transformers upgrade (#5921)</li>
+<li>Fix alltoall for llama4 (apply_router_weight_on_input=True) (#5902)</li>
+<li>Remove SpecConfig and fix thread leak issues (#5931)</li>
+<li>Fast redux detection in trtllm gen routing kernel (#5941)</li>
+<li>Fix cancel request logic (#5800)</li>
+<li>Fix errors in wide-ep scripts (#5992)</li>
+<li>Fix error in post-merge-tests (#5949)</li>
+<li>Fix missing arg to alltoall_prepare_maybe_dispatch (#5669)</li>
+<li>Fix attention DP doesn't work with embedding TP (#5642)</li>
+<li>Fix broken cyclic reference detect (#5417)</li>
+<li>Fix permission for local user issues in NGC docker container. (#5373)</li>
+<li>Fix mtp vanilla draft inputs (#5568)</li>
+<li>Fix mPtrExpertCounts allocation in MoE TRT-LLM backend (nvfp4) (#5519)</li>
+<li>Fix block scale fp8 support for deepseek v3 on Blackwell. (#5514)</li>
+<li>Fix the issue MoE autotune fallback failed to query default heuristic (#5520)</li>
+<li>Fix the unexpected keyword argument 'streaming' (#5436)</li>
+</ul>
+<h3>Known Issues</h3>
+<ul>
+<li>When using disaggregated serving with pipeline parallelism and KV cache reuse, a hang can occur. This will be fixed in a future release. In the meantime, disabling KV cache reuse will fix this issue.</li>
+<li>Running multi-node cases where each node has just a single GPU is known to fail. This will be addressed in a future release.</li>
+<li>For the Llama 3.x and Llama 4 models, there is an issue with pipeline parallelism when using FP8 and NVFP4 weights. As a workaround, you can set the environment variable <code>export TRTLLM_LLAMA_EAGER_FUSION_DISABLED=1</code>.</li>
+</ul>
+<h2>What's Changed</h2>
+<ul>
+<li>Qwen3: Fix eagle hidden states by @IzzyPutterman in https://github.com/NVIDIA/TensorRT-LLM/pull/6199</li>
+<li>[None][fix] Upgrade dependencies version to avoid security vulnerability by @yibinl-nvidia in https://github.com/NVIDIA/TensorRT-LLM/pull/6506</li>
+<li>[None][chore] update readme for perf release test by @ruodil in https://github.com/NVIDIA/TensorRT-LLM/pull/6664</li>
+<li>[None][test] remove trt backend cases in release perf test and move NIM cases to llm_perf_nim.yml by @ruodil in https://github.com/NVIDIA/TensorRT-LLM/pull/6662</li>
+<li>[None][fix] Explicitly add tiktoken as required by kimi k2 by @pengbowang-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6663</li>
+<li>[None][doc]: remove the outdated features which marked as Experimental by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/5995</li>
+<li>[https://nvbugs/5375966][chore] Unwaive test_disaggregated_deepseek_v3_lite_fp8_attention_dp_one by @yweng0828 in https://github.com/NVIDIA/TensorRT-LLM/pull/6658</li>
+<li>[TRTLLM-6892][infra] Run guardwords scan first in Release Check stage by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6659</li>
+<li>[None][chore] optimize kv cache transfer for context TEP and  gen DEP by @chuangz0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6657</li>
+<li>[None][chore] Bump version to 1.0.0 by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6652</li>
+<li>[None][test] Add Mistral Small 3.1 24B accuracy test to QA test list by @StanleySun639 in https://github.com/NVIDIA/TensorRT-LLM/pull/6682</li>
+<li>[None][test] cherry-pick: correct test-db context for perf yaml file and add mistral cases by @ruodil in https://github.com/NVIDIA/TensorRT-LLM/pull/6688</li>
+<li>[None][package] Pin cuda-python version to &gt;=12,&lt;13 by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6703</li>
+<li>[TRTLLM-6656][chore] Validate FP8 support for Gemma3 by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6678</li>
+<li>[TRTLLM-5574][test] Add NIM required VLM models multi-gpu test by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/6687</li>
+<li>[TRTLLM-6675][infra] Nixl test completion by @bo-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6623</li>
+<li>[None][test] fix yml condition error under qa folder by @ruodil in https://github.com/NVIDIA/TensorRT-LLM/pull/6733</li>
+<li>[None][doc] Add doc for multimodal feature support matrix (#6619) by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/6739</li>
+<li>[https://nvbugs/5344910][fix] Corrected memory position when setting buffers to 0 in standalone_stable_radix_topk_ by @stnie in https://github.com/NVIDIA/TensorRT-LLM/pull/6712</li>
+<li>[https://nvbugs/5442608][fix] Update CUDA graph config for get_model_yaml_config. by @yuxianq in https://github.com/NVIDIA/TensorRT-LLM/pull/6693</li>
+<li>[TRTLLM-4721][test] Add qa test for llm-api by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6727</li>
+<li>[https://nvbugs/5409420][fix] Fix test_ptp_star_attention_example by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6584</li>
+<li>[https://nvbugs/5444624][fix] Fix LLM_ROOT in triton_backend build.sh by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6744</li>
+<li>[https://nvbugs/5429689][fix] Fix mllama model structure update with transformers issue by @dominicshanshan in https://github.com/NVIDIA/TensorRT-LLM/pull/6699</li>
+<li>[None][chore] remove out-of-date comment in star attention test by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6773</li>
+<li>[https://nvbugs/5431127][fix] Run test_disaggregated_deepseek_v3_lite_fp8_nixl[DeepSeek-V3-Lite-fp8] only on hopper by @bo-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6737</li>
+<li>[None][infra] Waive failed tests on release branch 0811 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/6782</li>
+<li>[https://nvbugs/5444095][infra] waive test_ptp_quickstart_multimodal llava test by @yechank-nvidia in https://github.com/NVIDIA/TensorRT-LLM/pull/6795</li>
+<li>[TRTLLM-5252][fix] Propagate mapping to intermediate layers (#6611) by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/6765</li>
+<li>[TRTLLM-6683][feat] Support LoRA reload CPU cache evicted adapter by @amitz-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6786</li>
+<li>[None][feat] adding support for disaggregated multi-instance tests by @raayandhar in https://github.com/NVIDIA/TensorRT-LLM/pull/6674</li>
+<li>[None][infra] Avoid intermittent access broken to nvcr.io by @chzblych in https://github.com/NVIDIA/TensorRT-LLM/pull/6715</li>
+<li>[https://nvbugs/5383702][fix] error propagation in GenerationExecutor by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6793</li>
+<li>[https://nvbugs/5445774][fix] Unwaive Gemma3 27B fp8 test by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6799</li>
+<li>[None][fix] fix CUDA graph config for test_llm_api_pytorch.py. by @yuxianq in https://github.com/NVIDIA/TensorRT-LLM/pull/6826</li>
+<li>[TRTLLM-6975][test] Add multi-turn test cases for VLM models by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/6749</li>
+<li>[None][chore] waive GB300 known issues by @xinhe-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6812</li>
+<li>[None][fix] fix Llama3 eagle3 test case OOM by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/6832</li>
+<li>[https://nvbugs/5375594][fix] fix oom issue on structural_tag test case by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/6838</li>
+<li>[https://nvbugs/5401114][fix] Unwaive Gemma3 tests by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6870</li>
+<li>[TRTLLM-5252][feat] Add fp8 support for Mistral Small 3.1 by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/6731</li>
+<li>[None][infra] Setup the code review rule on the release branch by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6725</li>
+<li>[TRTLLM-6308][feat] Support Aggregate mode for phi4-mm by @Wanli-Jiang in https://github.com/NVIDIA/TensorRT-LLM/pull/6820</li>
+<li>[None][fix] Fix batching bug in Mistral3 model by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/6841</li>
+<li>[None][fix] Revert phi4-mm aggregate mode by @amukkara in https://github.com/NVIDIA/TensorRT-LLM/pull/6907</li>
+<li>[None][fix] Complete the last missing allreduce op in Llama3/4. by @hyukn in https://github.com/NVIDIA/TensorRT-LLM/pull/6850</li>
+<li>[None][chore] Add docs for Gemma3 VLMs by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6880</li>
+<li>[None][doc] add legacy section for tensorrt engine by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6724</li>
+<li>[TRTLLM-7048][feat] add benchmark TRT flow test for MIG by @xinhe-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6884</li>
+<li>[https://nvbugs/5451434][fix] Fix triton docker build by @Tabrizian in https://github.com/NVIDIA/TensorRT-LLM/pull/6898</li>
+<li>[TRTLLM-6481][fix] Fix deepseek r1 accuracy issue by @pengbowang-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6868</li>
+<li>[None][ci] unwaive test_ptp_star_attention_example by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6943</li>
+<li>[https://nvbugs/5455836][fix] Fix llama 4 FP4 by @mikeiovine in https://github.com/NVIDIA/TensorRT-LLM/pull/6911</li>
+<li>[None][infra] update CODEOWNERS for release by @venkywonka in https://github.com/NVIDIA/TensorRT-LLM/pull/6905</li>
+<li>[https://nvbugs/5453667] [fix] reverting a breaking change: make trtllm-bench <code>enable_chunked_context</code> defaults backend-dependent by @venkywonka in https://github.com/NVIDIA/TensorRT-LLM/pull/6956</li>
+<li>[https://nvbugs/5405041][fix] Update wide ep doc by @qiaoxj07 in https://github.com/NVIDIA/TensorRT-LLM/pull/6950</li>
+<li>[https://nvbugs/5412562][feat] Allocate MoE workspace only when necessary (release/1.0 retargeted) by @nv-yilinf in https://github.com/NVIDIA/TensorRT-LLM/pull/6955</li>
+<li>[TRTLLM-6835][fix] Fix potential hang caused by python multiprocessing when prefetching weights by @lancelly in https://github.com/NVIDIA/TensorRT-LLM/pull/6927</li>
+<li>[https://nvbugs/5448525][fix] Mistral Small 3.1 accuracy tests by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/6909</li>
+<li>[https://nvbugs/5375646][fix] update waives.txt for nvbug 5375646 by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/6847</li>
+<li>[None][fix] update skip config by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/6891</li>
+<li>[https://nvbugs/5449218][fix] Fix KvCacheConfig error in test_perf by @peaceh-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6937</li>
+<li>[None][infra] Waive failed tests for release branch 0818 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/6993</li>
+<li>[None][chore] Remove duplicate test waives by @yiqingy0 in https://github.com/NVIDIA/TensorRT-LLM/pull/6999</li>
+<li>[None][infra] Cherry-pick #6836 from main branch and improve SSH connection by @chzblych in https://github.com/NVIDIA/TensorRT-LLM/pull/6971</li>
+<li>[https://nvbugs/5462007][ci] Unwaive Mistral Small 3.1 FP8 test by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/7008</li>
+<li>[https://nvbugs/5449155][fix] Fix DeepSeek R1 weight loading for TP16 by @achartier in https://github.com/NVIDIA/TensorRT-LLM/pull/6913</li>
+<li>[https://nvbugs/5374016][fix] improve error message by @QiJune in https://github.com/NVIDIA/TensorRT-LLM/pull/6893</li>
+<li>[https://nvbugs/5394685][fix] proper fix for the accuracy issue in 2CTA MLA kernels (release 1.0) by @PerkzZheng in https://github.com/NVIDIA/TensorRT-LLM/pull/6946</li>
+<li>[https://nvbugs/5451028][fix] Constrain NemotronSuper test parameters… by @Naveassaf in https://github.com/NVIDIA/TensorRT-LLM/pull/6987</li>
+<li>[https://nvbugs/5448579][fix] EXAONE-4.0 accuracy test bugfix by @yechank-nvidia in https://github.com/NVIDIA/TensorRT-LLM/pull/6888</li>
+<li>[None][chore] Waive E2E GB200 tests for Gemma3 27B by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6916</li>
+<li>[https://nvbugs/5451296][bug] Fix a thread leak in test_llm_args.py by @Tabrizian in https://github.com/NVIDIA/TensorRT-LLM/pull/7017</li>
+<li>[None][infra] Waive failed tests  for release branch 08/19 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/7036</li>
+<li>[None][doc] add status labels to LLM class's api reference by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6899</li>
+<li>[https://nvbugs/5448437][fix] fix some nixl tests by @bo-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6940</li>
+<li>[https://nvbugs/5427801][fix] Torch compile support for Llama4 and Ea… by @liji-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/6978</li>
+<li>[https://nvbugs/5394392][fix] Enlarge scheduler capacity under disagg bs == 1 by @yifeizhang-c in https://github.com/NVIDIA/TensorRT-LLM/pull/6975</li>
+<li>[TRTLLM-7263][fix] Prevent recreation of cublas handles in lora_grouped_gemm every call by @amitz-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7053</li>
+<li>[None][fix] Fix build of tritonbuild/tritonrelease image by @dbari in https://github.com/NVIDIA/TensorRT-LLM/pull/7003</li>
+<li>[None][doc] update v1.0 doc for trtllm-serve by @hchings in https://github.com/NVIDIA/TensorRT-LLM/pull/7056</li>
+<li>[https://nvbugs/5440241][fix] Fix 70B GSM8K Accuracy drop by @chenfeiz0326 in https://github.com/NVIDIA/TensorRT-LLM/pull/7075</li>
+<li>[https://nvbugs/5451296][fix] zmq nonblock bug with retry by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7019</li>
+<li>[https://nvbugs/5383702][fix] test_llm_api_pytorch.py::TestLlama3_1_8BInstruct::test_fp8_4gpus by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/6889</li>
+<li>[https://nvbugs/5392414] [fix] For release 1.0 cherry pick. Add customized default routing method by @ChristinaZ in https://github.com/NVIDIA/TensorRT-LLM/pull/7068</li>
+<li>[https://nvbugs/5464088] [fix] Guard against fp8 activations in lora forward; update perf test config by @venkywonka in https://github.com/NVIDIA/TensorRT-LLM/pull/7014</li>
+<li>[None][infra] Skip failed tests for release branch 08/21 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/7130</li>
+<li>[https://nvbugs/5448442][fix] Skip trtllm moe backend for sm120 by @pamelap-nvidia in https://github.com/NVIDIA/TensorRT-LLM/pull/7010</li>
+<li>[https://nvbugs/5449032][fix] Add more llm-args to llm_mgmn_trtllm_bench.sh by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7144</li>
+<li>[https://nvbugs/5410391][bug] Support to share device buffers in attention meta by @HuiGao-NV in https://github.com/NVIDIA/TensorRT-LLM/pull/6557</li>
+<li>[https://nvbugs/5467062][fix] pass logitsPostProcessorBatched by reference by @milesial in https://github.com/NVIDIA/TensorRT-LLM/pull/7110</li>
+<li>[https://nvbugs/5450074][fix] Reduce the device memory requirements for testing by @Shixiaowei02 in https://github.com/NVIDIA/TensorRT-LLM/pull/6990</li>
+<li>[https://nvbugs/5474037][fix] Fix building tritonbuild/tritonrelease images by @dbari in https://github.com/NVIDIA/TensorRT-LLM/pull/7157</li>
+<li>[https://nvbugs/5433545][fix] TestPhi4MiniInstruct::test_auto_dtype - Use max_seq_len=4096 to fallback to the short RoPE factor by @moraxu in https://github.com/NVIDIA/TensorRT-LLM/pull/6895</li>
+<li>[https://nvbugs/5461712] [fix] Disable deep_gemm for Qwen3 due to accuracy issues by @DomBrown in https://github.com/NVIDIA/TensorRT-LLM/pull/7170</li>
+<li>[TRTLLM-6825][fix] Update lora for phi4-mm by @Wanli-Jiang in https://github.com/NVIDIA/TensorRT-LLM/pull/7149</li>
+<li>[https://nvbugs/5448426][fix] Fix illegal memory access in cuda graph by @peaceh-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7127</li>
+<li>[None][fix] Switch llm api quickstart example location per workflow. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7182</li>
+<li>[https://nvbugs/5467232][fix] Fix load_torch_hf_lora to override lora_config.trtllm_modules_to_hf_modules with default only when it has no value by @Wanli-Jiang in https://github.com/NVIDIA/TensorRT-LLM/pull/7168</li>
+<li>[None][doc] fix tensorrt legacy quickstart page by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7190</li>
+<li>[TRTLLM-7030][fix] BREAKING CHANGE: Mismatch between docs and actual commands by @Shixiaowei02 in https://github.com/NVIDIA/TensorRT-LLM/pull/7191</li>
+<li>[https://nvbugs/5470840][fix] Disaggregated unit test MPI Init handling by @pcastonguay in https://github.com/NVIDIA/TensorRT-LLM/pull/7139</li>
+<li>[None][test] add kv cache size in bench metric and fix failed cases by @ruodil in https://github.com/NVIDIA/TensorRT-LLM/pull/7211</li>
+<li>[None][fix] update skip case by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/7193</li>
+<li>[https://nvbugs/5409416][fix] test_openai_multi_chat_example by @Linda-Stadter in https://github.com/NVIDIA/TensorRT-LLM/pull/7174</li>
+<li>[https://nvbugs/5473789][bug] install cuda-toolkit to fix sanity check by @HuiGao-NV in https://github.com/NVIDIA/TensorRT-LLM/pull/7159</li>
+<li>[None][fix] fix log_once usage by @yuxianq in https://github.com/NVIDIA/TensorRT-LLM/pull/7210</li>
+<li>[None][infra] Waive failed cases for release/1.0 08/26 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/7258</li>
+<li>[https://nvbugs/5451342][fix] Use runtime max_batch_size when cuda_graph_config.max_batch_size is not provided in trtllm-bench by @jiaganc in https://github.com/NVIDIA/TensorRT-LLM/pull/7031</li>
+<li>[None][feat] Skip prefetching consolidated safetensors when appropriate by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/7225</li>
+<li>[https://nvbugs/5430125][ci] Unwaive test case for mistral 3.1 small by @2ez4bz in https://github.com/NVIDIA/TensorRT-LLM/pull/7265</li>
+<li>[https://nvbugs/5478151][fix] Add missing spec for Llama-3.3 70B by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7267</li>
+<li>[https://nvbugs/5451426][fix] Avoid torch compile on full eagle3 worker by @liji-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7245</li>
+<li>[https://nvbugs/5448767][fix] fix mpi4py deadlocks in pp event-loop by @reasonsolo in https://github.com/NVIDIA/TensorRT-LLM/pull/6976</li>
+<li>[https://nvbugs/5463720][fix] tp-split the inferred <code>mlp_hidden_size</code> for nemotron-nas by @venkywonka in https://github.com/NVIDIA/TensorRT-LLM/pull/7231</li>
+<li>[https://nvbugs/5480550][fix] Increase timeout for Gemma3 27B test by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7271</li>
+<li>[https://nvbugs/5434320][bug] Fix disagg pp bug by @Tabrizian in https://github.com/NVIDIA/TensorRT-LLM/pull/7099</li>
+<li>[https://nvbugs/5480415][fix] Fix phi4mm multi-gpu test by @Wanli-Jiang in https://github.com/NVIDIA/TensorRT-LLM/pull/7275</li>
+<li>[TRTLLM-7346][fix] Improve performance of PyTorchModelEngine._get_lora_params_from_requests by @amitz-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7203</li>
+<li>[https://nvbugs/5467548][fix] DeepSeek illegal memory access. by @bobboli in https://github.com/NVIDIA/TensorRT-LLM/pull/7298</li>
+<li>[https://nvbugs/5448767][fix] disable kv cache reuse for disagg pp&gt;1 tests by @reasonsolo in https://github.com/NVIDIA/TensorRT-LLM/pull/7354</li>
+<li>[https://nvbugs/5445466][fix] Eliminate race when loading HF dynamic modules (#7268) by @chang-l in https://github.com/NVIDIA/TensorRT-LLM/pull/7379</li>
+<li>[https://nvbugs/5474169][fix]Adjust max seq len for kvcache for memory estimation by @HuiGao-NV in https://github.com/NVIDIA/TensorRT-LLM/pull/7391</li>
+<li>[https://nvbugs/5448754][fix] Download HF model for all nodes. by @yuxianq in https://github.com/NVIDIA/TensorRT-LLM/pull/6824</li>
+<li>[None][infra] Waive failed tests on release branch 0901 by @EmmaQiaoCh in https://github.com/NVIDIA/TensorRT-LLM/pull/7448</li>
+<li>[None][doc] add blackwell information into support matrix by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/6740</li>
+<li>[TRTLLM-7008][fix] cherrypick fix to 1.0 Add automatic shared memory delete if already exist by @dongxuy04 in https://github.com/NVIDIA/TensorRT-LLM/pull/7433</li>
+<li>[https://nvbugs/5351244][fix] test_mpi_session by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7501</li>
+<li>[https://nvbugs/5461761][fix] Remove the waiver by @ziyixiong-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7427</li>
+<li>[TRTLLM-5930][doc] 1.0 Documentation. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/6696</li>
+<li>[https://nvbugs/5496960][fix] Fix Gemma model forward. by @hyukn in https://github.com/NVIDIA/TensorRT-LLM/pull/7509</li>
+<li>[None][doc] Update kvcache part by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7549</li>
+<li>[None][doc] Rename TensorRT-LLM to TensorRT LLM. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7554</li>
+<li>[https://nvbugs/5416501][doc] add known issues to llmapi doc by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7560</li>
+<li>[None][doc] Fix a invalid link. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7617</li>
+<li>[https://nvbugs/5474169][fix] seq_len mismatch between kv cache manager and graph attn metadata by @HuiGao-NV in https://github.com/NVIDIA/TensorRT-LLM/pull/7606</li>
+<li>[https://nvbugs/5503423][waive] Waive Llama3.1-70B-FP8 test on RTX PRO 6000 by @peaceh-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7603</li>
+<li>[https://nvbugs/5455140][fix] unwaive release/1.0 DS R1 test cases with bug already fixed by @lancelly in https://github.com/NVIDIA/TensorRT-LLM/pull/7432</li>
+<li>[https://nvbugs/5470782][chore] Remove the skip statement in 1.0 rele… by @SimengLiu-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7573</li>
+<li>[None][doc] Fix a invalid link and a typo. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7634</li>
+<li>[None][doc] Use hash id for external link by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7641</li>
+<li>[https://nvbugs/5477730][fix] Fix the alltoall case when tp_size larg… by @WeiHaocheng in https://github.com/NVIDIA/TensorRT-LLM/pull/7671</li>
+<li>[https://nvbugs/5436461][fix] Adjust free_gpu_memory_fraction of test_eagle3 by @leslie-fang25 in https://github.com/NVIDIA/TensorRT-LLM/pull/7673</li>
+<li>[https://nvbugs/5474409][fix] Disable concurrent loading by default by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7663</li>
+<li>[https://nvbugs/5501557][fix] Fix out-of-bounds vector access for model with multiple layer types by @brb-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7636</li>
+<li>[https://nvbugs/5398180][feat] Improve Llama4 performance for small max_seqlen cases by @nv-yilinf in https://github.com/NVIDIA/TensorRT-LLM/pull/7681</li>
+<li>[None][ci] Test waives for the release/1.0 branch 09/15 by @chzblych in https://github.com/NVIDIA/TensorRT-LLM/pull/7700</li>
+<li>[None][doc] Add labels description note into llm api section by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7696</li>
+<li>[https://nvbugs/5437405][fix] cherry-pick PR 7000 (qwen3 235b eagle3 ci) by @byshiue in https://github.com/NVIDIA/TensorRT-LLM/pull/7702</li>
+<li>[https://nvbugs/5512734][fix] Update kv cache config for maverick by @crazydemo in https://github.com/NVIDIA/TensorRT-LLM/pull/7710</li>
+<li>[https://nvbugs/5355219][fix] Fix trtllm moe backend  test config and Qwen3 MoE multi node by @yizhang-nv in https://github.com/NVIDIA/TensorRT-LLM/pull/7724</li>
+<li>[None][doc] Fix the link in the doc by @Shixiaowei02 in https://github.com/NVIDIA/TensorRT-LLM/pull/7754</li>
+<li>[https://nvbugs/5519525][fix] fix doc invalid link for bug 5519525 by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7753</li>
+<li>[https://nvbugs/5509024][fix] Print full parsed outputs and update keywords for multimodal model by @Wanli-Jiang in https://github.com/NVIDIA/TensorRT-LLM/pull/7670</li>
+<li>[None][doc] Enhance api reference doc by labeling stable APIs by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7751</li>
+<li>[https://nvbugs/5468897][fix] fix invalid expression for disabling pa… by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7762</li>
+<li>[https://nvbugs/5517023][fix] Pass allreduce strategy and force NCCL on pre-Blackwell arch by @hyukn in https://github.com/NVIDIA/TensorRT-LLM/pull/7768</li>
+<li>[TRTLLM-7958][doc] add 1.0 release notes by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7605</li>
+<li>[https://nvbugs/5522332][fix] Pin numpy version for Gemma. by @yuxianq in https://github.com/NVIDIA/TensorRT-LLM/pull/7783</li>
+<li>[None][doc] Update docker cmd in quick start guide and trtllm-serve … by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7787</li>
+<li>[https://nvbugs/1234567][fix] Revert https://github.com/NVIDIA/TensorRT-LLM/pull/7768/files by @litaotju in https://github.com/NVIDIA/TensorRT-LLM/pull/7813</li>
+<li>[https://nvbugs/5516710][fix] fix Llama 3.3 TP PP case by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7717</li>
+<li>[None][doc] Replace the main in the examples' link with commit id. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7837</li>
+<li>[None][doc] Rename TensorRT-LLM to TensorRT LLM for homepage and the … by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7850</li>
+<li>[None][doc] add a guide for modifying APIs by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7866</li>
+<li>[None][doc] Update Perf-Overview.md for release/1.0 by @zbpatel in https://github.com/NVIDIA/TensorRT-LLM/pull/7848</li>
+<li>[None][doc] add stable label to all the un-labelled arguments in LLM class by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7863</li>
+<li>[None][fix] api stability bug in status label by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7861</li>
+<li>[https://nvbugs/5427043][fix] cherrypick: request length exceeds max_num_tokens by @Superjomn in https://github.com/NVIDIA/TensorRT-LLM/pull/7718</li>
+<li>[https://nvbugs/5531963][fix] cherry pick #7725 by @QiJune in https://github.com/NVIDIA/TensorRT-LLM/pull/7907</li>
+<li>[None][chroe] Rename TensorRT-LLM to TensorRT LLM for source code. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7851</li>
+<li>[None][doc] fix invalid links in perf benchmarking. by @nv-guomingz in https://github.com/NVIDIA/TensorRT-LLM/pull/7933</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/NVIDIA/TensorRT-LLM/compare/v1.0.0rc6...v1.0.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM">NVIDIA/TensorRT-LLM</a> · <code>v1.0.0</code> · 2025-09-24 · <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.0.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/tensorrt-llm/1.1.0"> <span class="k">← Próximo</span> <span class="t">v1.1.0</span> </a> <a href="/releases/tensorrt-llm/0.21.0"> <span class="k">Anterior →</span> <span class="t">v0.21.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/NVIDIA/TensorRT-LLM/releases/tag/v1.0.0" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank" rel="noopener"> <span>NVIDIA/TensorRT-LLM</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Nesta página</div> <nav> <a href="#" class>TensorRT LLM versão 1.0</a><a href="#" class="lv3">Principais recursos e melhorias</a><a href="#" class="lv3">Mudanças na infraestrutura</a><a href="#" class="lv3">Mudanças no API</a><a href="#" class="lv3">Problemas corrigidos</a><a href="#" class="lv3">Problemas conhecidos</a><a href="#" class>O que mudou</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/tensorrt-llm/1.3.0"> <span class="v">v1.3.0</span> <span class="d">26-11-20</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.2.1"> <span class="v">v1.2.1</span> <span class="d">26-04-20</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.2.0"> <span class="v">v1.2.0</span> <span class="d">26-03-12</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.1.0"> <span class="v">v1.1.0</span> <span class="d">25-12-19</span> </a> </li><li> <a href="/releases/tensorrt-llm/1.0.0" aria-current="true"> <span class="v">v1.0.0</span> <span class="d">25-09-24</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.21.0"> <span class="v">v0.21.0</span> <span class="d">25-08-04</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.20.0"> <span class="v">v0.20.0</span> <span class="d">25-06-19</span> </a> </li><li> <a href="/releases/tensorrt-llm/0.19.0"> <span class="v">v0.19.0</span> <span class="d">25-05-09</span> </a> </li> </ul> <a href="/pt/releases/tensorrt-llm" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

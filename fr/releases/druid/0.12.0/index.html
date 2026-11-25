@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>druid 0.12.0 — STAGS NextStack</title><meta name="description" content="Druid 0.12.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors. This release adds major improvements to the Kafka indexing service."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/druid/0.12.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/druid/0.12.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/druid/0.12.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/druid/0.12.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="druid 0.12.0 — STAGS NextStack"><meta property="og:description" content="Druid 0.12.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors. This release adds major improvements to the Kafka indexing service."><meta property="og:url" content="https://www.stags.cn/fr/releases/druid/0.12.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/druid/0.12.0/#article","headline":"druid 0.12.0 release notes","datePublished":"2018-03-09","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/druid"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/druid/0.12.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/druid/druid_druid-0.12.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/druid/0.12.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/druid/0.12.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/druid/0.12.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/druid/0.12.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/druid/0.12.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/druid">druid</a> </nav> <h1 class="detail-title"> <span class="p">druid</span> 0.12.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>9 mars 2018</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span class="k">Source</span>apache/druid </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/druid/0.12.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/druid/0.12.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>druide druide-0.12.0</h1>
+<p>Druid 0.12.0 contient plus d'une centaine d'améliorations de performances, de stabilité et de corrections de bugs provenant de près de 40 contributeurs. Cette version ajoute des améliorations majeures au service d'indexation Kafka.
+Parmi les autres nouveautés majeures figurent :</p>
+<ul>
+<li>Verrouillage des tâches prioritaires</li>
+<li>Amélioration de la gestion automatique des segments</li>
+<li>Tester les statistiques post-agrégateurs</li>
+<li>Agrégateur de croquis de quantiles numériques</li>
+<li>Extension d'authentification de base</li>
+<li>Améliorations de la file d'attente des requêtes de requête</li>
+<li>Prise en charge des lots d'analyse</li>
+<li>Diverses améliorations des performances</li>
+<li>Diverses améliorations de Druid SQL
+La liste complète des changements est ici : https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.12.0
+La documentation de cette version se trouve à l'adresse suivante : http://druid.io/docs/0.12.0/</li>
+</ul>
+<h2>Faits saillants</h2>
+<h3>Kafka indexe les transferts incrémentiels et le partitionnement découplé</h3>
+<p>Le service d'indexation Kafka prend désormais en charge les transferts incrémentiels, ainsi que le découplage du nombre de segments créés par une tâche d'indexation Kafka du nombre de partitions Kafka. Veuillez consulter https://github.com/druid-io/druid/pull/4815#issuecomment-346155552 pour plus d'informations.
+Ajouté par @pjain1 dans #4815.</p>
+<h3>Verrouillage des tâches prioritaires</h3>
+<p>Druid prend désormais en charge les priorités pour les verrous de tâches d'indexation. Lorsqu'une tâche d'indexation doit acquérir un verrou sur une source de données + un intervalle, les tâches de priorité plus élevée peuvent désormais préempter les tâches de priorité inférieure. Veuillez consulter http://druid.io/docs/0.12.0-rc1/ingestion/tasks.html#task-priority pour plus d'informations.
+Ajouté par @jihoonson dans https://github.com/druid-io/druid/pull/4550.</p>
+<h3>Amélioration de la gestion automatique des segments</h3>
+<h4>Nettoyage automatique des segments en attente</h4>
+<p>Les tâches d'indexation créent des entrées dans la table « endingSegments » du magasin de métadonnées ; avant 0.12.0, ces entrées temporaires n'étaient pas automatiquement nettoyées, ce qui entraînait une éventuelle dégradation des performances du cluster au fil du temps. Druid 0.12.0 permet au coordinateur de nettoyer automatiquement les entrées inutilisées dans le tableau des segments en attente. Cette fonctionnalité est activée en définissant <code>druid.coordinator.kill.pendingSegments.on=true</code> dans les propriétés du coordinateur.
+Ajouté par @jihoonson dans #5149.</p>
+<h4>Tâche de compactage</h4>
+<p>Le compactage de segments (fusionner un ensemble de segments dans un intervalle donné pour créer un ensemble avec des segments plus grands mais moins nombreux) est un cas d'utilisation courant de l'ingestion par lots de Druid. Druid 0.12.0 prend désormais en charge une tâche de compactage qui fusionne tous les segments dans un intervalle donné en un seul segment. Veuillez consulter http://druid.io/docs/0.12.0-rc1/ingestion/tasks.html#compaction-task pour plus de détails.
+Ajouté par @jihoonson dans #4985.</p>
+<h3>Testez les statistiques post-agrégateurs</h3>
+<p>De nouveaux post-agrégateurs de statistiques de test de score z et de valeur p ont été ajoutés à l'extension <code>druid-stats</code>. Veuillez consulter http://druid.io/docs/0.12.0-rc1/development/extensions-core/test-stats.html pour plus de détails.
+Ajouté par @chunghochen dans #4532.</p>
+<h3>Agrégateur de croquis de quantiles numériques</h3>
+<p>Un agrégateur d'esquisses de quantiles numériques a été ajouté à l'extension <code>druid-datasketches</code>.
+Ajouté par @AlexanderSaydakov dans #5002.</p>
+<h3>Extension d'authentification de base</h3>
+<p>Druid 0.12.0 inclut une nouvelle extension d'authentification/autorisation qui fournit une authentification HTTP de base et un contrôle d'accès simple basé sur les rôles. Veuillez consulter http://druid.io/docs/0.12.0-rc1/development/extensions-core/druid-basic-security.html pour plus d'informations.
+Ajouté par @jon-wei dans #5099.</p>
+<h3>Améliorations de la file d'attente des requêtes de requête</h3>
+<p>Actuellement, clients peut submerger un courtier par inadvertance en envoyant trop de requêtes qui sont mises en file d'attente dans une file d'attente illimitée du pool de tâches Jetty. Clients ferme généralement la connexion après un certain délai d'attente côté client, ​​mais le courtier continuera à traiter ces demandes, donnant l'impression de ne pas répondre. Pendant ce temps, clients continuerait de réessayer, continuant d'ajouter des requêtes à un courtier déjà surchargé.
+Les propriétés nouvellement introduites <code>druid.server.http.queueSize</code> et <code>druid.server.http.enableRequestLimit</code> dans <a href="http://druid.io/docs/0.12.0-rc1/configuration/broker.html">configuration du courtier</a> et <a href="http://druid.io/docs/0.12.0-rc1/configuration/historical.html">configuration historique</a> permettent aux utilisateurs de configurer le rejet des demandes pour empêcher les clients de submerger les courtiers et les historiques de requêtes.
+Ajouté par @himanshug dans #4540.</p>
+<h3>Prise en charge de l'analyse par lots</h3>
+<p>Pour les développeurs d’extensions d’analyse d’ingestion personnalisées, il est désormais possible pour les InputRowParsers de renvoyer plusieurs InputRows à partir d’une seule ligne d’entrée. Cela peut simplifier les pipelines d’ingestion en réduisant le besoin de transformations d’entrée en dehors de Druid.
+Ajouté par @pjain1 dans #5081.</p>
+<h3>Améliorations des performances</h3>
+<h4>SegmentWriteOutMedium</h4>
+<p>Lors de la création de nouveaux segments, Druid stocke certaines données prétraitées dans des tampons temporaires. Avant 0.12.0, ces tampons étaient toujours conservés dans des fichiers temporaires sur le disque.  Dans 0.12.0, le PR #4762 de @leventov permet à ces tampons temporaires d'être stockés dans la mémoire hors tas, réduisant ainsi le nombre d'opérations d'E/S disque lors de l'ingestion. Pour activer l'utilisation de la mémoire hors tas pour ces tampons, la propriété <code>druid.peon.defaultSegmentWriteOutMediumFactory</code> doit être configurée en conséquence. Si vous utilisez de la mémoire hors tas pour les tampons temporaires, assurez-vous que <code>-XX:MaxDirectMemorySize</code> est augmenté pour prendre en charge l'utilisation plus élevée de la mémoire directe.
+Veuillez consulter http://druid.io/docs/0.12.0-rc1/configuration/indexing-service.html#SegmentWriteOutMediumFactory pour les détails de configuration.</p>
+<h4>Fusion parallèle des résultats GroupBy intermédiaires</h4>
+<p>PR #4704 de @jihoonson permet à l'utilisateur de configurer un certain nombre de threads de traitement à utiliser pour la fusion parallèle des résultats GroupBy intermédiaires qui ont été déversés sur le disque. Avant 0.12.0, cette étape de fusion avait toujours lieu au sein d'un seul thread.
+Veuillez consulter http://druid.io/docs/0.12.0-rc1/configuration/querying/groupbyquery.html#parallel-combine pour les détails de configuration.</p>
+<h4>Autres améliorations de performances</h4>
+<ul>
+<li>Optimisations de la mémoire DataSegment : #5094 par @leventov</li>
+<li>Supprimer IndexedInts.iterator() : #4811 par @leventov</li>
+<li>ExpressionSelectors : Ajouter des sélecteurs optimisés : #5048 par @gianm</li>
+</ul>
+<h3>Améliorations SQL</h3>
+<p>Diverses améliorations et fonctionnalités ont été ajoutées à Druid SQL, par @gianm dans les PR suivants :</p>
+<ul>
+<li>Améliorer la traduction des expressions de plancher temporel : #5107</li>
+<li>Ajouter TIMESTAMPADD : #5079</li>
+<li>Ajouter une règle pour élaguer les agrégations inutilisées : #5049</li>
+<li>Prise en charge du nombre filtré de style CASE distinct : #5047</li>
+<li>Ajouter le format de résultat &quot;tableau&quot; et les formats de résultat du document : #5032</li>
+<li>Correction de gettingSpec sur les agrégateurs complexes : #5024</li>
+<li>Comportement amélioré lors de la conversion implicite de chaînes en littéraux date/heure : #5023</li>
+<li>Ajouter des équilibreurs de connexion de routeur pour les requêtes Avatica : #4983</li>
+<li>Correction d'une simplification incorrecte du filtre : #4945</li>
+<li>Correction de la gestion par le routeur des requêtes SQL : #4851</li>
+</ul>
+<h3>Et bien plus encore !</h3>
+<p>La liste complète des changements est ici : https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.12.0</p>
+<h2>Mise à jour depuis 0.11.0 et versions antérieures</h2>
+<p>Veuillez consulter ci-dessous les modifications entre 0.11.0 et 0.12.0 dont vous devez être conscient avant la mise à niveau. Si vous effectuez une mise à jour à partir d'une version antérieure à 0.11.0, veuillez consulter les release note des versions intermédiaires concernées pour des notes supplémentaires.</p>
+<h3>Restrictions de restauration</h3>
+<p>Veuillez noter qu'après la mise à niveau vers 0.12.0, il n'est plus possible de revenir à une version antérieure à 0.11.0, en raison des modifications apportées à https://github.com/druid-io/druid/pull/4762.. Il est toujours possible de revenir à la version 0.11.0.</p>
+<h3>Migration de la bibliothèque com.metamx.java-util</h3>
+<p>La bibliothèque java-util Metamarkets a été intégrée à Druid. En conséquence, les références de packages suivantes ont changé :
+<code>com.metamx.common</code> -&gt; <code>io.druid.java.util.common</code>
+<code>com.metamx.emitter</code> -&gt; <code>io.druid.java.util.emitter</code>
+<code>com.metamx.http</code> -&gt; <code>io.druid.java.util.http</code>
+<code>com.metamx.metrics</code> -&gt; <code>io.druid.java.util.metrics</code>
+Cela affectera la configuration du <code>druid.monitoring.monitors</code>. Les références aux classes de surveillance sous l'ancien package <code>com.metamx.metrics.*</code> devront être mises à jour pour référencer <code>io.druid.java.metrics.*</code> à la place, par ex. <code>io.druid.java.util.metrics.JvmMonitor</code>.
+Si les classes des packages <code>com.metamx</code> présentés ci-dessus sont référencées dans d'autres configurations telles que log4j2.xml, ces références devront également être mises à jour.
+Les développeurs d'extensions devront également mettre à jour leur code pour utiliser les nouveaux packages Druid.</p>
+<h3>Extension du cache Caféine</h3>
+<p>L'extension de cache Caffeine a été déplacée d'une extension vers le noyau Druid. De plus, le cache Caffeine est désormais l'implémentation du cache par défaut. Veuillez supprimer <code>druid-caffeine-cache</code> s'il est présent de la liste des extensions lors de la mise à niveau vers 0.12.0. Plus d’informations peuvent être trouvées sur https://github.com/druid-io/druid/pull/4810.</p>
+<h3>Modifications du service d'indexation Kafka</h3>
+<h4>earlyMessageRejectPeriod</h4>
+<p>La sémantique de la configuration <code>earlyMessageRejectPeriod</code> a changé. Le <code>earlyMessageRejectPeriod</code> sera désormais ajouté au <code>(task start time + task duration)</code> au lieu du simple <code>(task start time)</code> lors de la détermination des limites de la fenêtre de message. Veuillez consulter https://github.com/druid-io/druid/pull/4990 pour plus d'informations.</p>
+<h4>Mise à niveau continue</h4>
+<p>Dans 0.12.0, il existe des changements de protocole entre le superviseur Kafka et la tâche d'indexation Kafka, ainsi que certaines modifications apportées aux formats de métadonnées conservées sur le disque. Par conséquent, pour prendre en charge la mise à niveau continue, tous les cadres intermédiaires devront être mis à niveau <strong>en premier</strong> avant l'Overlord. Notez que cet ordre est différent de l'ordre standard de mise à niveau. Notez également que cet ordre n'est nécessaire que lors de l'utilisation du service d'indexation Kafka. Si l'on n'utilise pas le service d'indexation Kafka ou si l'on peut gérer les temps d'arrêt de Kafka Supervisor, on peut effectuer la mise à niveau dans n'importe quel ordre.
+Jusqu'à la mise à niveau d'Overlord, toutes les tâches d'indexation Kafka se comporteront de la même manière (même si elles sont mises à niveau) que précédemment, ce qui signifie aucun découplage ni transfert incrémentiel. Une fois Overlord mis à niveau, les nouvelles tâches lancées par Overlord mis à niveau prendront en charge les nouvelles fonctionnalités.
+Veuillez consulter https://github.com/druid-io/druid/pull/4815 pour plus d'informations.</p>
+<h4>Revenir en arrière</h4>
+<p>Une fois que le suzerain et les cadres intermédiaires auront été annulés, un nouvel ensemble de tâches devrait être lancé, qui fonctionnera correctement. Cependant, l'ensemble de tâches actuel peut échouer lors d'une restauration. Veuillez consulter le numéro 4815 pour plus d'informations.</p>
+<h3>Modifications de l'interface pour les développeurs d'extensions</h3>
+<p>Le <code>ColumnSelectorFactory</code> API a changé. Les auteurs d'extensions d'agrégateur et tous ceux qui utilisent <code>ColumnSelectorFactory</code> devront mettre à jour leur code en conséquence. Veuillez consulter https://github.com/druid-io/druid/pull/4886 pour plus de détails.
+La méthode <code>Aggregator.reset()</code> a été supprimée car elle était obsolète et inutilisée. Veuillez consulter https://github.com/druid-io/druid/pull/5177 pour plus d'informations.
+L'interface <code>DataSegmentPusher</code> a changé et la méthode <code>push()</code> dispose désormais d'un paramètre <code>replaceExisting</code> supplémentaire. Veuillez consulter https://github.com/druid-io/druid/pull/5187 pour plus de détails.
+L'interface <code>Escalator</code> a changé : la méthode <code>createEscalatedJettyClient</code> a été supprimée. Veuillez consulter https://github.com/druid-io/druid/pull/5322 pour plus de détails.</p>
+<h2>Crédits</h2>
+<h2>Merci à tous ceux qui ont contribué à cette version !
+@a2l007
+@akashdw
+@AlexandreSaydakov
+@b-slim
+@ben-manes
+@benvogan
+@chuanlei
+@chunghochen
+@clintropolis
+@daniel-tcell
+@dclim
+@dpenas
+@drcrallen
+@egor-ryashin
+@elloooooo
+@Fokko
+@fuji-151a
+@gianm
+@gvsmirnov
+@himanshug
+@hzy001
+@Igosuki
+@jihoonson
+@jon-wei
+@KenjiTakahashi
+@kevinconaway
+@leventov
+@mh2753
+@niketh
+@nishantmonu51
+@pjain1
+@QiMM
+@QubitPi
+@quenlang
+@Shimi
+@skyler-tao
+@xanec
+@yuppie-grippe
+@zhangxinyu1</h2>
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.12.0</code> · 09/03/2018 · <a href="https://github.com/apache/druid/releases/tag/druid-0.12.0">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>druid druid-0.12.0</h1>
+<p>Druid 0.12.0 contains over a hundred performance improvements, stability improvements, and bug fixes from almost 40 contributors. This release adds major improvements to the Kafka indexing service.</p>
+<p>Other major new features include:</p>
+<ul>
+<li>Prioritized task locking</li>
+<li>Improved automatic segment management</li>
+<li>Test stats post-aggregators</li>
+<li>Numeric quantiles sketch aggregator</li>
+<li>Basic auth extension</li>
+<li>Query request queuing improvements</li>
+<li>Parse batch support</li>
+<li>Various performance improvements</li>
+<li>Various improvements to Druid SQL</li>
+</ul>
+<p>The full list of changes is here: https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.12.0</p>
+<p>Documentation for this release is at: http://druid.io/docs/0.12.0/</p>
+<h2>Highlights</h2>
+<h3>Kafka indexing incremental handoffs and decoupled partitioning</h3>
+<p>The Kafka indexing service now supports incremental handoffs, as well as decoupling the number of segments created by a Kafka indexing task from the number of Kafka partitions. Please see https://github.com/druid-io/druid/pull/4815#issuecomment-346155552 for more information.</p>
+<p>Added by @pjain1 in #4815.</p>
+<h3>Prioritized task locking</h3>
+<p>Druid now supports priorities for indexing task locks. When an indexing task needs to acquire a lock on a datasource + interval, higher-priority tasks can now preempt lower-priority tasks. Please see http://druid.io/docs/0.12.0-rc1/ingestion/tasks.html#task-priority for more information.</p>
+<p>Added by @jihoonson in https://github.com/druid-io/druid/pull/4550.</p>
+<h3>Improved automatic segment management</h3>
+<h4>Automatic pending segments cleanup</h4>
+<p>Indexing tasks create entries in the &quot;pendingSegments&quot; table in the metadata store; prior to 0.12.0, these temporary entries were not automatically cleaned up, leading to possible cluster performance degradation over time. Druid 0.12.0 allows the coordinator to automatically clean up unused entries in the pending segments table. This feature is enabled by setting  <code>druid.coordinator.kill.pendingSegments.on=true</code> in coordinator properties.</p>
+<p>Added by @jihoonson in #5149.</p>
+<h4>Compaction task</h4>
+<p>Compacting segments (merging a set of segments within a given interval to create a set with larger but fewer segments) is a common Druid batch ingestion use case. Druid 0.12.0 now supports a Compaction Task that merges all segments within a given interval into a single segment. Please see http://druid.io/docs/0.12.0-rc1/ingestion/tasks.html#compaction-task for more details.</p>
+<p>Added by @jihoonson in #4985.</p>
+<h3>Test stats post-aggregators</h3>
+<p>New z-score and p-value test statistics post-aggregators have been added to the <code>druid-stats</code> extension. Please see http://druid.io/docs/0.12.0-rc1/development/extensions-core/test-stats.html for more details.</p>
+<p>Added by @chunghochen in #4532.</p>
+<h3>Numeric quantiles sketch aggregator</h3>
+<p>A numeric quantiles sketch aggregator has been added to the <code>druid-datasketches</code> extension.</p>
+<p>Added by @AlexanderSaydakov in #5002.</p>
+<h3>Basic auth extension</h3>
+<p>Druid 0.12.0 includes a new authentication/authorization extension that provides Basic HTTP authentication and simple role-based access control. Please see http://druid.io/docs/0.12.0-rc1/development/extensions-core/druid-basic-security.html for more information.</p>
+<p>Added by @jon-wei in #5099.</p>
+<h3>Query request queuing improvements</h3>
+<p>Currently clients can overwhelm a broker inadvertently by sending too many requests which get queued in an unbounded Jetty worker pool queue. Clients typically close the connection after a certain client-side timeout but the broker will continue to process these requests, giving the appearance of being unresponsive. Meanwhile, clients would continue to retry, continuing to add requests to an already overloaded broker..</p>
+<p>The newly introduced properties <code>druid.server.http.queueSize</code> and <code>druid.server.http.enableRequestLimit</code> in the <a href="http://druid.io/docs/0.12.0-rc1/configuration/broker.html">broker configuration</a> and <a href="http://druid.io/docs/0.12.0-rc1/configuration/historical.html">historical configuration</a> allow users to configure request rejection to prevent clients from overwhelming brokers and historicals with queries.</p>
+<p>Added by @himanshug in #4540.</p>
+<h3>Parse batch support</h3>
+<p>For developers of custom ingestion parsing extensions, it is now possible for InputRowParsers to return multiple InputRows from a single input row. This can simplify ingestion pipelines by reducing the need for input transformations outside of Druid.
+Added by @pjain1 in #5081.</p>
+<h3>Performance improvements</h3>
+<h4>SegmentWriteOutMedium</h4>
+<p>When creating new segments, Druid stores some pre-processed data in temporary buffers. Prior to 0.12.0, these buffers were always kept in temporary files on disk.  In 0.12.0, PR #4762 by @leventov allows these temporary buffers to be stored in off-heap memory, thus reducing the number of disk I/O operations during ingestion. To enable using off-heap memory for these buffers, the <code>druid.peon.defaultSegmentWriteOutMediumFactory</code> property needs to be configured accordingly. If using off-heap memory for the temporary buffers, please ensure that <code>-XX:MaxDirectMemorySize</code> is increased to accommodate the higher direct memory usage.</p>
+<p>Please see http://druid.io/docs/0.12.0-rc1/configuration/indexing-service.html#SegmentWriteOutMediumFactory for configuration details.</p>
+<h4>Parallel merging of intermediate GroupBy results</h4>
+<p>PR #4704 by @jihoonson allows the user to configure a number of processing threads to be used for parallel merging of intermediate GroupBy results that have been spilled to disk. Prior to 0.12.0, this merging step would always take place within a single thread.</p>
+<p>Please see http://druid.io/docs/0.12.0-rc1/configuration/querying/groupbyquery.html#parallel-combine for configuration details.</p>
+<h4>Other performance improvements</h4>
+<ul>
+<li>DataSegment memory optimizations: #5094 by @leventov</li>
+<li>Remove IndexedInts.iterator(): #4811 by @leventov</li>
+<li>ExpressionSelectors: Add optimized selectors: #5048 by @gianm</li>
+</ul>
+<h3>SQL improvements</h3>
+<p>Various improvements and features have been added to Druid SQL, by @gianm in the following PRs:</p>
+<ul>
+<li>Improve translation of time floor expressions: #5107</li>
+<li>Add TIMESTAMPADD: #5079</li>
+<li>Add rule to prune unused aggregations: #5049</li>
+<li>Support CASE-style filtered count distinct: #5047</li>
+<li>Add &quot;array&quot; result format, and document result formats: #5032</li>
+<li>Fix havingSpec on complex aggregators: #5024</li>
+<li>Improved behavior when implicitly casting strings to date/time literals: #5023</li>
+<li>Add Router connection balancers for Avatica queries: #4983</li>
+<li>Fix incorrect filter simplification: #4945</li>
+<li>Fix Router handling of SQL queries: #4851</li>
+</ul>
+<h3>And much more!</h3>
+<p>The full list of changes is here: https://github.com/druid-io/druid/pulls?utf8=%E2%9C%93&amp;q=is%3Apr%20is%3Aclosed%20milestone%3A0.12.0</p>
+<h2>Updating from 0.11.0 and earlier</h2>
+<p>Please see below for changes between 0.11.0 and 0.12.0 that you should be aware of before upgrading. If you're updating from an earlier version than 0.11.0, please see release notes of the relevant intermediate versions for additional notes.</p>
+<h3>Rollback restrictions</h3>
+<p>Please note that after upgrading to 0.12.0, it is no longer possible to downgrade to a version older than 0.11.0, due to changes made in https://github.com/druid-io/druid/pull/4762. It is still possible to roll back to version 0.11.0.</p>
+<h3>com.metamx.java-util library migration</h3>
+<p>The Metamarkets java-util library has been brought into Druid. As a result, the following package references have changed:</p>
+<p><code>com.metamx.common</code> -&gt; <code>io.druid.java.util.common</code>
+<code>com.metamx.emitter</code> -&gt; <code>io.druid.java.util.emitter</code>
+<code>com.metamx.http</code> -&gt; <code>io.druid.java.util.http</code>
+<code>com.metamx.metrics</code> -&gt; <code>io.druid.java.util.metrics</code></p>
+<p>This will affect the <code>druid.monitoring.monitors</code> configuration. References to monitor classes under the old <code>com.metamx.metrics.*</code> package will need to be updated to reference <code>io.druid.java.metrics.*</code> instead, e.g. <code>io.druid.java.util.metrics.JvmMonitor</code>.</p>
+<p>If classes under the the <code>com.metamx</code> packages shown above are referenced in other configurations such as log4j2.xml, those references will need to be updated as well.</p>
+<p>Extension developers will need to update their code to use the new Druid packages as well.</p>
+<h3>Caffeine cache extension</h3>
+<p>The Caffeine cache extension has been moved out of an extension, into core Druid. In addition, the Caffeine cache is now the default cache implementation. Please remove <code>druid-caffeine-cache</code> if present from the extension list when upgrading to 0.12.0. More information can be found at https://github.com/druid-io/druid/pull/4810.</p>
+<h3>Kafka indexing service changes</h3>
+<h4>earlyMessageRejectPeriod</h4>
+<p>The semantics of the <code>earlyMessageRejectPeriod</code> configuration have changed. The <code>earlyMessageRejectPeriod</code> will now be added to <code>(task start time + task duration)</code> instead of just <code>(task start time)</code> when determining the bounds of the message window. Please see https://github.com/druid-io/druid/pull/4990 for more information.</p>
+<h4>Rolling upgrade</h4>
+<p>In 0.12.0, there are protocol changes between the Kafka supervisor and Kafka Indexing task and also some changes to the metadata formats persisted on disk. Therefore, to support rolling upgrade, all the Middle Managers will need to be upgraded <strong>first</strong> before the Overlord. Note that this ordering is different from the standard order of upgrade, also note that this ordering is only necessary when using the Kafka Indexing Service. If one is not using Kafka Indexing Service or can handle down time for Kafka Supervisor then one can upgrade in any order.</p>
+<p>Until the point in time Overlord is upgraded, all the Kafka Indexing Task will behave in same manner (even if they are upgraded) as earlier which means no decoupling and incremental hand-offs. Once, Overlord is upgraded, the new tasks started by the upgraded Overlord will support the new features.</p>
+<p>Please see https://github.com/druid-io/druid/pull/4815 for more info.</p>
+<h4>Roll back</h4>
+<p>Once both the overlord and middle managers are rolled back, a new set of tasks should be started, which will work properly. However, the current set of tasks may fail during a roll back. Please see #4815 for more info.</p>
+<h3>Interface Changes for Extension Developers</h3>
+<p>The <code>ColumnSelectorFactory</code> API has changed. Aggregator extension authors and any others who use <code>ColumnSelectorFactory</code> will need to update their code accordingly. Please see https://github.com/druid-io/druid/pull/4886 for more details.</p>
+<p>The <code>Aggregator.reset()</code> method has been removed because it was deprecated and unused. Please see https://github.com/druid-io/druid/pull/5177 for more info.</p>
+<p>The <code>DataSegmentPusher</code> interface has changed, and the <code>push()</code> method now has an additional <code>replaceExisting</code> parameter. Please see https://github.com/druid-io/druid/pull/5187 for details.</p>
+<p>The <code>Escalator</code> interface has changed: the <code>createEscalatedJettyClient</code> method has been removed. Please see https://github.com/druid-io/druid/pull/5322 for more details.</p>
+<h2>Credits</h2>
+<p>Thanks to everyone who contributed to this release!</p>
+<p>@a2l007
+@akashdw
+@AlexanderSaydakov
+@b-slim
+@ben-manes
+@benvogan
+@chuanlei
+@chunghochen
+@clintropolis
+@daniel-tcell
+@dclim
+@dpenas
+@drcrallen
+@egor-ryashin
+@elloooooo
+@Fokko
+@fuji-151a
+@gianm
+@gvsmirnov
+@himanshug
+@hzy001
+@Igosuki
+@jihoonson
+@jon-wei
+@KenjiTakahashi
+@kevinconaway
+@leventov
+@mh2753
+@niketh
+@nishantmonu51
+@pjain1
+@QiuMM
+@QubitPi
+@quenlang
+@Shimi
+@skyler-tao
+@xanec
+@yuppie-flu
+@zhangxinyu1</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/druid">apache/druid</a> · <code>druid-0.12.0</code> · 2018-03-09 · <a href="https://github.com/apache/druid/releases/tag/druid-0.12.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/druid/0.12.1"> <span class="k">← Suivant</span> <span class="t">0.12.1</span> </a> <a href="/releases/druid/0.11.0"> <span class="k">Précédent →</span> <span class="t">0.11.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/druid/releases/tag/0.12.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/druid" target="_blank" rel="noopener"> <span>apache/druid</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Faits saillants</a><a href="#" class="lv3">Kafka indexe les transferts incrémentiels et le partitionnement découplé</a><a href="#" class="lv3">Verrouillage des tâches prioritaires</a><a href="#" class="lv3">Amélioration de la gestion automatique des segments</a><a href="#" class="lv3">Testez les statistiques post-agrégateurs</a><a href="#" class="lv3">Agrégateur de croquis de quantiles numériques</a><a href="#" class="lv3">Extension d&#39;authentification de base</a><a href="#" class="lv3">Améliorations de la file d&#39;attente des requêtes de requête</a><a href="#" class="lv3">Prise en charge de l&#39;analyse par lots</a><a href="#" class="lv3">Améliorations des performances</a><a href="#" class="lv3">Améliorations SQL</a><a href="#" class="lv3">Et bien plus encore !</a><a href="#" class>Mise à jour depuis 0.11.0 et versions antérieures</a><a href="#" class="lv3">Restrictions de restauration</a><a href="#" class="lv3">Migration de la bibliothèque com.metamx.java-util</a><a href="#" class="lv3">Extension du cache Caféine</a><a href="#" class="lv3">Modifications du service d&#39;indexation Kafka</a><a href="#" class="lv3">Modifications de l&#39;interface pour les développeurs d&#39;extensions</a><a href="#" class>Crédits</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/druid/39.0.0"> <span class="v">39.0.0</span> <span class="d">26-11-19</span> </a> </li><li> <a href="/releases/druid/38.0.0"> <span class="v">38.0.0</span> <span class="d">26-10-01</span> </a> </li><li> <a href="/releases/druid/37.0.0"> <span class="v">37.0.0</span> <span class="d">26-05-08</span> </a> </li><li> <a href="/releases/druid/36.0.0"> <span class="v">36.0.0</span> <span class="d">26-02-09</span> </a> </li><li> <a href="/releases/druid/35.0.1"> <span class="v">35.0.1</span> <span class="d">25-12-15</span> </a> </li><li> <a href="/releases/druid/35.0.0"> <span class="v">35.0.0</span> <span class="d">25-11-18</span> </a> </li><li> <a href="/releases/druid/34.0.0"> <span class="v">34.0.0</span> <span class="d">25-08-11</span> </a> </li><li> <a href="/releases/druid/33.0.0"> <span class="v">33.0.0</span> <span class="d">25-04-29</span> </a> </li> </ul> <a href="/fr/releases/druid" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 71 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

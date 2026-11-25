@@ -1,0 +1,1707 @@
+<!DOCTYPE html><html lang="pt-BR" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>pulsar v2.11.0 — STAGS NextStack</title><meta name="description" content="Rename Pulsar txn metrics to specify OpenMetrics #16581 · Rename Pulsar schema metrics to specify OpenMetrics #16610 · Rename Pulsar lb metrics to specify OpenMetrics #16611 · Remove jul-to-slf4j #16320 #16320"><meta name="keywords" content="release notes de código aberto, rastreador de lançamento, agregador changelog, alterações significativas, rastreador de descontinuação, lançamentos Kafka, lançamentos Spring Boot, lançamentos Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/pt/releases/pulsar/2.11.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/pt/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/pulsar/2.11.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/pulsar/2.11.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/pulsar/2.11.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="pulsar v2.11.0 — STAGS NextStack"><meta property="og:description" content="Rename Pulsar txn metrics to specify OpenMetrics #16581 · Rename Pulsar schema metrics to specify OpenMetrics #16610 · Rename Pulsar lb metrics to specify OpenMetrics #16611 · Remove jul-to-slf4j #16320 #16320"><meta property="og:url" content="https://www.stags.cn/pt/releases/pulsar/2.11.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="pt_BR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="fr_FR"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"pt-BR","description":"NextStack indexa notas de versão de projetos de infraestrutura e IA – mudanças incompatíveis, descontinuações e migrações – em um feed único em inglês.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/pt/releases/pulsar/2.11.0/#article","headline":"pulsar v2.11.0 release notes","datePublished":"2023-01-13","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/apache/pulsar"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Ir para o conteúdo</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/pt/" class="brand" aria-label="STAGS NextStack — Inteligência de versões open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/pt/releases">Versões</a><a href="/pt/projects">Projetos</a><a href="/pt/method">Método</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/pt/releases" class="navmenu-item">Versões</a><a href="/pt/projects" class="navmenu-item">Projetos</a><a href="/pt/method" class="navmenu-item">Método</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Buscar versões"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Buscar</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Idioma"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">PT</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Idioma"> <p class="langmenu-head">Idioma</p> <a class="langmenu-item" href="/releases/pulsar/2.11.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/pulsar/pulsar_v2.11.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/pulsar/2.11.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/pulsar/2.11.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/pulsar/2.11.0/" hreflang="fr" lang="fr" data-on="false"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/pulsar/2.11.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/pulsar/2.11.0/" hreflang="pt-BR" lang="pt-BR" aria-current="true" data-on="true"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/pt/">Início</a> <span class="sep">/</span> <a href="/pt/releases">Versões</a> <span class="sep">/</span> <a href="/pt/releases/pulsar">pulsar</a> </nav> <h1 class="detail-title"> <span class="p">pulsar</span> v2.11.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Minor</span> <span><span class="k">Publicado</span>13 de jan. de 2023</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/apache/pulsar" target="_blank" rel="noopener"> <span class="k">Fonte</span>apache/pulsar </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/pulsar/2.11.0/"> Original em inglês </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/pt/releases/pulsar/2.11.0/">Copiar link</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Esta página é traduzida automaticamente. O texto original em inglês é a referência.</p>  <div><h1>pulsar v2.11.0</h1>
+<h3>Aviso importante</h3>
+<ul>
+<li>Renomeie as métricas Pulsar txn para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16581">#16581</a></li>
+<li>Renomeie as métricas do esquema Pulsar para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16610">#16610</a></li>
+<li>Renomeie as métricas Pulsar lb para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16611">#16611</a></li>
+<li>Remover jul-to-slf4j #16320 <a href="https://github.com/apache/pulsar/pull/16320">#16320</a></li>
+<li>Corrigido problema de obtenção de tópicos não persistentes em Namespaces <a href="https://github.com/apache/pulsar/pull/16170">#16170</a></li>
+<li>Correção da permissão de produtor/consumo que não consegue obter o esquema <a href="https://github.com/apache/pulsar/pull/15956">#15956</a></li>
+<li>Adicionar verificação para cota e retenção de pendências padrão configuradas <a href="https://github.com/apache/pulsar/pull/15441">#15441</a></li>
+<li>Correção do corretor ineficaz LoadBalance <a href="https://github.com/apache/pulsar/pull/15314">#15314</a></li>
+<li>Garantir a consistência de exclusão do tópico e do esquema <a href="https://github.com/apache/pulsar/pull/14608">#14608</a></li>
+<li>Alteração de reenvio cumulativo de transação <a href="https://github.com/apache/pulsar/pull/14371">#14371</a></li>
+<li>Versão Bump prometheus client de 0.5.0 para 0.15.0 <a href="https://github.com/apache/pulsar/pull/13785">#13785</a></li>
+<li>[PIP-158] Divida a criptografia de transporte TLS client da autenticação <a href="https://github.com/apache/pulsar/pull/15634">#15634</a></li>
+<li>[PIP-155] Remover suporte Python 2 <a href="https://github.com/apache/pulsar/pull/15376">#15376</a></li>
+<li>[PIP-156] Construir servidor Pulsar em Java 17 <a href="https://github.com/apache/pulsar/pull/15264">#15264</a></li>
+<li>[PIP-162] Habilitar tópico do sistema por padrão <a href="https://github.com/apache/pulsar/pull/15619">#15619</a></li>
+</ul>
+<h3>PIPs</h3>
+<ul>
+<li>[PIP 37] Suporte a chunking com assinatura compartilhada <a href="https://github.com/apache/pulsar/pull/16202">#16202</a></li>
+<li>[PIP-74] Limites de memória do Pulsar client <a href="https://github.com/apache/pulsar/pull/14400">#14400</a></li>
+<li>[PIP-81] Divida createNewMetadataLedger em vários métodos para reutilização <a href="https://github.com/apache/pulsar/pull/15425">#15425</a></li>
+<li>[PIP 97] Atualizar interfaces de autenticação para incluir métodos de autenticação assíncrona <a href="https://github.com/apache/pulsar/pull/12104">#12104</a></li>
+<li>[PIP-100] Suporte para fábrica de tópicos conectáveis <a href="https://github.com/apache/pulsar/pull/12235">#12235</a></li>
+<li>[PIP-105] Armazenar propriedades de assinatura <a href="https://github.com/apache/pulsar/pull/15757">#15757</a></li>
+<li>[PIP-117] Alterar padrões independentes do Pulsar <a href="https://github.com/apache/pulsar/pull/15478">#15478</a></li>
+<li>[PIP-132] Incluir o tamanho do cabeçalho da mensagem ao verificar maxMessageSize para mensagens que não sejam em lote no lado client <a href="https://github.com/apache/pulsar/pull/14007">#14007</a></li>
+<li>[PIP-136] Sincronizar metadados do Pulsar em várias nuvens <a href="https://github.com/apache/pulsar/pull/16425">#16425</a></li>
+<li>[PIP-143] Suporte a pacote dividido por limites especificados <a href="https://github.com/apache/pulsar/pull/13796">#13796</a></li>
+<li>[PIP-145] Melhorar o desempenho de assinaturas de regex <a href="https://github.com/apache/pulsar/pull/14505">#14505</a></li>
+<li>[PIP-146] Compressão ManagedCursorInfo <a href="https://github.com/apache/pulsar/pull/14542">#14542</a></li>
+<li>[PIP 149] Torne o REST Admin API totalmente assíncrono <a href="https://github.com/apache/pulsar/issues/14365">#14365</a></li>
+<li>[PIP-152] Suporte à configuração do limitador de taxa de despacho no nível de assinatura <a href="https://github.com/apache/pulsar/issues/15295">#15295</a></li>
+<li>[PIP-153] Otimizar posições de metadados em MLPendingAckStore <a href="https://github.com/apache/pulsar/pull/15137">#15137</a></li>
+<li>[PIP-160] Faça com que as transações funcionem de forma mais eficiente por meio da operação de agregação para log de transações e armazenamento de confirmação pendente <a href="https://github.com/apache/pulsar/issues/15370">#15370</a></li>
+<li>[PIP-161] Produtor Exclusivo: capacidade de isolar um Produtor existente <a href="https://github.com/apache/pulsar/pull/15488">#15488</a></li>
+<li>[PIP-163] Adicionar verificação lowWaterMark antes de anexar entrada ao TB <a href="https://github.com/apache/pulsar/pull/15424">#15424</a></li>
+<li>[PIP-166] Adicionar semântica de entrega MANUAL para Funções <a href="https://github.com/apache/pulsar/pull/16279">#16279</a></li>
+<li>[PIP-179] Apoie o administrador API para verificar parâmetros de solicitação desconhecidos <a href="https://github.com/apache/pulsar/issues/16135">#16135</a></li>
+<li>[PIP-181] Concha Pulsar <a href="https://github.com/apache/pulsar/issues/16250">#16250</a></li>
+<li>[PIP-184] Nível de prioridade do consumidor específico do tópico <a href="https://github.com/apache/pulsar/issues/16715">#16715</a></li>
+<li>[PIP-187] Adicione API para analisar um backlog de assinatura e fornecer um valor preciso <a href="https://github.com/apache/pulsar/issues/16545">#16545</a></li>
+<li>[PIP-189] Sem lote se houver apenas uma mensagem em lote <a href="https://github.com/apache/pulsar/issues/18548">#18548</a></li>
+<li>[PIP-201] Mecanismo de extensões para ferramentas Pulsar Admin CLI <a href="https://github.com/apache/pulsar/issues/17158">#17158</a></li>
+</ul>
+<h3>Corretor</h3>
+<ul>
+<li>[PIP 81] Divida os agradecimentos individuais em várias entradas
+<ul>
+<li>Adicionar wrapper de conjunto de intervalo para suportar registros de livros sujos <a href="https://github.com/apache/pulsar/pull/15607">#15607</a></li>
+<li>Notificações para descoberta mais rápida de tópicos <a href="https://github.com/apache/pulsar/pull/16062">#16062</a></li>
+</ul>
+</li>
+<li>Divida createNewMetadataLedger em vários métodos para reutilização <a href="https://github.com/apache/pulsar/pull/15425">#15425</a></li>
+<li>[PIP 105] Propriedades de assinatura da loja
+<ul>
+<li>Armazenar propriedades de assinatura <a href="https://github.com/apache/pulsar/pull/15757">#15757</a></li>
+<li>Pulsar Admin: crie assinatura com Propriedades <a href="https://github.com/apache/pulsar/pull/15503">#15503</a></li>
+<li>Corrigir erro na SubscriptionPropertiesList reciclada <a href="https://github.com/apache/pulsar/pull/15335">#15335</a></li>
+</ul>
+</li>
+<li>[PIP 160] Faça com que as transações funcionem com mais eficiência por meio da operação de agregação para log de transações e armazenamento de confirmação pendente
+<ul>
+<li>O armazenamento de log de confirmação pendente ativa o recurso de lote <a href="https://github.com/apache/pulsar/pull/16707">#16707</a></li>
+<li>Estatísticas de métricas do gravador com buffer de transação <a href="https://github.com/apache/pulsar/pull/16758">#16758</a></li>
+<li>Gravador com buffer de transação suporta temporizador <a href="https://github.com/apache/pulsar/pull/16727">#16727</a></li>
+<li>O armazenamento de log de transações ativa o recurso de lote <a href="https://github.com/apache/pulsar/pull/16685">#16685</a></li>
+<li>Alterações de protocolo e alterações de configuração para log de lote de transações <a href="https://github.com/apache/pulsar/pull/16617">#16617</a></li>
+<li>Gravador com buffer Txn para lote de log de transações <a href="https://github.com/apache/pulsar/pull/16428">#16428</a></li>
+</ul>
+</li>
+<li>[PIP 145] Melhorar o desempenho de assinaturas de regex
+<ul>
+<li>Habilitar avaliação do padrão de assinatura no lado do corretor <a href="https://github.com/apache/pulsar/pull/14804">#14804</a></li>
+<li>Notificações para descoberta mais rápida de tópicos <a href="https://github.com/apache/pulsar/pull/16062">#16062</a></li>
+</ul>
+</li>
+<li>[PIP-156] Construir servidor Pulsar em Java 17
+<ul>
+<li>Crie alterações descartando algumas verificações obrigatórias <a href="https://github.com/apache/pulsar/pull/15496">#15496</a></li>
+<li>Construir servidor Pulsar em Java 17 <a href="https://github.com/apache/pulsar/pull/15264">#15264</a></li>
+</ul>
+</li>
+<li>Adicionar registros sobre por que o pacote de namespace foi dividido <a href="https://github.com/apache/pulsar/pull/19003">#19003</a></li>
+<li>Omitir a cópia do CommandAck quando não houver interceptadores de corretores <a href="https://github.com/apache/pulsar/pull/18997">#18997</a></li>
+<li>Corrigir impasse em PendingAckHandleImpl <a href="https://github.com/apache/pulsar/pull/18989">#18989</a></li>
+<li>Copie os campos de comando proto nas variáveis finais no ServerCnx <a href="https://github.com/apache/pulsar/pull/18987">#18987</a></li>
+<li>Transação pendente de confirmação do futuro da loja não é um problema completo <a href="https://github.com/apache/pulsar/pull/18943">#18943</a></li>
+<li>Atualizar exceção do manipulador de interceptador <a href="https://github.com/apache/pulsar/pull/18940">#18940</a></li>
+<li>Não requer criptografia em tópicos do sistema <a href="https://github.com/apache/pulsar/pull/18898">#18898</a></li>
+<li>Corrigir uso incorreto de Nic coletado pelo pulsar <a href="https://github.com/apache/pulsar/pull/18882">#18882</a></li>
+<li>Correção de PendingAckHandleImpl quando pendenteAckStoreProvider.checkInitializedBefore falhou <a href="https://github.com/apache/pulsar/pull/18859">#18859</a></li>
+<li>Ignore a exceção de criação de namespace <a href="https://github.com/apache/pulsar/pull/18837">#18837</a></li>
+<li>Correção de impossibilidade de excluir namespace à força <a href="https://github.com/apache/pulsar/pull/18826">#18826</a></li>
+<li>Evite que o OOM não acione PulsarByteBufAllocator outOfMemoryListener ao usar ByteBufAllocator.DEFAULT.heapBuffer <a href="https://github.com/apache/pulsar/pull/18747">#18747</a></li>
+<li>Conexão de gravador/leitor de tópico do sistema não contada <a href="https://github.com/apache/pulsar/pull/18603">#18603</a></li>
+<li>DnsResolverUtil.TTL deve ser maior que zero <a href="https://github.com/apache/pulsar/pull/18565">#18565</a></li>
+<li>Persistir markDeletePosition correto para evitar perda de mensagem <a href="https://github.com/apache/pulsar/pull/18237">#18237</a></li>
+<li>Correção de que delete_when_subscriptions_caught_up não funciona enquanto há consumidores ativos <a href="https://github.com/apache/pulsar/pull/18320">#18320</a></li>
+<li>Leia o cookie local ao iniciar o pulsar autônomo <a href="https://github.com/apache/pulsar/pull/18260">#18260</a></li>
+<li>Remova a lógica de julgamento redundante de ManagedCursorImpl <a href="https://github.com/apache/pulsar/pull/18205">#18205</a></li>
+<li>Corrija o comportamento inesperado invocando PulsarConfigurationLoader#convertFrom <a href="https://github.com/apache/pulsar/pull/18816">#18816</a></li>
+<li>Corrigido o comportamento errado ao definir overrideBrokerNicSpeedGbps <a href="https://github.com/apache/pulsar/pull/18818">#18818</a></li>
+<li>Corrigida a alteração significativa da inicialização de metadados autônomos <a href="https://github.com/apache/pulsar/pull/18909">#18909</a></li>
+<li>Recuperação de buffer de transação bloqueada por readNext <a href="https://github.com/apache/pulsar/pull/18969">#18969</a></li>
+<li>Corrigir criação de esquemas duplicados <a href="https://github.com/apache/pulsar/pull/18701">#18701</a></li>
+<li>Leia o cookie local ao iniciar o pulsar autônomo <a href="https://github.com/apache/pulsar/pull/18260">#18260</a></li>
+<li>O agenciador de apostas autônomo Pulsar não está passando pela configuração do standalone.conf <a href="https://github.com/apache/pulsar/pull/18126">#18126</a></li>
+<li>Reduza chamadas desnecessárias de span() ao filtrar entradas de leitura <a href="https://github.com/apache/pulsar/pull/18106">#18106</a></li>
+<li>Alterar a autenticação do esquema de atualização do locatário para produzir <a href="https://github.com/apache/pulsar/pull/18074">#18074</a></li>
+<li>Corrigida entrega atrasada após erro de operação de leitura <a href="https://github.com/apache/pulsar/pull/18098">#18098</a></li>
+<li>Corrigir vazamento de memória durante o descarregamento de livros <a href="https://github.com/apache/pulsar/pull/18500">#18500</a></li>
+<li>Invalidação de cache devido a acesso simultâneo <a href="https://github.com/apache/pulsar/pull/18076">#18076</a></li>
+<li>Correção de impossibilidade de iniciar vários agenciadores de apostas para BKCluster <a href="https://github.com/apache/pulsar/pull/18072">#18072</a></li>
+<li>Compare o índice do lote ao acumular acks e atualizar batchDeletedIndexes <a href="https://github.com/apache/pulsar/pull/18042">#18042</a></li>
+<li>Limitar a memória usada pelas leituras ponta a ponta <a href="https://github.com/apache/pulsar/pull/18245">#18245</a></li>
+<li>A política de despejo de pendências do consumidor não deve redefinir a posição de leitura do consumidor <a href="https://github.com/apache/pulsar/pull/18037">#18037</a></li>
+<li>Permitir configurar e desabilitar o tamanho do lookahead para detecção de atrasos fixos em mensagens <a href="https://github.com/apache/pulsar/pull/17907">#17907</a></li>
+<li>Corrigir criação de ns <a href="https://github.com/apache/pulsar/pull/17864">#17864</a></li>
+<li>Corrija a unidade de taxa de velocidade da NIC errada <a href="https://github.com/apache/pulsar/pull/17890">#17890</a></li>
+<li>Corrigido bug de estouro numérico ao ler dados do armazenamento em camadas <a href="https://github.com/apache/pulsar/pull/18595">#18595</a></li>
+<li>Suporta eliminação de limites inferiores para ThresholdShedder <a href="https://github.com/apache/pulsar/pull/17456">#17456</a></li>
+<li>Evite a criação desnecessária de objetos BitSetRecyclable <a href="https://github.com/apache/pulsar/pull/17998">#17998</a></li>
+<li>Corrigido o despejo do cache do corretor de entradas lidas por cursores ativos <a href="https://github.com/apache/pulsar/pull/17273">#17273</a></li>
+<li>Correção do problema em que as informações do corretor líder não estavam disponíveis após 10 minutos <a href="https://github.com/apache/pulsar/pull/17401">#17401</a></li>
+<li>Correção do NPE quando ResourceGroupService executa tarefa agendada <a href="https://github.com/apache/pulsar/pull/17840">#17840</a></li>
+<li>Faça o BookieId funcionar com PulsarRegistrationDriver <a href="https://github.com/apache/pulsar/pull/17762">#17762</a></li>
+<li>Correção da verificação de cota de backlog de namespace com retenção <a href="https://github.com/apache/pulsar/pull/17706">#17706</a></li>
+<li>Estado de limpeza quando a revalidação do bloqueio obtém LockBusyException <a href="https://github.com/apache/pulsar/pull/17700">#17700</a></li>
+<li>Correção da análise de PartitionedKey com problema de codificação Base64 <a href="https://github.com/apache/pulsar/pull/17687">#17687</a></li>
+<li>Adicionar parâmetro independente de --metadata-url para execução com metadados <a href="https://github.com/apache/pulsar/pull/17077">#17077</a></li>
+<li>Definir corretamente os totais de bytes e mensagens por assinatura <a href="https://github.com/apache/pulsar/pull/18451">#18451</a></li>
+<li>Implementação de mensagens de transação atrasadas <a href="https://github.com/apache/pulsar/pull/17548">#17548</a></li>
+<li>Defina revalidateAfterReconnection como verdadeiro para certas falhas <a href="https://github.com/apache/pulsar/pull/17664">#17664</a></li>
+<li>Cancelar registro do ouvinte de política de tópico se o fechamento do livro gerenciado falhar <a href="https://github.com/apache/pulsar/pull/17652">#17652</a></li>
+<li>Manuseie corretamente os valores de configuração da lista <a href="https://github.com/apache/pulsar/pull/17661">#17661</a></li>
+<li>Cancelar a tarefa loadShedding ao fechar o serviço pulsar <a href="https://github.com/apache/pulsar/pull/17632">#17632</a></li>
+<li>O consumidor não pode consumir mensagens porque existem dois tópicos iguais em um corretor <a href="https://github.com/apache/pulsar/pull/17526">#17526</a></li>
+<li>Impedir solicitação de pesquisa de metadados particionados quando o corretor estiver fechando <a href="https://github.com/apache/pulsar/pull/17315">#17315</a></li>
+<li>Impedir nova solicitação de conexão quando o corretor estiver fechando <a href="https://github.com/apache/pulsar/pull/17314">#17314</a></li>
+<li>Vazamento do identificador do razão ao atualizar o esquema <a href="https://github.com/apache/pulsar/pull/17283">#17283</a></li>
+<li>Adicionar métricas para inserção de cache de entrada, despejo <a href="https://github.com/apache/pulsar/pull/17248">#17248</a></li>
+<li>Não envie leituras duplicadas para BK/offloaders <a href="https://github.com/apache/pulsar/pull/17241">#17241</a></li>
+<li>Correção do namespace do serviço do sistema para criar tópico de evento interno <a href="https://github.com/apache/pulsar/pull/17867">#17867</a></li>
+<li>Corrigir loop infinito getPositionAfterN <a href="https://github.com/apache/pulsar/pull/17971">#17971</a></li>
+<li>Corrigir vazamento de memória em caso de condições de erro no PendingReadsManager <a href="https://github.com/apache/pulsar/pull/17995">#17995</a></li>
+<li>Após o broker ser reiniciado, a configuração dinâmica do cache é inválida <a href="https://github.com/apache/pulsar/pull/17035">#17035</a></li>
+<li>Correção se o item dynamicConfig em ZK não existe no corretor causa NPE <a href="https://github.com/apache/pulsar/pull/17705">#17705</a></li>
+<li>Corrigido o problema de desligamento do corretor após a falha do nó Zookeeper <a href="https://github.com/apache/pulsar/pull/17909">#17909</a></li>
+<li>Correção do comportamento irracional do corretor quando ele está fechando <a href="https://github.com/apache/pulsar/pull/17085">#17085</a></li>
+<li>ServerCnx: log em nível de aviso quando tópico não encontrado <a href="https://github.com/apache/pulsar/pull/16225">#16225</a></li>
+<li>Otimize a obtenção do razão e do ID de entrada da entrada <a href="https://github.com/apache/pulsar/pull/17108">#17108</a></li>
+<li>O leitor de política de tópico não pode se recuperar ao obter qualquer exceção <a href="https://github.com/apache/pulsar/pull/17562">#17562</a></li>
+<li>Vários despachantes de consumo travados quando unackedMessages são maiores que maxUnackedMessages <a href="https://github.com/apache/pulsar/pull/17483">#17483</a></li>
+<li>Corrigido vazamento de semáforo memoryLimitController currentUsage e MaxQueueSize quando batchMessageContainer adiciona exceção de mensagem <a href="https://github.com/apache/pulsar/pull/17276">#17276</a></li>
+<li>Correção da exceção aritmética para a estratégia LeastResourceUsageWithWeight <a href="https://github.com/apache/pulsar/pull/17149">#17149</a></li>
+<li>Corrigir propriedades de remoção de tópico de atualização <a href="https://github.com/apache/pulsar/pull/17231">#17231</a></li>
+<li>Corrigir confirmação com erro txn compute ackedCount <a href="https://github.com/apache/pulsar/pull/17016">#17016</a></li>
+<li>Melhorar cursor.getNumberOfEntries se isUnackedRangesOpenCacheSetEnabled=true <a href="https://github.com/apache/pulsar/pull/17465">#17465</a></li>
+<li>Corrigir mensagens duplicadas de envio com modo Exclusivo <a href="https://github.com/apache/pulsar/pull/17237">#17237</a></li>
+<li>Remova internalUpdateOffloadPolicies para manter a mesma política de tópico de atualização de comportamento <a href="https://github.com/apache/pulsar/pull/17236">#17236</a></li>
+<li>Corrigir propriedades de remoção de tópico de atualização <a href="https://github.com/apache/pulsar/pull/17231">#17231</a></li>
+<li>Correção da exceção aritmética para a estratégia LeastResourceUsageWithWeight <a href="https://github.com/apache/pulsar/pull/17149">#17149</a></li>
+<li>Correção de que pulsarLedgerIdGenerator não pode excluir o caminho do índice quando zk metadata store config rootPath <a href="https://github.com/apache/pulsar/pull/17192">#17192</a></li>
+<li>Evite que mensagens sejam repetidas repetidamente com assinaturas SHARED (streaming dispatcher) <a href="https://github.com/apache/pulsar/pull/17163">#17163</a></li>
+<li>Adicionar verificação de estado ServerCnx antes da solicitação de identificador do servidor <a href="https://github.com/apache/pulsar/pull/17084">#17084</a></li>
+<li>Passe subscriptionName para o serviço de autenticação <a href="https://github.com/apache/pulsar/pull/17123">#17123</a></li>
+<li>Suporte à configuração dinâmica loadBalancerSheddingIntervalMinutes <a href="https://github.com/apache/pulsar/pull/16408">#16408</a></li>
+<li>Corrigir replicação de dados fora de ordem <a href="https://github.com/apache/pulsar/pull/17154">#17154</a></li>
+<li>Correção do esquema não replicado com sucesso <a href="https://github.com/apache/pulsar/pull/17049">#17049</a></li>
+<li>Otimize a sequência de desligamento do serviço do corretor quando ele fechar <a href="https://github.com/apache/pulsar/pull/16756">#16756</a></li>
+<li>Razão gerenciada do modernizador <a href="https://github.com/apache/pulsar/pull/16363">#16363</a></li>
+<li>Fazer com que deleteTopicPolicies serializado seja executado ao fechar o tópico <a href="https://github.com/apache/pulsar/pull/15811">#15811</a></li>
+<li>O despachante de streaming travou após ler a primeira entrada com assinaturas SHARED <a href="https://github.com/apache/pulsar/pull/17143">#17143</a></li>
+<li>Correção do cálculo da mensagem média por entrada <a href="https://github.com/apache/pulsar/pull/17046">#17046</a></li>
+<li>Corrigido vazamento de metadados de dados do pacote porque as estatísticas do pacote não foram limpas <a href="https://github.com/apache/pulsar/pull/17095">#17095</a></li>
+<li>ByteBuffer duplicado ao armazenar em cache consumidores em pendência <a href="https://github.com/apache/pulsar/pull/17105">#17105</a></li>
+<li>Correção do identificador de leitura de descarregamento NPE <a href="https://github.com/apache/pulsar/pull/17056">#17056</a></li>
+<li>Aumentar os contadores de mensagens de saída das estatísticas do tópico e a taxa de atualização após as mensagens terem sido gravadas na conexão TCP/IP <a href="https://github.com/apache/pulsar/pull/17043">#17043</a></li>
+<li>Avançar a verificação de estado <a href="https://github.com/apache/pulsar/pull/17020">#17020</a></li>
+<li>Acompanhe #16968 para restaurar algum comportamento em PersistentDispatcherMultipleConsumers <a href="https://github.com/apache/pulsar/pull/17018">#17018</a></li>
+<li>Remover log de exceção ao acessar status.html <a href="https://github.com/apache/pulsar/pull/17025">#17025</a></li>
+<li>Não permitir encerramento do tópico do sistema <a href="https://github.com/apache/pulsar/pull/17006">#17006</a></li>
+<li>Corrigir vazamento de memória se existir entrada no cache <a href="https://github.com/apache/pulsar/pull/16996">#16996</a></li>
+<li>Remova o bloqueio desnecessário no tópico de estatísticas <a href="https://github.com/apache/pulsar/pull/16983">#16983</a></li>
+<li>Evitar StackOverFlowException na assinatura SHARED <a href="https://github.com/apache/pulsar/pull/16968">#16968</a></li>
+<li>Melhorar a nomenclatura para erro de exclusão de tópico <a href="https://github.com/apache/pulsar/pull/16965">#16965</a></li>
+<li>Correção de ConcurrentModificationException quando ModularLoadManagerImpl inicia <a href="https://github.com/apache/pulsar/pull/16953">#16953</a></li>
+<li>Ignorar o uso de recursos mal configurados (&gt;100%) no balanceador de carga <a href="https://github.com/apache/pulsar/pull/16937">#16937</a></li>
+<li>Adapte a configuração básica de autenticação com prefixo <a href="https://github.com/apache/pulsar/pull/16935">#16935</a></li>
+<li>Altere a posição de confirmação pendente de exclusão de foreach para firstKey <a href="https://github.com/apache/pulsar/pull/16927">#16927</a></li>
+<li>Corrigir vazamento de liberação do semáforo MaxQueueSize em createOpSendMsg <a href="https://github.com/apache/pulsar/pull/16915">#16915</a></li>
+<li>PulsarLedgerManager para passar o código de erro correto para BK client <a href="https://github.com/apache/pulsar/pull/16857">#16857</a></li>
+<li>Suporte para iniciar vários corretores para BKCluster <a href="https://github.com/apache/pulsar/pull/16847">#16847</a></li>
+<li>Suporte dividido à criptografia de transporte TLS da autenticação <a href="https://github.com/apache/pulsar/pull/16819">#16819</a></li>
+<li>Correção da opção -c enganosa no pulsar autônomo <a href="https://github.com/apache/pulsar/pull/16838">#16838</a></li>
+<li>Correção da corrida de dados de expiração do cache de reconhecimento de rack <a href="https://github.com/apache/pulsar/pull/16825">#16825</a></li>
+<li>Corrigir mensagens repetidas do despachante compartilhado <a href="https://github.com/apache/pulsar/pull/16812">#16812</a></li>
+<li>Evite IllegalStateException enquanto client_version não estiver definido <a href="https://github.com/apache/pulsar/pull/16788">#16788</a></li>
+<li>Otimize a lógica de redução da coleção simultânea <a href="https://github.com/apache/pulsar/pull/16754">#16754</a></li>
+<li>Correção do consumidor que não cumpre a limitação máxima de unacks para assinatura Key_Shared <a href="https://github.com/apache/pulsar/pull/16718">#16718</a></li>
+<li>Suporte para limpar dados antigos de apostas para BKCluster <a href="https://github.com/apache/pulsar/pull/16744">#16744</a></li>
+<li>Evite ConcurrentModificationException para ModularLoadManagerImpl.cleanupDeadBrokersData() <a href="https://github.com/apache/pulsar/pull/16690">#16690</a></li>
+<li>Melhorar a configuração básica de autenticação <a href="https://github.com/apache/pulsar/pull/16526">#16526</a></li>
+<li>Tente excluir novamente o namespace se novos tópicos forem criados durante a exclusão do namespace <a href="https://github.com/apache/pulsar/pull/16676">#16676</a></li>
+<li>Correção do consumidor que não cumpre a limitação máxima de unacks para assinatura compartilhada <a href="https://github.com/apache/pulsar/pull/16670">#16670</a></li>
+<li>Adicionar decodificação InputStream para Schema <a href="https://github.com/apache/pulsar/pull/16659">#16659</a></li>
+<li>Suporte para obter token de parâmetros HTTP <a href="https://github.com/apache/pulsar/pull/16650">#16650</a></li>
+<li>Faça com que defaultOffloader seja criado após substituições de offloaderStats <a href="https://github.com/apache/pulsar/pull/16638">#16638</a></li>
+<li>BadVersionException ao dividir pacotes, atrase 100 ms e tente novamente <a href="https://github.com/apache/pulsar/pull/16612">#16612</a></li>
+<li>A configuração loadBalancerNamespaceMaximumBundles é inválida <a href="https://github.com/apache/pulsar/pull/16552">#16552</a></li>
+<li>PulsarLedgerManager: adicionar instrução de retorno perdida <a href="https://github.com/apache/pulsar/pull/16607">#16607</a></li>
+<li>Tente novamente quando DistributedIdGenerator apresentar erro BadVersion <a href="https://github.com/apache/pulsar/pull/16491">#16491</a></li>
+<li>Corrigido erro quando o estado dos rastreadores de mensagens atrasadas aumentava para &gt;1,5 GB <a href="https://github.com/apache/pulsar/pull/16490">#16490</a></li>
+<li>Correção de RawReader hasMessageAvailable retorna verdadeiro quando não há mensagens <a href="https://github.com/apache/pulsar/pull/16443">#16443</a></li>
+<li>Corrigir nenhuma exceção de razão <a href="https://github.com/apache/pulsar/pull/16420">#16420</a></li>
+<li>Melhorar o processo de download de pacotes <a href="https://github.com/apache/pulsar/pull/16365">#16365</a></li>
+<li>Adicionar configuração maxUnloadBundleNumPerShedding para UniformLoadShedder <a href="https://github.com/apache/pulsar/pull/16409">#16409</a></li>
+<li>Ignorar a leitura de mais entradas para uma leitura pendente sem mais entradas <a href="https://github.com/apache/pulsar/pull/16400">#16400</a></li>
+<li>Reciclar OpReadEntry em alguns casos extremos <a href="https://github.com/apache/pulsar/pull/16399">#16399</a></li>
+<li>Adicionar configuração dinâmica para UniformLoadShedder <a href="https://github.com/apache/pulsar/pull/16391">#16391</a></li>
+<li>Corrigir RawReader fora de serviço <a href="https://github.com/apache/pulsar/pull/16390">#16390</a></li>
+<li>Crie o registro do cursor preguiçosamente para melhorar o desempenho da assinatura <a href="https://github.com/apache/pulsar/pull/16389">#16389</a></li>
+<li>Libere a entrada em getEarliestMessagePublishTimeOfPos <a href="https://github.com/apache/pulsar/pull/16386">#16386</a></li>
+<li>Atualize o CPU ResourceUsage antes de atualizar o uso do SystemResourceUsage <a href="https://github.com/apache/pulsar/pull/16366">#16366</a></li>
+<li>Use o provedor de executor programado do corretor compartilhado client <a href="https://github.com/apache/pulsar/pull/16338">#16338</a></li>
+<li>Corrigir erro de cluster etcd e adicionar teste para cluster etcd <a href="https://github.com/apache/pulsar/pull/16309">#16309</a></li>
+<li>Não use thread IO para consumerFlow em assinatura compartilhada <a href="https://github.com/apache/pulsar/pull/16304">#16304</a></li>
+<li>Fornecer implementação de nova estratégia de posicionamento de balanceamento de carga com base no menor uso de recursos com peso <a href="https://github.com/apache/pulsar/pull/16281">#16281</a></li>
+<li>Correção do marcador de acréscimo do livro razão TopicTransactionBuffer lançado ManagedLedgerAlreadyClosedException <a href="https://github.com/apache/pulsar/pull/16265">#16265</a></li>
+<li>Evite passar por todos os consumidores para receber a mensagem de confirmação do proprietário <a href="https://github.com/apache/pulsar/pull/16245">#16245</a></li>
+<li>Reduza a classificação da lista de consumidores por nível de prioridade <a href="https://github.com/apache/pulsar/pull/16243">#16243</a></li>
+<li>Reduza a operação de reprogramação de leitura de mensagem para PersistentDispatcherMultipleConsumers <a href="https://github.com/apache/pulsar/pull/16241">#16241</a></li>
+<li>Correção do NPE ao invocar replaceBookie. <a href="https://github.com/apache/pulsar/pull/16239">#16239</a></li>
+<li>Corrigir novamente a falta ocasional de LeaderInfo do getInternalStats <a href="https://github.com/apache/pulsar/pull/16238">#16238</a></li>
+<li>Corrigir NPE ao eliminar pendências por limite de tempo <a href="https://github.com/apache/pulsar/pull/16235">#16235</a></li>
+<li>Melhorar mensagem de erro quando client não é autorizado <a href="https://github.com/apache/pulsar/pull/16224">#16224</a></li>
+<li>Corrigir problema de mensagem de confirmação do marcador de assinatura de compactação <a href="https://github.com/apache/pulsar/pull/16205">#16205</a></li>
+<li>Correção do limitador do despachante de assinatura que não foi inicializado <a href="https://github.com/apache/pulsar/pull/16175">#16175</a></li>
+<li>Usando handle em vez de handleAsync para evitar o uso de thread de pool comum <a href="https://github.com/apache/pulsar/pull/17403">#17403</a></li>
+<li>Use LinkedHashSet para itens de configuração do tipo Set para preservar a ordem dos elementos <a href="https://github.com/apache/pulsar/pull/16138">#16138</a></li>
+<li>Correção do limitador de taxa de despacho de tópico que não é inicializado no nível do corretor <a href="https://github.com/apache/pulsar/pull/16084">#16084</a></li>
+<li>Correção do NPE ao obter /admin/v2/namespaces/public/default/maxTopicsPerNamespace <a href="https://github.com/apache/pulsar/pull/16076">#16076</a></li>
+<li>Adicione configuração para permitir que o tempo de entrega seja estritamente respeitado <a href="https://github.com/apache/pulsar/pull/16068">#16068</a></li>
+<li>Adicionar opção para ativar/desativar distribuição de pacotes uniformemente no LoadManager <a href="https://github.com/apache/pulsar/pull/16059">#16059</a></li>
+<li>Correção de problemas de segurança de thread ao acessar ManagedCursorContainer.heap ArrayList <a href="https://github.com/apache/pulsar/pull/16049">#16049</a></li>
+<li>Tornar os logs de nomes de tópicos e namespaces inválidos mais descritivos <a href="https://github.com/apache/pulsar/pull/16047">#16047</a></li>
+<li>Encerre JVM quando o comando inicializar-cluster-metadata falhar <a href="https://github.com/apache/pulsar/pull/16039">#16039</a></li>
+<li>Evite armazenar instâncias de MessageMetadata retornadas por peekMessageMetadata <a href="https://github.com/apache/pulsar/pull/15983">#15983</a></li>
+<li>Corrigir atualização de políticas de tópico e não verificar expiração de mensagem <a href="https://github.com/apache/pulsar/pull/15941">#15941</a></li>
+<li>Corrigido erro de alcance máximo de locatários se o locatário já existir <a href="https://github.com/apache/pulsar/pull/15932">#15932</a></li>
+<li>Fechar transactionBufferClient antes de fechar o Pulsar interno client <a href="https://github.com/apache/pulsar/pull/15922">#15922</a></li>
+<li>Remover tópico -&gt; cache de namespace de LedgerOffloaderStatsImpl <a href="https://github.com/apache/pulsar/pull/15869">#15869</a></li>
+<li>Correção do NPE quando o ID do razão não foi encontrado no OpReadEntry <a href="https://github.com/apache/pulsar/pull/15837">#15837</a></li>
+<li>Correção do limitador de taxa do replicador em nível de tópico que não é inicializado <a href="https://github.com/apache/pulsar/pull/15825">#15825</a></li>
+<li>Corrigir NPE em MessageDeduplication <a href="https://github.com/apache/pulsar/pull/15820">#15820</a></li>
+<li>Configure DLog Bookie, Pulsar e Admin clients por meio de configuração de passagem <a href="https://github.com/apache/pulsar/pull/15818">#15818</a></li>
+<li>Corrigir o problema de fechamento do corretor <a href="https://github.com/apache/pulsar/pull/15755">#15755</a></li>
+<li>Desativar controlador de limite de memória no Pulsar interno clients <a href="https://github.com/apache/pulsar/pull/15752">#15752</a></li>
+<li>Adicionar tempo limite para descarregar pacote de namespace <a href="https://github.com/apache/pulsar/pull/15719">#15719</a></li>
+<li>Suporte a schemaValidationEnforced em nível de tópico <a href="https://github.com/apache/pulsar/pull/15712">#15712</a></li>
+<li>Correção do NPE ao colocar valor em RangeCache <a href="https://github.com/apache/pulsar/pull/15707">#15707</a></li>
+<li>Retorno rápido se reconhecimento cumulativo ilegal <a href="https://github.com/apache/pulsar/pull/15695">#15695</a></li>
+<li>Correção de falha na criação do produtor ao definir cota de pendências <a href="https://github.com/apache/pulsar/pull/15663">#15663</a></li>
+<li>Corrigido o login no desligamento quando o corretor é desligado <a href="https://github.com/apache/pulsar/pull/15626">#15626</a></li>
+<li>Correção de MetadataStoreException$NotFoundException ao fazer pesquisa de tópico <a href="https://github.com/apache/pulsar/pull/15633">#15633</a></li>
+<li>Use dispatchRateLimiterLock para atualizar dispatchRateLimiter <a href="https://github.com/apache/pulsar/pull/15601">#15601</a></li>
+<li>Adicionar suporte ao sufixo .yaml para arquivo de configuração de filtro do corretor <a href="https://github.com/apache/pulsar/pull/15600">#15600</a></li>
+<li>Adicionar nova linha ao final de standalone.conf <a href="https://github.com/apache/pulsar/pull/15591">#15591</a></li>
+<li>Crie um cluster &quot;independente&quot; ao iniciar o servidor independente <a href="https://github.com/apache/pulsar/pull/15583">#15583</a></li>
+<li>Feche opublishLimiter ao desativá-lo <a href="https://github.com/apache/pulsar/pull/15520">#15520</a></li>
+<li>Habilite SO_REUSEADDR em soquetes de escuta para corretor, proxy <a href="https://github.com/apache/pulsar/pull/15517">#15517</a></li>
+<li>Correção para evitar TopicStatsImpl NPE mesmo se ProducerName for nulo <a href="https://github.com/apache/pulsar/pull/15502">#15502</a></li>
+<li>Feche a conexão se uma mensagem ping ou pong não puder ser enviada <a href="https://github.com/apache/pulsar/pull/15382">#15382</a></li>
+<li>Introduzir BitRateUnit para calcular a taxa de bits <a href="https://github.com/apache/pulsar/pull/15435">#15435</a></li>
+<li>Adicionar verificação para cota e retenção de pendências padrão configuradas <a href="https://github.com/apache/pulsar/pull/15441">#15441</a></li>
+<li>Altere o atômico desnecessário para o tipo básico <a href="https://github.com/apache/pulsar/pull/15369">#15369</a></li>
+<li>Redução de suporte para ConcurrentSortedLongPairSet <a href="https://github.com/apache/pulsar/pull/15354">#15354</a></li>
+<li>Use o mapa de redução para reenvio de mensagens <a href="https://github.com/apache/pulsar/pull/15342">#15342</a></li>
+<li>Corrigido erro de precisão em UsageUnit <a href="https://github.com/apache/pulsar/pull/15322">#15322</a></li>
+<li>Atualização otimizada do dispatcherRateLimiter em nível de namespace <a href="https://github.com/apache/pulsar/pull/15315">#15315</a></li>
+<li>Corrigir unidade errada de velocidade da NIC no Linux <a href="https://github.com/apache/pulsar/pull/15304">#15304</a></li>
+<li>Corrigido problema de cálculo de totalEntries em AbstractBaseDispatcher#filterEntriesForConsumere <a href="https://github.com/apache/pulsar/pull/15298">#15298</a></li>
+<li>Correção do grupo de recursos que não informa o uso <a href="https://github.com/apache/pulsar/pull/15292">#15292</a></li>
+<li>Arrume o tópico do sistema <a href="https://github.com/apache/pulsar/pull/15252">#15252</a></li>
+<li>Correção da condição de corrida entre o tempo limite e a conclusão em OpAddEntry <a href="https://github.com/apache/pulsar/pull/15233">#15233</a></li>
+<li>Melhorar o salto da resolução DNS ao criar a instância AuthenticationDataHttp <a href="https://github.com/apache/pulsar/pull/15228">#15228</a></li>
+<li>Ignore a resolução desnecessária de DNS ao criar a instância AuthenticationDataHttp <a href="https://github.com/apache/pulsar/pull/15221">#15221</a></li>
+<li>Corrigir MessageDeduplication#inactiveProducers pode não ter persistência corretamente <a href="https://github.com/apache/pulsar/pull/15206">#15206</a></li>
+<li>Cancelar fencedTopicMonitoringTask quando o tópico for fechado normalmente <a href="https://github.com/apache/pulsar/pull/15202">#15202</a></li>
+<li>Corrigir npe quando doCacheEviction <a href="https://github.com/apache/pulsar/pull/15184">#15184</a></li>
+<li>Faça com que a verificação de integridade falhe se threads bloqueados forem detectados <a href="https://github.com/apache/pulsar/pull/15155">#15155</a></li>
+<li>Correção do parâmetro saslJaasBrokerSectionName em broker.conf <a href="https://github.com/apache/pulsar/pull/15110">#15110</a></li>
+<li>Corrigir potencial para adicionar consumidor duplicado <a href="https://github.com/apache/pulsar/pull/15051">#15051</a></li>
+<li>Correção de falha no retrocesso ao redeliverUnacknowledgedMessages <a href="https://github.com/apache/pulsar/pull/15046">#15046</a></li>
+<li>Correção da condição de corrida na atualização do campo lastMarkDeleteEntry <a href="https://github.com/apache/pulsar/pull/15031">#15031</a></li>
+<li>Evite tópico de pulsação para descarregar <a href="https://github.com/apache/pulsar/pull/15008">#15008</a></li>
+<li>Remova os dados do cache de acordo com o markDeletedPosition mais lento <a href="https://github.com/apache/pulsar/pull/14985">#14985</a></li>
+<li>Retornar se a redefinição estiver em andamento <a href="https://github.com/apache/pulsar/pull/14978">#14978</a></li>
+<li>Limitador de taxa de assinatura em nível de corretor de atualização dinâmica <a href="https://github.com/apache/pulsar/pull/14890">#14890</a></li>
+<li>Corrigir estado errado para cursor não durável <a href="https://github.com/apache/pulsar/pull/14869">#14869</a></li>
+<li>Suporte a ouvintes anunciados para serviços HTTP e HTTPS <a href="https://github.com/apache/pulsar/pull/14839">#14839</a></li>
+<li>Suporte à atualização dinâmica entre valores diferentes de zero de topicPublisherThrottlingTickTimeMillis <a href="https://github.com/apache/pulsar/pull/14782">#14782</a></li>
+<li>Suporte à atualização dinâmica entre valores diferentes de zero de brokerPublisherThrottlingTickTimeMillis <a href="https://github.com/apache/pulsar/pull/14759">#14759</a></li>
+<li>Correção do ID de entrada incorreto no log de aviso ao ler a entrada do armazenamento em camadas <a href="https://github.com/apache/pulsar/pull/14685">#14685</a></li>
+<li>Otimize os métodos PositionImpl toString, compareTo e hashCode <a href="https://github.com/apache/pulsar/pull/14678">#14678</a></li>
+<li>Melhorar a legibilidade do código-fonte do ManagedCursorImpl <a href="https://github.com/apache/pulsar/pull/14617">#14617</a></li>
+<li>Interceptar comando ACK pelo BrokerInterceptor <a href="https://github.com/apache/pulsar/pull/14616">#14616</a></li>
+<li>Adicionar filteredMsgCount para tópicos de estatísticas do corretor pulsar-admin <a href="https://github.com/apache/pulsar/pull/14531">#14531</a></li>
+<li>Correção do NPE quando a assinatura já foi removida <a href="https://github.com/apache/pulsar/pull/14363">#14363</a></li>
+<li>Correção do tratamento de contrapressão na configuração do servidor web Jetty <a href="https://github.com/apache/pulsar/pull/14353">#14353</a></li>
+<li>Otimize o processo de localização de nics <a href="https://github.com/apache/pulsar/pull/14340">#14340</a></li>
+<li>Suporte para status de autenticação http <a href="https://github.com/apache/pulsar/pull/14044">#14044</a></li>
+<li>Suporte ao cache para drenar consumidores de pendências <a href="https://github.com/apache/pulsar/pull/12258">#12258</a></li>
+<li>Estratégia rigorosa de grupo de afinidade de apostadores <a href="https://github.com/apache/pulsar/pull/12025">#12025</a></li>
+</ul>
+<h3>Clients</h3>
+<ul>
+<li>[PIP 74] Limites de memória do Pulsar client
+<ul>
+<li>Suporte à fila de receptores de consumidores com escala automática <a href="https://github.com/apache/pulsar/pull/14494">#14494</a></li>
+<li>Suporte ao limite dinâmico da fila de receptores do consumidor <a href="https://github.com/apache/pulsar/pull/14400">#14400</a></li>
+<li>Suporte ao limite de memória do consumidor client <a href="https://github.com/apache/pulsar/pull/15216">#15216</a></li>
+</ul>
+</li>
+<li>[Java] Corrigir consumidor multitópico travado após reenviar mensagens <a href="https://github.com/apache/pulsar/pull/18491">#18491</a></li>
+<li>[Java] Correção de NPE de MultiTopicsConsumerImpl devido à condição de corrida <a href="https://github.com/apache/pulsar/pull/18287">#18287</a></li>
+<li>[Java] Refatore SchemaHash para reduzir a chamada de hashFunction em SchemaHash <a href="https://github.com/apache/pulsar/pull/17948">#17948</a></li>
+<li>[Java] Corrigir vazamento de pendenteLookupRequestSemaphore quando canal inativo <a href="https://github.com/apache/pulsar/pull/17856">#17856</a></li>
+<li>[Java] Exceção de conclusão de desempacotamento para serviços de pesquisa <a href="https://github.com/apache/pulsar/pull/17717">#17717</a></li>
+<li>[Java] Corrigida falha de confirmação no ReaderImpl devido a messageId nulo <a href="https://github.com/apache/pulsar/pull/17728">#17728</a></li>
+<li>[Java] Corrigido o não desligamento do ScheduledExecutorProvider <a href="https://github.com/apache/pulsar/pull/17527">#17527</a></li>
+<li>[Java] Inicialização LastBatchSendNanoTime <a href="https://github.com/apache/pulsar/pull/17058">#17058</a></li>
+<li>[Java] Corrigido canal cnx inativo fazendo com que a solicitação não alcançasse o tempo limite e não retornasse <a href="https://github.com/apache/pulsar/pull/17051">#17051</a></li>
+<li>[Java] Liberar semáforo antes de descartar mensagens em batchMessageContainer <a href="https://github.com/apache/pulsar/pull/17019">#17019</a></li>
+<li>[Java] Corrigir limite de memória client vazamento de uso atual e liberação de semáforo duplicado em ProducerImpl <a href="https://github.com/apache/pulsar/pull/16837">#16837</a></li>
+<li>[Java] Remover verificação redundante para mensagem em pedaços TotalChunkMsgSize em ConsumerImpl <a href="https://github.com/apache/pulsar/pull/16797">#16797</a></li>
+<li>[Java] Reduza a duplicação de código no administrador client <a href="https://github.com/apache/pulsar/pull/16377">#16377</a></li>
+<li>[Java] Libera uso de memória para mensagens inválidas <a href="https://github.com/apache/pulsar/pull/16835">#16835</a></li>
+<li>[Java] Corrigir erro de nome de tópico de assinatura <a href="https://github.com/apache/pulsar/pull/16719">#16719</a></li>
+<li>[Java] Enviar CloseConsumer no tempo limite de client <a href="https://github.com/apache/pulsar/pull/16616">#16616</a></li>
+<li>[Java] Adicionar chave de mensagem, se existir, para mensagens deadLetter <a href="https://github.com/apache/pulsar/pull/16615">#16615</a></li>
+<li>[Java] Tornar DeadLetterPolicy desserializável <a href="https://github.com/apache/pulsar/pull/16513">#16513</a></li>
+<li>[Java] Melhore o desempenho do consumidor multitópico com mais de um thread IO <a href="https://github.com/apache/pulsar/pull/16336">#16336</a></li>
+<li>[Java] Adicionar inicialização para OpSendMsg <a href="https://github.com/apache/pulsar/pull/16256">#16256</a></li>
+<li>[Java] Substitua ScheduledExecutor para melhorar o desempenho do consumo de mensagens <a href="https://github.com/apache/pulsar/pull/16236">#16236</a></li>
+<li>[Java] Corrigir mensagens grandes que às vezes não podem ser divididas em partes <a href="https://github.com/apache/pulsar/pull/16196">#16196</a></li>
+<li>[Java] Acionar o tempo limite de recebimento do lote apenas quando houver solicitações de recebimento de lote pendentes <a href="https://github.com/apache/pulsar/pull/16160">#16160</a></li>
+<li>[Java] Correção de que startMessageId não pode ser respeitado como ChunkMessageID <a href="https://github.com/apache/pulsar/pull/16154">#16154</a></li>
+<li>[Java] Corrigir failover automático de cluster que não resolve bug de host <a href="https://github.com/apache/pulsar/pull/16152">#16152</a></li>
+<li>[Java] Mude para confiar em Netty para verificação de nome de host <a href="https://github.com/apache/pulsar/pull/15824">#15824</a></li>
+<li>[Java] Evita que o gatilho seja executado simultaneamente no controlador de limite de memória <a href="https://github.com/apache/pulsar/pull/15737">#15737</a></li>
+<li>[Java] Correção de mensagens enviadas por produtores sem esquema não podem ser decodificadas <a href="https://github.com/apache/pulsar/pull/15622">#15622</a></li>
+<li>[Java] Remover mensagens confidenciais do registro de estatísticas do consumidor/produtor <a href="https://github.com/apache/pulsar/pull/15483">#15483</a></li>
+<li>[Java] Adicione informações de mensagens pendentes ao imprimir as estatísticas do produtor <a href="https://github.com/apache/pulsar/pull/15440">#15440</a></li>
+<li>[Java] Corrija BatchMessageTest instável inicializando lastBatchSendNanoTime <a href="https://github.com/apache/pulsar/pull/15406">#15406</a></li>
+<li>[Java] Verifique antecipadamente o esquema do consumidor nulo <a href="https://github.com/apache/pulsar/pull/15327">#15327</a></li>
+<li>[Java] Corrigir parâmetro inconsistente de TopicPolicies.getSubscriptionDispatchRate <a href="https://github.com/apache/pulsar/pull/15293">#15293</a></li>
+<li>[Java] Corrigir erro de digitação no ConsumerBuilder <a href="https://github.com/apache/pulsar/pull/15194">#15194</a></li>
+<li>[Java] Corrigir regressão de desempenho com ouvinte de mensagem <a href="https://github.com/apache/pulsar/pull/15162">#15162</a></li>
+<li>[Java] ConsumerBuilderImpl não pode definir nulo como deadLetterPolicy <a href="https://github.com/apache/pulsar/pull/14980">#14980</a></li>
+<li>[Java] Corrigida a publicação de mensagens travadas ao ativar o lote <a href="https://github.com/apache/pulsar/pull/14870">#14870</a></li>
+<li>[Java] Retorna conjunto de dados imutáveis ao usar TableView <a href="https://github.com/apache/pulsar/pull/14833">#14833</a></li>
+<li>[Java] Evite a execução da tarefa do temporizador antes da conclusão da assinatura anterior <a href="https://github.com/apache/pulsar/pull/14818">#14818</a></li>
+<li>[Java] Interceptador de leitor de suporte <a href="https://github.com/apache/pulsar/pull/14729">#14729</a></li>
+<li>[Java] Suporta métricas agregadas para estatísticas de tópicos de partição <a href="https://github.com/apache/pulsar/pull/18214">#18214</a></li>
+<li>[Java] Adicione api para obter estatísticas de produtor/consumidor para o tópico de partição <a href="https://github.com/apache/pulsar/pull/18212">#18212</a></li>
+<li>[Java] Otimize a pausa ao criar subconsumidores em consumidores multitópicos <a href="https://github.com/apache/pulsar/pull/14566">#14566</a></li>
+</ul>
+<h3>Pulsar IO e Funções Pulsar</h3>
+<ul>
+<li>[Funções] A função de correção falhou ao iniciar se nenhum typeClassName for fornecido em FunctionDetails <a href="https://github.com/apache/pulsar/pull/18111">#18111</a></li>
+<li>[Funções] Não exclua o pacote gerenciado ao excluir a função <a href="https://github.com/apache/pulsar/pull/18030">#18030</a></li>
+<li>[Funções] Corrija o download de funções integradas <a href="https://github.com/apache/pulsar/pull/17877">#17877</a></li>
+<li>[Funções] Garantir que o modelo de dados InternalConfigurationData seja compatível entre diferentes versões <a href="https://github.com/apache/pulsar/pull/17690">#17690</a></li>
+<li>[Funções] Utilize o esquema definido pela Função quando ela retornar um Registro <a href="https://github.com/apache/pulsar/pull/17142">#17142</a></li>
+<li>[Funções] Tornar obrigatório o fornecimento de um esquema em Context::newOutputRecordBuilder <a href="https://github.com/apache/pulsar/pull/17118">#17118</a></li>
+<li>[Funções] Adicione a capacidade de personalizar o nível de registro para funções Go e Python <a href="https://github.com/apache/pulsar/pull/16939">#16939</a></li>
+<li>[Funções] Corrigido erro quando o usuário inicia com o runner local de funções de pulsar <a href="https://github.com/apache/pulsar/pull/16565">#16565</a></li>
+<li>[Funções] Corrigir problema de compatibilidade do netty.DnsResolverUtil no JDK9+ para os tempos de execução da função <a href="https://github.com/apache/pulsar/pull/16423">#16423</a></li>
+<li>[Funções] Certifique-se de que os bytes sejam uma sequência de bytes UTF-8 bem formada ao decodificar os bytes FunctionState para string <a href="https://github.com/apache/pulsar/pull/16199">#16199</a></li>
+<li>[Funções] Registro de suporte&lt;?&gt; como tipo de saída de função <a href="https://github.com/apache/pulsar/pull/16041">#16041</a></li>
+<li>[Funções] Configurar DLog Bookie, Pulsar e Admin clients por meio de configuração de passagem <a href="https://github.com/apache/pulsar/pull/15818">#15818</a></li>
+<li>[Funções] Desativar controlador de limite de memória no Pulsar interno clients <a href="https://github.com/apache/pulsar/pull/15752">#15752</a></li>
+<li>[Funções] Fornece manipulador de erros padrão para anexador de log de função <a href="https://github.com/apache/pulsar/pull/15728">#15728</a></li>
+<li>[Funções] Suporte para desabilitação de porta de serviço não TLS <a href="https://github.com/apache/pulsar/pull/15328">#15328</a></li>
+<li>[Funções] Verifica o executor nulo ao fechar o FileSource <a href="https://github.com/apache/pulsar/pull/15247">#15247</a></li>
+<li>[Funções] Corrigir exemplo de UserConfigFunction <a href="https://github.com/apache/pulsar/pull/15240">#15240</a></li>
+<li>[Funções] Adicionar um cache de KeyValueSchemaImpl versionado <a href="https://github.com/apache/pulsar/pull/15122">#15122</a></li>
+<li>[Funções] Adicionar suporte KeyStore em WebSocket, servidores Function Worker HTTPS <a href="https://github.com/apache/pulsar/pull/15084">#15084</a></li>
+<li>[Funções] Tratar NPE quando getLeader retorna nulo <a href="https://github.com/apache/pulsar/pull/15058">#15058</a></li>
+<li>[Funções] Remover dependência interna: pulsar-functions-instance <a href="https://github.com/apache/pulsar/pull/14925">#14925</a></li>
+<li>[Funções] Permitir que uma Função&lt;GenericObject,?&gt; acesse o Esquema original da Mensagem e utilize-o <a href="https://github.com/apache/pulsar/pull/14847">#14847</a></li>
+<li>[Funções] Corrigir falha na função de início de tempos de execução gerenciados por pulsar com URL do pacote do serviço de gerenciamento de pacotes <a href="https://github.com/apache/pulsar/pull/14814">#14814</a></li>
+<li>[Funções] Defina o canal de função como inativo para evitar a resolução DNS do pod excluído <a href="https://github.com/apache/pulsar/pull/14750">#14750</a></li>
+<li>[Funções] Remover chamada extra para gi.stats.incrTotalProcessedSuccessfully() <a href="https://github.com/apache/pulsar/pull/12316">#12316</a></li>
+<li>[Funções] Corrigir a instância python que não processa o arquivo zip corretamente <a href="https://github.com/apache/pulsar/pull/16697">#16697</a></li>
+<li>[Funções] Asserção ausente em KubernetesRuntimeTest::verifyJavaInstance <a href="https://github.com/apache/pulsar/pull/16747">#16747</a></li>
+<li>[Conector IO] Pacote apenas do registro de esquema kafka client <a href="https://github.com/apache/pulsar/pull/18931">#18931</a></li>
+<li>[IO Connector] Corrigir mensagem sem problema de esquema <a href="https://github.com/apache/pulsar/pull/18745">#18745</a></li>
+<li>[IO Connector] Kinesis sink: corrija NPE com esquema KeyValue e sem valor <a href="https://github.com/apache/pulsar/pull/17959">#17959</a></li>
+<li>[Conector IO] Fornece um coletor HTTP <a href="https://github.com/apache/pulsar/pull/17581">#17581</a></li>
+<li>[IO Connector] Suporte IOConfigUtils necessário e anotações defaultValue <a href="https://github.com/apache/pulsar/pull/16785">#16785</a></li>
+<li>[Conector IO] Corrigida a configuração da fonte Kafka para pulsar-io-kafka quando consumerConfigProperties é nulo <a href="https://github.com/apache/pulsar/pull/16731">#16731</a></li>
+<li>[Conector IO] Adicionar configuração do leitor ao pulsar-io-debezium e pulsar-io-kafka-connect-adaptor <a href="https://github.com/apache/pulsar/pull/16675">#16675</a></li>
+<li>[IO Connector] Transações de suporte para conector JDBC <a href="https://github.com/apache/pulsar/pull/16468">#16468</a></li>
+<li>[Conector IO] Coletores JDBC: suporte para upsert e exclusão de linha <a href="https://github.com/apache/pulsar/pull/16448">#16448</a></li>
+<li>[IO Connector] Adicionar método getSourceConfig em SourceContext <a href="https://github.com/apache/pulsar/pull/16305">#16305</a></li>
+<li>[Conector IO] Coletores KCA: corrige o mapeamento de deslocamento quando sanitizeTopicName=true <a href="https://github.com/apache/pulsar/pull/15950">#15950</a></li>
+<li>[Conector IO] Permitir que pulsar_tool_env.sh PULSAR_MEM seja substituído <a href="https://github.com/apache/pulsar/pull/15868">#15868</a></li>
+<li>[Conector IO] Coletores JDBC: suporta tipos de dados específicos do Avro <a href="https://github.com/apache/pulsar/pull/15845">#15845</a></li>
+<li>[Conector IO] Tipo de reconhecimento personalizado de suporte a coletor <a href="https://github.com/apache/pulsar/pull/15491">#15491</a></li>
+<li>[IO Connector] Adicionar método getSinkConfig ao SinkContext <a href="https://github.com/apache/pulsar/pull/15482">#15482</a></li>
+<li>[Conector IO] Lidar com tipos nativos de coleções Avro (chaves de mapa GenericData.Array e Utf8) <a href="https://github.com/apache/pulsar/pull/15432">#15432</a></li>
+<li>[Conector IO] Lidar com tipos nativos de coleções Avro (chaves de mapa GenericData.Array e Utf8) <a href="https://github.com/apache/pulsar/pull/15430">#15430</a></li>
+<li>[Conector IO] Adicionar suporte a ID com hash <a href="https://github.com/apache/pulsar/pull/15428">#15428</a></li>
+<li>[Conector IO] ElasticSearch Sink: opção para gerar campos-chave canônicos (JSON e Avro) <a href="https://github.com/apache/pulsar/pull/15426">#15426</a></li>
+<li>[Conector IO] Substituído &quot;Dispositivo&quot; por &quot;medição&quot; <a href="https://github.com/apache/pulsar/pull/15416">#15416</a></li>
+<li>[IO Connector] Habilita agendamento de liberação em massa por padrão <a href="https://github.com/apache/pulsar/pull/15244">#15244</a></li>
+<li>[IO Connector] Defina sinkType no arquivo de configuração <a href="https://github.com/apache/pulsar/pull/15174">#15174</a></li>
+<li>[IO Connector] Adicionar um cache de KeyValueSchemaImpl com versão <a href="https://github.com/apache/pulsar/pull/15122">#15122</a></li>
+<li>[Conector IO] Suporta conector de coletor jdbc 4paradigm/OpenMLDB <a href="https://github.com/apache/pulsar/pull/15064">#15064</a></li>
+<li>[IO Connector] ElasticSearch Sink: opção para desabilitar a validação do certificado SSL <a href="https://github.com/apache/pulsar/pull/14997">#14997</a></li>
+<li>[Conector IO] Adicionar formato de mensagem FULL_MESSAGE_IN_JSON_EXPAND_VALUE ao coletor Kinesis <a href="https://github.com/apache/pulsar/pull/14929">#14929</a></li>
+</ul>
+<h3>Observabilidade</h3>
+<ul>
+<li>[Broker] Corrigir codificação de string de métricas <a href="https://github.com/apache/pulsar/pull/18138">#18138</a></li>
+<li>[Corretor] Corrigir estatísticas do EntryFilter <a href="https://github.com/apache/pulsar/pull/17605">#17605</a></li>
+<li>[Broker] Adicionar métricas de EntryFilter por assinatura <a href="https://github.com/apache/pulsar/pull/16932">#16932</a></li>
+<li>[Broker] Expor métricas de taxa de gravação e leitura de armazenamento em nível de tópico <a href="https://github.com/apache/pulsar/pull/16855">#16855</a></li>
+<li>[Broker] Renomeie as métricas Pulsar lb para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16611">#16611</a></li>
+<li>[Broker] Renomeie as métricas do esquema Pulsar para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16610">#16610</a></li>
+<li>[Broker] Renomeie as métricas Pulsar txn para especificar OpenMetrics <a href="https://github.com/apache/pulsar/pull/16581">#16581</a></li>
+<li>[Broker] Otimize msgOutCounter e bytesOutCounter <a href="https://github.com/apache/pulsar/pull/16214">#16214</a></li>
+<li>[Corretor] Falha ao expor as estatísticas do razão gerenciado client para prometheus se o contadorClientExposeStatsToPrometheus for verdadeiro <a href="https://github.com/apache/pulsar/pull/16219">#16219</a></li>
+<li>[Broker] Adicionar métricas para o pool de threads do serviço web pulsar <a href="https://github.com/apache/pulsar/pull/14742">#14742</a></li>
+<li>[Broker] Adicionar suporte de PrometheusRawMetricsProvider para o Pulsar-Proxy <a href="https://github.com/apache/pulsar/pull/14681">#14681</a></li>
+<li>[Broker] Adicionar filteredMsgCount para tópicos de estatísticas do corretor pulsar-admin <a href="https://github.com/apache/pulsar/pull/14531">#14531</a></li>
+<li>[Broker] Melhorar o desempenho do endpoint /metrics <a href="https://github.com/apache/pulsar/pull/14453">#14453</a></li>
+<li>[Corretor] Métricas do offloader <a href="https://github.com/apache/pulsar/pull/13833">#13833</a></li>
+<li>[Broker] Melhorar o desempenho do endpoint /metrics <a href="https://github.com/apache/pulsar/pull/14453">#14453</a></li>
+<li>[Broker] Adicionar métricas para uso de memória do InMemoryDelayedDeliveryTracker <a href="https://github.com/apache/pulsar/pull/15867">#15867</a>
+###CLI</li>
+<li>[Pulsar Admin] Corrigir NPE ao obter OffloadThreshold no namespace <a href="https://github.com/apache/pulsar/pull/18061">#18061</a></li>
+<li>[Pulsar Admin] Adicionar cabeçalho SNI quando tlsHostnameVerification não estiver habilitado <a href="https://github.com/apache/pulsar/pull/17543">#17543</a></li>
+<li>[Pulsar Admin] Cancelar política de namespace para melhorar a exclusão de namespace <a href="https://github.com/apache/pulsar/pull/17033">#17033</a></li>
+<li>[Pulsar Admin] Reduza a chamada REST local PartitionedStats <a href="https://github.com/apache/pulsar/pull/16916">#16916</a></li>
+<li>[Pulsar Admin] Torne alguns métodos policiais assíncronos em Namespaces <a href="https://github.com/apache/pulsar/pull/16881">#16881</a></li>
+<li>[Pulsar Admin] Exponha o carimbo de data/hora do último fluxo consumido para estatísticas do consumidor <a href="https://github.com/apache/pulsar/pull/16817">#16817</a></li>
+<li>[Pulsar Admin] Torne alguns métodos assíncronos em Namespaces <a href="https://github.com/apache/pulsar/pull/16814">#16814</a></li>
+<li>[Pulsar Admin] Configuração dinâmica para verificar parâmetros de solicitação desconhecidos <a href="https://github.com/apache/pulsar/pull/16781">#16781</a></li>
+<li>[Pulsar Admin] Torne os métodos policiais de descarregamento assíncronos em Namespaces <a href="https://github.com/apache/pulsar/pull/16760">#16760</a></li>
+<li>[Pulsar Admin] Apoie o administrador API para verificar solicitação desconhecida <a href="https://github.com/apache/pulsar/pull/16577">#16577</a></li>
+<li>[Pulsar Admin] Torne o método getBacklogQuotaMap assíncrono em Namespaces <a href="https://github.com/apache/pulsar/pull/16504">#16504</a></li>
+<li>[Pulsar Admin] Torne GetMessageIdByTimestamp puro assíncrono <a href="https://github.com/apache/pulsar/pull/16446">#16446</a></li>
+<li>[Pulsar Admin] Torne splitNamespaceBundle e getTopicHashPositions assíncronos <a href="https://github.com/apache/pulsar/pull/16411">#16411</a></li>
+<li>[Pulsar Admin] Tornar AutoSubscriptionCreation assíncrono <a href="https://github.com/apache/pulsar/pull/16329">#16329</a></li>
+<li>[Pulsar Admin] Tornar o método SubscriptionExpirationTime assíncrono <a href="https://github.com/apache/pulsar/pull/16328">#16328</a></li>
+<li>[Pulsar Admin] Faça algum método de permissão assíncrona <a href="https://github.com/apache/pulsar/pull/16324">#16324</a></li>
+<li>[Pulsar Admin] Tornar unloadNamespaceBundle assíncrono <a href="https://github.com/apache/pulsar/pull/16313">#16313</a></li>
+<li>[Pulsar Admin] Torne Namespaces.deleteNamespaceBundle assíncrono <a href="https://github.com/apache/pulsar/pull/16287">#16287</a></li>
+<li>[Pulsar Admin] Torne o método deleteTopic assíncrono <a href="https://github.com/apache/pulsar/pull/16232">#16232</a></li>
+<li>[Pulsar Admin] Torne o método compactionStatus assíncrono <a href="https://github.com/apache/pulsar/pull/16231">#16231</a></li>
+<li>[Pulsar Admin] Torne o método de finalização assíncrono <a href="https://github.com/apache/pulsar/pull/16227">#16227</a></li>
+<li>[Pulsar Admin] Tornar getList assíncrono <a href="https://github.com/apache/pulsar/pull/16221">#16221</a></li>
+<li>[Pulsar Admin] Torne o método getPartitionedTopicList assíncrono <a href="https://github.com/apache/pulsar/pull/16217">#16217</a></li>
+<li>[Pulsar Admin] Melhorar a documentação para estatísticas unackedMessages <a href="https://github.com/apache/pulsar/pull/16213">#16213</a></li>
+<li>[Pulsar Admin] Tornar o método internalPeekNthMessage assíncrono <a href="https://github.com/apache/pulsar/pull/16192">#16192</a></li>
+<li>[Pulsar Admin] Correção de problema de obtenção de tópicos não persistentes em Namespaces <a href="https://github.com/apache/pulsar/pull/16170">#16170</a></li>
+<li>[Pulsar Admin] Torne o método getInternalStats assíncrono <a href="https://github.com/apache/pulsar/pull/16141">#16141</a></li>
+<li>[Pulsar Admin] Corrigir get-publish-rete Admin API lidar com comportamento de exceção <a href="https://github.com/apache/pulsar/pull/16001">#16001</a></li>
+<li>[Pulsar Admin] Libera LookupRequestSemaphore antes de retornar dados <a href="https://github.com/apache/pulsar/pull/13549">#15974</a></li>
+<li>[Pulsar Admin] Correção da permissão de produtor/consumo, não é possível obter o esquema <a href="https://github.com/apache/pulsar/pull/15956">#15956</a></li>
+<li>[Pulsar Admin] Torne assíncrona a operação da taxa de publicação e da taxa de despacho <a href="https://github.com/apache/pulsar/pull/15946">#15946</a></li>
+<li>[Pulsar Admin] Suporte para obter propriedades do tópico <a href="https://github.com/apache/pulsar/pull/15944">#15944</a></li>
+<li>[Pulsar Admin] Novo API para obter propriedades de assinatura <a href="https://github.com/apache/pulsar/pull/16095">#16095</a></li>
+<li>[Pulsar Admin] Faça alguns métodos de expedição de assinatura de operação em Namespaces assíncronos <a href="https://github.com/apache/pulsar/pull/15880">#15880</a></li>
+<li>[Pulsar Admin] Faça alguns métodos em SchemasResourceBase assíncrono <a href="https://github.com/apache/pulsar/pull/15821">#15821</a></li>
+<li>[Pulsar Admin] Torne alguns clusters de replicação de operação assíncronos <a href="https://github.com/apache/pulsar/pull/15760">#15760</a></li>
+<li>[Pulsar Admin] Faça alguns métodos de ClusterBase puro assíncrono <a href="https://github.com/apache/pulsar/pull/15685">#15685</a></li>
+<li>[Pulsar Admin] Permitir a criação de funções integradas no pulsar-admin CLI <a href="https://github.com/apache/pulsar/pull/15671">#15671</a></li>
+<li>[Pulsar Admin] Permite que os usuários especifiquem opções de TTL em unidades diferentes de segundos <a href="https://github.com/apache/pulsar/pull/15657">#15657</a></li>
+<li>[Pulsar Admin] Faça algumas operações com métodos SubscribeRate em Namespaces assíncronos <a href="https://github.com/apache/pulsar/pull/15656">#15656</a></li>
+<li>[Pulsar Admin] Adicione administrador de transação para obter tempo de recuperação nas estatísticas <a href="https://github.com/apache/pulsar/pull/15654">#15654</a></li>
+<li>[Pulsar Admin] Faça alguma operação de criação automática de tópicos em Namespaces assíncronos <a href="https://github.com/apache/pulsar/pull/15621">#15621</a></li>
+<li>[Pulsar Admin] Adicionar nome do tópico e subnome para mensagem de erro NotFound <a href="https://github.com/apache/pulsar/pull/15606">#15606</a></li>
+<li>[Pulsar Admin] Faça alguns métodos em ResourceQuotasBase assíncronos <a href="https://github.com/apache/pulsar/pull/15605">#15605</a></li>
+<li>[Pulsar Admin] Faça alguns métodos em TenantsBase assíncrono <a href="https://github.com/apache/pulsar/pull/15603">#15603</a></li>
+<li>[Pulsar Admin] Faça alguns métodos messageTTL de operação em Namespaces assíncronos <a href="https://github.com/apache/pulsar/pull/15577">#15577</a></li>
+<li>[Pulsar Admin] Permite que os usuários especifiquem algumas opções de tempo em unidades diferentes de segundos <a href="https://github.com/apache/pulsar/pull/15563">#15563</a></li>
+<li>[Pulsar Admin] Faça alguns métodos de ClusterBase puro assíncrono <a href="https://github.com/apache/pulsar/pull/15527">#15527</a></li>
+<li>[Pulsar Admin] Suporte ao tópico do sistema de filtragem ao obter lista <a href="https://github.com/apache/pulsar/pull/15410">#15410</a></li>
+<li>[Pulsar Admin] Faça alguns métodos de ClusterBase puro assíncrono <a href="https://github.com/apache/pulsar/pull/15358">#15358</a></li>
+<li>[Pulsar Admin] Faça alguns métodos de ClusterBase puro assíncrono <a href="https://github.com/apache/pulsar/pull/15318">#15318</a></li>
+<li>[Administrador Pulsar] Adicionar administrador api updateTransactionCoordinatorNumber <a href="https://github.com/apache/pulsar/pull/15296">#15296</a></li>
+<li>[Administrador Pulsar] Coloque ValidTopicOwnershipAsync antes de ValidTopicOperationAsync <a href="https://github.com/apache/pulsar/pull/15265">#15265</a></li>
+<li>[Pulsar Admin] Remover duplicação validTopicOwnershipAsync <a href="https://github.com/apache/pulsar/pull/15410">#15120</a></li>
+<li>[Pulsar Admin] Corrigir mensagem de não aviso do pulsar-admin quando há um erro 500 <a href="https://github.com/apache/pulsar/pull/14856">#14856</a></li>
+<li>[Pulsar Admin] Adicionar corretores ativos api sem nome de cluster <a href="https://github.com/apache/pulsar/pull/14702">#14702</a></li>
+<li>[Pulsar Admin] Obtenha stacktrace contextual para métodos de sincronização <a href="https://github.com/apache/pulsar/pull/14620">#14620</a></li>
+<li>[Pulsar Admin] Prompt de mensagem de status correto <a href="https://github.com/apache/pulsar/pull/14603">#14603</a></li>
+<li>[Pulsar CLI] Corrigir NPE no comando de estatísticas do tópico admin-CLI <a href="https://github.com/apache/pulsar/pull/18326">#18326</a></li>
+<li>[Pulsar CLI] Corrigir CLI client produto não é capaz de usar vários -m enviar múltiplas mensagens <a href="https://github.com/apache/pulsar/pull/18238">#18238</a></li>
+<li>[Pulsar CLI] Pulsar shell: permite criar uma nova configuração (--file) com um caminho relativo <a href="https://github.com/apache/pulsar/pull/17675">#17675</a></li>
+<li>[Pulsar CLI] Pulsar shell: não saia na interrupção do usuário durante comandos <a href="https://github.com/apache/pulsar/pull/18615">#18615</a></li>
+<li>[Pulsar CLI] Pulsar shell: permite clonar uma configuração existente <a href="https://github.com/apache/pulsar/pull/18608">#18608</a></li>
+<li>[Pulsar CLI] Concha de pulsar: suporta caminhos relativos <a href="https://github.com/apache/pulsar/pull/17648">#17648</a></li>
+<li>[Pulsar CLI] Pulsar shell, Pulsar admin, Pulsar client e Pulsar perf: suporte para Windows <a href="https://github.com/apache/pulsar/pull/17243">#17243</a></li>
+<li>[Pulsar CLI] Pulsar shell: adicionar comando para definir/obter propriedade de uma configuração <a href="https://github.com/apache/pulsar/pull/17651">#17651</a></li>
+<li>[Pulsar CLI] Corrigir execução de comandos personalizados do shell Pulsar <a href="https://github.com/apache/pulsar/pull/17479">#17479</a></li>
+<li>[Pulsar CLI] Extensões CLI: renomeie o local padrão para 'cliextensions' <a href="https://github.com/apache/pulsar/pull/17435">#17435</a></li>
+<li>[Pulsar CLI] Excluir script do Windows da imagem docker <a href="https://github.com/apache/pulsar/pull/17404">#17404</a></li>
+<li>[Pulsar CLI] Adicionar uma configuração de criptografia de transporte TLS separada <a href="https://github.com/apache/pulsar/pull/16930">#16930</a></li>
+<li>[Pulsar CLI] Corrige descrição incorreta para produção de mensagens <a href="https://github.com/apache/pulsar/pull/16876">#16876</a></li>
+<li>[Pulsar CLI] Use NoSplitter para propriedades de assinatura <a href="https://github.com/apache/pulsar/pull/16862">#16862</a></li>
+<li>[Pulsar CLI] Adicionar suporte ao provedor TLS <a href="https://github.com/apache/pulsar/pull/16700">#16700</a></li>
+<li>[Pulsar CLI] Suporte getEarliestTimeInBacklog no método getPartitionedStats <a href="https://github.com/apache/pulsar/pull/16388">#16388</a></li>
+<li>[Pulsar CLI] Adicionar opções de consulta aos tópicos get no Namespace <a href="https://github.com/apache/pulsar/pull/16167">#16167</a></li>
+<li>[Pulsar CLI] Adicionar cmd cli para limitador de taxa de despacho em nível de assinatura <a href="https://github.com/apache/pulsar/pull/15862">#15862</a></li>
+<li>[Pulsar CLI] Desative o limite de memória do Pulsar client por padrão <a href="https://github.com/apache/pulsar/pull/15748">#15748</a></li>
+<li>[Pulsar CLI] Corrigida verificação ao criar nome de classe de função <a href="https://github.com/apache/pulsar/pull/15862">#15700</a></li>
+<li>[Pulsar CLI] Suporte ao tópico do sistema de filtragem ao obter lista <a href="https://github.com/apache/pulsar/pull/15410">#15410</a></li>
+<li>[Pulsar CLI] Altere o padrão para conexões máximas de 100 para 1 <a href="https://github.com/apache/pulsar/pull/15387">#15387</a></li>
+<li>[Pulsar CLI] Adicione um nome abreviado para o nome completo no administrador cli <a href="https://github.com/apache/pulsar/pull/14301">#14301</a></li>
+<li>[Ferramenta Client] Usando int em vez de long em scripts python <a href="https://github.com/apache/pulsar/pull/17215">#17215</a></li>
+<li>[Ferramenta Client] Correção usando o diretório '?' na imagem docker <a href="https://github.com/apache/pulsar/pull/17185">#17185</a></li>
+<li>[Ferramenta Client] Manipule ctrl-d e saia do shell <a href="https://github.com/apache/pulsar/pull/17204">#17204</a></li>
+<li>[Ferramenta Client] Adicionar tlsTrustCertFilePath como argumento CLI para pulsar-client-tool <a href="https://github.com/apache/pulsar/pull/16961">#16961</a></li>
+<li>[Perf Tool] Capaz de definir maxLookupRequest para pulsar-perf <a href="https://github.com/apache/pulsar/pull/16967">#16967</a></li>
+<li>[Ferramenta Perf] Pulsar-perf falha em jdk17 <a href="https://github.com/apache/pulsar/pull/18806">#18806</a></li>
+</ul>
+<h3>Outros</h3>
+<ul>
+<li>[Proxy] Corrigir atualização de autenticação client <a href="https://github.com/apache/pulsar/pull/17831">#17831</a></li>
+<li>[Proxy] Atualizar tipo de exceção de lançamento de pesquisa de proxy <a href="https://github.com/apache/pulsar/pull/17600">#17600</a></li>
+<li>[Proxy] Adicionar criptografia de transporte TLS para o corretor client <a href="https://github.com/apache/pulsar/pull/16833">#16833</a></li>
+<li>[Proxy] Corrigir URL do serviço client <a href="https://github.com/apache/pulsar/pull/16834">#16834</a></li>
+<li>[Proxy] Consolidar liberações de canal Netty para mitigar sobrecarga de syscall <a href="https://github.com/apache/pulsar/pull/16372">#16372</a></li>
+<li>[Proxy] Não preserva o host ao encaminhar solicitações de administrador <a href="https://github.com/apache/pulsar/pull/16342">#16342</a></li>
+<li>[Proxy] Mude para confiar em Netty para verificação de nome de host <a href="https://github.com/apache/pulsar/pull/15824">#15824</a></li>
+<li>[Proxy] Suporta cópia zero de NIC para NIC no proxy <a href="https://github.com/apache/pulsar/pull/15678">#15678</a></li>
+<li>[Proxy] Sugestão de colocar brokerProxyAllowedTargetPorts em proxy.conf <a href="https://github.com/apache/pulsar/pull/15069">#15069</a></li>
+<li>[Proxy] Sair se o serviço de proxy falhar ao iniciar <a href="https://github.com/apache/pulsar/pull/15076">#15076</a></li>
+<li>[Proxy] Adicionar suporte de PrometheusRawMetricsProvider para o Pulsar-Proxy <a href="https://github.com/apache/pulsar/pull/14681">#14681</a></li>
+<li>[Proxy] Falha na inicialização do proxy se estiver faltando esquema no brokerServiceURL <a href="https://github.com/apache/pulsar/pull/14682">#14682</a></li>
+<li>[Proxy] Corrigir problema de negação de serviço do servidor DNS quando a entrada DNS expirar <a href="https://github.com/apache/pulsar/pull/15403">#15403</a></li>
+<li>[Proxy] Remova o bloqueio desnecessário de pesquisa de DNS em LookupProxyHandler <a href="https://github.com/apache/pulsar/pull/15415">#15415</a></li>
+<li>[WebSocket] Suporta criptografia em proxy websocket <a href="https://github.com/apache/pulsar/pull/16234">#16234</a></li>
+<li>[WebSocket] Corrigir MultiTopicReader#getConsumer ClassCastException <a href="https://github.com/apache/pulsar/pull/15534">#15534</a></li>
+<li>[WebSocket] Adicionar suporte KeyStore em WebSocket, servidores Function Worker HTTPS <a href="https://github.com/apache/pulsar/pull/15084">#15084</a></li>
+<li>[WebSocket] Correção de ClassCastException quando o usuário cria MultiTopicReader <a href="https://github.com/apache/pulsar/pull/14316">#14316</a></li>
+<li>[Gerenciamento de pacotes] Corrija o novo caminho /data introduzido na regressão <a href="https://github.com/apache/pulsar/pull/15367">#15367</a></li>
+<li>[Esquema] Adicionar decodificação InputStream para Esquema <a href="https://github.com/apache/pulsar/pull/16659">#16659</a></li>
+<li>[Esquema] Expor campo de carimbo de data/hora para SchemaData&amp;SchemaInfo <a href="https://github.com/apache/pulsar/pull/16380">#16380</a></li>
+<li>[Esquema] Adicionar campo classLoader para SchemaDefinition <a href="https://github.com/apache/pulsar/pull/15915">#15915</a></li>
+<li>[Esquema] Correção de conversão de TimestampMillisConversion não tem efeito quando Jsr310Conversion ativado <a href="https://github.com/apache/pulsar/pull/15863">#15863</a></li>
+<li>[Esquema] Garanta a consistência de exclusão do tópico e do esquema <a href="https://github.com/apache/pulsar/pull/14608">#14608</a></li>
+<li>[Armazenamento em camadas] Assinatura compartilhada: melhoria com livros contábeis transferidos <a href="https://github.com/apache/pulsar/pull/16417">#16417</a></li>
+<li>[Armazenamento em camadas] Corrija o nome errado da chave secreta obtida no env <a href="https://github.com/apache/pulsar/pull/15814">#15814</a></li>
+<li>[Armazenamento em camadas] Adicionar provedor S3 puro para o offloader <a href="https://github.com/apache/pulsar/pull/15710">#15710</a></li>
+<li>[Armazenamento em camadas] reppDnsResolverClass padrão de recuperação automática para ZkBookieRackAffinityMapping <a href="https://github.com/apache/pulsar/pull/15640">#15640</a></li>
+<li>[Armazenamento em camadas] Reduza o uso da CPU ao descarregar livros contábeis <a href="https://github.com/apache/pulsar/pull/15063">#15063</a></li>
+<li>[Armazenamento em camadas] Corrigir NPE potencial em MockManagedLedger <a href="https://github.com/apache/pulsar/pull/15006">#15006</a></li>
+<li>[Armazenamento em camadas] Adicione API para digitalizar objetos no armazenamento em camadas <a href="https://github.com/apache/pulsar/pull/14930">#14930</a></li>
+<li>[Armazenamento em camadas] Corrija o ID de entrada incorreto no log de aviso ao ler a entrada do armazenamento em camadas <a href="https://github.com/apache/pulsar/pull/14685">#14685</a></li>
+<li>Incluir shell Pulsar nos artefatos lançados <a href="https://github.com/apache/pulsar/pull/18583">#18583</a></li>
+<li>Adicionar plugin lombok para resolver problema de Javadoc <a href="https://github.com/apache/pulsar/pull/18520">#18520</a></li>
+<li>Remover novas tentativas de teste de nível de linha cmd <a href="https://github.com/apache/pulsar/pull/16524">#16524</a></li>
+<li>Corrigir opções Java potencialmente incompatíveis causadas por IS_JAVA_8 <a href="https://github.com/apache/pulsar/pull/15444">#15444</a></li>
+<li>Remover perfis maven obsoletos jdk11 e errorprone-jdk11 <a href="https://github.com/apache/pulsar/pull/15505">#15505</a></li>
+<li>Remover dependência interna: pulsar-functions-instance <a href="https://github.com/apache/pulsar/pull/14925">#14925</a></li>
+<li>Habilite novas tentativas para o apt-get ao construir a imagem Pulsar docker <a href="https://github.com/apache/pulsar/pull/15505">#14513</a></li>
+<li>Migrar imagens Docker e CI para Java 17 <a href="https://github.com/apache/pulsar/pull/14355">#14355</a></li>
+</ul>
+<h3>Atualizações da biblioteca</h3>
+<ul>
+<li>Remover versões tratadas por netty-bom <a href="https://github.com/apache/pulsar/pull/18629">#18629</a></li>
+<li>Atualize Netty para 4.1.86.Final e Netty Tcnativo para 2.0.54.Final <a href="https://github.com/apache/pulsar/pull/18599">#18599</a></li>
+<li>Atualize jackson-databind para 2.13.4.2 para se livrar do CVE-2022-42003 <a href="https://github.com/apache/pulsar/pull/18394">#18394</a></li>
+<li>Versão do contador para 4.15.3 <a href="https://github.com/apache/pulsar/pull/18455">#18455</a></li>
+<li>Atualize jackson-databind para 2.13.4.2 para se livrar do CVE-2022-42003 <a href="https://github.com/apache/pulsar/pull/18394">#18394</a></li>
+<li>Atualize o protobuf para 3.19.6 para se livrar do CVE-2022-3171 <a href="https://github.com/apache/pulsar/pull/18086">#18086</a></li>
+<li>Bump commons-text para 1.10.0 corrigir CVE-2022-42889 <a href="https://github.com/apache/pulsar/pull/18053">#18053</a></li>
+<li>Armazenamento em camadas de arquivos: atualize o descarte para se livrar do CVE-2022-40149 <a href="https://github.com/apache/pulsar/pull/18022">#18022</a></li>
+<li>Atualize a biblioteca scala para se livrar do CVE-2022-36944 <a href="https://github.com/apache/pulsar/pull/18021">#18021</a></li>
+<li>Atualize JacksonXML para 2.13.4 <a href="https://github.com/apache/pulsar/pull/18020">#18020</a></li>
+<li>Atualize para Jetty para 9.4.48.v20220622 <a href="https://github.com/apache/pulsar/pull/16520">#16520</a></li>
+<li>Coloque o plugin de dependência maven em 3.3.0 <a href="https://github.com/apache/pulsar/pull/16318">#16318</a></li>
+<li>Aumente a versão do plug-in os-maven de 1.4.1.Final para 1.7.0 <a href="https://github.com/apache/pulsar/pull/16308">#16308</a></li>
+<li>Pressione presto.version para executar PrestoServer em JDK11+ <a href="https://github.com/apache/pulsar/pull/16163">#16163</a></li>
+<li>Atualize a versão fastjson para 1.2.83 <a href="https://github.com/apache/pulsar/pull/16148">#16148</a></li>
+<li>Aumente PyYAML de 5.3.1 para 5.4.1 para resolver CVE-2020-14343 <a href="https://github.com/apache/pulsar/pull/15989">#15989</a></li>
+<li>Aumente a versão da mola para 5.3.20 para resolver CVE-2022-22970 <a href="https://github.com/apache/pulsar/pull/15699">#15699</a></li>
+<li>Versão rápida do zstd para corrigir CompressorCodecBackwardCompatTest no Apple M1 <a href="https://github.com/apache/pulsar/pull/15698">#15698</a></li>
+<li>Athenz: não use uber-jar e acesse 1.10.50 para remover a dependência sombreada de jackson-databind <a href="https://github.com/apache/pulsar/pull/14884">#14884</a></li>
+<li>Remover erros de acesso ilegal resultantes do Google Guice - Pulsar IO, Offloaders e Pulsar SQL - Bump Guice para 5.1.0 <a href="https://github.com/apache/pulsar/pull/14300">#14300</a></li>
+<li>Versão Bump prometheus client de 0.5.0 para 0.15.0 <a href="https://github.com/apache/pulsar/pull/13785">#13785</a></li>
+<li>Atualize a versão log4j2 para 2.18.0 [#16884](https://github.com/apache/pulsar/pull/16884</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Fonte</strong> <a href="https://github.com/apache/pulsar">apache/pulsar</a> · <code>v2.11.0</code> · 2023-01-13 · <a href="https://github.com/apache/pulsar/releases/tag/v2.11.0">versão upstream</a>
+<em>Espelhado literalmente para indexação. Todos os direitos pertencem ao projeto upstream.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Original em inglês / English original</summary> <div class="prose mt-original-body"><h1>pulsar v2.11.0</h1>
+<h3>Important notice</h3>
+<ul>
+<li>Rename Pulsar txn metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16581">#16581</a></li>
+<li>Rename Pulsar schema metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16610">#16610</a></li>
+<li>Rename Pulsar lb metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16611">#16611</a></li>
+<li>Remove jul-to-slf4j #16320 <a href="https://github.com/apache/pulsar/pull/16320">#16320</a></li>
+<li>Fix get non-persistent topics issue in Namespaces <a href="https://github.com/apache/pulsar/pull/16170">#16170</a></li>
+<li>Fix producer/consume permission can’t get schema <a href="https://github.com/apache/pulsar/pull/15956">#15956</a></li>
+<li>Add verification for configured default backlog quota and retention <a href="https://github.com/apache/pulsar/pull/15441">#15441</a></li>
+<li>Fix ineffective broker LoadBalance <a href="https://github.com/apache/pulsar/pull/15314">#15314</a></li>
+<li>Ensure the deletion consistency of topic and schema <a href="https://github.com/apache/pulsar/pull/14608">#14608</a></li>
+<li>Transaction cumulative ack redeliver change <a href="https://github.com/apache/pulsar/pull/14371">#14371</a></li>
+<li>Bump prometheus client version from 0.5.0 to 0.15.0 <a href="https://github.com/apache/pulsar/pull/13785">#13785</a></li>
+<li>[PIP-158] Split client TLS transport encryption from authentication <a href="https://github.com/apache/pulsar/pull/15634">#15634</a></li>
+<li>[PIP-155] Remove Python 2 support <a href="https://github.com/apache/pulsar/pull/15376">#15376</a></li>
+<li>[PIP-156] Build Pulsar Server on Java 17 <a href="https://github.com/apache/pulsar/pull/15264">#15264</a></li>
+<li>[PIP-162] Enable system topic by default <a href="https://github.com/apache/pulsar/pull/15619">#15619</a></li>
+</ul>
+<h3>PIPs</h3>
+<ul>
+<li>[PIP 37] Support chunking with Shared subscription <a href="https://github.com/apache/pulsar/pull/16202">#16202</a></li>
+<li>[PIP-74] Pulsar client memory limits <a href="https://github.com/apache/pulsar/pull/14400">#14400</a></li>
+<li>[PIP-81] Split createNewMetadataLedger into multiple methods for reuse <a href="https://github.com/apache/pulsar/pull/15425">#15425</a></li>
+<li>[PIP 97] Update Authentication Interfaces to Include Async Authentication Methods <a href="https://github.com/apache/pulsar/pull/12104">#12104</a></li>
+<li>[PIP-100] Support pluggable topic factory <a href="https://github.com/apache/pulsar/pull/12235">#12235</a></li>
+<li>[PIP-105] Store Subscription properties <a href="https://github.com/apache/pulsar/pull/15757">#15757</a></li>
+<li>[PIP-117] Change Pulsar standalone defaults <a href="https://github.com/apache/pulsar/pull/15478">#15478</a></li>
+<li>[PIP-132] Include message header size when checking maxMessageSize for non-batch messages on the client side <a href="https://github.com/apache/pulsar/pull/14007">#14007</a></li>
+<li>[PIP-136] Sync Pulsar metadata across multiple clouds <a href="https://github.com/apache/pulsar/pull/16425">#16425</a></li>
+<li>[PIP-143] Support split bundle by specified boundaries <a href="https://github.com/apache/pulsar/pull/13796">#13796</a></li>
+<li>[PIP-145] Improve performance of regex subscriptions <a href="https://github.com/apache/pulsar/pull/14505">#14505</a></li>
+<li>[PIP-146] ManagedCursorInfo compression <a href="https://github.com/apache/pulsar/pull/14542">#14542</a></li>
+<li>[PIP 149] Make the REST Admin API fully async <a href="https://github.com/apache/pulsar/issues/14365">#14365</a></li>
+<li>[PIP-152] Support subscription level dispatch rate limiter setting <a href="https://github.com/apache/pulsar/issues/15295">#15295</a></li>
+<li>[PIP-153] Optimize metadataPositions in MLPendingAckStore <a href="https://github.com/apache/pulsar/pull/15137">#15137</a></li>
+<li>[PIP-160] Make transactions work more efficiently by aggregation operation for transaction log and pending ack store <a href="https://github.com/apache/pulsar/issues/15370">#15370</a></li>
+<li>[PIP-161] Exclusive Producer: ability to fence out an existing Producer <a href="https://github.com/apache/pulsar/pull/15488">#15488</a></li>
+<li>[PIP-163] Add lowWaterMark check before appending entry to TB <a href="https://github.com/apache/pulsar/pull/15424">#15424</a></li>
+<li>[PIP-166] Add MANUAL delivery semantics for Functions <a href="https://github.com/apache/pulsar/pull/16279">#16279</a></li>
+<li>[PIP-179] Support the admin API to check unknown request parameters <a href="https://github.com/apache/pulsar/issues/16135">#16135</a></li>
+<li>[PIP-181] Pulsar Shell <a href="https://github.com/apache/pulsar/issues/16250">#16250</a></li>
+<li>[PIP-184] Topic specific consumer priorityLevel <a href="https://github.com/apache/pulsar/issues/16715">#16715</a></li>
+<li>[PIP-187] Add API to analyze a subscription backlog and provide an accurate value <a href="https://github.com/apache/pulsar/issues/16545">#16545</a></li>
+<li>[PIP-189] No batching if only one message in batch <a href="https://github.com/apache/pulsar/issues/18548">#18548</a></li>
+<li>[PIP-201] Extensions mechanism for Pulsar Admin CLI tools <a href="https://github.com/apache/pulsar/issues/17158">#17158</a></li>
+</ul>
+<h3>Broker</h3>
+<ul>
+<li>
+<p>[PIP 81] Split the individual acknowledgments into multiple entries</p>
+<ul>
+<li>Add range set wrapper to support record dirty ledgers <a href="https://github.com/apache/pulsar/pull/15607">#15607</a></li>
+<li>Notifications for faster topic discovery <a href="https://github.com/apache/pulsar/pull/16062">#16062</a></li>
+<li>Split createNewMetadataLedger into multiple methods for reuse <a href="https://github.com/apache/pulsar/pull/15425">#15425</a></li>
+</ul>
+</li>
+<li>
+<p>[PIP 105] Store Subscription properties</p>
+<ul>
+<li>Store Subscription properties <a href="https://github.com/apache/pulsar/pull/15757">#15757</a></li>
+<li>Pulsar Admin: create subscription with Properties <a href="https://github.com/apache/pulsar/pull/15503">#15503</a></li>
+<li>Fix error on recycled SubscriptionPropertiesList <a href="https://github.com/apache/pulsar/pull/15335">#15335</a></li>
+</ul>
+</li>
+<li>
+<p>[PIP 160] Make transactions work more efficiently by aggregation operation for transaction log and pending ack store</p>
+<ul>
+<li>Pending ack log store enables the batch feature <a href="https://github.com/apache/pulsar/pull/16707">#16707</a></li>
+<li>Metrics stats of Transaction buffered writer <a href="https://github.com/apache/pulsar/pull/16758">#16758</a></li>
+<li>Transaction buffered writer supports Timer <a href="https://github.com/apache/pulsar/pull/16727">#16727</a></li>
+<li>Transaction log store enables the batch feature <a href="https://github.com/apache/pulsar/pull/16685">#16685</a></li>
+<li>Protocol changes and configuration changes for transaction batch log <a href="https://github.com/apache/pulsar/pull/16617">#16617</a></li>
+<li>Txn buffered writer for transaction log batch <a href="https://github.com/apache/pulsar/pull/16428">#16428</a></li>
+</ul>
+</li>
+<li>
+<p>[PIP 145] Improve performance of regex subscriptions</p>
+<ul>
+<li>Enable evaluating subscription pattern on broker side <a href="https://github.com/apache/pulsar/pull/14804">#14804</a></li>
+<li>Notifications for faster topic discovery <a href="https://github.com/apache/pulsar/pull/16062">#16062</a></li>
+</ul>
+</li>
+<li>
+<p>[PIP-156] Build Pulsar Server on Java 17</p>
+<ul>
+<li>Build changes by dropping some required checks <a href="https://github.com/apache/pulsar/pull/15496">#15496</a></li>
+<li>Build Pulsar Server on Java 17 <a href="https://github.com/apache/pulsar/pull/15264">#15264</a></li>
+</ul>
+</li>
+<li>
+<p>Add logs for why namespace bundle been split <a href="https://github.com/apache/pulsar/pull/19003">#19003</a></p>
+</li>
+<li>
+<p>Omit making a copy of CommandAck when there are no broker interceptors <a href="https://github.com/apache/pulsar/pull/18997">#18997</a></p>
+</li>
+<li>
+<p>Fix deadlock in PendingAckHandleImpl <a href="https://github.com/apache/pulsar/pull/18989">#18989</a></p>
+</li>
+<li>
+<p>Copy proto command fields into final variables in ServerCnx <a href="https://github.com/apache/pulsar/pull/18987">#18987</a></p>
+</li>
+<li>
+<p>Transaction pending ack store future not completely problem <a href="https://github.com/apache/pulsar/pull/18943">#18943</a></p>
+</li>
+<li>
+<p>Update interceptor handler exception <a href="https://github.com/apache/pulsar/pull/18940">#18940</a></p>
+</li>
+<li>
+<p>Do not require encryption on system topics <a href="https://github.com/apache/pulsar/pull/18898">#18898</a></p>
+</li>
+<li>
+<p>Fix incorrect Nic usage collected by pulsar <a href="https://github.com/apache/pulsar/pull/18882">#18882</a></p>
+</li>
+<li>
+<p>Fix PendingAckHandleImpl when pendingAckStoreProvider.checkInitializedBefore failed <a href="https://github.com/apache/pulsar/pull/18859">#18859</a></p>
+</li>
+<li>
+<p>Ignore the exception of creating namespace <a href="https://github.com/apache/pulsar/pull/18837">#18837</a></p>
+</li>
+<li>
+<p>Fixing can not delete namespace by force <a href="https://github.com/apache/pulsar/pull/18826">#18826</a></p>
+</li>
+<li>
+<p>Avoid OOM not trigger PulsarByteBufAllocator outOfMemoryListener when use ByteBufAllocator.DEFAULT.heapBuffer <a href="https://github.com/apache/pulsar/pull/18747">#18747</a></p>
+</li>
+<li>
+<p>System topic writer/reader connection not counted <a href="https://github.com/apache/pulsar/pull/18603">#18603</a></p>
+</li>
+<li>
+<p>DnsResolverUtil.TTL should be greater than zero <a href="https://github.com/apache/pulsar/pull/18565">#18565</a></p>
+</li>
+<li>
+<p>Persist correct markDeletePosition to prevent message loss <a href="https://github.com/apache/pulsar/pull/18237">#18237</a></p>
+</li>
+<li>
+<p>Fix delete_when_subscriptions_caught_up doesn't work while have active consumers <a href="https://github.com/apache/pulsar/pull/18320">#18320</a></p>
+</li>
+<li>
+<p>Read local cookie when start pulsar standalone <a href="https://github.com/apache/pulsar/pull/18260">#18260</a></p>
+</li>
+<li>
+<p>Remove the redundant judgment logic of ManagedCursorImpl <a href="https://github.com/apache/pulsar/pull/18205">#18205</a></p>
+</li>
+<li>
+<p>Fix unexpected behaviour by invoke PulsarConfigurationLoader#convertFrom <a href="https://github.com/apache/pulsar/pull/18816">#18816</a></p>
+</li>
+<li>
+<p>Fix the wrong behaviour when set overrideBrokerNicSpeedGbps <a href="https://github.com/apache/pulsar/pull/18818">#18818</a></p>
+</li>
+<li>
+<p>Fix the breaking change of standalone metadata initialization <a href="https://github.com/apache/pulsar/pull/18909">#18909</a></p>
+</li>
+<li>
+<p>Transaction buffer recover blocked by readNext <a href="https://github.com/apache/pulsar/pull/18969">#18969</a></p>
+</li>
+<li>
+<p>Fix duplicated schemas creation <a href="https://github.com/apache/pulsar/pull/18701">#18701</a></p>
+</li>
+<li>
+<p>Read local cookie when start pulsar standalone <a href="https://github.com/apache/pulsar/pull/18260">#18260</a></p>
+</li>
+<li>
+<p>The Pulsar standalone bookie is not getting passed the config from standalone.conf <a href="https://github.com/apache/pulsar/pull/18126">#18126</a></p>
+</li>
+<li>
+<p>Reduce unnecessary calling span() when filtering read entries <a href="https://github.com/apache/pulsar/pull/18106">#18106</a></p>
+</li>
+<li>
+<p>Change update schema auth from tenant to produce <a href="https://github.com/apache/pulsar/pull/18074">#18074</a></p>
+</li>
+<li>
+<p>Fixed delayed delivery after read operation error <a href="https://github.com/apache/pulsar/pull/18098">#18098</a></p>
+</li>
+<li>
+<p>Fix memory leak while Offloading ledgers <a href="https://github.com/apache/pulsar/pull/18500">#18500</a></p>
+</li>
+<li>
+<p>Cache invalidation due to concurrent access <a href="https://github.com/apache/pulsar/pull/18076">#18076</a></p>
+</li>
+<li>
+<p>Fix unable to start multiple bookies for BKCluster <a href="https://github.com/apache/pulsar/pull/18072">#18072</a></p>
+</li>
+<li>
+<p>Compare batch index when accumulating acks and updating batchDeletedIndexes <a href="https://github.com/apache/pulsar/pull/18042">#18042</a></p>
+</li>
+<li>
+<p>Limit the memory used by reads end-to-end <a href="https://github.com/apache/pulsar/pull/18245">#18245</a></p>
+</li>
+<li>
+<p>Consumer backlog eviction policy should not reset read position for consumer <a href="https://github.com/apache/pulsar/pull/18037">#18037</a></p>
+</li>
+<li>
+<p>Allow to configure and disable the size of lookahead for detecting fixed delays in messages <a href="https://github.com/apache/pulsar/pull/17907">#17907</a></p>
+</li>
+<li>
+<p>Fix create ns <a href="https://github.com/apache/pulsar/pull/17864">#17864</a></p>
+</li>
+<li>
+<p>Fix the wrong NIC speed rate unit <a href="https://github.com/apache/pulsar/pull/17890">#17890</a></p>
+</li>
+<li>
+<p>Fix numerical overflow bug while reading data from tiered storage <a href="https://github.com/apache/pulsar/pull/18595">#18595</a></p>
+</li>
+<li>
+<p>Support lower boundary shedding for ThresholdShedder <a href="https://github.com/apache/pulsar/pull/17456">#17456</a></p>
+</li>
+<li>
+<p>Avoid unnecessary creation of BitSetRecyclable objects <a href="https://github.com/apache/pulsar/pull/17998">#17998</a></p>
+</li>
+<li>
+<p>Fix broker cache eviction of entries read by active cursors <a href="https://github.com/apache/pulsar/pull/17273">#17273</a></p>
+</li>
+<li>
+<p>Fix issue where leader broker information isn't available after 10 minutes <a href="https://github.com/apache/pulsar/pull/17401">#17401</a></p>
+</li>
+<li>
+<p>Fix NPE when ResourceGroupService execute scheduled task <a href="https://github.com/apache/pulsar/pull/17840">#17840</a></p>
+</li>
+<li>
+<p>Make BookieId work with PulsarRegistrationDriver <a href="https://github.com/apache/pulsar/pull/17762">#17762</a></p>
+</li>
+<li>
+<p>Fix namespace backlog quota check with retention <a href="https://github.com/apache/pulsar/pull/17706">#17706</a></p>
+</li>
+<li>
+<p>Cleanup state when lock revalidation gets LockBusyException <a href="https://github.com/apache/pulsar/pull/17700">#17700</a></p>
+</li>
+<li>
+<p>Fix parsing partitionedKey with Base64 encode issue <a href="https://github.com/apache/pulsar/pull/17687">#17687</a></p>
+</li>
+<li>
+<p>Standalone Add param of --metadata-url for runing with metadata <a href="https://github.com/apache/pulsar/pull/17077">#17077</a></p>
+</li>
+<li>
+<p>Correctly set byte and message out totals per subscription <a href="https://github.com/apache/pulsar/pull/18451">#18451</a></p>
+</li>
+<li>
+<p>Implementation of Delayed Transaction Messages <a href="https://github.com/apache/pulsar/pull/17548">#17548</a></p>
+</li>
+<li>
+<p>Set revalidateAfterReconnection true for certain failures <a href="https://github.com/apache/pulsar/pull/17664">#17664</a></p>
+</li>
+<li>
+<p>Unregister topic policy listener if managed ledger close failed <a href="https://github.com/apache/pulsar/pull/17652">#17652</a></p>
+</li>
+<li>
+<p>Correctly handle list configuration values <a href="https://github.com/apache/pulsar/pull/17661">#17661</a></p>
+</li>
+<li>
+<p>Cancel the loadShedding task when closing pulsar service <a href="https://github.com/apache/pulsar/pull/17632">#17632</a></p>
+</li>
+<li>
+<p>Consumer can't consume messages because there has two sames topics in one broker <a href="https://github.com/apache/pulsar/pull/17526">#17526</a></p>
+</li>
+<li>
+<p>Prevent partitioned metadata lookup request when broker is closing <a href="https://github.com/apache/pulsar/pull/17315">#17315</a></p>
+</li>
+<li>
+<p>Prevent new connection request when broker is closing <a href="https://github.com/apache/pulsar/pull/17314">#17314</a></p>
+</li>
+<li>
+<p>Ledger handle leak when update schema <a href="https://github.com/apache/pulsar/pull/17283">#17283</a></p>
+</li>
+<li>
+<p>Add metrics for entry cache insertion, eviction <a href="https://github.com/apache/pulsar/pull/17248">#17248</a></p>
+</li>
+<li>
+<p>Do not send duplicate reads to BK/offloaders <a href="https://github.com/apache/pulsar/pull/17241">#17241</a></p>
+</li>
+<li>
+<p>Fix system service namespace create internal event topic <a href="https://github.com/apache/pulsar/pull/17867">#17867</a></p>
+</li>
+<li>
+<p>Fix getPositionAfterN infinite loop <a href="https://github.com/apache/pulsar/pull/17971">#17971</a></p>
+</li>
+<li>
+<p>Fix memory leak in case of error conditions in PendingReadsManager <a href="https://github.com/apache/pulsar/pull/17995">#17995</a></p>
+</li>
+<li>
+<p>After the broker is restarted, the cache dynamic configuration is invalid <a href="https://github.com/apache/pulsar/pull/17035">#17035</a></p>
+</li>
+<li>
+<p>Fix if dynamicConfig item in ZK do not exist in broker cause NPE <a href="https://github.com/apache/pulsar/pull/17705">#17705</a></p>
+</li>
+<li>
+<p>Fix the broker shutdown issue after Zookeeper node crashed <a href="https://github.com/apache/pulsar/pull/17909">#17909</a></p>
+</li>
+<li>
+<p>Fix broker irrational behavior when it is closing <a href="https://github.com/apache/pulsar/pull/17085">#17085</a></p>
+</li>
+<li>
+<p>ServerCnx: log at warning level when topic not found <a href="https://github.com/apache/pulsar/pull/16225">#16225</a></p>
+</li>
+<li>
+<p>Optimize getting ledger and entry id from entry <a href="https://github.com/apache/pulsar/pull/17108">#17108</a></p>
+</li>
+<li>
+<p>Topic policy reader can't recover when get any exception <a href="https://github.com/apache/pulsar/pull/17562">#17562</a></p>
+</li>
+<li>
+<p>Multiple consumer dispatcher stuck when unackedMessages greater than maxUnackedMessages <a href="https://github.com/apache/pulsar/pull/17483">#17483</a></p>
+</li>
+<li>
+<p>Fix memoryLimitController currentUsage and MaxQueueSize semaphore leak when batchMessageContainer add message exception <a href="https://github.com/apache/pulsar/pull/17276">#17276</a></p>
+</li>
+<li>
+<p>Fix arithmetic exception for LeastResourceUsageWithWeight strategy <a href="https://github.com/apache/pulsar/pull/17149">#17149</a></p>
+</li>
+<li>
+<p>Fix update topic remove properties <a href="https://github.com/apache/pulsar/pull/17231">#17231</a></p>
+</li>
+<li>
+<p>Fix ack with txn compute ackedCount error <a href="https://github.com/apache/pulsar/pull/17016">#17016</a></p>
+</li>
+<li>
+<p>Improve cursor.getNumberOfEntries if isUnackedRangesOpenCacheSetEnabled=true <a href="https://github.com/apache/pulsar/pull/17465">#17465</a></p>
+</li>
+<li>
+<p>Fix dispatch duplicated messages with Exclusive mode <a href="https://github.com/apache/pulsar/pull/17237">#17237</a></p>
+</li>
+<li>
+<p>Remove internalUpdateOffloadPolicies to keep the same behavior update topic policy <a href="https://github.com/apache/pulsar/pull/17236">#17236</a></p>
+</li>
+<li>
+<p>Fix update topic remove properties <a href="https://github.com/apache/pulsar/pull/17231">#17231</a></p>
+</li>
+<li>
+<p>Fix arithmetic exception for LeastResourceUsageWithWeight strategy <a href="https://github.com/apache/pulsar/pull/17149">#17149</a></p>
+</li>
+<li>
+<p>Fix pulsarLedgerIdGenerator can't delete index path when zk metadata store config rootPath <a href="https://github.com/apache/pulsar/pull/17192">#17192</a></p>
+</li>
+<li>
+<p>Avoid messages being repeatedly replayed with SHARED subscriptions (streaming dispatcher) <a href="https://github.com/apache/pulsar/pull/17163">#17163</a></p>
+</li>
+<li>
+<p>Add ServerCnx state check before server handle request <a href="https://github.com/apache/pulsar/pull/17084">#17084</a></p>
+</li>
+<li>
+<p>Pass subscriptionName to auth service <a href="https://github.com/apache/pulsar/pull/17123">#17123</a></p>
+</li>
+<li>
+<p>Support loadBalancerSheddingIntervalMinutes dynamic configuration <a href="https://github.com/apache/pulsar/pull/16408">#16408</a></p>
+</li>
+<li>
+<p>Fix out of order data replication <a href="https://github.com/apache/pulsar/pull/17154">#17154</a></p>
+</li>
+<li>
+<p>Fix schema does not replicate successfully <a href="https://github.com/apache/pulsar/pull/17049">#17049</a></p>
+</li>
+<li>
+<p>Optimize the shutdown sequence of broker service when it close <a href="https://github.com/apache/pulsar/pull/16756">#16756</a></p>
+</li>
+<li>
+<p>Modernizer managed ledger <a href="https://github.com/apache/pulsar/pull/16363">#16363</a></p>
+</li>
+<li>
+<p>Make deleteTopicPolicies serialized is executed when close topic <a href="https://github.com/apache/pulsar/pull/15811">#15811</a></p>
+</li>
+<li>
+<p>Streaming dispatcher stuck after reading the first entry with SHARED subscriptions <a href="https://github.com/apache/pulsar/pull/17143">#17143</a></p>
+</li>
+<li>
+<p>Fix calculate avg message per entry <a href="https://github.com/apache/pulsar/pull/17046">#17046</a></p>
+</li>
+<li>
+<p>Fix bundle-data metadata leak because bundle stats was not cleaned up <a href="https://github.com/apache/pulsar/pull/17095">#17095</a></p>
+</li>
+<li>
+<p>Duplicate ByteBuffer when Caching Backlogged Consumers <a href="https://github.com/apache/pulsar/pull/17105">#17105</a></p>
+</li>
+<li>
+<p>Fix offload read handle NPE <a href="https://github.com/apache/pulsar/pull/17056">#17056</a></p>
+</li>
+<li>
+<p>Increment topic stats outbound message counters and update rate after messages have been written to the TCP/IP connection <a href="https://github.com/apache/pulsar/pull/17043">#17043</a></p>
+</li>
+<li>
+<p>Move the state check forward <a href="https://github.com/apache/pulsar/pull/17020">#17020</a></p>
+</li>
+<li>
+<p>Follow up on #16968 to restore some behavior in PersistentDispatcherMultipleConsumers <a href="https://github.com/apache/pulsar/pull/17018">#17018</a></p>
+</li>
+<li>
+<p>Remove exception log when access status.html <a href="https://github.com/apache/pulsar/pull/17025">#17025</a></p>
+</li>
+<li>
+<p>Not allow terminating system topic <a href="https://github.com/apache/pulsar/pull/17006">#17006</a></p>
+</li>
+<li>
+<p>Fix memory leak if entry exists in cache <a href="https://github.com/apache/pulsar/pull/16996">#16996</a></p>
+</li>
+<li>
+<p>Remove unnecessary lock on the stats thread <a href="https://github.com/apache/pulsar/pull/16983">#16983</a></p>
+</li>
+<li>
+<p>Prevent StackOverFlowException in SHARED subscription <a href="https://github.com/apache/pulsar/pull/16968">#16968</a></p>
+</li>
+<li>
+<p>Improve naming for delete topic error <a href="https://github.com/apache/pulsar/pull/16965">#16965</a></p>
+</li>
+<li>
+<p>Fix ConcurrentModificationException when ModularLoadManagerImpl start <a href="https://github.com/apache/pulsar/pull/16953">#16953</a></p>
+</li>
+<li>
+<p>Skip mis-configured resource usage(&gt;100%) in load balancer <a href="https://github.com/apache/pulsar/pull/16937">#16937</a></p>
+</li>
+<li>
+<p>Adapt basic authentication configuration with prefix <a href="https://github.com/apache/pulsar/pull/16935">#16935</a></p>
+</li>
+<li>
+<p>Change delete pending ack position from foreach to firstKey <a href="https://github.com/apache/pulsar/pull/16927">#16927</a></p>
+</li>
+<li>
+<p>Fix MaxQueueSize semaphore release leak in createOpSendMsg <a href="https://github.com/apache/pulsar/pull/16915">#16915</a></p>
+</li>
+<li>
+<p>PulsarLedgerManager to pass correct error code to BK client <a href="https://github.com/apache/pulsar/pull/16857">#16857</a></p>
+</li>
+<li>
+<p>Support start multiple bookies for BKCluster <a href="https://github.com/apache/pulsar/pull/16847">#16847</a></p>
+</li>
+<li>
+<p>Split TLS transport encryption support from authentication <a href="https://github.com/apache/pulsar/pull/16819">#16819</a></p>
+</li>
+<li>
+<p>Fix misleading -c option in pulsar standalone <a href="https://github.com/apache/pulsar/pull/16838">#16838</a></p>
+</li>
+<li>
+<p>Fix rack awareness cache expiration data race <a href="https://github.com/apache/pulsar/pull/16825">#16825</a></p>
+</li>
+<li>
+<p>Fix Repeated messages of shared dispatcher <a href="https://github.com/apache/pulsar/pull/16812">#16812</a></p>
+</li>
+<li>
+<p>Avoid IllegalStateException while client_version is not set <a href="https://github.com/apache/pulsar/pull/16788">#16788</a></p>
+</li>
+<li>
+<p>Optimize concurrent collection's shrink logic <a href="https://github.com/apache/pulsar/pull/16754">#16754</a></p>
+</li>
+<li>
+<p>Fix consumer does not abide by the max unacks limitation for Key_Shared subscription <a href="https://github.com/apache/pulsar/pull/16718">#16718</a></p>
+</li>
+<li>
+<p>Support clear old bookie data for BKCluster <a href="https://github.com/apache/pulsar/pull/16744">#16744</a></p>
+</li>
+<li>
+<p>Avoid ConcurrentModificationException for ModularLoadManagerImpl.cleanupDeadBrokersData() <a href="https://github.com/apache/pulsar/pull/16690">#16690</a></p>
+</li>
+<li>
+<p>Improve get the basic authentication config <a href="https://github.com/apache/pulsar/pull/16526">#16526</a></p>
+</li>
+<li>
+<p>Retry to delete the namespace if new topics created during the namespace deletion <a href="https://github.com/apache/pulsar/pull/16676">#16676</a></p>
+</li>
+<li>
+<p>Fix consumer does not abide by the max unacks limitation for Shared subscription <a href="https://github.com/apache/pulsar/pull/16670">#16670</a></p>
+</li>
+<li>
+<p>Add decode InputStream for Schema <a href="https://github.com/apache/pulsar/pull/16659">#16659</a></p>
+</li>
+<li>
+<p>Support for get token from HTTP params <a href="https://github.com/apache/pulsar/pull/16650">#16650</a></p>
+</li>
+<li>
+<p>Make defaultOffloader create after offloaderStats overrides <a href="https://github.com/apache/pulsar/pull/16638">#16638</a></p>
+</li>
+<li>
+<p>BadVersionException when splitting bundles, delay 100ms and try again <a href="https://github.com/apache/pulsar/pull/16612">#16612</a></p>
+</li>
+<li>
+<p>The configuration loadBalancerNamespaceMaximumBundles is invalid <a href="https://github.com/apache/pulsar/pull/16552">#16552</a></p>
+</li>
+<li>
+<p>PulsarLedgerManager: add missed return statement <a href="https://github.com/apache/pulsar/pull/16607">#16607</a></p>
+</li>
+<li>
+<p>Retry when DistributedIdGenerator has BadVersion error <a href="https://github.com/apache/pulsar/pull/16491">#16491</a></p>
+</li>
+<li>
+<p>Fixed error when delayed messages trackers state grows to &gt;1.5GB <a href="https://github.com/apache/pulsar/pull/16490">#16490</a></p>
+</li>
+<li>
+<p>Fix RawReader hasMessageAvailable returns true when no messages <a href="https://github.com/apache/pulsar/pull/16443">#16443</a></p>
+</li>
+<li>
+<p>Fix No such ledger exception <a href="https://github.com/apache/pulsar/pull/16420">#16420</a></p>
+</li>
+<li>
+<p>Improve the package download process <a href="https://github.com/apache/pulsar/pull/16365">#16365</a></p>
+</li>
+<li>
+<p>Add config maxUnloadBundleNumPerShedding for UniformLoadShedder <a href="https://github.com/apache/pulsar/pull/16409">#16409</a></p>
+</li>
+<li>
+<p>Skip reading more entries for a pending read with no more entries <a href="https://github.com/apache/pulsar/pull/16400">#16400</a></p>
+</li>
+<li>
+<p>Recycle OpReadEntry in some corner cases <a href="https://github.com/apache/pulsar/pull/16399">#16399</a></p>
+</li>
+<li>
+<p>Add dynamic configuration for UniformLoadShedder <a href="https://github.com/apache/pulsar/pull/16391">#16391</a></p>
+</li>
+<li>
+<p>Fix RawReader out of order <a href="https://github.com/apache/pulsar/pull/16390">#16390</a></p>
+</li>
+<li>
+<p>Create the cursor ledger lazily to improve the subscribe performance <a href="https://github.com/apache/pulsar/pull/16389">#16389</a></p>
+</li>
+<li>
+<p>Release the entry in getEarliestMessagePublishTimeOfPos <a href="https://github.com/apache/pulsar/pull/16386">#16386</a></p>
+</li>
+<li>
+<p>Update CPU ResourceUsage before updating SystemResourceUsage usage <a href="https://github.com/apache/pulsar/pull/16366">#16366</a></p>
+</li>
+<li>
+<p>Use shared broker client scheduled executor provider <a href="https://github.com/apache/pulsar/pull/16338">#16338</a></p>
+</li>
+<li>
+<p>Fix etcd cluster error and add test for etcd cluster <a href="https://github.com/apache/pulsar/pull/16309">#16309</a></p>
+</li>
+<li>
+<p>Do not use IO thread for consumerFlow in Shared subscription <a href="https://github.com/apache/pulsar/pull/16304">#16304</a></p>
+</li>
+<li>
+<p>Provide new load balance placement strategy implementation based on the least resource usage with weight <a href="https://github.com/apache/pulsar/pull/16281">#16281</a></p>
+</li>
+<li>
+<p>Fix TopicTransactionBuffer ledger apend marker throw ManagedLedgerAlreadyClosedException <a href="https://github.com/apache/pulsar/pull/16265">#16265</a></p>
+</li>
+<li>
+<p>Avoid go through all the consumers to get the message ack owner <a href="https://github.com/apache/pulsar/pull/16245">#16245</a></p>
+</li>
+<li>
+<p>Reduce the consumers list sort by priority level <a href="https://github.com/apache/pulsar/pull/16243">#16243</a></p>
+</li>
+<li>
+<p>Reduce the re-schedule message read operation for PersistentDispatcherMultipleConsumers <a href="https://github.com/apache/pulsar/pull/16241">#16241</a></p>
+</li>
+<li>
+<p>Fix NPE when invoke replaceBookie. <a href="https://github.com/apache/pulsar/pull/16239">#16239</a></p>
+</li>
+<li>
+<p>Fix getInternalStats occasional lack of LeaderInfo again <a href="https://github.com/apache/pulsar/pull/16238">#16238</a></p>
+</li>
+<li>
+<p>Fix NPE when drop backlog for time limit <a href="https://github.com/apache/pulsar/pull/16235">#16235</a></p>
+</li>
+<li>
+<p>Improve error msg when client is unauthorized <a href="https://github.com/apache/pulsar/pull/16224">#16224</a></p>
+</li>
+<li>
+<p>Fix compaction subscription acknowledge Marker msg issue <a href="https://github.com/apache/pulsar/pull/16205">#16205</a></p>
+</li>
+<li>
+<p>Fix subscribe dispatcher limiter not be initialized <a href="https://github.com/apache/pulsar/pull/16175">#16175</a></p>
+</li>
+<li>
+<p>Using handle instead of handleAsync to avoid using common pool thread <a href="https://github.com/apache/pulsar/pull/17403">#17403</a></p>
+</li>
+<li>
+<p>Use LinkedHashSet for config items of type Set to preserve elements order <a href="https://github.com/apache/pulsar/pull/16138">#16138</a></p>
+</li>
+<li>
+<p>Fix topic dispatch rate limiter not init on broker-level <a href="https://github.com/apache/pulsar/pull/16084">#16084</a></p>
+</li>
+<li>
+<p>Fix NPE when get /admin/v2/namespaces/public/default/maxTopicsPerNamespace <a href="https://github.com/apache/pulsar/pull/16076">#16076</a></p>
+</li>
+<li>
+<p>Add config to allow deliverAt time to be strictly honored <a href="https://github.com/apache/pulsar/pull/16068">#16068</a></p>
+</li>
+<li>
+<p>Add switch for enable/disable distribute bundles evenly in LoadManager <a href="https://github.com/apache/pulsar/pull/16059">#16059</a></p>
+</li>
+<li>
+<p>Fix thread safety issues in accessing ManagedCursorContainer.heap ArrayList <a href="https://github.com/apache/pulsar/pull/16049">#16049</a></p>
+</li>
+<li>
+<p>Make invalid namespace and topic name logs more descriptive <a href="https://github.com/apache/pulsar/pull/16047">#16047</a></p>
+</li>
+<li>
+<p>Terminate JVM when initialize-cluster-metadata command fails <a href="https://github.com/apache/pulsar/pull/16039">#16039</a></p>
+</li>
+<li>
+<p>Avoid storing MessageMetadata instances returned by peekMessageMetadata <a href="https://github.com/apache/pulsar/pull/15983">#15983</a></p>
+</li>
+<li>
+<p>Fix topic policies update not check message expiry <a href="https://github.com/apache/pulsar/pull/15941">#15941</a></p>
+</li>
+<li>
+<p>Fix reach max tenants error if the tenant already exists <a href="https://github.com/apache/pulsar/pull/15932">#15932</a></p>
+</li>
+<li>
+<p>Close transactionBufferClient before closing the internal Pulsar client <a href="https://github.com/apache/pulsar/pull/15922">#15922</a></p>
+</li>
+<li>
+<p>Remove topic -&gt; namespace cache of LedgerOffloaderStatsImpl <a href="https://github.com/apache/pulsar/pull/15869">#15869</a></p>
+</li>
+<li>
+<p>Fix NPE when ledger id not found in OpReadEntry <a href="https://github.com/apache/pulsar/pull/15837">#15837</a></p>
+</li>
+<li>
+<p>Fix topic-level replicator rate limiter not init <a href="https://github.com/apache/pulsar/pull/15825">#15825</a></p>
+</li>
+<li>
+<p>Fix NPE in MessageDeduplication <a href="https://github.com/apache/pulsar/pull/15820">#15820</a></p>
+</li>
+<li>
+<p>Configure DLog Bookie, Pulsar, and Admin clients via pass through config <a href="https://github.com/apache/pulsar/pull/15818">#15818</a></p>
+</li>
+<li>
+<p>Fix the broker close hanged issue <a href="https://github.com/apache/pulsar/pull/15755">#15755</a></p>
+</li>
+<li>
+<p>Disable memory limit controller in internal Pulsar clients <a href="https://github.com/apache/pulsar/pull/15752">#15752</a></p>
+</li>
+<li>
+<p>Add timeout for unload namespace bundle <a href="https://github.com/apache/pulsar/pull/15719">#15719</a></p>
+</li>
+<li>
+<p>Support schemaValidationEnforced on topic level <a href="https://github.com/apache/pulsar/pull/15712">#15712</a></p>
+</li>
+<li>
+<p>Fix NPE when put value to RangeCache <a href="https://github.com/apache/pulsar/pull/15707">#15707</a></p>
+</li>
+<li>
+<p>Fast return if ack cumulative illegal <a href="https://github.com/apache/pulsar/pull/15695">#15695</a></p>
+</li>
+<li>
+<p>Fix creating producer failure when set backlog quota <a href="https://github.com/apache/pulsar/pull/15663">#15663</a></p>
+</li>
+<li>
+<p>Fix logging in shutdown when broker shutdown <a href="https://github.com/apache/pulsar/pull/15626">#15626</a></p>
+</li>
+<li>
+<p>Fix MetadataStoreException$NotFoundException while doing topic lookup <a href="https://github.com/apache/pulsar/pull/15633">#15633</a></p>
+</li>
+<li>
+<p>Use dispatchRateLimiterLock to update dispatchRateLimiter <a href="https://github.com/apache/pulsar/pull/15601">#15601</a></p>
+</li>
+<li>
+<p>Add .yaml suffix support for broker filter config file <a href="https://github.com/apache/pulsar/pull/15600">#15600</a></p>
+</li>
+<li>
+<p>Add newline to the end of standalone.conf <a href="https://github.com/apache/pulsar/pull/15591">#15591</a></p>
+</li>
+<li>
+<p>Create &quot;standalone&quot; cluster when starting standalone server <a href="https://github.com/apache/pulsar/pull/15583">#15583</a></p>
+</li>
+<li>
+<p>Close publishLimiter when disable it <a href="https://github.com/apache/pulsar/pull/15520">#15520</a></p>
+</li>
+<li>
+<p>Enable SO_REUSEADDR on listen sockets for broker,proxy <a href="https://github.com/apache/pulsar/pull/15517">#15517</a></p>
+</li>
+<li>
+<p>Fix to avoid TopicStatsImpl NPE even if producerName is null <a href="https://github.com/apache/pulsar/pull/15502">#15502</a></p>
+</li>
+<li>
+<p>Close connection if a ping or pong message cannot be sent <a href="https://github.com/apache/pulsar/pull/15382">#15382</a></p>
+</li>
+<li>
+<p>Introduce BitRateUnit for calculate bitrate <a href="https://github.com/apache/pulsar/pull/15435">#15435</a></p>
+</li>
+<li>
+<p>Add verification for configured default backlog quota and retention <a href="https://github.com/apache/pulsar/pull/15441">#15441</a></p>
+</li>
+<li>
+<p>Change unnecessary atomic to basic type <a href="https://github.com/apache/pulsar/pull/15369">#15369</a></p>
+</li>
+<li>
+<p>Support shrink for ConcurrentSortedLongPairSet <a href="https://github.com/apache/pulsar/pull/15354">#15354</a></p>
+</li>
+<li>
+<p>Use shrink map for message redelivery <a href="https://github.com/apache/pulsar/pull/15342">#15342</a></p>
+</li>
+<li>
+<p>Fix precision error in UsageUnit <a href="https://github.com/apache/pulsar/pull/15322">#15322</a></p>
+</li>
+<li>
+<p>Optimized namespace-level dispatcherRateLimiter update <a href="https://github.com/apache/pulsar/pull/15315">#15315</a></p>
+</li>
+<li>
+<p>Fix wrong unit of NIC speed on Linux <a href="https://github.com/apache/pulsar/pull/15304">#15304</a></p>
+</li>
+<li>
+<p>Fix totalEntries calculation problem in AbstractBaseDispatcher#filterEntriesForConsumere <a href="https://github.com/apache/pulsar/pull/15298">#15298</a></p>
+</li>
+<li>
+<p>Fix resource group does not report usage <a href="https://github.com/apache/pulsar/pull/15292">#15292</a></p>
+</li>
+<li>
+<p>Tidy up the system topic <a href="https://github.com/apache/pulsar/pull/15252">#15252</a></p>
+</li>
+<li>
+<p>Fix race condition between timeout and completion in OpAddEntry <a href="https://github.com/apache/pulsar/pull/15233">#15233</a></p>
+</li>
+<li>
+<p>Improve skipping of DNS resolution when creating AuthenticationDataHttp instance <a href="https://github.com/apache/pulsar/pull/15228">#15228</a></p>
+</li>
+<li>
+<p>Skip unnecessary DNS resolution when creating AuthenticationDataHttp instance <a href="https://github.com/apache/pulsar/pull/15221">#15221</a></p>
+</li>
+<li>
+<p>Fix MessageDeduplication#inactiveProducers may not be persistence correctly <a href="https://github.com/apache/pulsar/pull/15206">#15206</a></p>
+</li>
+<li>
+<p>Cancel fencedTopicMonitoringTask when topic closed normally <a href="https://github.com/apache/pulsar/pull/15202">#15202</a></p>
+</li>
+<li>
+<p>Fix npe when doCacheEviction <a href="https://github.com/apache/pulsar/pull/15184">#15184</a></p>
+</li>
+<li>
+<p>Make health check fail if dead locked threads are detected <a href="https://github.com/apache/pulsar/pull/15155">#15155</a></p>
+</li>
+<li>
+<p>Fix parameter saslJaasBrokerSectionName in broker.conf <a href="https://github.com/apache/pulsar/pull/15110">#15110</a></p>
+</li>
+<li>
+<p>Fix potential to add duplicated consumer <a href="https://github.com/apache/pulsar/pull/15051">#15051</a></p>
+</li>
+<li>
+<p>Fix rewind failed when redeliverUnacknowledgedMessages <a href="https://github.com/apache/pulsar/pull/15046">#15046</a></p>
+</li>
+<li>
+<p>Fix race condition in updating lastMarkDeleteEntry field <a href="https://github.com/apache/pulsar/pull/15031">#15031</a></p>
+</li>
+<li>
+<p>Avoid heartbeat topic to offload <a href="https://github.com/apache/pulsar/pull/15008">#15008</a></p>
+</li>
+<li>
+<p>Evict cache data according to the slowest markDeletedPosition <a href="https://github.com/apache/pulsar/pull/14985">#14985</a></p>
+</li>
+<li>
+<p>Return if reset in progress <a href="https://github.com/apache/pulsar/pull/14978">#14978</a></p>
+</li>
+<li>
+<p>Dynamic update broker-level subscribe-rate limter <a href="https://github.com/apache/pulsar/pull/14890">#14890</a></p>
+</li>
+<li>
+<p>Fix wrong state for non-durable cursor <a href="https://github.com/apache/pulsar/pull/14869">#14869</a></p>
+</li>
+<li>
+<p>Support advertised listeners for HTTP and HTTPS services <a href="https://github.com/apache/pulsar/pull/14839">#14839</a></p>
+</li>
+<li>
+<p>Support dynamic update between non-zero values of topicPublisherThrottlingTickTimeMillis <a href="https://github.com/apache/pulsar/pull/14782">#14782</a></p>
+</li>
+<li>
+<p>Support dynamic update between non-zero values of brokerPublisherThrottlingTickTimeMillis <a href="https://github.com/apache/pulsar/pull/14759">#14759</a></p>
+</li>
+<li>
+<p>Fix incorrect entryId in warn log when reading entry from tiered storage <a href="https://github.com/apache/pulsar/pull/14685">#14685</a></p>
+</li>
+<li>
+<p>Optimize PositionImpl toString, compareTo and hashCode methods <a href="https://github.com/apache/pulsar/pull/14678">#14678</a></p>
+</li>
+<li>
+<p>Improve readability of ManagedCursorImpl source code <a href="https://github.com/apache/pulsar/pull/14617">#14617</a></p>
+</li>
+<li>
+<p>Intercept ACK command by BrokerInterceptor <a href="https://github.com/apache/pulsar/pull/14616">#14616</a></p>
+</li>
+<li>
+<p>Add filteredMsgCount for pulsar-admin broker-stats topics <a href="https://github.com/apache/pulsar/pull/14531">#14531</a></p>
+</li>
+<li>
+<p>Fix NPE when subscription is already removed <a href="https://github.com/apache/pulsar/pull/14363">#14363</a></p>
+</li>
+<li>
+<p>Fix backpressure handling in Jetty web server configuration <a href="https://github.com/apache/pulsar/pull/14353">#14353</a></p>
+</li>
+<li>
+<p>Optimize find nics process <a href="https://github.com/apache/pulsar/pull/14340">#14340</a></p>
+</li>
+<li>
+<p>Support pass http auth status <a href="https://github.com/apache/pulsar/pull/14044">#14044</a></p>
+</li>
+<li>
+<p>Support caching to drain backlog consumers <a href="https://github.com/apache/pulsar/pull/12258">#12258</a></p>
+</li>
+<li>
+<p>Strict bookie affinity group strategy <a href="https://github.com/apache/pulsar/pull/12025">#12025</a></p>
+</li>
+</ul>
+<h3>Clients</h3>
+<ul>
+<li>[PIP 74] Pulsar client memory limits
+<ul>
+<li>Support auto scaled consumer receiver queue <a href="https://github.com/apache/pulsar/pull/14494">#14494</a></li>
+<li>Support dynamic limit of consumer receiver queue <a href="https://github.com/apache/pulsar/pull/14400">#14400</a></li>
+<li>Support consumer client memory limit <a href="https://github.com/apache/pulsar/pull/15216">#15216</a></li>
+</ul>
+</li>
+<li>[Java] Fix multi-topic consumer stuck after redeliver messages <a href="https://github.com/apache/pulsar/pull/18491">#18491</a></li>
+<li>[Java] Fix NPE of MultiTopicsConsumerImpl due to race condition <a href="https://github.com/apache/pulsar/pull/18287">#18287</a></li>
+<li>[Java] Refactor SchemaHash to reduce call of hashFunction in SchemaHash <a href="https://github.com/apache/pulsar/pull/17948">#17948</a></li>
+<li>[Java] Fix pendingLookupRequestSemaphore leak when channel inactive <a href="https://github.com/apache/pulsar/pull/17856">#17856</a></li>
+<li>[Java] Unwrap completion exception for Lookup Services <a href="https://github.com/apache/pulsar/pull/17717">#17717</a></li>
+<li>[Java] Fixed ack failure in ReaderImpl due to null messageId <a href="https://github.com/apache/pulsar/pull/17728">#17728</a></li>
+<li>[Java] Fix scheduledExecutorProvider not shutdown <a href="https://github.com/apache/pulsar/pull/17527">#17527</a></li>
+<li>[Java] LastBatchSendNanoTime initialization <a href="https://github.com/apache/pulsar/pull/17058">#17058</a></li>
+<li>[Java] Fix inactive cnx channel causing the request to fail to time out and fail to return <a href="https://github.com/apache/pulsar/pull/17051">#17051</a></li>
+<li>[Java] Release semaphore before discarding messages in batchMessageContainer <a href="https://github.com/apache/pulsar/pull/17019">#17019</a></li>
+<li>[Java] Fix client memory limit currentUsage leak and semaphore release duplicated in ProducerImpl <a href="https://github.com/apache/pulsar/pull/16837">#16837</a></li>
+<li>[Java] Remove redundant check for chunked message TotalChunkMsgSize in ConsumerImpl <a href="https://github.com/apache/pulsar/pull/16797">#16797</a></li>
+<li>[Java] Reduce code duplication in admin client <a href="https://github.com/apache/pulsar/pull/16377">#16377</a></li>
+<li>[Java] Release memory usage for invalid messages <a href="https://github.com/apache/pulsar/pull/16835">#16835</a></li>
+<li>[Java] Fix subscription topic name error <a href="https://github.com/apache/pulsar/pull/16719">#16719</a></li>
+<li>[Java] Send CloseConsumer on client timeout <a href="https://github.com/apache/pulsar/pull/16616">#16616</a></li>
+<li>[Java] Add message key if exists to deadLetter messages <a href="https://github.com/apache/pulsar/pull/16615">#16615</a></li>
+<li>[Java] Make DeadLetterPolicy deserializable <a href="https://github.com/apache/pulsar/pull/16513">#16513</a></li>
+<li>[Java] Improve performance of multi-topic consumer with more than one IO thread <a href="https://github.com/apache/pulsar/pull/16336">#16336</a></li>
+<li>[Java] Add initialization for the OpSendMsg <a href="https://github.com/apache/pulsar/pull/16256">#16256</a></li>
+<li>[Java] Replace ScheduledExecutor to improve performance of message consumption <a href="https://github.com/apache/pulsar/pull/16236">#16236</a></li>
+<li>[Java] Fix large messages sometimes cannot be split into chunks <a href="https://github.com/apache/pulsar/pull/16196">#16196</a></li>
+<li>[Java] Only trigger the batch receive timeout when having pending batch receives requests <a href="https://github.com/apache/pulsar/pull/16160">#16160</a></li>
+<li>[Java] Fix the startMessageId can't be respected as the ChunkMessageID <a href="https://github.com/apache/pulsar/pull/16154">#16154</a></li>
+<li>[Java] Fix auto cluster failover can't resolve host bug <a href="https://github.com/apache/pulsar/pull/16152">#16152</a></li>
+<li>[Java] Switch to rely on Netty for Hostname Verification <a href="https://github.com/apache/pulsar/pull/15824">#15824</a></li>
+<li>[Java] Prevent the trigger from running concurrently in the memory limit controller <a href="https://github.com/apache/pulsar/pull/15737">#15737</a></li>
+<li>[Java] Fix messages sent by producers without schema cannot be decoded <a href="https://github.com/apache/pulsar/pull/15622">#15622</a></li>
+<li>[Java] Remove sensitive msg from consumer/producer stats log <a href="https://github.com/apache/pulsar/pull/15483">#15483</a></li>
+<li>[Java] Add pending messages information while printing the producer stats <a href="https://github.com/apache/pulsar/pull/15440">#15440</a></li>
+<li>[Java] Fix flaky BatchMessageTest by initializing lastBatchSendNanoTime <a href="https://github.com/apache/pulsar/pull/15406">#15406</a></li>
+<li>[Java] Check consumer schema null in advance <a href="https://github.com/apache/pulsar/pull/15327">#15327</a></li>
+<li>[Java] Fix inconsistent parameter of TopicPolicies.getSubscriptionDispatchRate <a href="https://github.com/apache/pulsar/pull/15293">#15293</a></li>
+<li>[Java] Fix typo in ConsumerBuilder <a href="https://github.com/apache/pulsar/pull/15194">#15194</a></li>
+<li>[Java] Fix performance regression with message listener <a href="https://github.com/apache/pulsar/pull/15162">#15162</a></li>
+<li>[Java] ConsumerBuilderImpl can not set null to deadLetterPolicy <a href="https://github.com/apache/pulsar/pull/14980">#14980</a></li>
+<li>[Java] Fix message publishing stuck when enabling batch <a href="https://github.com/apache/pulsar/pull/14870">#14870</a></li>
+<li>[Java] Return immutable data set when using TableView <a href="https://github.com/apache/pulsar/pull/14833">#14833</a></li>
+<li>[Java] Avoid timer task run before previous subscribe complete <a href="https://github.com/apache/pulsar/pull/14818">#14818</a></li>
+<li>[Java] Support Reader Interceptor <a href="https://github.com/apache/pulsar/pull/14729">#14729</a></li>
+<li>[Java] Support aggregate metrics for partition topic stats <a href="https://github.com/apache/pulsar/pull/18214">#18214</a></li>
+<li>[Java] Add api to get producer/consumer stats for partition topic <a href="https://github.com/apache/pulsar/pull/18212">#18212</a></li>
+<li>[Java] Optimize pause when creating sub consumers in multi-topic consumer <a href="https://github.com/apache/pulsar/pull/14566">#14566</a></li>
+</ul>
+<h3>Pulsar IO and Pulsar Functions</h3>
+<ul>
+<li>[Functions] Fix function failed to start if no typeClassName provided in FunctionDetails <a href="https://github.com/apache/pulsar/pull/18111">#18111</a></li>
+<li>[Functions] Do not delete managed package when delete function <a href="https://github.com/apache/pulsar/pull/18030">#18030</a></li>
+<li>[Functions] Fix the download of builtin Functions <a href="https://github.com/apache/pulsar/pull/17877">#17877</a></li>
+<li>[Functions] Ensure InternalConfigurationData data model is compatible across different versions <a href="https://github.com/apache/pulsar/pull/17690">#17690</a></li>
+<li>[Functions] Use the schema set by the Function when it returns a Record <a href="https://github.com/apache/pulsar/pull/17142">#17142</a></li>
+<li>[Functions] Make mandatory to provide a schema in Context::newOutputRecordBuilder <a href="https://github.com/apache/pulsar/pull/17118">#17118</a></li>
+<li>[Functions] Add the ability to customize logging level for Go &amp; Python functions <a href="https://github.com/apache/pulsar/pull/16939">#16939</a></li>
+<li>[Functions] Fixed error when user starts with the pulsar functions local runner <a href="https://github.com/apache/pulsar/pull/16565">#16565</a></li>
+<li>[Functions] Fix netty.DnsResolverUtil compat issue on JDK9+ for the function Runtimes <a href="https://github.com/apache/pulsar/pull/16423">#16423</a></li>
+<li>[Functions] Ensure bytes are a well-formed UTF-8 byte sequence when decoding the FunctionState bytes to string <a href="https://github.com/apache/pulsar/pull/16199">#16199</a></li>
+<li>[Functions] Support Record&lt;?&gt; as Function output type <a href="https://github.com/apache/pulsar/pull/16041">#16041</a></li>
+<li>[Functions] Configure DLog Bookie, Pulsar, and Admin clients via pass through config <a href="https://github.com/apache/pulsar/pull/15818">#15818</a></li>
+<li>[Functions] Disable memory limit controller in internal Pulsar clients <a href="https://github.com/apache/pulsar/pull/15752">#15752</a></li>
+<li>[Functions] Provide default error handler for function log appender <a href="https://github.com/apache/pulsar/pull/15728">#15728</a></li>
+<li>[Functions] Support disabling non-TLS service port <a href="https://github.com/apache/pulsar/pull/15328">#15328</a></li>
+<li>[Functions] Check executor null when close the FileSource <a href="https://github.com/apache/pulsar/pull/15247">#15247</a></li>
+<li>[Functions] Fix UserConfigFunction example <a href="https://github.com/apache/pulsar/pull/15240">#15240</a></li>
+<li>[Functions] Add a cache of versioned KeyValueSchemaImpl <a href="https://github.com/apache/pulsar/pull/15122">#15122</a></li>
+<li>[Functions] Add KeyStore support in WebSocket, Function Worker HTTPS Servers <a href="https://github.com/apache/pulsar/pull/15084">#15084</a></li>
+<li>[Functions] Handle NPE when getLeader returns null <a href="https://github.com/apache/pulsar/pull/15058">#15058</a></li>
+<li>[Functions] Remove internal dependency: pulsar-functions-instance <a href="https://github.com/apache/pulsar/pull/14925">#14925</a></li>
+<li>[Functions] Allow a Function&lt;GenericObject,?&gt; to access the original Schema of the Message and use it <a href="https://github.com/apache/pulsar/pull/14847">#14847</a></li>
+<li>[Functions] Fix pulsar-managed runtimes failed start function with package URL from package management service <a href="https://github.com/apache/pulsar/pull/14814">#14814</a></li>
+<li>[Functions] Set function channel to idle to prevent DNS resolution of deleted pod <a href="https://github.com/apache/pulsar/pull/14750">#14750</a></li>
+<li>[Functions] Remove extra call to gi.stats.incrTotalProcessedSuccessfully() <a href="https://github.com/apache/pulsar/pull/12316">#12316</a></li>
+<li>[Functions] Fix python instance not process zip file correctly <a href="https://github.com/apache/pulsar/pull/16697">#16697</a></li>
+<li>[Functions] Missing assertion in KubernetesRuntimeTest::verifyJavaInstance <a href="https://github.com/apache/pulsar/pull/16747">#16747</a></li>
+<li>[IO Connector] Only bundle kafka schema registry client <a href="https://github.com/apache/pulsar/pull/18931">#18931</a></li>
+<li>[IO Connector] Fix message without schema issue <a href="https://github.com/apache/pulsar/pull/18745">#18745</a></li>
+<li>[IO Connector] Kinesis sink: fix NPE with KeyValue schema and no value <a href="https://github.com/apache/pulsar/pull/17959">#17959</a></li>
+<li>[IO Connector] Provide a HTTP Sink <a href="https://github.com/apache/pulsar/pull/17581">#17581</a></li>
+<li>[IO Connector] IOConfigUtils support required and defaultValue annotations <a href="https://github.com/apache/pulsar/pull/16785">#16785</a></li>
+<li>[IO Connector] Fixed Kafka source config for pulsar-io-kafka when consumerConfigProperties is null <a href="https://github.com/apache/pulsar/pull/16731">#16731</a></li>
+<li>[IO Connector] Add reader config to pulsar-io-debezium and pulsar-io-kafka-connect-adaptor <a href="https://github.com/apache/pulsar/pull/16675">#16675</a></li>
+<li>[IO Connector] Support transactions for JDBC connector <a href="https://github.com/apache/pulsar/pull/16468">#16468</a></li>
+<li>[IO Connector] JDBC sinks: support upsert and row deletion <a href="https://github.com/apache/pulsar/pull/16448">#16448</a></li>
+<li>[IO Connector] Add getSourceConfig method on SourceContext <a href="https://github.com/apache/pulsar/pull/16305">#16305</a></li>
+<li>[IO Connector] KCA sinks: fix offset mapping when sanitizeTopicName=true <a href="https://github.com/apache/pulsar/pull/15950">#15950</a></li>
+<li>[IO Connector] Allow pulsar_tool_env.sh PULSAR_MEM to be Overridden <a href="https://github.com/apache/pulsar/pull/15868">#15868</a></li>
+<li>[IO Connector] JDBC sinks: support Avro specific datatypes <a href="https://github.com/apache/pulsar/pull/15845">#15845</a></li>
+<li>[IO Connector] Sink support custom acknowledge type <a href="https://github.com/apache/pulsar/pull/15491">#15491</a></li>
+<li>[IO Connector] Add getSinkConfig method to SinkContext <a href="https://github.com/apache/pulsar/pull/15482">#15482</a></li>
+<li>[IO Connector] Handle Avro collections native types (GenericData.Array and Utf8 map keys) <a href="https://github.com/apache/pulsar/pull/15432">#15432</a></li>
+<li>[IO Connector] Handle Avro collections native types (GenericData.Array and Utf8 map keys) <a href="https://github.com/apache/pulsar/pull/15430">#15430</a></li>
+<li>[IO Connector] Add hashed id support <a href="https://github.com/apache/pulsar/pull/15428">#15428</a></li>
+<li>[IO Connector] ElasticSearch Sink: option to output canonical key fields (JSON and Avro) <a href="https://github.com/apache/pulsar/pull/15426">#15426</a></li>
+<li>[IO Connector] Replaced &quot;Device&quot; with &quot;measurement&quot; <a href="https://github.com/apache/pulsar/pull/15416">#15416</a></li>
+<li>[IO Connector] Enable bulk flushing scheduling by default <a href="https://github.com/apache/pulsar/pull/15244">#15244</a></li>
+<li>[IO Connector] Set sinkType in config file <a href="https://github.com/apache/pulsar/pull/15174">#15174</a></li>
+<li>[IO Connector] Add a cache of versioned KeyValueSchemaImpl <a href="https://github.com/apache/pulsar/pull/15122">#15122</a></li>
+<li>[IO Connector] Support 4paradigm/OpenMLDB jdbc sink connector <a href="https://github.com/apache/pulsar/pull/15064">#15064</a></li>
+<li>[IO Connector] ElasticSearch Sink: option to disable SSL certificate validation <a href="https://github.com/apache/pulsar/pull/14997">#14997</a></li>
+<li>[IO Connector] Add FULL_MESSAGE_IN_JSON_EXPAND_VALUE message format to Kinesis sink <a href="https://github.com/apache/pulsar/pull/14929">#14929</a></li>
+</ul>
+<h3>Observability</h3>
+<ul>
+<li>[Broker] Fix metrics string encoding <a href="https://github.com/apache/pulsar/pull/18138">#18138</a></li>
+<li>[Broker] Fix EntryFilter stats <a href="https://github.com/apache/pulsar/pull/17605">#17605</a></li>
+<li>[Broker] Add per-subscription EntryFilter metrics <a href="https://github.com/apache/pulsar/pull/16932">#16932</a></li>
+<li>[Broker] Expose topic level storage write and read rate metrics <a href="https://github.com/apache/pulsar/pull/16855">#16855</a></li>
+<li>[Broker] Rename Pulsar lb metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16611">#16611</a></li>
+<li>[Broker] Rename Pulsar schema metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16610">#16610</a></li>
+<li>[Broker] Rename Pulsar txn metrics to specify OpenMetrics <a href="https://github.com/apache/pulsar/pull/16581">#16581</a></li>
+<li>[Broker] Optimise msgOutCounter and bytesOutCounter <a href="https://github.com/apache/pulsar/pull/16214">#16214</a></li>
+<li>[Broker] Fail to expose managed ledger client stats to prometheus if bookkeeperClientExposeStatsToPrometheus is true <a href="https://github.com/apache/pulsar/pull/16219">#16219</a></li>
+<li>[Broker] Add metrics for pulsar web service thread pool <a href="https://github.com/apache/pulsar/pull/14742">#14742</a></li>
+<li>[Broker] Add support of PrometheusRawMetricsProvider for the Pulsar-Proxy <a href="https://github.com/apache/pulsar/pull/14681">#14681</a></li>
+<li>[Broker] Add filteredMsgCount for pulsar-admin broker-stats topics <a href="https://github.com/apache/pulsar/pull/14531">#14531</a></li>
+<li>[Broker] Improve /metrics endpoint performance <a href="https://github.com/apache/pulsar/pull/14453">#14453</a></li>
+<li>[Broker] Offloader metrics <a href="https://github.com/apache/pulsar/pull/13833">#13833</a></li>
+<li>[Broker] Improve /metrics endpoint performance <a href="https://github.com/apache/pulsar/pull/14453">#14453</a></li>
+<li>[Broker] Add metrics for InMemoryDelayedDeliveryTracker's memory usage <a href="https://github.com/apache/pulsar/pull/15867">#15867</a></li>
+</ul>
+<h3>CLI</h3>
+<ul>
+<li>[Pulsar Admin] Fix NPE when get OffloadThreshold on namespace <a href="https://github.com/apache/pulsar/pull/18061">#18061</a></li>
+<li>[Pulsar Admin] Add SNI header when tlsHostnameVerification is not enabled <a href="https://github.com/apache/pulsar/pull/17543">#17543</a></li>
+<li>[Pulsar Admin] Unset namespace policy to improve deleting namespace <a href="https://github.com/apache/pulsar/pull/17033">#17033</a></li>
+<li>[Pulsar Admin] Reduce PartitionedStats local REST call <a href="https://github.com/apache/pulsar/pull/16916">#16916</a></li>
+<li>[Pulsar Admin] Make some police methods async in Namespaces <a href="https://github.com/apache/pulsar/pull/16881">#16881</a></li>
+<li>[Pulsar Admin] Expose the last consumed flow timestamp for consumer stats <a href="https://github.com/apache/pulsar/pull/16817">#16817</a></li>
+<li>[Pulsar Admin] Make some methods async in Namespaces <a href="https://github.com/apache/pulsar/pull/16814">#16814</a></li>
+<li>[Pulsar Admin] Dynamic configuration for check unknown request parameters <a href="https://github.com/apache/pulsar/pull/16781">#16781</a></li>
+<li>[Pulsar Admin] Make offload police methods async in Namespaces <a href="https://github.com/apache/pulsar/pull/16760">#16760</a></li>
+<li>[Pulsar Admin] Support the admin API to check unknown request <a href="https://github.com/apache/pulsar/pull/16577">#16577</a></li>
+<li>[Pulsar Admin] Make getBacklogQuotaMap method async in Namespaces <a href="https://github.com/apache/pulsar/pull/16504">#16504</a></li>
+<li>[Pulsar Admin] Make GetMessageIdByTimestamp pure async <a href="https://github.com/apache/pulsar/pull/16446">#16446</a></li>
+<li>[Pulsar Admin] Make splitNamespaceBundle and getTopicHashPositions async <a href="https://github.com/apache/pulsar/pull/16411">#16411</a></li>
+<li>[Pulsar Admin] Make AutoSubscriptionCreation async <a href="https://github.com/apache/pulsar/pull/16329">#16329</a></li>
+<li>[Pulsar Admin] Make SubscriptionExpirationTime method async <a href="https://github.com/apache/pulsar/pull/16328">#16328</a></li>
+<li>[Pulsar Admin] Make some method on permission async <a href="https://github.com/apache/pulsar/pull/16324">#16324</a></li>
+<li>[Pulsar Admin] Make unloadNamespaceBundle async <a href="https://github.com/apache/pulsar/pull/16313">#16313</a></li>
+<li>[Pulsar Admin] Make Namespaces.deleteNamespaceBundle async <a href="https://github.com/apache/pulsar/pull/16287">#16287</a></li>
+<li>[Pulsar Admin] Make deleteTopic method async <a href="https://github.com/apache/pulsar/pull/16232">#16232</a></li>
+<li>[Pulsar Admin] Make compactionStatus method async <a href="https://github.com/apache/pulsar/pull/16231">#16231</a></li>
+<li>[Pulsar Admin] Make terminate method async <a href="https://github.com/apache/pulsar/pull/16227">#16227</a></li>
+<li>[Pulsar Admin] Make getList async <a href="https://github.com/apache/pulsar/pull/16221">#16221</a></li>
+<li>[Pulsar Admin] Make getPartitionedTopicList method async <a href="https://github.com/apache/pulsar/pull/16217">#16217</a></li>
+<li>[Pulsar Admin] Improve documentation for unackedMessages stat <a href="https://github.com/apache/pulsar/pull/16213">#16213</a></li>
+<li>[Pulsar Admin] Make internalPeekNthMessage method async <a href="https://github.com/apache/pulsar/pull/16192">#16192</a></li>
+<li>[Pulsar Admin] Fix get non-persistent topics issue in Namespaces <a href="https://github.com/apache/pulsar/pull/16170">#16170</a></li>
+<li>[Pulsar Admin] Make getInternalStats method async <a href="https://github.com/apache/pulsar/pull/16141">#16141</a></li>
+<li>[Pulsar Admin] Fix get-publish-rete Admin API handle exception behavior <a href="https://github.com/apache/pulsar/pull/16001">#16001</a></li>
+<li>[Pulsar Admin] Release LookupRequestSemaphore before returning data <a href="https://github.com/apache/pulsar/pull/13549">#15974</a></li>
+<li>[Pulsar Admin] Fix producer/consume permission can’t get schema <a href="https://github.com/apache/pulsar/pull/15956">#15956</a></li>
+<li>[Pulsar Admin] Make publish rate and dispatch rate operation async <a href="https://github.com/apache/pulsar/pull/15946">#15946</a></li>
+<li>[Pulsar Admin] Support to get topic properties <a href="https://github.com/apache/pulsar/pull/15944">#15944</a></li>
+<li>[Pulsar Admin] New API to get subscription properties <a href="https://github.com/apache/pulsar/pull/16095">#16095</a></li>
+<li>[Pulsar Admin] Make some operation subscription dispatchRate methods in Namespaces async <a href="https://github.com/apache/pulsar/pull/15880">#15880</a></li>
+<li>[Pulsar Admin] Make some methods in SchemasResourceBase async <a href="https://github.com/apache/pulsar/pull/15821">#15821</a></li>
+<li>[Pulsar Admin] Make some operation replication clusters async <a href="https://github.com/apache/pulsar/pull/15760">#15760</a></li>
+<li>[Pulsar Admin] Make some methods of ClusterBase pure async <a href="https://github.com/apache/pulsar/pull/15685">#15685</a></li>
+<li>[Pulsar Admin] Allow creating builtin functions in pulsar-admin CLI <a href="https://github.com/apache/pulsar/pull/15671">#15671</a></li>
+<li>[Pulsar Admin] Enable users to specify TTL options in units other than seconds <a href="https://github.com/apache/pulsar/pull/15657">#15657</a></li>
+<li>[Pulsar Admin] Make some operation SubscribeRate methods in Namespaces async <a href="https://github.com/apache/pulsar/pull/15656">#15656</a></li>
+<li>[Pulsar Admin] Add transaction admin to get recover time in stats <a href="https://github.com/apache/pulsar/pull/15654">#15654</a></li>
+<li>[Pulsar Admin] Make some operation auto topic creation in Namespaces async <a href="https://github.com/apache/pulsar/pull/15621">#15621</a></li>
+<li>[Pulsar Admin] Add topic name and sub name for NotFound error message <a href="https://github.com/apache/pulsar/pull/15606">#15606</a></li>
+<li>[Pulsar Admin] Make some methods in ResourceQuotasBase async <a href="https://github.com/apache/pulsar/pull/15605">#15605</a></li>
+<li>[Pulsar Admin] Make some methods in TenantsBase async <a href="https://github.com/apache/pulsar/pull/15603">#15603</a></li>
+<li>[Pulsar Admin] Make some operation messageTTL methods in Namespaces async <a href="https://github.com/apache/pulsar/pull/15577">#15577</a></li>
+<li>[Pulsar Admin] Enable users to specify some time options in units other than seconds <a href="https://github.com/apache/pulsar/pull/15563">#15563</a></li>
+<li>[Pulsar Admin] Make some methods of ClusterBase pure async <a href="https://github.com/apache/pulsar/pull/15527">#15527</a></li>
+<li>[Pulsar Admin] Support filtering system topic when get list <a href="https://github.com/apache/pulsar/pull/15410">#15410</a></li>
+<li>[Pulsar Admin] Make some methods of ClusterBase pure async <a href="https://github.com/apache/pulsar/pull/15358">#15358</a></li>
+<li>[Pulsar Admin] Make some methods of ClusterBase pure async <a href="https://github.com/apache/pulsar/pull/15318">#15318</a></li>
+<li>[Pulsar Admin] Add admin api updateTransactionCoordinatorNumber <a href="https://github.com/apache/pulsar/pull/15296">#15296</a></li>
+<li>[Pulsar Admin] Put validateTopicOwnershipAsync before validateTopicOperationAsync <a href="https://github.com/apache/pulsar/pull/15265">#15265</a></li>
+<li>[Pulsar Admin] Remove duplication validateTopicOwnershipAsync <a href="https://github.com/apache/pulsar/pull/15410">#15120</a></li>
+<li>[Pulsar Admin] Fix pulsar-admin not prompting message when there is a 500 error <a href="https://github.com/apache/pulsar/pull/14856">#14856</a></li>
+<li>[Pulsar Admin] Add get active brokers api without cluster name <a href="https://github.com/apache/pulsar/pull/14702">#14702</a></li>
+<li>[Pulsar Admin] Grab contextual stacktrace for sync methods <a href="https://github.com/apache/pulsar/pull/14620">#14620</a></li>
+<li>[Pulsar Admin] Correct status message prompt <a href="https://github.com/apache/pulsar/pull/14603">#14603</a></li>
+<li>[Pulsar CLI] Fix NPE in admin-CLI topic stats command <a href="https://github.com/apache/pulsar/pull/18326">#18326</a></li>
+<li>[Pulsar CLI] Fix CLI client produce don't able to use multiple -m send multiple messages <a href="https://github.com/apache/pulsar/pull/18238">#18238</a></li>
+<li>[Pulsar CLI] Pulsar shell: allow to create a new config (--file) with a relative path <a href="https://github.com/apache/pulsar/pull/17675">#17675</a></li>
+<li>[Pulsar CLI] Pulsar shell: do not exit on user interrupt during commands <a href="https://github.com/apache/pulsar/pull/18615">#18615</a></li>
+<li>[Pulsar CLI] Pulsar shell: allow cloning an existing config <a href="https://github.com/apache/pulsar/pull/18608">#18608</a></li>
+<li>[Pulsar CLI] Pulsar shell: support relative paths <a href="https://github.com/apache/pulsar/pull/17648">#17648</a></li>
+<li>[Pulsar CLI] Pulsar shell, Pulsar admin, Pulsar client and Pulsar perf: support for Windows <a href="https://github.com/apache/pulsar/pull/17243">#17243</a></li>
+<li>[Pulsar CLI] Pulsar shell: add command to set/get property of a config <a href="https://github.com/apache/pulsar/pull/17651">#17651</a></li>
+<li>[Pulsar CLI] Fix Pulsar shell custom commands execution <a href="https://github.com/apache/pulsar/pull/17479">#17479</a></li>
+<li>[Pulsar CLI] CLI extensions: rename default location to 'cliextensions' <a href="https://github.com/apache/pulsar/pull/17435">#17435</a></li>
+<li>[Pulsar CLI] Exclude windows script from the docker image <a href="https://github.com/apache/pulsar/pull/17404">#17404</a></li>
+<li>[Pulsar CLI] Add a separate TLS transport encryption configuration <a href="https://github.com/apache/pulsar/pull/16930">#16930</a></li>
+<li>[Pulsar CLI] Fix incorrect description for producing messages <a href="https://github.com/apache/pulsar/pull/16876">#16876</a></li>
+<li>[Pulsar CLI] Use NoSplitter for subscription properties <a href="https://github.com/apache/pulsar/pull/16862">#16862</a></li>
+<li>[Pulsar CLI] Add TLS provider support <a href="https://github.com/apache/pulsar/pull/16700">#16700</a></li>
+<li>[Pulsar CLI] Support getEarliestTimeInBacklog at getPartitionedStats method <a href="https://github.com/apache/pulsar/pull/16388">#16388</a></li>
+<li>[Pulsar CLI] Add query options to the get topics in Namespace <a href="https://github.com/apache/pulsar/pull/16167">#16167</a></li>
+<li>[Pulsar CLI] Add cli cmd for subscription level dispatch-rate-limiter <a href="https://github.com/apache/pulsar/pull/15862">#15862</a></li>
+<li>[Pulsar CLI] Disable Pulsar client memory limit by default <a href="https://github.com/apache/pulsar/pull/15748">#15748</a></li>
+<li>[Pulsar CLI] Fix check on create function class name <a href="https://github.com/apache/pulsar/pull/15862">#15700</a></li>
+<li>[Pulsar CLI] Support filtering system topic when get list <a href="https://github.com/apache/pulsar/pull/15410">#15410</a></li>
+<li>[Pulsar CLI] Change the default for max-connections from 100 to 1 <a href="https://github.com/apache/pulsar/pull/15387">#15387</a></li>
+<li>[Pulsar CLI] Add short name for full name in admin cli <a href="https://github.com/apache/pulsar/pull/14301">#14301</a></li>
+<li>[Client Tool] Using int instead of long in python scripts <a href="https://github.com/apache/pulsar/pull/17215">#17215</a></li>
+<li>[Client Tool] Fix using directory '?' in the docker image <a href="https://github.com/apache/pulsar/pull/17185">#17185</a></li>
+<li>[Client Tool] Handle ctrl-d and exit the shell <a href="https://github.com/apache/pulsar/pull/17204">#17204</a></li>
+<li>[Client Tool] Add tlsTrustCertFilePath as CLI argument for pulsar-client-tool <a href="https://github.com/apache/pulsar/pull/16961">#16961</a></li>
+<li>[Perf Tool] Able to set maxLookupRequest for pulsar-perf <a href="https://github.com/apache/pulsar/pull/16967">#16967</a></li>
+<li>[Perf Tool] Pulsar-perf fails on jdk17 <a href="https://github.com/apache/pulsar/pull/18806">#18806</a></li>
+</ul>
+<h3>Others</h3>
+<ul>
+<li>[Proxy] Fix refresh client auth <a href="https://github.com/apache/pulsar/pull/17831">#17831</a></li>
+<li>[Proxy] Update proxy lookup throw exception type <a href="https://github.com/apache/pulsar/pull/17600">#17600</a></li>
+<li>[Proxy] Add TLS transport encryption for broker client <a href="https://github.com/apache/pulsar/pull/16833">#16833</a></li>
+<li>[Proxy] Fix client service URL <a href="https://github.com/apache/pulsar/pull/16834">#16834</a></li>
+<li>[Proxy] Consolidate Netty channel flushes to mitigate syscall overhead <a href="https://github.com/apache/pulsar/pull/16372">#16372</a></li>
+<li>[Proxy] Do not preserve host when forwarding admin requests <a href="https://github.com/apache/pulsar/pull/16342">#16342</a></li>
+<li>[Proxy] Switch to rely on Netty for Hostname Verification <a href="https://github.com/apache/pulsar/pull/15824">#15824</a></li>
+<li>[Proxy] Support zero-copy of NIC to NIC on Proxy <a href="https://github.com/apache/pulsar/pull/15678">#15678</a></li>
+<li>[Proxy] Suggestion put brokerProxyAllowedTargetPorts in proxy.conf <a href="https://github.com/apache/pulsar/pull/15069">#15069</a></li>
+<li>[Proxy] Exit if proxy service fails to start <a href="https://github.com/apache/pulsar/pull/15076">#15076</a></li>
+<li>[Proxy] Add support of PrometheusRawMetricsProvider for the Pulsar-Proxy <a href="https://github.com/apache/pulsar/pull/14681">#14681</a></li>
+<li>[Proxy] Fail proxy startup if brokerServiceURL is missing scheme <a href="https://github.com/apache/pulsar/pull/14682">#14682</a></li>
+<li>[Proxy] Fix DNS server denial-of-service issue when DNS entry expires <a href="https://github.com/apache/pulsar/pull/15403">#15403</a></li>
+<li>[Proxy] Remove unnecessary blocking DNS lookup in LookupProxyHandler <a href="https://github.com/apache/pulsar/pull/15415">#15415</a></li>
+<li>[WebSocket] Support encryption in websocket proxy <a href="https://github.com/apache/pulsar/pull/16234">#16234</a></li>
+<li>[WebSocket] Fix MultiTopicReader#getConsumer ClassCastException <a href="https://github.com/apache/pulsar/pull/15534">#15534</a></li>
+<li>[WebSocket] Add KeyStore support in WebSocket, Function Worker HTTPS Servers <a href="https://github.com/apache/pulsar/pull/15084">#15084</a></li>
+<li>[WebSocket] Fix ClassCastException when user create MultiTopicReader <a href="https://github.com/apache/pulsar/pull/14316">#14316</a></li>
+<li>[Package Management] Fix the new path /data introduced regression <a href="https://github.com/apache/pulsar/pull/15367">#15367</a></li>
+<li>[Schema] Add decode InputStream for Schema <a href="https://github.com/apache/pulsar/pull/16659">#16659</a></li>
+<li>[Schema] Expose timestamp field for SchemaData&amp;SchemaInfo <a href="https://github.com/apache/pulsar/pull/16380">#16380</a></li>
+<li>[Schema] Add classLoader field for SchemaDefinition <a href="https://github.com/apache/pulsar/pull/15915">#15915</a></li>
+<li>[Schema] Fix conversion of TimestampMillisConversion has no effect when Jsr310Conversion enabled <a href="https://github.com/apache/pulsar/pull/15863">#15863</a></li>
+<li>[Schema] Ensure the deletion consistency of topic and schema <a href="https://github.com/apache/pulsar/pull/14608">#14608</a></li>
+<li>[Tiered Storage] Shared subscription: improvement with offloaded ledgers <a href="https://github.com/apache/pulsar/pull/16417">#16417</a></li>
+<li>[Tiered Storage] Fix the wrong secret key name get from env <a href="https://github.com/apache/pulsar/pull/15814">#15814</a></li>
+<li>[Tiered Storage] Add pure S3 provider for the offloader <a href="https://github.com/apache/pulsar/pull/15710">#15710</a></li>
+<li>[Tiered Storage] Autorecovery default reppDnsResolverClass to ZkBookieRackAffinityMapping <a href="https://github.com/apache/pulsar/pull/15640">#15640</a></li>
+<li>[Tiered Storage] Reduce CPU usage when offloading ledgers <a href="https://github.com/apache/pulsar/pull/15063">#15063</a></li>
+<li>[Tiered Storage] Fix potential NPE in MockManagedLedger <a href="https://github.com/apache/pulsar/pull/15006">#15006</a></li>
+<li>[Tiered Storage] Add API to scan objects on Tiered Storage <a href="https://github.com/apache/pulsar/pull/14930">#14930</a></li>
+<li>[Tiered Storage] Fix incorrect entryId in warn log when reading entry from tiered storage <a href="https://github.com/apache/pulsar/pull/14685">#14685</a></li>
+<li>Include Pulsar shell in the released artifacts <a href="https://github.com/apache/pulsar/pull/18583">#18583</a></li>
+<li>Add lombok plugin to solve Javadoc issue <a href="https://github.com/apache/pulsar/pull/18520">#18520</a></li>
+<li>Remove cmd-line level test retries <a href="https://github.com/apache/pulsar/pull/16524">#16524</a></li>
+<li>Fix potentially incompatible Java opts caused by IS_JAVA_8 <a href="https://github.com/apache/pulsar/pull/15444">#15444</a></li>
+<li>Remove obsolete jdk11 and errorprone-jdk11 maven profiles <a href="https://github.com/apache/pulsar/pull/15505">#15505</a></li>
+<li>Remove internal dependency: pulsar-functions-instance <a href="https://github.com/apache/pulsar/pull/14925">#14925</a></li>
+<li>Enable retries for apt-get when building Pulsar docker image <a href="https://github.com/apache/pulsar/pull/15505">#14513</a></li>
+<li>Migrate Docker images and CI to Java 17 <a href="https://github.com/apache/pulsar/pull/14355">#14355</a></li>
+</ul>
+<h3>Library updates</h3>
+<ul>
+<li>Remove versions that are handled by netty-bom <a href="https://github.com/apache/pulsar/pull/18629">#18629</a></li>
+<li>Upgrade Netty to 4.1.86.Final and Netty Tcnative to 2.0.54.Final <a href="https://github.com/apache/pulsar/pull/18599">#18599</a></li>
+<li>Upgrade jackson-databind to 2.13.4.2 to get rid of CVE-2022-42003 <a href="https://github.com/apache/pulsar/pull/18394">#18394</a></li>
+<li>Bump bookkeeper version to 4.15.3 <a href="https://github.com/apache/pulsar/pull/18455">#18455</a></li>
+<li>Upgrade jackson-databind to 2.13.4.2 to get rid of CVE-2022-42003 <a href="https://github.com/apache/pulsar/pull/18394">#18394</a></li>
+<li>Upgrade protobuf to 3.19.6 to get rid of CVE-2022-3171 <a href="https://github.com/apache/pulsar/pull/18086">#18086</a></li>
+<li>Bump commons-text to 1.10.0 fix CVE-2022-42889 <a href="https://github.com/apache/pulsar/pull/18053">#18053</a></li>
+<li>File tiered storage: upgrade jettison to get rid of CVE-2022-40149 <a href="https://github.com/apache/pulsar/pull/18022">#18022</a></li>
+<li>Upgrade scala-library to get rid of CVE-2022-36944 <a href="https://github.com/apache/pulsar/pull/18021">#18021</a></li>
+<li>Upgrade JacksonXML to 2.13.4 <a href="https://github.com/apache/pulsar/pull/18020">#18020</a></li>
+<li>Upgrade to Jetty to 9.4.48.v20220622 <a href="https://github.com/apache/pulsar/pull/16520">#16520</a></li>
+<li>Bump maven-dependency-plugin to 3.3.0 <a href="https://github.com/apache/pulsar/pull/16318">#16318</a></li>
+<li>Bump os-maven-plugin version from 1.4.1.Final to 1.7.0 <a href="https://github.com/apache/pulsar/pull/16308">#16308</a></li>
+<li>Bump presto.version to run PrestoServer on JDK11+ <a href="https://github.com/apache/pulsar/pull/16163">#16163</a></li>
+<li>Update fastjson version to 1.2.83 <a href="https://github.com/apache/pulsar/pull/16148">#16148</a></li>
+<li>Bump PyYAML from 5.3.1 to 5.4.1 to solve CVE-2020-14343 <a href="https://github.com/apache/pulsar/pull/15989">#15989</a></li>
+<li>Bump spring version to 5.3.20 to solve CVE-2022-22970 <a href="https://github.com/apache/pulsar/pull/15699">#15699</a></li>
+<li>Bump snappy zstd version to fix CompressorCodecBackwardCompatTest on Apple M1 <a href="https://github.com/apache/pulsar/pull/15698">#15698</a></li>
+<li>Athenz: do not use uber-jar and bump to 1.10.50 to remove jackson-databind shaded dependency <a href="https://github.com/apache/pulsar/pull/14884">#14884</a></li>
+<li>Remove --illegal-access errors resulting from Google Guice - Pulsar IO, Offloaders and Pulsar SQL - Bump Guice to 5.1.0 <a href="https://github.com/apache/pulsar/pull/14300">#14300</a></li>
+<li>Bump prometheus client version from 0.5.0 to 0.15.0 <a href="https://github.com/apache/pulsar/pull/13785">#13785</a></li>
+<li>Upgrade log4j2 version to 2.18.0 [#16884](https://github.com/apache/pulsar/pull/16884</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/apache/pulsar">apache/pulsar</a> · <code>v2.11.0</code> · 2023-01-13 · <a href="https://github.com/apache/pulsar/releases/tag/v2.11.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Release notes são publicados pelo projeto upstream e espelhados aqui para indexação. Todos os direitos pertencem aos seus autores. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/pulsar/2.10.4"> <span class="k">← Próximo</span> <span class="t">v2.10.4</span> </a> <a href="/releases/pulsar/2.9.4"> <span class="k">Anterior →</span> <span class="t">v2.9.4</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/apache/pulsar/releases/tag/v2.11.0" target="_blank" rel="noopener"> <span>Original no GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/apache/pulsar" target="_blank" rel="noopener"> <span>apache/pulsar</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Nesta página</div> <nav> <a href="#" class="lv3">Aviso importante</a><a href="#" class="lv3">PIPs</a><a href="#" class="lv3">Corretor</a><a href="#" class="lv3">Clients</a><a href="#" class="lv3">Pulsar IO e Funções Pulsar</a><a href="#" class="lv3">Observabilidade</a><a href="#" class="lv3">Outros</a><a href="#" class="lv3">Atualizações da biblioteca</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Histórico de versões</div> <ul class="rail-list"> <li> <a href="/releases/pulsar/5.0.1"> <span class="v">v5.0.1</span> <span class="d">26-10-26</span> </a> </li><li> <a href="/releases/pulsar/5.0.0"> <span class="v">v5.0.0</span> <span class="d">26-10-05</span> </a> </li><li> <a href="/releases/pulsar/4.2.5"> <span class="v">v4.2.5</span> <span class="d">26-10-05</span> </a> </li><li> <a href="/releases/pulsar/4.0.14"> <span class="v">v4.0.14</span> <span class="d">26-10-05</span> </a> </li><li> <a href="/releases/pulsar/5.0.0-m2"> <span class="v">v5.0.0-M2</span> <span class="d">26-09-16</span> </a> </li><li> <a href="/releases/pulsar/4.2.4"> <span class="v">v4.2.4</span> <span class="d">26-08-03</span> </a> </li><li> <a href="/releases/pulsar/4.0.13"> <span class="v">v4.0.13</span> <span class="d">26-08-03</span> </a> </li><li> <a href="/releases/pulsar/4.2.3"> <span class="v">v4.2.3</span> <span class="d">26-07-06</span> </a> </li> </ul> <a href="/pt/releases/pulsar" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Ver tudo 100 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/pt/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Inteligência de lançamento de código aberto, publicada diariamente.</p> </div> <div class="footer-col"> <h3>Acompanhar</h3> <ul> <li><a href="/pt/releases">Versões</a></li> <li><a href="/pt/projects">Projetos</a></li> <li><a href="/pt/releases.xml">Feed RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Arquivo</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Arquivo chinês</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notas técnicas</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>Sobre</h3> <ul> <li><a href="/pt/method">Método</a></li> <li><a href="/privacy">Política de Privacidade</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Release notes pertencem aos seus projetos upstream.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Buscar versões"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Pesquise lançamentos, projetos, versões…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

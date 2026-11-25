@@ -1,0 +1,618 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>faiss v1.14.2 — STAGS NextStack</title><meta name="description" content="SuperKMeans — faster k-means via ADSampling + PDX progressive pruning (#5168) · Metal GPU backend for Apple Silicon, starting with IndexFlat (#5144)"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/faiss/1.14.2/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/faiss/1.14.2/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/faiss/1.14.2/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/faiss/1.14.2/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="faiss v1.14.2 — STAGS NextStack"><meta property="og:description" content="SuperKMeans — faster k-means via ADSampling + PDX progressive pruning (#5168) · Metal GPU backend for Apple Silicon, starting with IndexFlat (#5144)"><meta property="og:url" content="https://www.stags.cn/fr/releases/faiss/1.14.2/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/faiss/1.14.2/#article","headline":"faiss v1.14.2 release notes","datePublished":"2026-05-22","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/facebookresearch/faiss"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/faiss/1.14.2/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/faiss/faiss_v1.14.2" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/faiss/1.14.2/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/faiss/1.14.2/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/faiss/1.14.2/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/faiss/1.14.2/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/faiss/1.14.2/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/faiss">faiss</a> </nav> <h1 class="detail-title"> <span class="p">faiss</span> v1.14.2 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>22 mai 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener"> <span class="k">Source</span>facebookresearch/faiss </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/faiss/1.14.2/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/faiss/1.14.2/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><p>#faiss v1.14.2</p>
+<h2>Faits saillants</h2>
+<ul>
+<li><strong>SuperKMeans</strong> — k-means plus rapides via ADSampling + élagage progressif PDX (#5168)</li>
+<li><strong>Backend GPU Metal</strong> pour Apple Silicon, en commençant par <code>IndexFlat</code> (#5144)</li>
+<li><strong>Backend SIMD RVV (RISC-V Vector)</strong> + CI de compilation croisée RISC-V (#5156, #5184)</li>
+<li><strong>prise en charge de l'installation de pip</strong> via scikit-build-core + cibuildwheel (#4862)</li>
+<li><strong>Indice de FIV SVS</strong> activé ; SVS mis à niveau vers 0.3.0 (#4801, #4999) ; SVSVamana utilisable comme quantificateur grossier de FIV via <code>index_factory</code> (#5175)</li>
+<li>Quantificateur <strong>TurboQuant (CPU)</strong> (#5049)</li>
+<li><strong>Améliorations HNSW</strong> — verrous persistants facultatifs pour les ajouts incrémentiels (#5031), <code>prune_headroom</code> pour éviter l'élagage O(n²) (#4847), section critique de temps d'ajout plus étroite (#4915)</li>
+<li><strong>Renforcement étendu de la désérialisation d'index</strong> — validation et protection MOO/débordement sur environ 40 PR (binaire, FIV, HNSW, FastScan, ScalarQuantizer, AdditiveQuantizer, ProductQuantizer, SVS, VectorTransform, …)</li>
+<li><strong>Refactor majeur de répartition dynamique</strong> sur les distances, le jambon, le partitionnement, RaBitQ, FastScan ; la répartition dynamique s'appuie désormais sur Windows (#5127)</li>
+<li><strong>cuVS mis à niveau vers 26.02</strong> (#4945, #4788) ; CI a été déplacé vers <strong>CUDA 13.2</strong> (#5207) ; <strong>C++20 pour cuVS</strong> (#4881) ; recherche filtrée des index cuVS (#4858)</li>
+<li><strong>Sécurité des exceptions OMP</strong> sur <code>IndexHNSW</code>, <code>IndexNNDescent</code>, <code>IndexNSG</code>, <code>IndexFlatCodes</code>, <code>IndexIVF</code> (#5106, #5105, #5111, #5133, #5037, #5053)</li>
+</ul>
+<h2>Complet Changelog</h2>
+<p>Ajouté</p>
+<ul>
+<li>b7618fadc7fdf9b677277fbe96864c1902a6d8dc Ajouter des SuperKMeans : des k-means plus rapides via ADSampling+élagage progressif PDX (#5168)</li>
+<li>66c9d082651659fb6e78d67c547b035d3c2c8228 Ajout des fondations SuperKMeans : primitives mathématiques, disposition PDX, noyaux SIMD</li>
+<li>dc7afcfdf0d4bf7cc694f4974db77e471422d4cb Prise en charge de SVSVamana comme quantificateur grossier de FIV via index_factory (#5175)</li>
+<li>7a8e4ddaca3d25363a79942e9fcd26de78436607 CI : compilation croisée pour riscv64 avec répartition dynamique RVV (#5184)</li>
+<li>03202795b6451f2c6942262c998de3b980e96157 Présenter RVV (#5156)</li>
+<li>417c53e0ce23e8c3f2843bc727c9493e35b1d5d0 Ajouter le gestionnaire de contexte NoneSIMDLevel pour les vérifications de références à plusieurs niveaux (#5158)</li>
+<li>46def46902231ed57552ddbcfd751e17720c6d32 Activer l'index SVS IVF dans FAISS (#4801)</li>
+<li>585ba7954afb4da180a897bf195acd7516a44632 Ajout du support d'installation de pip via scikit-build-core + cibuildwheel (#4862)</li>
+<li>799bf3aaeca910113fd2f1b0287568f07eb002fa Introduire des installations d'arrêt précoce pour la FIV, tentative 2 (#5160)</li>
+<li>66cea524339ee7cd1b3954e3b5a677edb2adad74 Ajout d'un backend GPU métallique pour Apple Silicon (IndexFlat) (#5144)</li>
+<li>17fd3332c77c2801da4b467de67b5cadf045b328 Ajout d'une recherche plate parallèle à la base de données pour les charges de travail comportant quelques requêtes (#5000)</li>
+<li>c7f07bbc0ad0e9c0b68c6c7a3696850f42500906 Ajout de tests C++ par niveau SIMD pour les fonctions utilitaires à distance (#5154)</li>
+<li>0242758a3d073be0f5b0117b524a1fbdfcf02860 Ajout d'un test multi-niveaux d'encodage RQ au bit exact (#5155)</li>
+<li>2f68a3730777f88da34d562bc90f637bb39c1cb3 Ajout de tests par niveau SIMD pour les utilitaires hamming.h + correction du bug crosshamming (#5153)</li>
+<li>a7116ed4ec2ab4f0889d305592f579d5b2fb5745 Ajouter TurboQuant (CPU) (#5049)</li>
+<li>11e5d3916054b23bf60253763abf5e9033fca39e Ajouter des verrous persistants facultatifs à IndexHNSW pour les ajouts incrémentiels (#5031)</li>
+<li>e82aa28b838d1cad66044c3888b75eb832a39fb4 Ajouter des assistants de capture d'exception OMP et migrer IndexIVF (#5111)</li>
+<li>6299bff1f60e5423fa8cfe8e8d3926f8d87bdafb Ajouter QT_0bit à ScalarQuantizer pour la distance de FIV centroïde uniquement (#5079)</li>
+<li>3030fe0635b743ccfddf3684752438269a5ab0c5 Ajouter une recherche filtrée pour les index cuVS (#4858)</li>
+<li>f83ea51eaa60987315fcd2deca153924abd7995d Prise en charge de IVFRaBitQSearchParameters dans le scanner RaBitQFastScan (#5081)</li>
+<li>82a823513d8a7a7e497de11e7da0cba2aae7721d Ajout de rappels d'itérateur pour le calcul de distance et l'admission du tas (#5082)</li>
+<li>b068fd985a7460c04ec6c4f909900409392520d0 Prise en charge de IO_FLAG_MMAP_IFC sur Darwin (#5058)</li>
+<li>113bf6ceac4e9d1bfeaf29279b29a8293759f83b Exposer fast_scan_code_size à partir d'indices FastScan non FIV (#5077)</li>
+<li>786d993dbfb8b74b2a0d4d9543b2b08310acabbe Exposer une taille de code d'analyse rapide à partir d'index d'analyse rapide (#5064)</li>
+<li>95f1e45221ede8caf1b0139a3c8864d473e0e47d Diagnostics de construction OMP (#4842)</li>
+<li>c4ac852e5b5aa2ba4bde8a977633c367aa85d5db Ajouter une fonction d'affectation équilibrée (#5050)</li>
+<li>8402a6b764c024ca78fb87d768cb81de3f60c925 Ajout de tests unitaires pour la validation de la désérialisation HNSW (#5033)</li>
+<li>1dc5e1fb60405eda268a7d55b1d5a14feef962ba V2 permet de spécifier un sous-ensemble de niveaux SIMD implémentés au moment de la répartition. (#4959)</li>
+<li>e6f5c0c9a9f70f63c00d3ac5651edce6aebd734d Ajout d'un guide de migration de répartition dynamique SIMD (#4973)</li>
+<li>8177a3bca62af1042d955277cafe9db73d5a0c1d Ajouter un appel de diagnostic nvidia-smi (#4960)</li>
+<li>67fc664fe0ac1774bd4dcf2ab1aaa488cc7d0545 Ajouter CappedInvertedLists pour limiter la taille par liste (#4880)</li>
+<li>e57a8939c91244009c7ef5745d59f33139dc46d2 présente <code>SingleQueryResultCollectHandler</code> (#4926)</li>
+<li>748c0311e423844f25d46a95d27d1621c520a4c7 HNSW : ajoutez prune_headroom pour éviter l'élagage/verrouillage O(n^2), test de marge (#4847)</li>
+<li>1e4d2271a6b27c70c4d824cc47067d36998d9daf Introduire un seuil d'arrêt anticipé pour les Kmeans (#4894)</li>
+<li>4a0fba1fe2c5e5c8fb3405e614ef9b11524b1064 Ajout d'une limite de répartition FastScanCodeScanner avec des TU par SIMD (#4897)</li>
+<li>0fcba2284c266f12ead208ef61559c81e2d7ac72 Ajouter des sentinelles aux énumérations au format d'index. (#4907)</li>
+<li>40480fb303fe06a7126e78c71965041911b687c5 Limites de prise en charge des boucles de désérialisation d'index — utile pour les tests (#4902)</li>
+<li>1e4544a37e62f89bce0baf3253d214d37fba5192 Ajout du paramètre de modèle SIMDLevel par défaut aux types de gestionnaire et de scaler (#4867)</li>
+<li>abdd37bd964b87be5283334ca49ff603a8e46f4c Ajouter l'option d'installation de Pixi à la documentation (#5214)
+Changé</li>
+<li>9d5491a117b1628dd911d942353156db63553fcf Modèle SIMDResultHandler sur SL, marque handle() final (#5223)</li>
+<li>b63f236a5252580e1f24158ca7bc6f58517983f2 Mise à niveau du CI d'actions GitHub de CUDA 12.6 vers CUDA 13.2 (#5207)</li>
+<li>a9f5baa58c3bacf208d9f02362ea9db47ffb9f21 Déplacer les redirecteurs RISC-V fast_scan vers impl-riscv.cpp dédié (#5216)</li>
+<li>8932716646db11b5f03f1d6e64d2b96ad6cd202b Valider SVS storage_kind via une aide partagée sur tous les sites de lecture de désérialisation (#5204)</li>
+<li>bc490b56b0896a56d8fc68df42b00798ab5d7eee Rendre les champs de type IVFPQSearchCagraConfig définissables à partir de Python (#5191)</li>
+<li>ffd3727d4815a819b3c229adc1ec4fb0e584156c Modèle de mise à jour pour la chaîne de fabrique d'index avec SVSVamana (#5201)</li>
+<li>f37041d0732bed52e186263466e0cc02fd2b6fe2 Extraire les shaders Metal vers un fichier .metal autonome avec la classe wrapper du noyau (#5167)</li>
+<li>d98364eb490f0f53b9bece0046b2933f1ec7e646 perf: reserve() pour éviter le rehachage/réallocation (#5193)</li>
+<li>4eee3d7859d4872dc30172092e3ff2a7b919df99 Ajouter un journal de tolérance et d'assertion à test_OIVFPQ (#5188)</li>
+<li>2322afd2d8489bcaae4cb50d105786121335b1a7 faiss : paralléliser la boucle de réduction post-BLAS et end_multiple() dans les gestionnaires de résultats (#5185)</li>
+<li>967eda65dec2515ccd18c5abe464b485f8a883d0 Remplacez FAISS_ASSERT par FAISS_THROW_FMT pour SVSStorageKind non pris en charge (#5182)</li>
+<li>715725df362a04d7f1424942583c309ee79c14c6 Activer le mode détaillé pour l'étape de publication TestPyPI (#5181)</li>
+<li>5e123115f109ae17062c0a5b120a21e7723bbc43 Filtrer les artefacts de la roue avant de les publier sur PyPI (#5179)</li>
+<li>28b2b66cf279ff2bdb7b8a7fd387c7ea328cb642 Noyaux de distance de code PQ en ligne dans les TU du scanner (#5159)</li>
+<li>c41405d5253cfd45673728f5544acad07de1eb32 Appliquer la taille minimale de l'ensemble de formation pour ScalarQuantizer, vérifiez nullptr (#5141)</li>
+<li>44c1972aec4e5d19720263c64dcc5592b06edbdc Activer ccache dans les builds cmake des actions GitHub (#5157)</li>
+<li>e09de2d070ea13ad4fdc65b5c1df97d5455732de Renforcer computing_query_factors : ajouter des conditions préalables, gérer l'alias, supprimer les vérifications mortes</li>
+<li>6a9936c60de22ef41138e8b6a8f19df5f180c4ea Hoist les allocations de vecteurs par itération dans IndexIVFRaBitQFastScan::compute_LUT</li>
+<li>c3460c980be78afac11f6dc1f88b170fd7e70693 Convertir les appelants d'index binaire Hamming en répartition dynamique (#5071)</li>
+<li>ecac6511a271e5441d942054c619dbd34d71e83f Convertir hamming.cpp public API en répartition dynamique (#5070)</li>
+<li>8d1b964c11a943f72c6d6f8d7e4e250fd15b5697 Activer la génération de répartition dynamique sur Windows (#5127)</li>
+<li>a25bcb1e22e06d4626941bcc0d7b1365bd8b428b S'appuyer sur cuVS pour les valeurs par défaut (#5140)</li>
+<li>06228410c6a60c4ca127b00a16e4007d5f0d5353 Optimisations panoramiques (#5041)</li>
+<li>f4338ade1bfae983ff03164f8ef53921b193f46c Paramétrer les tests existants avec @for_all_simd_levels (#5134)</li>
+<li>9d567497ecae53cebafa7c81dc4a75b7d1aff8cd Câblez les noyaux QBS 512 bits dans la répartition DD à analyse rapide (#5075)</li>
+<li>bdf877f90c955581d74d559a5b85719cee78ba0f facebook-unused-include-check dans IndexNNDescent.cpp (#5132)</li>
+<li>632427fd0d9d11990f9520d09794203151308253 fbcode/faiss/invlists (#5048)</li>
+<li>e23c66175d7d5469aee00c9939ccb1ecf7bb4ac5 Remplacez dispatch_HammingComputer par with_HammingComputer (#5126)</li>
+<li>ed7e1f2435b6c7d76d049473758ef50001547812 Répartition Hoist SIMD hors boucles dans 4 sites d'appel (#5074)</li>
+<li>582246b6bd7ad71bf60d6ddf5b4b1066de24ffd3 Suppression de l'utilisation de la macro __AMDGCN_WAVEFRONT_SIZE, elle étant obsolète dans ROCm 7 (#4619)</li>
+<li>2dff119f138167b915d03fa8df23068802f38e51 Ajouter des accolades autour des instructions de flux de contrôle sur une seule ligne</li>
+<li>cc0c08754851a6d95870f259c91271fd4560416d Hoist SIMD dispatch hors des boucles chaudes approx_topk (#5073)</li>
+<li>18f93fd82f1de86245b4566c53553316671112e5 Remplacer les intrinsèques SSE3 dans Index2Layer par du code scalaire portable (#5076)</li>
+<li>42765abc0061a00e0afc5f32e53c5d798a3ded61 Optimiser la construction RaBitQ FastScan LUT pour les données de grande dimension (#5110)</li>
+<li>ec5e70c6555c2f95f131d33c731f72f13065d3af Optimiser le déballage des bits de signe multibits dans les gestionnaires RaBitQ FastScan (#5097)</li>
+<li>3f127ee3bad4922b1ba0cf2f17f1368d99a241ec Thread qb/paramètres de recherche centrés via FastScan LUT et le gestionnaire (#5095)</li>
+<li>3c19c52ca0380bbbd032ba15cd9ff8143e4b7b8e Utilisez std:: fonctions mathématiques qualifiées pour éviter la promotion float-to-double (#5088)</li>
+<li>48d2b0c946de235f6f5cc2a6fb072f90544a2aee Remplacer typedef par des déclarations using (#5086)</li>
+<li>e12debcb6123eee4dd49eafd143ac20952ad75b1 Supprimer les points-virgules supplémentaires après les définitions de fonctions membres en ligne (#5085)</li>
+<li>5679d3ad42533e6f367fdd746b60e3b16fd692c7 HNSW Cagra parallèle d'échantillonnage de point d'entrée de niveau de base (#5068)</li>
+<li>c4efc422192b6e43a7f5b2014f5cdd53e8bd8e84 Supprimer les alias de type simdlib nus de simdlib_dispatch.h (#5069)</li>
+<li>4a63c9e415078a79a7e95d52eb8c974d3ddefdaa Convertir le partitionnement en répartition dynamique (#5062)</li>
+<li>f226be432c261df5f24c163434e3b45d3abf4193 Déployer @for_all_simd_levels sur les fichiers de test clés (#5061)</li>
+<li>afd69493777f8a95c3b2c810f35a24aef8105c8c fbcode/faiss/impl/HNSW.cpp (#5059)</li>
+<li>658c4340c0a6ff548c291d26d7182e09e703344a Remplacer bare assert() par FAISS_THROW_IF_NOT dans les fichiers d'index principaux (#5052)</li>
+<li>364749e88624ae2c93c099e1a798c48a47c1ab2d Réactiver le coureur ROCm pour AMD GPU CI (#4854)</li>
+<li>faeac8636c4c6c15c47fa60fc7f2c18db775b3b7 Mise à jour des références C++17 et Python 2 obsolètes (#5045)</li>
+<li>77e602870bd860043db843ccbf458c2ef1c534b2 Utiliser HTTPS pour les liens GitHub dans README (#5043)</li>
+<li>91843bdbd3eaf1b4e409b1d61763cb2e35170a12 Utiliser des indicateurs ISA explicites au lieu de -march/-mtune=sapphirerapids (#5034)</li>
+<li>acac823db4cfff3fdd4e6a033543e0649a9f9f27 Fusionner les mises à jour .gitignore de faiss-gpu-cu132 dans main (#4996)</li>
+<li>8d8881ee3f6a5a9f8de827742ca38f9db89b78ec Rendre distance_compute_blas_threshold dimensionnel (#5022)</li>
+<li>553c78b25685d0aa38a2844ab35fdd9ed6801e57 Répartition HNSW SIMD (#5015)</li>
+<li>499b4885b8aaf439013a820b6f0f14e57ad4ff1a boucle la boucle sur l'intégration du filtre à analyse rapide ivf rabitq (#5026)</li>
+<li>aef066ac0ebc914a7de2d6ab1770df15a1b10c69 SVS0.3.0 (#4999)</li>
+<li>cc34603106c16d30edbdd9cb1fcd35ce8f2fbc5a réutilise le tampon de décompression dans le raffinement IVFRaBitQFastScan multibit (#5003)</li>
+<li>d81584d548191ff002c304f5d5c8e3f519e6e4e2 Mise à jour des stubs de type Python : correction de la hiérarchie des classes et ajout des classes de base manquantes (#5004)</li>
+<li>d1c432fb5fd7d1bf96a73299e95fa6476b2825e3 Convertir rabitq_simd.h en répartition SIMD d'exécution (#4912)</li>
+<li>6bca9613b7822ee7392957bf19cc53c237133bd4 Convertir distances_fused/ en répartition SIMD d'exécution (#4911)</li>
+<li>04d0d56d0e24ad8da8283a210f8f0527ae2ac91c facebook-unused-include-check dans distances_simd.cpp (#5013)</li>
+<li>7eb05f01fab7bce7750f84f4ce63fb17354cdd43 facebook-unused-include-check dans partition.cpp (#5012)</li>
+<li>7e04fa26212bbfba8749f837fc5e6be1360613b4 Mise à jour des stubs de type Python (<strong>init</strong>.pyi) pour correspondre au API actuel (#4998)</li>
+<li>db0e798d5a93a97589d7705ae44f0f7b222bea90 Utilisez omp_get_max_threads() pour le nombre de threads OpenMP (#4991)</li>
+<li>9af8384f14edb7c47c8ac6869c6dd45884f72369 Bump openblas de 0.3.30 à 0.3.32 dans les recettes conda (#4994)</li>
+<li>c048917dcd686fcdc7dd386c6d2b345767085bac Activer l'avertissement FAISS silencieux &quot;listes inversées non stockées&quot; (#4964)</li>
+<li>b2ddb465bf8fe6a3cf470a67d3f8d70df8cc86c9 Assouplir les exigences de version du package de recherche SVS (#4969)</li>
+<li>d8c3d26130552d70b32c7d61acb9a315f66b045a Mise à niveau vers C++20 pour CUVS (#4881)</li>
+<li>94f2b51fdbf9d72956e84131a12dc6d911e7c362 Renommer train() avec des requêtes en train_with_queries (#4955)</li>
+<li>02d609caff186bbbf04a2b541ffa1fd7a7a967fc Mise à niveau de la version cuVS vers 26.02 (#4945)</li>
+<li>55a47c927cd93f22c2b60953bc9e1138e31f1ec4 Mettez à niveau la version cuVS vers 26.02, basculez divers fichiers BUCK vers 26.02 (#4788)</li>
+<li>0d147a78bc60574d6ae03d09e9e04c9b32d5b6c5 Rendre la limite d'octets READVECTOR configurable (#4928)</li>
+<li>9962fbec6ee8cd0ea1d8a05c9e8d435652d6a096 HNSW : section critique étroite lors de l'ajout pour éviter les conflits de verrouillage (#4915)</li>
+<li>b1feeb79f88ea11e2c7cbebb2a9fed7e9aa67bc2 Convertir approx_topk et résiduel_quantizer_encode_steps en répartition dynamique SIMDLevel (#4923)</li>
+<li>58a57e6bca746821b8a018a35bd6d7057565de03 Réactivez les tests de compatibilité ascendante pour Rabitq maintenant que 1.14.1 est sorti (#4924)</li>
+<li>5dcef1858d960b22226a47d1b9ee326033e73b63 Refactoriser les statistiques binaires HNSW pour utiliser la réduction OpenMP au lieu de la synchronisation du destructeur (#4910)</li>
+<li>d8c1a9785f21c84e7517226f6d7f84bfbfd26a36 implémentation des distances de déplacement dans les unités de compilation spécifiques SIMD (#4906)</li>
+<li>ea11f0ef9c04d346a65e9096e13d6d5cb6ba8aab Basculez tous les chemins de recherche vers FastScanCodeScanner et supprimez make_knn_handler (#4904)</li>
+<li>57190f91cddffc8ac168dd5ac88044976d4be864 Recherche Wire RaBitQ via l'envoi FastScanCodeScanner (# 4903)</li>
+<li>79e8acb07228e2b706ce784358a9bfc42672761f Paralléliser les computation_residuals dans IndexIVFPQ (#4654)</li>
+<li>eddea2a6078c362f19deb39fd16ccff875121a9e Extraire le gestionnaire de résultats RaBitQ vers impl/fast_scan/ (#4895)</li>
+<li>734751a16f6babc42a850b1c78b7cdb09bc9ddbb Extraire les noyaux PQ4 vers des en-têtes incluables dans impl/pq_4bit/ (#4868)</li>
+<li>bb298a2323c1df5fd4ee4cdf8ddae23d6614e45c convertir simdlib en distances_simd.cpp (#4884)</li>
+<li>8d8268c8aeea11cb0f25f37789882d4800ac89f1 Modèler les types simdlib sur SIMDLevel (#4866)</li>
+<li>c74809a7c6f0830d1b6090494979533252465269 Améliorer la sécurité des exceptions pour le modèle 'own_fields'/allocation (#4864)</li>
+<li>c6cf004ecefebfc71822b72be617ef96839ae004 utilise <code>level</code> mais pas <code>0</code> dans Neighbor_range(i, level, &amp;begin, &amp;end) (ligne 198) (#5005)
+Corrigé</li>
+<li>cb69d7c5665241d1e84f476105ffb6fd6c7c192c Correction du crash de Dq=None et du non-déterminisme np.empty dans les wrappers search_preassigned (#5221)</li>
+<li>5c92c5c1ee744545a77f6be9f14d4fdccaad7869 Correction du test de fumée test_hnsw floconneux en augmentant efSearch (#5222)</li>
+<li>8d3cc92536e340e210f05c8265b8523e1efd1168 Correction du retour nul clone_index pour IndexRowwiseMinMax (#5220)</li>
+<li>ff1d54397780abc22dd90e958bef11c77ea88a1b Correction des problèmes de python_unnecessary_generator_set_comprehension dans faiss/tests/test_fastscan_filter.py (#5215)</li>
+<li>e2359156e08c96bdc9a6ddb2ed28e97963f8f3c4 Correction de la régression FastScan DD en enfilant le niveau SIMD via les fonctions du noyau (#5210)</li>
+<li>172324aea695fca9f5d59c7a6a7098f28e314e52 Correction de la conversion IDSelectorBitmap en jeu de bits cuVS (#5211)</li>
+<li>6bd749e39bd17d45acfdb6f92d5027fc64ffeced Correction d'une fuite IDSelector via le setter SearchParameters.sel (#5208)</li>
+<li>6376bc35e3db976d55a8fcec039dd1ffb444aca9 Correction de CI : (cuVS) verrouillage du cache des fragments de conda, (ARM) bump openblas, (SVS) correction de la double destruction de LeanVec (#5209)</li>
+<li>4b5a73577ee90c8466139f5448ef2b5db033808b Correction des problèmes de python_unnecessary_generator_set_comprehension dans faiss/.../bench_fw/optimize.py (#5205)</li>
+<li>6789bf5eb7ff1ffac95ca24b4473af8ba8024ac5 Valider l'IndexIDMap id_map et la cohérence totale de l'index interne pour empêcher le deref nul au moment de la recherche (#5203)</li>
+<li>f7508155124af8de6ca427b9842feb770d0075f2 Pin MKL à &lt;2026 pour éviter une incompatibilité de nom avec pytorch (#5192)</li>
+<li>bb2ce7137d32901898b81fb519abee00c2ce841e Correction de 7 tests cassés (#5197)</li>
+<li>f323c0fa11a3e17b4417d81fb75159304b5a550f Correction du test de compatibilité ascendante (#5195)</li>
+<li>23cd94cd51062f014cb48a1b1a00884311ad786e Réduire les paramètres de test BinaryCagra pour éviter les délais d'attente CI (#5194)</li>
+<li>85fc627c1e7559557e1d0c427eb506e124944524 Valider ProductQuantizer M*ksub pendant la désérialisation pour éviter des allocations surdimensionnées (#5187)</li>
+<li>6cef1bb08c47ff7fc772e8d70a931b014eab771c Correction des échecs de l'environnement conda cuVS et ROCm CI (#5180)</li>
+<li>4a471eebf9e41059ad4f677172bdda6a0af504a2 Pin conda &lt;25.7 pour corriger la version de Windows (#5176)</li>
+<li>a9c0d4187b508565599677e4421143a676d3625c Contournement de la mauvaise compilation par GCC 12 de l'histogramme AVX2 (#5124)</li>
+<li>40a8cc003460855a810b2063191eaac0382bb85e Correction des peluches associées aux installations d'arrêt anticipé pour la FIV (#5172)</li>
+<li>1e69d5ab20223212e23df9630a5240b60d075f04 Correction du pic de mémoire lors du chargement des listes d'inv. FIV via IO_FLAG_MMAP_IFC (#5122)</li>
+<li>9942229393c6a161cff4061634805d2e5c24adf6 Correction de add_sa_codes acceptant silencieusement les identifiants non-int64, corrompant les étiquettes stockées (#5171)</li>
+<li>c5ddbc710427d6b323f0ee0bdfa406f77c42d63e c_api : correction de la non-concordance des noms de getter/setter d'IndexShards own_indices (#5165)</li>
+<li>8380e2543db6ae43feba7fd210207bd916eca953 Correction du test unitaire avx512 (#5161)</li>
+<li>71448c07d309a5058703a81e1dda6059c4a9f947 Correction d'un problème avec les tests SVS (#5162)</li>
+<li>6c70444d0843d6de7e1e8376c0cc4526cae1025a Valider code_size pendant la désérialisation pour éviter des allocations surdimensionnées (#5151)</li>
+<li>9dbb81ca9d674b031090c4ac31cf001a65fdd78f Définir own_fields après avoir lu le sous-quantificateur Index2Layer pendant la désérialisation (#5147)</li>
+<li>01b22b4cc94fe4121de30f04b54a1f451a1e6188 Correction d'un avertissement de fuite de mémoire pour unordered_multimap dans la liaison IndexIVFFlatDedup Python (#1667) (#5145)</li>
+<li>130fc2481a0fa768848387cd3f724395157cebe1 Correction d'un test floconneux (#5150)</li>
+<li>dfce6e948e153b783d8bd0785c1c30432e84a166 Correction de la sécurité des exceptions OMP dans la recherche IndexHNSW (#5133)</li>
+<li>c6273349f948dc2df83be83c8f49c12ca63842e8 Correction d'un bug de décalage sa_decode et d'un débordement d'entier dans IndexRefine (#5143)</li>
+<li>1b4b995b97c97e503c051e7b3087b2937aed5633 Correction d'une perte de précision implicite des entiers de 64 bits à 32 bits (#5091)</li>
+<li>b0568942efcb980f91fb286e1fdebfa0925f1150 Correction de divers avertissements liés aux peluches (#5093)</li>
+<li>ed11f283d63915c014d1e176033a1bd0f1fd72ff Correction du fbcode cassé//faiss/tests:test_contrib - test_checkpoint (test_contrib.TestBigBatchSearch) (#5139)</li>
+<li>277c53d299ac7e059d2791d2cb15956819287586 Correction d'un bug de formation PCA et de problèmes de sécurité de la mémoire dans VectorTransform.cpp (#5138)</li>
+<li>83125407637fa69358de00ffcf7681947109d92a Correction de la troncature de type entier dans le masque de filtre bloom IDSelectorBatch (#5136)</li>
+<li>9cbc8da28efb865d9f8fed2f20ccf80ca2db0d20 Correction d'un débordement d'entier et d'une boucle illimitée dans Clustering.cpp (#5130)</li>
+<li>3c4056d822129f2e211d9aa8fc1ee1436fed82a9 Correction d'une condition de concurrence critique dans HNSW :: add_with_locks (#5129)</li>
+<li>6e64c5d6873e9ba7a66918fe6f743997178b665b Bump la broche GCC dans la recette faiss-gpu conda pour corriger la mauvaise compilation AVX2 SIMD (#5125)</li>
+<li>58f6ebb7fa84a995a3c11c7b4e8d3a9a0adaa489 Ajout d'une limite d'octets par lecture à SVS ReaderStreambuf pour empêcher le MOO de corrompre les données d'index (#5118)</li>
+<li>817ecf9cd444dbd7461d3a09a0035b16448d2c6f Valider les tailles d'entrée de liste inversée par rapport à la limite d'octets de désérialisation (#5117)</li>
+<li>e6be16241a10e1143dff263150315c220cc2a100 Valider la cohérence des dimensions VectorTransform pendant la désérialisation (#5115)</li>
+<li>6707eacfaffc012bdb2ac95eae37b4baceef11f0 Ajouter la vérification is_trained à la recherche IndexIVF et range_search pour empêcher l'interrogation d'index non entraînés (#5114)</li>
+<li>349df7035bd2ddfa30f148c2e6225e90be91cdfa Valider le type de stockage IndexHNSW2Level pendant la désérialisation et la recherche (#5113)</li>
+<li>edd6f3b54c38e3ca063368f5079d2662b33098a1 Rejeter le quantificateur nul lors de la désérialisation de l'index FIV (#5112)</li>
+<li>27078c52809b8ad43fbc73b6857a0865fe9c59c0 Correction de la sécurité des exceptions OMP dans la recherche IndexNNDescent et IndexNSG (#5106)</li>
+<li>99db159afd3f5e85f55dd959ef4cdb62e15086ad Correction de la sécurité des exceptions OMP dans la recherche IndexFlatCodes (#5105)</li>
+<li>40ad64694d4096b606a72a72622647a9421e8789 Correction de la version cuVS (#5107)</li>
+<li>57bf47410f58616d1a104523327d474cdc264fb1 Correction des incompatibilités de signature int/size_t dans l'ajout HNSW (#5116)</li>
+<li>f9f116d303e93abd5bf79bc89d4227505e086448 Valider k_factor pendant la désérialisation pour empêcher le MOO au moment de la recherche (#5104)</li>
+<li>2d8232c981f4148719bedbe9d0dcc2cd98f5fa3a Définir code_size sur IVFRaBitQFastScanScanner (#5099)</li>
+<li>Correctif b923091c0d87c68d2ff5e7076c5c1b1cf6489aed : GPU CAGRA copyFrom dépendance à vie de la mémoire hôte et ajout d'un test de régression (#4968)</li>
+<li>796977a1abc1ebfc42ce27fda655593089bcc70e Correction de IndexBinaryMultiHash::reset() qui n'efface pas les cartes de hachage et évite les copies inutiles (#5100)</li>
+<li>Correction b86066a9989ea7223826e06d25170b9e03c67b66 : bug cagra (#4963)</li>
+<li>91f6636b2a4d08c13c06e99dd0a1cb0bc77ceaf9 Ajout d'une initialisation de valeur aux variables membres non initialisées (#5089)</li>
+<li>61ed7dc917b2db31edef74e9f825f1d04efbe80e Correction des directives OpenMP orphelines dans les fonctions de formation IndexRowwiseMinMax (#5096)</li>
+<li>740d3a396575114156cb2cd5e36ba98669a9998d Correction de FastScan pour les index sans propres listes inversées + optimisations de performances dans le gestionnaire RaBitQ (#5080)</li>
+<li>7cc63422d701ee9178ae0f7c8afa8aa6b9533a83 Supprimer les avertissements de variables constexpr statiques inutilisées (#5087)</li>
+<li>aa3ce376ced6741b170ceef26bebbbf1f139cbec Correction des conditions de concurrence critique, de la gestion de la mémoire, de la sortie de débogage et de la recherche de table de hachage dans sorting.cpp (#5078)</li>
+<li>86d33710702b668c1413d3bafe7be6048718f138 Valider la cohérence de FastScan M2 pendant la désérialisation (#5056)</li>
+<li>67f066f7a02f76d3178baccf4c31b4839ff0fee8 Valider SVS storage_kind pendant la désérialisation (#5055)</li>
+<li>e899476ceb8e21d1739851e2d7d6c0c70cac43e5 Initialisation par défaut de SVSStorageKind dans IndexSVSVamana (#5054)</li>
+<li>c1e48a2ce12a008cd741f4d340af8026807cd020 Ajouter la vérification des limites du chemin de recherche à IndexIVF::search1 (#5040)</li>
+<li>97d257433a59d7150a52491439f80314f2474cfb Correction de bugs d'exactitude dans les opérations de copie/déplacement NNDescent Nhood et les limites gen_random (#5072)</li>
+<li>06ef481afa0910b07b33eee47d52c542e06a988a Correction d'exceptions non interceptées dans la région OpenMP IndexIVF::range_search_preassigned (#5053)</li>
+<li>255250985a74e81a9a81822959588339dfae0cd0 Correction de bugs dans NSG search_on_graph et sync_prune (#5063)</li>
+<li>7047dc5346abcfcf0a71b58f29aa9c138093af68 Correction de l'héritage du constructeur priorité_queue pour Apple Clang sur macOS (#5065)</li>
+<li>e0a1aec811bb78af64c140fe47720cf9a80431cc Divers correctifs de nettoyage Dynamic Dispatch (#5060)</li>
+<li>25296bad4f726aacff414a1f467f8a5f6eb0e306 Correction d'un bug d'incompatibilité de type et suppression du code mort dans IndexRowwiseMinMax::sa_decode_impl (#5051)</li>
+<li>7b2705c2698354ca75732970ba2e3526dc8330c7 Crash du collecteur de débogage avec NaN (#5025)</li>
+<li>9d3f97e620a24543f5e4d6e921473de0d63f2cd9 Correction des mots en double et des fautes de frappe grammaticales dans la base de code (#5044)</li>
+<li>84262f09d4d0bc83c7147ddb53a97b402c2e0539 Correction du bug de vérification d_out et ajout de messages d'erreur descriptifs aux assertions VectorTransform (#5047)</li>
+<li>ef28c6beb081d265cb6bdace8a3e85606bfd8a56 Correction d'exceptions non interceptées dans la région OpenMP IndexIVF::search_preassigned (#5037)</li>
+<li>8008ca2a70d7806694be80e365ff4b242982b699 Correction du signal mortel dans to_svs_metric() pour les métriques non prises en charge (#5032)</li>
+<li>4b8da6820ead7ddd07f7d54e55bb4eb8bb2b8417 Correction d'IndexSVSVamana null-deref dans deserialize_impl (#5029)</li>
+<li>ab3da522a4da1cd370052e36106f9743428d06b7 Cap ZnSphereCodecRec décode la taille du cache (#5028)</li>
+<li>d68050d269c0aeb1bf7fe0ef5f5f662dba006477 Ajout d'une validation d'entrée manquante à IndexFlat::range_search et computation_distance_subset (#5038)</li>
+<li>c6fa50a4510760be0075e9cd0383b2290dec5057 Valider la taille de l'IndexIDMap id_map pendant la désérialisation (#5024)</li>
+<li>408786bec9d016f2b9893373a2ad40b82868eeb4 Valider la cohérence des dimensions AdditiveQuantizer lors de la désérialisation (#5023)</li>
+<li>0ce4dfb2069019f9390fbfbf50be3052443325d5 Correction d'un échec de build AVX512_SPR pour les types SIMD 512 bits (#5030)</li>
+<li>a308adae08ae7b589e2f11da1ec08fa0d46b93c1 Validation de la désérialisation Harden ScalarQuantizer (#5020)</li>
+<li>ab46dcbeaed4817617f214604bdffc40026b5922 Valider les qbs au moment de la désérialisation dans les formats d'index FastScan (#5019)</li>
+<li>668da4a38684b95083e1ce737483d3ca64279c24 Valider IndexBinaryHash b &lt;= code_size*8 pendant la désérialisation (#5011)</li>
+<li>87bc9b08722d3a5ec01a91f5b16236fc56caf3bc Valider l'état du quantificateur IndexFastScan pendant la désérialisation (#5009)</li>
+<li>4c391564a60e9e4441d5aeb3744347d855530e79 Valider la taille des livres de codes au moment de la désérialisation dans read_AdditiveQuantizer (#5008)</li>
+<li>8c1f3f48d48147777a0a2adaf3ceb661e0c43a7d read-heap-buffer-overflow (taille 32) dans float faiss::fvec_norm_L2sqr&lt;&gt;()</li>
+<li>226ccf3e84d4439070262ff72dadab7de1d0e5f7 Correction d'OSX arm64 la nuit : faire passer libopenblas de 0.3.30 à 0.3.32 (#5006)</li>
+<li>aeb170c15a105d640118bd32c37e9de81c7432be large-malloc (15023964028 octets) dans __sanitizer::RunMallocHooks() (#5018)</li>
+<li>8550f2304af244a4a3ccbd8edb0f2d00aea11320 Valider les dimensions de VectorTransform pendant la désérialisation (#5007)</li>
+<li>833d4aaf7b719f30a022271bab7b0d0917edfbff manque de mémoire dans __gnu_cxx::new_allocator&lt;&gt;::allocate() (#5014)</li>
+<li>d716be39ed1092d6e5545809b944b1742283920e Correction de avx512_result_handlers construit sur aarch64 (#4965)</li>
+<li>18c85e17e1ed5605c814d284e2704bca612f0e70 Ajout d'une application de limite de vecteur de désérialisation pour ResidualCoarseQuantizer (#4997)</li>
+<li>b74f3cd8d9ba57a0549e91154057b8554c0fdd21 Valider les limites IndexBinaryMultiHash b et nhash*b pendant la désérialisation (#4984)</li>
+<li>b9f49601d109ae4c88adfec1ff84b5f40c00a2f3 Ajouter la vérification nulle des invlists à IndexBinaryIVF::search (#4980)</li>
+<li>ba1981ca4ce1c6139e80a6d00ad6c26e44443dec Ajouter une validation d'entrée aux conditions préalables de recherche IndexBinaryHNSW (#4979)</li>
+<li>d26c15d954a1d0f372a4da59ee30622d314a666d Valider la cohérence de l'index binaire lors de la désérialisation (#4978)</li>
+<li>2c28ef5382a21ba623afe56e3fdade97ae93b50c Valider RaBitQ qb pendant la désérialisation (#4983)</li>
+<li>5a4d62146c606796b24711003bf18d87402f2400 signal mortel (vecteur :: _M_default_append) dans __clang_call_terminate (#4986)</li>
+<li>0759009bd7ddf290170c930c70a722badd05aa7d Correction des avertissements du compilateur pour les builds pip wheel (macOS + Windows) (#4989)</li>
+<li>Signal 8a80b3dd6e2bcd1f0c6bef98aa396ac6d5a53e0d dans faiss::ArrayInvertedListsPanorama::ArrayInvertedListsPanorama() (#4987)</li>
+<li>12675affbcf1976c77a75d16813135f92584debc manque de mémoire dans __gnu_cxx::new_allocator&lt;&gt;::allocate() (#4985)</li>
+<li>0a8e516058cb76e5e026858dc3ded478aa815683 Correction du bug HNSW Panorama Perf (#4974)</li>
+<li>6dbf2713db8673d8007514d6f1d6375c72d5c99f Valider les données VectorTransform pendant la désérialisation (#4981)</li>
+<li>3f7938924d611b38adfdb00b7da27f24531decb7 Correction d'un échec de lien MSVC : supprimer __restrict des spécialisations fvec_madd (#4972)</li>
+<li>d47b281578d98c25e3187201e6f138ba91f50e97 signal mortel (vecteur :: _M_default_append) dans __clang_call_terminate (#4982)</li>
+<li>f851c54cd9fb89bda2680bbdeb28298d10c8178e large-malloc (6241124352 octets) dans __sanitizer::RunMallocHooks() (#4977)</li>
+<li>bd5ed00c384d5513917c51e348694d899e01718f Valider le pointeur de listes inversées dans les opérations IndexIVF (#4951)</li>
+<li>398857b1ff7248579ab8a63ee5d570d0bfcce71e Gérer l'index vide dans la recherche IndexHNSWCagra base_level_only (#4950)</li>
+<li>d647b596e01e1df4b79d5c513410b33463619aa8 Valider les données d'index du graphique pendant la désérialisation (#4949)</li>
+<li>Correctif e5114c2368073d00316a866baa33e6595df3c396 : résolution des avertissements du compilateur dans les fichiers d'index binaires et divers (#4940)</li>
+<li>Correctif 44f57ba4c91d2e4933f99f2c102df3ef5a3994cf : résolution des avertissements du compilateur dans les fichiers sources FAISS de niveau supérieur (#4943)</li>
+<li>Correctif b3a2914982f5affcc61f280bfe3860b97c686f1f : résolution des avertissements du compilateur dans les fichiers de test (#4944)</li>
+<li>Correctif 88efcb981a22fabd9a6dbe6cd583c51362864420 : résolution des avertissements du compilateur dans les classes de base et les en-têtes principaux (#4933)</li>
+<li>Correctif 7acc420929c40abc44899417b6e49e2eb28bb06e : résolution des avertissements du compilateur dans les listes inversées et cppcontrib (#4939)</li>
+<li>Correctif 64a2122ef1c8142287f277ec9e00cd2f8132d80a : résolution des avertissements du compilateur dans les E/S, les gestionnaires de résultats et divers impl (#4936)</li>
+<li>Correctif a05f13ff6a395ad6916b6772ef4baa0d8ba72d26 : résolution des avertissements du compilateur dans les fichiers PQ, PreTransform et Refine Index (#4941)</li>
+<li>Correctif 7645426ac338b61856210a9d8a5eee9d653d47e4 : résolution des avertissements du compilateur dans les implémentations de l'index FIV (#4942)</li>
+<li>f5142bfc5d8a8deed0268336c95352bab71dd781 large-malloc (7046432072 octets) dans __sanitizer::RunMallocHooks() (#4967)</li>
+<li>Correctif 4db01e3431b88b7363c55406b0babd6e8812977f : résolution des avertissements du compilateur dans les implémentations d'index basées sur des graphiques (#4956)</li>
+<li>ccc3cd619a8e2bc6ee970e61b1f4f7417724aadc Valider les tailles des vecteurs de code lors de la désérialisation de l'index (#4948)</li>
+<li>ec30fb387c79a99454805d07f47311e77fd90bfc Utilisez BitstringReader dans IndexBinaryHash pour éviter les lectures OOB (#4961)</li>
+<li>fa8ddd99a323ac289a96fd37b38e8c40f34004ad Correction du test floconneux pour l'équivalence Panaorama/IVFFlat régulière (#4954)</li>
+<li>1e6729d53e5080e8290d1b7993969c3267f4c393 Valider la taille des données du quantificateur lors de la désérialisation de l'index (#4947)</li>
+<li>Correctif 62a19690988c0765e95d6707bb563a2233a9d2aa : résolution des avertissements du compilateur dans les utilitaires de distance et de hamming (#4937)</li>
+<li>645a742b51813f11b033f9ebda909f0e60771dd5 Réajoutez les cuvs à cmakelists.txt (#4953)</li>
+<li>Correctif 5287db053721511ffa15a563d22665ea4ad02ae4 : résolution des avertissements du compilateur dans les implémentations d'index basées sur des graphiques (#4934)</li>
+<li>Correctif a48e45af3a7405a502711a1c63aeef5ba9b35ad1 : résolution des avertissements du compilateur dans les implémentations de quantificateurs (#4935)</li>
+<li>Correctif 32ca42f873053080435e57e306c3db123b3ea901 : résolution des avertissements du compilateur dans les utilitaires SIMD, de tri et divers (#4938)</li>
+<li>52d9fc705391db885138e86df42dbaf97d7f0a55 Ajout d'un contrôle de débordement dans la macro READVECTOR (#4946)</li>
+<li>0f7e65e53de6dd4a0273a3791fa70075b9de77f4 Appliquer la limite de mémoire dans read_ProductQuantizer (#4930)</li>
+<li>9ea026cc93f349eeca25b1246af1e97745df84f7 Valider la taille du vecteur de codes dans la désérialisation BlockInvertedLists (#4920)</li>
+<li>a4385dfd079f3de6046f6d68d56322600efdbaad Valider n_per_block et block_size dans la désérialisation BlockInvertedLists (#4919)</li>
+<li>cdb725466736f1667d2f2a9426594e639097a967 Valider la taille de id_map correspond à ntotal dans la désérialisation IndexBinaryIDMap (#4917)</li>
+<li>05ca04e469a6458f9abe25073f034987cb9844e4 Valider ilsz par entrée dans read_binary_multi_hash_map (#4916)</li>
+<li>b023178c5dfc8980dd7dee40ef228198b13ef65a Correction de la version MSVC OpenMP : utilisez idx_t au lieu de size_t en parallèle pour la boucle (#4922)</li>
+<li>5b83ec68569b82ece3ca182f45b6951c761f8aff Correction des conflits de section critique OpenMP dans la recherche IndexBinaryHNSW (#4909)</li>
+<li>Correction e96ba2d13cb827a19cc3c6fe4996e8f963a07d79 : découpler le quantificateur grossier de la réinitialisation de l'index cuvs (#4885)</li>
+<li>9d6b2e7b186cdc889c91866aff2ca2b5907ffb4d Validation d'entrée supplémentaire pour la désérialisation d'index (#4899)</li>
+<li>796bdf94a8878ebef1725fcea40f9dab06d1c5e5 Validation supplémentaire des entrées d'index binaire (#4898)</li>
+<li>d0434be649f556fbbefb7317899805a48f077553 Correction du clonage pour IVFFlatPanorama (#4887)</li>
+<li>3e4c103d77a7b2cd1759f359fe073385920571f5 Valider Dynamic_casts pendant le chargement de l'index (#4883)</li>
+<li>47e53b4468a87fe4c33609b0dfd1902328e3ea6f Correction de la rétrocompatibilité pour utiliser la dernière version (#4855)
+Obsolète</li>
+<li>812010fe19e1cac03e5f0bf529ddae9cb0ea4f1b Supprimer le test floconneux (#5169)</li>
+<li>74dceee9038339bb57e232cfd655df3cdde3891c Supprime les compteurs de débogage RaBitQStats de tous les gestionnaires RaBitQ (#5102)</li>
+<li>000eec283a89342c411820de35bf9b118f39602c Supprimer les anciens fichiers pq4_accumulate_loop (remplacés par dispatching.h) (#4905)
+<strong>Comparez :</strong> https://github.com/facebookresearch/faiss/compare/v1.14.1...v1.14.2</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/facebookresearch/faiss">facebookresearch/faiss</a> · <code>v1.14.2</code> · 2026-05-22 · <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.2">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>faiss v1.14.2</h1>
+<h2>Highlights</h2>
+<ul>
+<li><strong>SuperKMeans</strong> — faster k-means via ADSampling + PDX progressive pruning (#5168)</li>
+<li><strong>Metal GPU backend</strong> for Apple Silicon, starting with <code>IndexFlat</code> (#5144)</li>
+<li><strong>RVV (RISC-V Vector) SIMD backend</strong> + RISC-V cross-compilation CI (#5156, #5184)</li>
+<li><strong>pip install support</strong> via scikit-build-core + cibuildwheel (#4862)</li>
+<li><strong>SVS IVF index</strong> enabled; SVS upgraded to 0.3.0 (#4801, #4999); SVSVamana usable as IVF coarse quantizer via <code>index_factory</code> (#5175)</li>
+<li><strong>TurboQuant (CPU)</strong> quantizer (#5049)</li>
+<li><strong>HNSW improvements</strong> — optional persistent locks for incremental adds (#5031), <code>prune_headroom</code> to avoid O(n²) pruning (#4847), narrower add-time critical section (#4915)</li>
+<li><strong>Extensive index deserialization hardening</strong> — validation and OOM/overflow protection across ~40 PRs (binary, IVF, HNSW, FastScan, ScalarQuantizer, AdditiveQuantizer, ProductQuantizer, SVS, VectorTransform, …)</li>
+<li><strong>Major Dynamic Dispatch refactor</strong> across distances, hamming, partitioning, RaBitQ, FastScan; dynamic dispatch now builds on Windows (#5127)</li>
+<li><strong>cuVS upgraded to 26.02</strong> (#4945, #4788); CI moved to <strong>CUDA 13.2</strong> (#5207); <strong>C++20 for cuVS</strong> (#4881); filtered search for cuVS indexes (#4858)</li>
+<li><strong>OMP exception safety</strong> across <code>IndexHNSW</code>, <code>IndexNNDescent</code>, <code>IndexNSG</code>, <code>IndexFlatCodes</code>, <code>IndexIVF</code> (#5106, #5105, #5111, #5133, #5037, #5053)</li>
+</ul>
+<h2>Full Changelog</h2>
+<p>Added</p>
+<ul>
+<li>b7618fadc7fdf9b677277fbe96864c1902a6d8dc Add SuperKMeans: faster k-means via ADSampling+PDX progressive pruning (#5168)</li>
+<li>66c9d082651659fb6e78d67c547b035d3c2c8228 Add SuperKMeans foundations: math primitives, PDX layout, SIMD kernels</li>
+<li>dc7afcfdf0d4bf7cc694f4974db77e471422d4cb Support SVSVamana as IVF coarse quantizer via index_factory (#5175)</li>
+<li>7a8e4ddaca3d25363a79942e9fcd26de78436607 CI: cross-compile for riscv64 with RVV dynamic dispatch (#5184)</li>
+<li>03202795b6451f2c6942262c998de3b980e96157 Introduce RVV (#5156)</li>
+<li>417c53e0ce23e8c3f2843bc727c9493e35b1d5d0 Add NoneSIMDLevel context manager for cross-level reference checks (#5158)</li>
+<li>46def46902231ed57552ddbcfd751e17720c6d32 Enable SVS IVF Index in FAISS (#4801)</li>
+<li>585ba7954afb4da180a897bf195acd7516a44632 Add pip install support via scikit-build-core + cibuildwheel (#4862)</li>
+<li>799bf3aaeca910113fd2f1b0287568f07eb002fa Introduce early stop facilities for IVF, attempt 2 (#5160)</li>
+<li>66cea524339ee7cd1b3954e3b5a677edb2adad74 Add Metal GPU backend for Apple Silicon (IndexFlat) (#5144)</li>
+<li>17fd3332c77c2801da4b467de67b5cadf045b328 Add database-parallel flat search for few-query workloads (#5000)</li>
+<li>c7f07bbc0ad0e9c0b68c6c7a3696850f42500906 Add C++ per-SIMD-level tests for distance utility functions (#5154)</li>
+<li>0242758a3d073be0f5b0117b524a1fbdfcf02860 Add bit-exact RQ encode cross-level test (#5155)</li>
+<li>2f68a3730777f88da34d562bc90f637bb39c1cb3 Add per-SIMD-level tests for hamming.h utils + fix crosshamming bug (#5153)</li>
+<li>a7116ed4ec2ab4f0889d305592f579d5b2fb5745 Add TurboQuant (CPU) (#5049)</li>
+<li>11e5d3916054b23bf60253763abf5e9033fca39e Add optional persistent locks to IndexHNSW for incremental adds (#5031)</li>
+<li>e82aa28b838d1cad66044c3888b75eb832a39fb4 Add OMP exception capture helpers and migrate IndexIVF (#5111)</li>
+<li>6299bff1f60e5423fa8cfe8e8d3926f8d87bdafb Add QT_0bit to ScalarQuantizer for centroid-only IVF distance (#5079)</li>
+<li>3030fe0635b743ccfddf3684752438269a5ab0c5 Add filtered search for cuVS indexes (#4858)</li>
+<li>f83ea51eaa60987315fcd2deca153924abd7995d Support IVFRaBitQSearchParameters in RaBitQFastScan scanner (#5081)</li>
+<li>82a823513d8a7a7e497de11e7da0cba2aae7721d Add iterator callbacks for distance computation and heap admission (#5082)</li>
+<li>b068fd985a7460c04ec6c4f909900409392520d0 Support IO_FLAG_MMAP_IFC on Darwin (#5058)</li>
+<li>113bf6ceac4e9d1bfeaf29279b29a8293759f83b Expose fast_scan_code_size from non-IVF FastScan indices (#5077)</li>
+<li>786d993dbfb8b74b2a0d4d9543b2b08310acabbe Expose a fast scan code size from fast scan indices (#5064)</li>
+<li>95f1e45221ede8caf1b0139a3c8864d473e0e47d OMP build diagnostics (#4842)</li>
+<li>c4ac852e5b5aa2ba4bde8a977633c367aa85d5db Add a balanced assignment function (#5050)</li>
+<li>8402a6b764c024ca78fb87d768cb81de3f60c925 Add unit tests for HNSW deserialization validation (#5033)</li>
+<li>1dc5e1fb60405eda268a7d55b1d5a14feef962ba V2 enable specifying a subset of SIMD levels that are implemented at dispatching time. (#4959)</li>
+<li>e6f5c0c9a9f70f63c00d3ac5651edce6aebd734d Add SIMD dynamic dispatch migration guide (#4973)</li>
+<li>8177a3bca62af1042d955277cafe9db73d5a0c1d Add nvidia-smi diagnostic call (#4960)</li>
+<li>67fc664fe0ac1774bd4dcf2ab1aaa488cc7d0545 Add CappedInvertedLists for per-list size limiting (#4880)</li>
+<li>e57a8939c91244009c7ef5745d59f33139dc46d2 introduce <code>SingleQueryResultCollectHandler</code> (#4926)</li>
+<li>748c0311e423844f25d46a95d27d1621c520a4c7 HNSW: add prune_headroom to avoid O(n^2) pruning/locking, headroom test (#4847)</li>
+<li>1e4d2271a6b27c70c4d824cc47067d36998d9daf Introduce an early stop threshold for Kmeans (#4894)</li>
+<li>4a0fba1fe2c5e5c8fb3405e614ef9b11524b1064 Add FastScanCodeScanner dispatch boundary with per-SIMD TUs (#4897)</li>
+<li>0fcba2284c266f12ead208ef61559c81e2d7ac72 Add sentinels to index format enums. (#4907)</li>
+<li>40480fb303fe06a7126e78c71965041911b687c5 Support limits on index deserialization loops — useful for tests (#4902)</li>
+<li>1e4544a37e62f89bce0baf3253d214d37fba5192 Add defaulted SIMDLevel template parameter to handler and scaler types (#4867)</li>
+<li>abdd37bd964b87be5283334ca49ff603a8e46f4c Add Pixi installation option to docs (#5214)</li>
+</ul>
+<p>Changed</p>
+<ul>
+<li>9d5491a117b1628dd911d942353156db63553fcf Templatize SIMDResultHandler on SL, mark handle() final (#5223)</li>
+<li>b63f236a5252580e1f24158ca7bc6f58517983f2 Upgrade GitHub Actions CI from CUDA 12.6 to CUDA 13.2 (#5207)</li>
+<li>a9f5baa58c3bacf208d9f02362ea9db47ffb9f21 Move RISC-V fast_scan forwarders to dedicated impl-riscv.cpp (#5216)</li>
+<li>8932716646db11b5f03f1d6e64d2b96ad6cd202b Validate SVS storage_kind via shared helper at all deserialization read sites (#5204)</li>
+<li>bc490b56b0896a56d8fc68df42b00798ab5d7eee Make IVFPQSearchCagraConfig dtype fields settable from Python (#5191)</li>
+<li>ffd3727d4815a819b3c229adc1ec4fb0e584156c Update pattern for index factory string with SVSVamana (#5201)</li>
+<li>f37041d0732bed52e186263466e0cc02fd2b6fe2 Extract Metal shaders to standalone .metal file with kernel wrapper class (#5167)</li>
+<li>d98364eb490f0f53b9bece0046b2933f1ec7e646 perf: reserve() to avoid rehashing/reallocation (#5193)</li>
+<li>4eee3d7859d4872dc30172092e3ff2a7b919df99 Add tolerance and assertion log to test_OIVFPQ (#5188)</li>
+<li>2322afd2d8489bcaae4cb50d105786121335b1a7 faiss: parallelize post-BLAS reduction loop and end_multiple() in result handlers (#5185)</li>
+<li>967eda65dec2515ccd18c5abe464b485f8a883d0 Replace FAISS_ASSERT with FAISS_THROW_FMT for unsupported SVSStorageKind (#5182)</li>
+<li>715725df362a04d7f1424942583c309ee79c14c6 Enable verbose mode for TestPyPI publish step (#5181)</li>
+<li>5e123115f109ae17062c0a5b120a21e7723bbc43 Filter wheel artifacts before publishing to PyPI (#5179)</li>
+<li>28b2b66cf279ff2bdb7b8a7fd387c7ea328cb642 Inline PQ code distance kernels into scanner TUs (#5159)</li>
+<li>c41405d5253cfd45673728f5544acad07de1eb32 Enforce minimum training set size for ScalarQuantizer, check nullptr (#5141)</li>
+<li>44c1972aec4e5d19720263c64dcc5592b06edbdc Enable ccache in GitHub Actions cmake builds (#5157)</li>
+<li>e09de2d070ea13ad4fdc65b5c1df97d5455732de Harden compute_query_factors: add preconditions, handle aliasing, remove dead checks</li>
+<li>6a9936c60de22ef41138e8b6a8f19df5f180c4ea Hoist per-iteration vector allocations in IndexIVFRaBitQFastScan::compute_LUT</li>
+<li>c3460c980be78afac11f6dc1f88b170fd7e70693 Convert binary index Hamming callers to dynamic dispatch (#5071)</li>
+<li>ecac6511a271e5441d942054c619dbd34d71e83f Convert hamming.cpp public API to dynamic dispatch (#5070)</li>
+<li>8d1b964c11a943f72c6d6f8d7e4e250fd15b5697 Enable dynamic dispatch build on Windows (#5127)</li>
+<li>a25bcb1e22e06d4626941bcc0d7b1365bd8b428b Rely on cuVS for default values (#5140)</li>
+<li>06228410c6a60c4ca127b00a16e4007d5f0d5353 Panorama Optimizations (#5041)</li>
+<li>f4338ade1bfae983ff03164f8ef53921b193f46c Parameterize existing tests with @for_all_simd_levels (#5134)</li>
+<li>9d567497ecae53cebafa7c81dc4a75b7d1aff8cd Wire 512-bit QBS kernels into fast scan DD dispatch (#5075)</li>
+<li>bdf877f90c955581d74d559a5b85719cee78ba0f facebook-unused-include-check in IndexNNDescent.cpp (#5132)</li>
+<li>632427fd0d9d11990f9520d09794203151308253 fbcode/faiss/invlists (#5048)</li>
+<li>e23c66175d7d5469aee00c9939ccb1ecf7bb4ac5 Replace dispatch_HammingComputer with with_HammingComputer (#5126)</li>
+<li>ed7e1f2435b6c7d76d049473758ef50001547812 Hoist SIMD dispatch outside loops in 4 call sites (#5074)</li>
+<li>582246b6bd7ad71bf60d6ddf5b4b1066de24ffd3 Remove use of __AMDGCN_WAVEFRONT_SIZE macro with it being deprecated in ROCm 7 (#4619)</li>
+<li>2dff119f138167b915d03fa8df23068802f38e51 Add braces around single-line control flow statements</li>
+<li>cc0c08754851a6d95870f259c91271fd4560416d Hoist SIMD dispatch out of approx_topk hot loops (#5073)</li>
+<li>18f93fd82f1de86245b4566c53553316671112e5 Replace SSE3 intrinsics in Index2Layer with portable scalar code (#5076)</li>
+<li>42765abc0061a00e0afc5f32e53c5d798a3ded61 Optimize RaBitQ FastScan LUT construction for high-dimensional data (#5110)</li>
+<li>ec5e70c6555c2f95f131d33c731f72f13065d3af Optimize multibit sign-bit unpacking in RaBitQ FastScan handlers (#5097)</li>
+<li>3f127ee3bad4922b1ba0cf2f17f1368d99a241ec Thread qb/centered search params through FastScan LUT and handler (#5095)</li>
+<li>3c19c52ca0380bbbd032ba15cd9ff8143e4b7b8e Use std:: qualified math functions to avoid float-to-double promotion (#5088)</li>
+<li>48d2b0c946de235f6f5cc2a6fb072f90544a2aee Replace typedef with using declarations (#5086)</li>
+<li>e12debcb6123eee4dd49eafd143ac20952ad75b1 Remove extra semicolons after inline member function definitions (#5085)</li>
+<li>5679d3ad42533e6f367fdd746b60e3b16fd692c7 HNSW Cagra base-level entrypoint sampling parallel (#5068)</li>
+<li>c4efc422192b6e43a7f5b2014f5cdd53e8bd8e84 Remove bare simdlib type aliases from simdlib_dispatch.h (#5069)</li>
+<li>4a63c9e415078a79a7e95d52eb8c974d3ddefdaa Convert partitioning to dynamic dispatch (#5062)</li>
+<li>f226be432c261df5f24c163434e3b45d3abf4193 Roll out @for_all_simd_levels to key test files (#5061)</li>
+<li>afd69493777f8a95c3b2c810f35a24aef8105c8c fbcode/faiss/impl/HNSW.cpp (#5059)</li>
+<li>658c4340c0a6ff548c291d26d7182e09e703344a Replace bare assert() with FAISS_THROW_IF_NOT in core index files (#5052)</li>
+<li>364749e88624ae2c93c099e1a798c48a47c1ab2d Re-enable ROCm runner for AMD GPU CI (#4854)</li>
+<li>faeac8636c4c6c15c47fa60fc7f2c18db775b3b7 Update outdated C++17 and Python 2 references (#5045)</li>
+<li>77e602870bd860043db843ccbf458c2ef1c534b2 Use HTTPS for GitHub links in README (#5043)</li>
+<li>91843bdbd3eaf1b4e409b1d61763cb2e35170a12 Use explicit ISA flags instead of -march/-mtune=sapphirerapids (#5034)</li>
+<li>acac823db4cfff3fdd4e6a033543e0649a9f9f27 Merge .gitignore updates from faiss-gpu-cu132 into main (#4996)</li>
+<li>8d8881ee3f6a5a9f8de827742ca38f9db89b78ec Make distance_compute_blas_threshold dimension-aware (#5022)</li>
+<li>553c78b25685d0aa38a2844ab35fdd9ed6801e57 HNSW SIMD dispatch (#5015)</li>
+<li>499b4885b8aaf439013a820b6f0f14e57ad4ff1a close the loop on ivf rabitq fast scan filter integration (#5026)</li>
+<li>aef066ac0ebc914a7de2d6ab1770df15a1b10c69 SVS 0.3.0 (#4999)</li>
+<li>cc34603106c16d30edbdd9cb1fcd35ce8f2fbc5a reuse unpack buffer in multibit IVFRaBitQFastScan refinement (#5003)</li>
+<li>d81584d548191ff002c304f5d5c8e3f519e6e4e2 Update Python type stubs: fix class hierarchy and add missing base classes (#5004)</li>
+<li>d1c432fb5fd7d1bf96a73299e95fa6476b2825e3 Convert rabitq_simd.h to runtime SIMD dispatch (#4912)</li>
+<li>6bca9613b7822ee7392957bf19cc53c237133bd4 Convert distances_fused/ to runtime SIMD dispatch (#4911)</li>
+<li>04d0d56d0e24ad8da8283a210f8f0527ae2ac91c facebook-unused-include-check in distances_simd.cpp (#5013)</li>
+<li>7eb05f01fab7bce7750f84f4ce63fb17354cdd43 facebook-unused-include-check in partition.cpp (#5012)</li>
+<li>7e04fa26212bbfba8749f837fc5e6be1360613b4 Update Python type stubs (<strong>init</strong>.pyi) to match current API (#4998)</li>
+<li>db0e798d5a93a97589d7705ae44f0f7b222bea90 Use omp_get_max_threads() for OpenMP thread count (#4991)</li>
+<li>9af8384f14edb7c47c8ac6869c6dd45884f72369 Bump openblas from 0.3.30 to 0.3.32 in conda recipes (#4994)</li>
+<li>c048917dcd686fcdc7dd386c6d2b345767085bac Enable quieting FAISS warning &quot;inverted lists not stored&quot; (#4964)</li>
+<li>b2ddb465bf8fe6a3cf470a67d3f8d70df8cc86c9 Loosen SVS findpackage version requirement (#4969)</li>
+<li>d8c3d26130552d70b32c7d61acb9a315f66b045a Upgrade to C++20 for CUVS (#4881)</li>
+<li>94f2b51fdbf9d72956e84131a12dc6d911e7c362 Rename train() with queries to train_with_queries (#4955)</li>
+<li>02d609caff186bbbf04a2b541ffa1fd7a7a967fc Upgrade cuVS Version to 26.02 (#4945)</li>
+<li>55a47c927cd93f22c2b60953bc9e1138e31f1ec4 Upgrade cuVS Version to 26.02, switch various BUCK files over to 26.02 (#4788)</li>
+<li>0d147a78bc60574d6ae03d09e9e04c9b32d5b6c5 Make READVECTOR byte limit configurable (#4928)</li>
+<li>9962fbec6ee8cd0ea1d8a05c9e8d435652d6a096 HNSW: narrow critical section during add to avoid lock contention (#4915)</li>
+<li>b1feeb79f88ea11e2c7cbebb2a9fed7e9aa67bc2 Convert approx_topk and residual_quantizer_encode_steps to SIMDLevel dynamic dispatch (#4923)</li>
+<li>58a57e6bca746821b8a018a35bd6d7057565de03 Re-enable backwards compatibility tests for rabitq now that 1.14.1 released (#4924)</li>
+<li>5dcef1858d960b22226a47d1b9ee326033e73b63 Refactor binary HNSW stats to use OpenMP reduction instead of destructor sync (#4910)</li>
+<li>d8c1a9785f21c84e7517226f6d7f84bfbfd26a36 move distances implementation into SIMD specific compile units (#4906)</li>
+<li>ea11f0ef9c04d346a65e9096e13d6d5cb6ba8aab Switch all search paths to FastScanCodeScanner and remove make_knn_handler (#4904)</li>
+<li>57190f91cddffc8ac168dd5ac88044976d4be864 Wire RaBitQ search through FastScanCodeScanner dispatch (#4903)</li>
+<li>79e8acb07228e2b706ce784358a9bfc42672761f Parallelize compute_residuals in IndexIVFPQ (#4654)</li>
+<li>eddea2a6078c362f19deb39fd16ccff875121a9e Extract RaBitQ result handler to impl/fast_scan/ (#4895)</li>
+<li>734751a16f6babc42a850b1c78b7cdb09bc9ddbb Extract PQ4 kernels to includable headers in impl/pq_4bit/ (#4868)</li>
+<li>bb298a2323c1df5fd4ee4cdf8ddae23d6614e45c convert simdlib in distances_simd.cpp (#4884)</li>
+<li>8d8268c8aeea11cb0f25f37789882d4800ac89f1 Templatize simdlib types on SIMDLevel (#4866)</li>
+<li>c74809a7c6f0830d1b6090494979533252465269 Improve exception safety for the 'own_fields'/allocation pattern (#4864)</li>
+<li>c6cf004ecefebfc71822b72be617ef96839ae004 use <code>level</code> but not <code>0</code> in neighbor_range(i, level, &amp;begin, &amp;end) (line 198) (#5005)</li>
+</ul>
+<p>Fixed</p>
+<ul>
+<li>cb69d7c5665241d1e84f476105ffb6fd6c7c192c Fix Dq=None crash and np.empty nondeterminism in search_preassigned wrappers (#5221)</li>
+<li>5c92c5c1ee744545a77f6be9f14d4fdccaad7869 Fix flaky test_hnsw smoke test by increasing efSearch (#5222)</li>
+<li>8d3cc92536e340e210f05c8265b8523e1efd1168 Fix clone_index null return for IndexRowwiseMinMax (#5220)</li>
+<li>ff1d54397780abc22dd90e958bef11c77ea88a1b Fix python_unnecessary_generator_set_comprehension issues in faiss/tests/test_fastscan_filter.py (#5215)</li>
+<li>e2359156e08c96bdc9a6ddb2ed28e97963f8f3c4 Fix FastScan DD regression by threading SIMD level through kernel functions (#5210)</li>
+<li>172324aea695fca9f5d59c7a6a7098f28e314e52 Fix IDSelectorBitmap conversion to cuVS bitset (#5211)</li>
+<li>6bd749e39bd17d45acfdb6f92d5027fc64ffeced Fix IDSelector leak via SearchParameters.sel setter (#5208)</li>
+<li>6376bc35e3db976d55a8fcec039dd1ffb444aca9 Fix CI: (cuVS) conda shards cache lock, (ARM) bump openblas, (SVS) fix LeanVec double-destruction (#5209)</li>
+<li>4b5a73577ee90c8466139f5448ef2b5db033808b Fix python_unnecessary_generator_set_comprehension issues in faiss/.../bench_fw/optimize.py (#5205)</li>
+<li>6789bf5eb7ff1ffac95ca24b4473af8ba8024ac5 Validate IndexIDMap id_map and inner-index ntotal consistency to prevent search-time null deref (#5203)</li>
+<li>f7508155124af8de6ca427b9842feb770d0075f2 Pin MKL to &lt;2026 to avoid soname mismatch with pytorch (#5192)</li>
+<li>bb2ce7137d32901898b81fb519abee00c2ce841e Fix 7 broken tests (#5197)</li>
+<li>f323c0fa11a3e17b4417d81fb75159304b5a550f Fix backward compat test (#5195)</li>
+<li>23cd94cd51062f014cb48a1b1a00884311ad786e Reduce BinaryCagra test parameters to prevent CI timeouts (#5194)</li>
+<li>85fc627c1e7559557e1d0c427eb506e124944524 Validate ProductQuantizer M*ksub during deserialization to prevent oversized allocations (#5187)</li>
+<li>6cef1bb08c47ff7fc772e8d70a931b014eab771c Fix cuVS and ROCm CI conda environment failures (#5180)</li>
+<li>4a471eebf9e41059ad4f677172bdda6a0af504a2 Pin conda &lt;25.7 to fix Windows build (#5176)</li>
+<li>a9c0d4187b508565599677e4421143a676d3625c Work around GCC 12 miscompilation of AVX2 histogram (#5124)</li>
+<li>40a8cc003460855a810b2063191eaac0382bb85e Fix lints associated with early stop facilities for IVF (#5172)</li>
+<li>1e69d5ab20223212e23df9630a5240b60d075f04 Fix peak-memory spike when loading IVF invlists via IO_FLAG_MMAP_IFC (#5122)</li>
+<li>9942229393c6a161cff4061634805d2e5c24adf6 Fix add_sa_codes silently accepting non-int64 ids, corrupting stored labels (#5171)</li>
+<li>c5ddbc710427d6b323f0ee0bdfa406f77c42d63e c_api: fix IndexShards own_indices getter/setter name mismatch (#5165)</li>
+<li>8380e2543db6ae43feba7fd210207bd916eca953 Fix avx512 unit test (#5161)</li>
+<li>71448c07d309a5058703a81e1dda6059c4a9f947 Fix issue with svs tests (#5162)</li>
+<li>6c70444d0843d6de7e1e8376c0cc4526cae1025a Validate code_size during deserialization to prevent oversized allocations (#5151)</li>
+<li>9dbb81ca9d674b031090c4ac31cf001a65fdd78f Set own_fields after reading Index2Layer sub-quantizer during deserialization (#5147)</li>
+<li>01b22b4cc94fe4121de30f04b54a1f451a1e6188 Fix memory leak warning for unordered_multimap in IndexIVFFlatDedup Python binding (#1667) (#5145)</li>
+<li>130fc2481a0fa768848387cd3f724395157cebe1 Fix flaky test (#5150)</li>
+<li>dfce6e948e153b783d8bd0785c1c30432e84a166 Fix OMP exception safety in IndexHNSW search (#5133)</li>
+<li>c6273349f948dc2df83be83c8f49c12ca63842e8 Fix sa_decode offset bug and integer overflow in IndexRefine (#5143)</li>
+<li>1b4b995b97c97e503c051e7b3087b2937aed5633 Fix implicit integer precision loss from 64-bit to 32-bit (#5091)</li>
+<li>b0568942efcb980f91fb286e1fdebfa0925f1150 Fix miscellaneous lint warnings (#5093)</li>
+<li>ed11f283d63915c014d1e176033a1bd0f1fd72ff Fix broken fbcode//faiss/tests:test_contrib - test_checkpoint (test_contrib.TestBigBatchSearch) (#5139)</li>
+<li>277c53d299ac7e059d2791d2cb15956819287586 Fix PCA training bug and memory safety issues in VectorTransform.cpp (#5138)</li>
+<li>83125407637fa69358de00ffcf7681947109d92a Fix integer type truncation in IDSelectorBatch bloom filter mask (#5136)</li>
+<li>9cbc8da28efb865d9f8fed2f20ccf80ca2db0d20 Fix integer overflow and unbounded loop in Clustering.cpp (#5130)</li>
+<li>3c4056d822129f2e211d9aa8fc1ee1436fed82a9 Fix race condition in HNSW::add_with_locks (#5129)</li>
+<li>6e64c5d6873e9ba7a66918fe6f743997178b665b Bump GCC pin in faiss-gpu conda recipe to fix AVX2 SIMD miscompilation (#5125)</li>
+<li>58f6ebb7fa84a995a3c11c7b4e8d3a9a0adaa489 Add per-read byte limit to SVS ReaderStreambuf to prevent OOM from corrupt index data (#5118)</li>
+<li>817ecf9cd444dbd7461d3a09a0035b16448d2c6f Validate inverted list entry sizes against deserialization byte limit (#5117)</li>
+<li>e6be16241a10e1143dff263150315c220cc2a100 Validate VectorTransform dimension consistency during deserialization (#5115)</li>
+<li>6707eacfaffc012bdb2ac95eae37b4baceef11f0 Add is_trained check to IndexIVF search and range_search to prevent querying untrained indexes (#5114)</li>
+<li>349df7035bd2ddfa30f148c2e6225e90be91cdfa Validate IndexHNSW2Level storage type during deserialization and search (#5113)</li>
+<li>edd6f3b54c38e3ca063368f5079d2662b33098a1 Reject null quantizer during IVF index deserialization (#5112)</li>
+<li>27078c52809b8ad43fbc73b6857a0865fe9c59c0 Fix OMP exception safety in IndexNNDescent and IndexNSG search (#5106)</li>
+<li>99db159afd3f5e85f55dd959ef4cdb62e15086ad Fix OMP exception safety in IndexFlatCodes search (#5105)</li>
+<li>40ad64694d4096b606a72a72622647a9421e8789 Fix cuVS build (#5107)</li>
+<li>57bf47410f58616d1a104523327d474cdc264fb1 Fix int/size_t signedness mismatches in HNSW add (#5116)</li>
+<li>f9f116d303e93abd5bf79bc89d4227505e086448 Validate k_factor during deserialization to prevent search-time OOM (#5104)</li>
+<li>2d8232c981f4148719bedbe9d0dcc2cd98f5fa3a Set code_size on IVFRaBitQFastScanScanner (#5099)</li>
+<li>b923091c0d87c68d2ff5e7076c5c1b1cf6489aed fix: GPU CAGRA copyFrom host-memory lifetime dependency and add regression test (#4968)</li>
+<li>796977a1abc1ebfc42ce27fda655593089bcc70e Fix IndexBinaryMultiHash::reset() not clearing hash maps and avoid unnecessary copies (#5100)</li>
+<li>b86066a9989ea7223826e06d25170b9e03c67b66 fix: cagra bug (#4963)</li>
+<li>91f6636b2a4d08c13c06e99dd0a1cb0bc77ceaf9 Add value-initialization to uninitialized member variables (#5089)</li>
+<li>61ed7dc917b2db31edef74e9f825f1d04efbe80e Fix orphaned OpenMP directives in IndexRowwiseMinMax training functions (#5096)</li>
+<li>740d3a396575114156cb2cd5e36ba98669a9998d Fix FastScan for indices without own inverted lists + performance optimizations in RaBitQ handler (#5080)</li>
+<li>7cc63422d701ee9178ae0f7c8afa8aa6b9533a83 Suppress unused static constexpr variable warnings (#5087)</li>
+<li>aa3ce376ced6741b170ceef26bebbbf1f139cbec Fix race condition, memory management, debug output, and hashtable lookup in sorting.cpp (#5078)</li>
+<li>86d33710702b668c1413d3bafe7be6048718f138 Validate FastScan M2 consistency during deserialization (#5056)</li>
+<li>67f066f7a02f76d3178baccf4c31b4839ff0fee8 Validate SVS storage_kind during deserialization (#5055)</li>
+<li>e899476ceb8e21d1739851e2d7d6c0c70cac43e5 Default-initialize SVSStorageKind in IndexSVSVamana (#5054)</li>
+<li>c1e48a2ce12a008cd741f4d340af8026807cd020 Add search-path bounds checking to IndexIVF::search1 (#5040)</li>
+<li>97d257433a59d7150a52491439f80314f2474cfb Fix correctness bugs in NNDescent Nhood copy/move operations and gen_random bounds (#5072)</li>
+<li>06ef481afa0910b07b33eee47d52c542e06a988a Fix uncaught exceptions in IndexIVF::range_search_preassigned OpenMP region (#5053)</li>
+<li>255250985a74e81a9a81822959588339dfae0cd0 Fix bugs in NSG search_on_graph and sync_prune (#5063)</li>
+<li>7047dc5346abcfcf0a71b58f29aa9c138093af68 Fix priority_queue constructor inheritance for Apple Clang on macOS (#5065)</li>
+<li>e0a1aec811bb78af64c140fe47720cf9a80431cc Assorted Dynamic Dispatch cleanup fixes (#5060)</li>
+<li>25296bad4f726aacff414a1f467f8a5f6eb0e306 Fix type mismatch bug and remove dead code in IndexRowwiseMinMax::sa_decode_impl (#5051)</li>
+<li>7b2705c2698354ca75732970ba2e3526dc8330c7 Debug manifold crash with NaN (#5025)</li>
+<li>9d3f97e620a24543f5e4d6e921473de0d63f2cd9 Fix duplicate words and grammar typos across codebase (#5044)</li>
+<li>84262f09d4d0bc83c7147ddb53a97b402c2e0539 Fix d_out check bug and add descriptive error messages to VectorTransform assertions (#5047)</li>
+<li>ef28c6beb081d265cb6bdace8a3e85606bfd8a56 Fix uncaught exceptions in IndexIVF::search_preassigned OpenMP region (#5037)</li>
+<li>8008ca2a70d7806694be80e365ff4b242982b699 Fix deadly signal in to_svs_metric() for unsupported metrics (#5032)</li>
+<li>4b8da6820ead7ddd07f7d54e55bb4eb8bb2b8417 Fix IndexSVSVamana null-deref in deserialize_impl (#5029)</li>
+<li>ab3da522a4da1cd370052e36106f9743428d06b7 Cap ZnSphereCodecRec decode cache size (#5028)</li>
+<li>d68050d269c0aeb1bf7fe0ef5f5f662dba006477 Add missing input validation to IndexFlat::range_search and compute_distance_subset (#5038)</li>
+<li>c6fa50a4510760be0075e9cd0383b2290dec5057 Validate IndexIDMap id_map size during deserialization (#5024)</li>
+<li>408786bec9d016f2b9893373a2ad40b82868eeb4 Validate AdditiveQuantizer dimension consistency during deserialization (#5023)</li>
+<li>0ce4dfb2069019f9390fbfbf50be3052443325d5 Fix AVX512_SPR build failure for 512-bit SIMD types (#5030)</li>
+<li>a308adae08ae7b589e2f11da1ec08fa0d46b93c1 Harden ScalarQuantizer deserialization validation (#5020)</li>
+<li>ab46dcbeaed4817617f214604bdffc40026b5922 Validate qbs at deserialization time in FastScan index formats (#5019)</li>
+<li>668da4a38684b95083e1ce737483d3ca64279c24 Validate IndexBinaryHash b &lt;= code_size*8 during deserialization (#5011)</li>
+<li>87bc9b08722d3a5ec01a91f5b16236fc56caf3bc Validate IndexFastScan quantizer state during deserialization (#5009)</li>
+<li>4c391564a60e9e4441d5aeb3744347d855530e79 Validate codebooks size at deserialization time in read_AdditiveQuantizer (#5008)</li>
+<li>8c1f3f48d48147777a0a2adaf3ceb661e0c43a7d read-heap-buffer-overflow (size 32) in float faiss::fvec_norm_L2sqr&lt;&gt;()</li>
+<li>226ccf3e84d4439070262ff72dadab7de1d0e5f7 Fix OSX arm64 nightly: bump libopenblas from 0.3.30 to 0.3.32 (#5006)</li>
+<li>aeb170c15a105d640118bd32c37e9de81c7432be large-malloc (15023964028 bytes) in __sanitizer::RunMallocHooks() (#5018)</li>
+<li>8550f2304af244a4a3ccbd8edb0f2d00aea11320 Validate VectorTransform dimensions during deserialization (#5007)</li>
+<li>833d4aaf7b719f30a022271bab7b0d0917edfbff out-of-memory in __gnu_cxx::new_allocator&lt;&gt;::allocate() (#5014)</li>
+<li>d716be39ed1092d6e5545809b944b1742283920e Fix avx512_result_handlers build on aarch64 (#4965)</li>
+<li>18c85e17e1ed5605c814d284e2704bca612f0e70 Add deserialization vector limit enforcement for ResidualCoarseQuantizer (#4997)</li>
+<li>b74f3cd8d9ba57a0549e91154057b8554c0fdd21 Validate IndexBinaryMultiHash b and nhash*b bounds during deserialization (#4984)</li>
+<li>b9f49601d109ae4c88adfec1ff84b5f40c00a2f3 Add invlists null check to IndexBinaryIVF::search (#4980)</li>
+<li>ba1981ca4ce1c6139e80a6d00ad6c26e44443dec Add input validation to IndexBinaryHNSW search preconditions (#4979)</li>
+<li>d26c15d954a1d0f372a4da59ee30622d314a666d Validate binary index consistency during deserialization (#4978)</li>
+<li>2c28ef5382a21ba623afe56e3fdade97ae93b50c Validate RaBitQ qb during deserialization (#4983)</li>
+<li>5a4d62146c606796b24711003bf18d87402f2400 deadly-signal (vector::_M_default_append) in __clang_call_terminate (#4986)</li>
+<li>0759009bd7ddf290170c930c70a722badd05aa7d Fix compiler warnings for pip wheel builds (macOS + Windows) (#4989)</li>
+<li>8a80b3dd6e2bcd1f0c6bef98aa396ac6d5a53e0d signal in faiss::ArrayInvertedListsPanorama::ArrayInvertedListsPanorama() (#4987)</li>
+<li>12675affbcf1976c77a75d16813135f92584debc out-of-memory in __gnu_cxx::new_allocator&lt;&gt;::allocate() (#4985)</li>
+<li>0a8e516058cb76e5e026858dc3ded478aa815683 Fix HNSW Panorama Perf Bug (#4974)</li>
+<li>6dbf2713db8673d8007514d6f1d6375c72d5c99f Validate VectorTransform data during deserialization (#4981)</li>
+<li>3f7938924d611b38adfdb00b7da27f24531decb7 Fix MSVC link failure: remove __restrict from fvec_madd specializations (#4972)</li>
+<li>d47b281578d98c25e3187201e6f138ba91f50e97 deadly-signal (vector::_M_default_append) in __clang_call_terminate (#4982)</li>
+<li>f851c54cd9fb89bda2680bbdeb28298d10c8178e large-malloc (6241124352 bytes) in __sanitizer::RunMallocHooks() (#4977)</li>
+<li>bd5ed00c384d5513917c51e348694d899e01718f Validate inverted lists pointer in IndexIVF operations (#4951)</li>
+<li>398857b1ff7248579ab8a63ee5d570d0bfcce71e Handle empty index in IndexHNSWCagra base_level_only search (#4950)</li>
+<li>d647b596e01e1df4b79d5c513410b33463619aa8 Validate graph index data during deserialization (#4949)</li>
+<li>e5114c2368073d00316a866baa33e6595df3c396 fix: resolve compiler warnings in binary and miscellaneous Index files (#4940)</li>
+<li>44f57ba4c91d2e4933f99f2c102df3ef5a3994cf fix: resolve compiler warnings in top-level FAISS source files (#4943)</li>
+<li>b3a2914982f5affcc61f280bfe3860b97c686f1f fix: resolve compiler warnings in test files (#4944)</li>
+<li>88efcb981a22fabd9a6dbe6cd583c51362864420 fix: resolve compiler warnings in core base classes and headers (#4933)</li>
+<li>7acc420929c40abc44899417b6e49e2eb28bb06e fix: resolve compiler warnings in inverted lists and cppcontrib (#4939)</li>
+<li>64a2122ef1c8142287f277ec9e00cd2f8132d80a fix: resolve compiler warnings in IO, result handlers, and misc impl (#4936)</li>
+<li>a05f13ff6a395ad6916b6772ef4baa0d8ba72d26 fix: resolve compiler warnings in PQ, PreTransform, and Refine Index files (#4941)</li>
+<li>7645426ac338b61856210a9d8a5eee9d653d47e4 fix: resolve compiler warnings in IVF Index implementations (#4942)</li>
+<li>f5142bfc5d8a8deed0268336c95352bab71dd781 large-malloc (7046432072 bytes) in __sanitizer::RunMallocHooks() (#4967)</li>
+<li>4db01e3431b88b7363c55406b0babd6e8812977f fix: resolve compiler warnings in graph-based index implementations (#4956)</li>
+<li>ccc3cd619a8e2bc6ee970e61b1f4f7417724aadc Validate code vector sizes during index deserialization (#4948)</li>
+<li>ec30fb387c79a99454805d07f47311e77fd90bfc Use BitstringReader in IndexBinaryHash to avoid OOB reads (#4961)</li>
+<li>fa8ddd99a323ac289a96fd37b38e8c40f34004ad Fix flaky test for Panaorama/regular IVFFlat equivalence (#4954)</li>
+<li>1e6729d53e5080e8290d1b7993969c3267f4c393 Validate quantizer data sizes during index deserialization (#4947)</li>
+<li>62a19690988c0765e95d6707bb563a2233a9d2aa fix: resolve compiler warnings in distance and hamming utilities (#4937)</li>
+<li>645a742b51813f11b033f9ebda909f0e60771dd5 Re add cuvs to cmakelists.txt (#4953)</li>
+<li>5287db053721511ffa15a563d22665ea4ad02ae4 fix: resolve compiler warnings in graph-based index implementations (#4934)</li>
+<li>a48e45af3a7405a502711a1c63aeef5ba9b35ad1 fix: resolve compiler warnings in quantizer implementations (#4935)</li>
+<li>32ca42f873053080435e57e306c3db123b3ea901 fix: resolve compiler warnings in SIMD, sorting, and misc utilities (#4938)</li>
+<li>52d9fc705391db885138e86df42dbaf97d7f0a55 Add overflow check in READVECTOR macro (#4946)</li>
+<li>0f7e65e53de6dd4a0273a3791fa70075b9de77f4 Enforce memory limit in read_ProductQuantizer (#4930)</li>
+<li>9ea026cc93f349eeca25b1246af1e97745df84f7 Validate codes vector size in BlockInvertedLists deserialization (#4920)</li>
+<li>a4385dfd079f3de6046f6d68d56322600efdbaad Validate n_per_block and block_size in BlockInvertedLists deserialization (#4919)</li>
+<li>cdb725466736f1667d2f2a9426594e639097a967 Validate id_map size matches ntotal in IndexBinaryIDMap deserialization (#4917)</li>
+<li>05ca04e469a6458f9abe25073f034987cb9844e4 Validate per-entry ilsz in read_binary_multi_hash_map (#4916)</li>
+<li>b023178c5dfc8980dd7dee40ef228198b13ef65a Fix MSVC OpenMP build: use idx_t instead of size_t in parallel for loop (#4922)</li>
+<li>5b83ec68569b82ece3ca182f45b6951c761f8aff Fix OpenMP critical section contention in IndexBinaryHNSW search (#4909)</li>
+<li>e96ba2d13cb827a19cc3c6fe4996e8f963a07d79 fix: decouple coarse quantizer from cuvs index reset (#4885)</li>
+<li>9d6b2e7b186cdc889c91866aff2ca2b5907ffb4d Additional input validation for index deserialization (#4899)</li>
+<li>796bdf94a8878ebef1725fcea40f9dab06d1c5e5 Additional binary index input validation (#4898)</li>
+<li>d0434be649f556fbbefb7317899805a48f077553 Fix cloning for IVFFlatPanorama (#4887)</li>
+<li>3e4c103d77a7b2cd1759f359fe073385920571f5 Validate dynamic_casts during index load (#4883)</li>
+<li>47e53b4468a87fe4c33609b0dfd1902328e3ea6f Fix backward compatibility to use latest version (#4855)</li>
+</ul>
+<p>Deprecated</p>
+<ul>
+<li>812010fe19e1cac03e5f0bf529ddae9cb0ea4f1b Remove flaky test (#5169)</li>
+<li>74dceee9038339bb57e232cfd655df3cdde3891c Remove RaBitQStats debug counters from all RaBitQ handlers (#5102)</li>
+<li>000eec283a89342c411820de35bf9b118f39602c Delete old pq4_accumulate_loop files (replaced by dispatching.h) (#4905)</li>
+</ul>
+<p><strong>Compare:</strong> https://github.com/facebookresearch/faiss/compare/v1.14.1...v1.14.2</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/facebookresearch/faiss">facebookresearch/faiss</a> · <code>v1.14.2</code> · 2026-05-22 · <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.2">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/faiss/1.14.3"> <span class="k">← Suivant</span> <span class="t">v1.14.3</span> </a> <a href="/releases/faiss/1.14.1"> <span class="k">Précédent →</span> <span class="t">v1.14.1</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/facebookresearch/faiss/releases/tag/v1.14.2" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener"> <span>facebookresearch/faiss</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/faiss/1.16.0"> <span class="v">v1.16.0</span> <span class="d">26-11-10</span> </a> </li><li> <a href="/releases/faiss/1.15.1"> <span class="v">v1.15.1</span> <span class="d">26-09-16</span> </a> </li><li> <a href="/releases/faiss/1.15.0"> <span class="v">v1.15.0</span> <span class="d">26-08-03</span> </a> </li><li> <a href="/releases/faiss/1.14.3"> <span class="v">v1.14.3</span> <span class="d">26-06-13</span> </a> </li><li> <a href="/releases/faiss/1.14.2" aria-current="true"> <span class="v">v1.14.2</span> <span class="d">26-05-22</span> </a> </li><li> <a href="/releases/faiss/1.14.1"> <span class="v">v1.14.1</span> <span class="d">26-03-06</span> </a> </li><li> <a href="/releases/faiss/1.14.0"> <span class="v">v1.14.0</span> <span class="d">26-03-03</span> </a> </li><li> <a href="/releases/faiss/1.13.2"> <span class="v">v1.13.2</span> <span class="d">25-12-19</span> </a> </li> </ul> <a href="/fr/releases/faiss" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

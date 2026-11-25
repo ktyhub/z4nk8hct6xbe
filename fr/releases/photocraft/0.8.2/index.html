@@ -1,0 +1,982 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>photocraft v0.8.2 — STAGS NextStack</title><meta name="description" content="Adopt shared docking while preserving panel controls and workspaces · GPU composite: reuse unchanged lower-stack chunks for property edits · Design: bounded GPU stack prefix reuse for property edits"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/photocraft/0.8.2/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/photocraft/0.8.2/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/photocraft/0.8.2/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/photocraft/0.8.2/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="photocraft v0.8.2 — STAGS NextStack"><meta property="og:description" content="Adopt shared docking while preserving panel controls and workspaces · GPU composite: reuse unchanged lower-stack chunks for property edits · Design: bounded GPU stack prefix reuse for property edits"><meta property="og:url" content="https://www.stags.cn/fr/releases/photocraft/0.8.2/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/photocraft/0.8.2/#article","headline":"photocraft v0.8.2 release notes","datePublished":"2026-10-12","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/storytold/photocraft"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/photocraft/0.8.2/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/photocraft/photocraft_v0.8.2" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/photocraft/0.8.2/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/photocraft/0.8.2/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/photocraft/0.8.2/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/photocraft/0.8.2/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/photocraft/0.8.2/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/photocraft">photocraft</a> </nav> <h1 class="detail-title"> <span class="p">photocraft</span> v0.8.2 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>12 oct. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/storytold/photocraft" target="_blank" rel="noopener"> <span class="k">Source</span>storytold/photocraft </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/photocraft/0.8.2/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/photocraft/0.8.2/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>photocraft v0.8.2</h1>
+<h2>Ce qui a changé</h2>
+<ul>
+<li>Adoptez l'amarrage partagé tout en préservant les contrôles du panneau et les espaces de travail par @skylartaylor dans https://github.com/storytold/photocraft/pull/3097</li>
+<li>Composite GPU : réutilisez les morceaux inchangés de la pile inférieure pour les modifications de propriétés par @Elvis33LE dans https://github.com/storytold/photocraft/pull/1169</li>
+<li>Conception : réutilisation limitée du préfixe de la pile GPU pour les modifications de propriétés par @Elvis33LE dans https://github.com/storytold/photocraft/pull/1164</li>
+<li>feat(ui) : autoriser la désactivation des points d'arrière-plan du canevas Studio par @Ni-zav dans https://github.com/storytold/photocraft/pull/2317</li>
+<li>Les informations sur le fichier montrent les données de la caméra EXIF/XMP (#2424) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2692</li>
+<li>correctif (canvas) : mise à jour Déplacer les curseurs de contrôle de transformation au premier survol par @Ni-zav dans https://github.com/storytold/photocraft/pull/2887</li>
+<li>Le relâchement d'un coup de pinceau ne se fige plus : le commit prend les pixels que le coup de pinceau en direct a déjà dessinés (P32 : 136 ms → 0.8 ms) par @tanish2k09 dans https://github.com/storytold/photocraft/pull/2131</li>
+<li>correctif (pinceau) : interpoler la pression du stylet entre les traits de connexion Shift-click par @Ni-zav dans https://github.com/storytold/photocraft/pull/2890</li>
+<li>fix(transform) : commit Free Transform sur un click extérieur par @Ni-zav dans https://github.com/storytold/photocraft/pull/2909</li>
+<li>app.save : encodez sur le travailleur de sauvegarde, pas sur le fil de discussion de l'interface utilisateur (#2488) par @ahmedhosnypro dans https://github.com/storytold/photocraft/pull/2517</li>
+<li>correctif (raccourcis) : rejeter les liaisons mal formées et afficher correctement Plus par @Ni-zav dans https://github.com/storytold/photocraft/pull/3006</li>
+<li>Thèmes favoris du menu droit du bouton d'apparence click par @luniiya dans https://github.com/storytold/photocraft/pull/2445</li>
+<li>Render Video : les GIF animés gardent leur transparence (#3061) par @fabianghe dans https://github.com/storytold/photocraft/pull/3162</li>
+<li>correctif (type) : exclure le texte à l'intérieur des groupes cachés des tests d'accès automatiques par @Ni-zav dans https://github.com/storytold/photocraft/pull/3173</li>
+<li>Contrôles améliorés : zoom filaire avec pincement du trackpad (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2577</li>
+<li>Unités et règles : câblez la préférence d'unités de type (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2587</li>
+<li>fix(type) : utilisez la ligne correcte aux limites du curseur soft-wrap par @Ni-zav dans https://github.com/storytold/photocraft/pull/3174</li>
+<li>correctif (masques) : conserver l'alpha hors toile dans From Transparency par @Ni-zav dans https://github.com/storytold/photocraft/pull/3177</li>
+<li>Règles : gardez les graduations et les étiquettes hors du coin d'origine par @arthurdeka dans https://github.com/storytold/photocraft/pull/2617</li>
+<li>correctif (psd) : Améliorer l'interopérabilité et le décodage par @reneleonhardt dans https://github.com/storytold/photocraft/pull/1955</li>
+<li>correctif (couches) : remapper les groupes de couches liées lors de la copie entre documents par @Ni-zav dans https://github.com/storytold/photocraft/pull/3178</li>
+<li>HUD du pinceau : le fil varie la dureté du pinceau rond et la couleur de l'aperçu du pinceau (# 204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2640</li>
+<li>correctif (historique) : conserve une sélection de calque vide lors de l'annulation et du rétablissement par @Ni-zav dans https://github.com/storytold/photocraft/pull/3179</li>
+<li>Calques d'alignement automatique : enregistrez les tranches de mise au point et d'exposition par intensité lorsqu'il n'y a rien qui corresponde par @ragtux dans https://github.com/storytold/photocraft/pull/2065</li>
+<li>Double-clicquer une vignette de masque dans le panneau Calques ouvre désormais les paramètres de ce masque par @Lyraedan dans https://github.com/storytold/photocraft/pull/2654</li>
+<li>correctif (couches) : sélectionnez les plages de décalage dans l'ordre des lignes du panneau visible (#3041) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3180</li>
+<li>Auto-Blend Stack Images : fusionnez la couche fusionnée par niveau de pyramide par région d'énergie, avec contrôle du halo par @ragtux dans https://github.com/storytold/photocraft/pull/2044</li>
+<li>fix(io) : préserver l'opacité du remplissage du groupe dans les exportations OpenRaster par @Ni-zav dans https://github.com/storytold/photocraft/pull/3181</li>
+<li>Canal de contrôle : les méthodes de saisie rejettent les mauvais paramètres au lieu d'utiliser les valeurs par défaut (#2449) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2656</li>
+<li>correctif (vecteur) : transformations de chemin explicite pivot sur la couche cible (#3062) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3183</li>
+<li>Général : envoyez un bip une fois terminé pour les tâches en arrière-plan terminées (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2658</li>
+<li>correctif (vecteur) : préserve l'épaisseur de la ligne dynamique mise à l'échelle lors des modifications des points finaux par @Ni-zav dans https://github.com/storytold/photocraft/pull/3184</li>
+<li>correctif (actions) : évitez de rejouer deux fois les modifications du script Parcourir par @Ni-zav dans https://github.com/storytold/photocraft/pull/3190</li>
+<li>Test i18n : analyse les petits modules de test ; traduisez ce qui manquait par @herzer dans https://github.com/storytold/photocraft/pull/2660</li>
+<li>correctif (masques) : cuire une couverture en plumes lors de l'application d'un masque de calque par @Ni-zav dans https://github.com/storytold/photocraft/pull/3191</li>
+<li>Tapez : wire Font Preview Size pour les exemples de menu de polices (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2668</li>
+<li>Correction (vidéo) : conserver les images originales pour restaurer l'image et afficher la vidéo modifiée par @Ni-zav dans https://github.com/storytold/photocraft/pull/3192</li>
+<li>Améliorer les détails de l'aperçu zoomé de Liquify par @Elvis33LE dans https://github.com/storytold/photocraft/pull/2715</li>
+<li>fix(compose) : préserve la couverture Dissolve pour les ajustements, les styles et le clipping par @Ni-zav dans https://github.com/storytold/photocraft/pull/3195</li>
+<li>Outil de remplacement de couleur sur la barre d'outils (#1045) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2719</li>
+<li>correctif (formes) : conserver le contour transformé lors des modifications de géométrie en direct inchangées par @Ni-zav dans https://github.com/storytold/photocraft/pull/3197</li>
+<li>Outil de recadrage : Nouveau/Supprimer le préréglage de recadrage enregistre et supprime les préréglages utilisateur (#1919) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2723</li>
+<li>Testez le déplacement des bords des calques selon les profondeurs de bits et les modes d'affichage par @Skyfuller1303 dans https://github.com/storytold/photocraft/pull/2738</li>
+<li>fix(type) : conserver le formatage des paragraphes vides de fin par @Ni-zav dans https://github.com/storytold/photocraft/pull/3198</li>
+<li>Conservez les champs de ratio de recadrage personnalisés modifiables par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3209</li>
+<li>raw : adapter les couleurs non DNG au JPEG intégré de la caméra par @switch87 dans https://github.com/storytold/photocraft/pull/2135</li>
+<li>Outils Ajouter un point d'ancrage et Supprimer un point d'ancrage (#1044) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2756</li>
+<li>fix(crop) : stabilisez le redimensionnement et appliquez immédiatement les changements de ratio par @TheTeslak dans https://github.com/storytold/photocraft/pull/3206</li>
+<li>Panneau Calques : chargez une police de secours pour les noms de calques dans d'autres scripts (#2275) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2758</li>
+<li>Tapez : ⇧⌘&gt; / ⇧⌘&lt; changez la taille des caractères (et travaillez sur les mises en page nordiques/allemandes) par @Simonfalentinolesen dans https://github.com/storytold/photocraft/pull/2402</li>
+<li>CLI : le lot joue une action à partir d'un ensemble d'actions avec l'ensemble chargé (#2786) par @vangel76 dans https://github.com/storytold/photocraft/pull/2792</li>
+<li>Droplets : réalisez les actions que leurs étapes Play Action appellent (#2794) par @vangel76 dans https://github.com/storytold/photocraft/pull/2800</li>
+<li>Spot Healing : Content-Aware dab n'analyse plus chaque patch dans son intégralité (#2771) par @vangel76 dans https://github.com/storytold/photocraft/pull/2805</li>
+<li>Calques : double-click sur la vignette d'un calque de forme pour choisir sa couleur de remplissage (#2812) par @vangel76 dans https://github.com/storytold/photocraft/pull/2820</li>
+<li>TGA : les options targa demandent 24 ou 32 bits/pixel, comme dans Photoshop par @Matty-PW dans https://github.com/storytold/photocraft/pull/2760</li>
+<li>Outils : mémorisez les options d'outils entre les lancements (#2814) par @vangel76 dans https://github.com/storytold/photocraft/pull/2822</li>
+<li>Barre d'options : Réinitialiser l'outil et Réinitialiser tous les outils (#2825) par @vangel76 dans https://github.com/storytold/photocraft/pull/2830</li>
+<li>Transformation gratuite : menu droit click avec les modes de transformation, rotation et retournement (#2832) par @vangel76 dans https://github.com/storytold/photocraft/pull/2840</li>
+<li>Canaux : Éditer &gt; La transformation fonctionne sur un canal alpha ciblé (#2835) par @vangel76 dans https://github.com/storytold/photocraft/pull/2845</li>
+<li>Transformation gratuite : curseur de rotation thématique et lecture en direct de l'angle/taille/décalage (#1767) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2809</li>
+<li>Outil de déplacement : faites glisser un rectangle de sélection depuis un emplacement vide pour sélectionner les calques qu'il touche (#2844) par @vangel76 dans https://github.com/storytold/photocraft/pull/2852</li>
+<li>Vue : Prévisualisation du motif mosaïque le document autour du canevas (#1067) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2803</li>
+<li>Outils : Freeform Pen et Curvature Pen (#1054) par @vangel76 dans https://github.com/storytold/photocraft/pull/2856</li>
+<li>Outils : Masque de type horizontal et vertical (#1055) par @vangel76 dans https://github.com/storytold/photocraft/pull/2861</li>
+<li>Accélérez l'actualisation des grands masques à plumes par @Elvis33LE dans https://github.com/storytold/photocraft/pull/2417</li>
+<li>Outils : outil Artboard (#2858) par @vangel76 dans https://github.com/storytold/photocraft/pull/2862</li>
+<li>Outils : Perspective Crop (#1043) par @vangel76 dans https://github.com/storytold/photocraft/pull/2864</li>
+<li>Actions : basculer, réorganiser et supprimer des étapes uniques (#2855) par @vangel76 dans https://github.com/storytold/photocraft/pull/2866</li>
+<li>Champs de texte : la sélection par glisser-déposer dans un champ d'une seule ligne suit le x du pointeur (#1946) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2821</li>
+<li>perf : réponses répétées de Sélection du sujet du dernier masque (#2865) par @vangel76 dans https://github.com/storytold/photocraft/pull/2870</li>
+<li>Listes déroulantes : appuyez, faites glisser sur une option et relâchez pour la choisir (#2735) par @LloydNicholson dans https://github.com/storytold/photocraft/pull/2854</li>
+<li>perf : Sélectionnez › Modifier › Plume/Lisse sur 24 MP dans les limites du budget (#2873) par @vangel76 dans https://github.com/storytold/photocraft/pull/2882</li>
+<li>Affiner les contrôles d'arrêt de dégradé dans les propriétés et l'éditeur de dégradé par @Skyfuller1303 dans https://github.com/storytold/photocraft/pull/2859</li>
+<li>perf : la duplication d'un calque se recompose uniquement là où la copie dessine (#2883) par @vangel76 dans https://github.com/storytold/photocraft/pull/2884</li>
+<li>Barre d'état : les boutons se trouvent à l'intérieur de la barre avec des étiquettes centrées (#2823) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2876</li>
+<li>perf : conservez les tuiles GPU résidentes et convertissez les tuiles 32 bits directement pour les touches de pinceau sur les documents volumineux (#2900) par @vangel76 dans https://github.com/storytold/photocraft/pull/2902</li>
+<li>Thèmes : niveaux de luminosité gris clair et clair Pro de Photoshop (#2661) par @ngrafton2006 dans https://github.com/storytold/photocraft/pull/2892</li>
+<li>scorecard : vingt lignes décrivent le travail déjà dans l'arbre par @Erica4fr dans https://github.com/storytold/photocraft/pull/2894</li>
+<li>perf : les sélections de sélection sur les documents volumineux sont construites ligne par ligne (#2888) par @vangel76 dans https://github.com/storytold/photocraft/pull/2907</li>
+<li>Outils : Outil Cadre (#2914) par @vangel76 dans https://github.com/storytold/photocraft/pull/2915</li>
+<li>Ajoutez une boîte de dialogue de mise en page de guide de style Photoshop et un aperçu en direct par @Skyfuller1303 dans https://github.com/storytold/photocraft/pull/2930</li>
+<li>perf : coller un calque se recompose uniquement là où il dessine (#2901) par @vangel76 dans https://github.com/storytold/photocraft/pull/2917</li>
+<li>Taille de l'image : rééchantillonnage de Photoshop, mesuré par @Unemars dans https://github.com/storytold/photocraft/pull/2451</li>
+<li>Barre d'outils : les thèmes Pro dessinent des glyphes d'outils aux deux tiers du bouton (#2665) par @ngrafton2006 dans https://github.com/storytold/photocraft/pull/2932</li>
+<li>Pont MCP : reconnectez-vous avant la mort des sockets inactifs, réessayez les lectures, délais d'attente exploitables (#2487) par @ahmedhosnypro dans https://github.com/storytold/photocraft/pull/2507</li>
+<li>Listes déroulantes : tapez une lettre pour accéder à un élément, entrez pour choisir (#1481) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2948</li>
+<li>Calques : cliquez à droite sur click sur une ligne d'effet pour le menu de style de calque (#2846) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2950</li>
+<li>Objets intelligents : les objets intelligents liés suivent leurs fichiers lorsqu'ils sont ouverts par @KattKnight dans https://github.com/storytold/photocraft/pull/2510</li>
+<li>Place : fil Créez toujours des objets intelligents lors du placement (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/2543</li>
+<li>Préférences : Wire Tools &gt; Afficher les valeurs de transformation (#204) par @timothydaly1 dans https://github.com/storytold/photocraft/pull/2953</li>
+<li>Canaux : désactivez RVB lorsqu'un alpha ou un masque est affiché et sélectionnez à partir de ce canal. par @Desayuno64 dans https://github.com/storytold/photocraft/pull/2555</li>
+<li>Outils : fil Activer le panoramique panoramique pour l'outil Main (#204) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2964</li>
+<li>app.open : ouvrez le répertoire .pcraft via la racine de lecture automatisée (#2490) par @ahmedhosnypro dans https://github.com/storytold/photocraft/pull/2581</li>
+<li>Calques : boîte de dialogue Remplissage de motif pour les calques de remplissage de motif nouveaux et modifiés (#2908) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2979</li>
+<li>Style de calque : sélecteur de contour et éditeur de contour (#2912) par @vangel76 dans https://github.com/storytold/photocraft/pull/2949</li>
+<li>Tapez : wire Afficher les noms de polices en anglais (#204) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2981</li>
+<li>Champs de texte : menu d'édition droit-click (#2921) par @vangel76 dans https://github.com/storytold/photocraft/pull/2952</li>
+<li>contrôle : autoriser les requêtes qui font fonctionner une boîte de dialogue Camera Raw ouverte par @harrisonoconnorhover dans https://github.com/storytold/photocraft/pull/2988</li>
+<li>Grille de pixels : estompez la couleur de la ligne sur les tons moyens au lieu de l'inverser d'une seule luminance par @Jeremy8776 dans https://github.com/storytold/photocraft/pull/2990</li>
+<li>Tests : la vérification de l'ellipse de sélection parcourt plusieurs périodes de tirets de la courbe par @ahmedhosnypro dans https://github.com/storytold/photocraft/pull/3018</li>
+<li>Correction des contrôles Shape Stroke, des interactions contextuelles et des couleurs de peinture par @optimalbytee dans https://github.com/storytold/photocraft/pull/3019</li>
+<li>Correction des menus contextuels du canevas se fermant immédiatement lors des pressions sur le trackpad par @zi-ger dans https://github.com/storytold/photocraft/pull/3029</li>
+<li>Documents 8 bits : les coups de pinceau doux et à faible débit sont tramés au lieu d'être regroupés par @tanish2k09 dans https://github.com/storytold/photocraft/pull/3237</li>
+<li>fix(ui) : largeur d'espacement des suffixes réduite dans le champ de valeur pour éviter tout débordement (#3040) par @peppepol dans https://github.com/storytold/photocraft/pull/3084</li>
+<li>Règles : rappelez-vous Afficher › Règles pour les nouveaux documents ; guides comme f64 (#2918) par @vangel76 dans https://github.com/storytold/photocraft/pull/2954</li>
+<li>Miroir du shell pour les langues d'interface utilisateur de droite à gauche (DIST-220-4) par @MathMattTech dans https://github.com/storytold/photocraft/pull/3114</li>
+<li>Tapez : Modifier › Coller, copier et sélectionner › Tous les travaux sur le texte en cours de saisie (#2893) par @vangel76 dans https://github.com/storytold/photocraft/pull/2960</li>
+<li>Nouveau document : les préréglages suivent les unités et les règles › Résolutions prédéfinies (#204) par @paulo-vc dans https://github.com/storytold/photocraft/pull/3126</li>
+<li>Boîtes de dialogue : la boîte de dialogue en direct reste devant les anciennes (invites de profil empilées bloquées) par @kayrockscreenprinting dans https://github.com/storytold/photocraft/pull/3140</li>
+<li>Menu Fenêtre : liste les documents ouverts, celui actif vérifié (#2991) par @brennanMKE dans https://github.com/storytold/photocraft/pull/3147</li>
+<li>correctif (ui) : respecter les valeurs par défaut des listes déroulantes explicites dans les boîtes de dialogue de schéma (#3056) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3149</li>
+<li>PSD : ne gonflez pas une image fusionnée ZIP dépassant le budget au moment de l'analyse (#2926) par @vangel76 dans https://github.com/storytold/photocraft/pull/2967</li>
+<li>i18n(es) : revue en style natif du catalogue espagnol (échange Dodge/Burn, terminologie Photoshop, registre formel) par @diegozpy dans https://github.com/storytold/photocraft/pull/3154</li>
+<li>Outil de saisie : menu droit click lors de l'édition du texte (#2968) par @vangel76 dans https://github.com/storytold/photocraft/pull/2969</li>
+<li>Préserver la plage HDR dans les ajustements flottants et les statistiques de pile par @grlessa dans https://github.com/storytold/photocraft/pull/2592</li>
+<li>Accélérez les grandes opérations Content-Aware Scale par @Elvis33LE dans https://github.com/storytold/photocraft/pull/2596</li>
+<li>correctif (zoom) : Alt-click avec l'outil Zoom sur les ordinateurs de bureau prenant Alt+cli… par @kavishkashehan726-sudo dans https://github.com/storytold/photocraft/pull/3164</li>
+<li>Sélectionner et masquer : aperçu en direct dans les modes d'affichage de Photoshop (#1754) par @vangel76 dans https://github.com/storytold/photocraft/pull/2970</li>
+<li>Cinq accélérations de sortie exactes : extrusion dense de 160 s à 0,39 s par @excited-raccoon dans https://github.com/storytold/photocraft/pull/2685</li>
+<li>correctif (ui) : respecter l'échelle native du bureau sous la mise à l'échelle automatique de l'interface utilisateur (#1278) par @dylanmtaylor dans https://github.com/storytold/photocraft/pull/3165</li>
+<li>correctif : crash de macOS Monterey sur Intel Iris Pro (désactiver la validation indirecte wgpu) par @mjohnson7cd dans https://github.com/storytold/photocraft/pull/3171</li>
+<li>correctif (moteur) : autoriser le ciblage du masque de calque et du masque vectoriel via canal.target (#2458) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/2705</li>
+<li>Outils : outil Convertir un point dans le menu déroulant Stylo (# 3204) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3211</li>
+<li>correctif (ui) : la configuration d'épreuve personnalisée inchangée remplace le profil d'épreuve de document actif (#3055) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3213</li>
+<li>PSD : terminez l'arborescence des calques dans psd_to_document ; TIFF en couches vérifie la profondeur du groupe (#2940) par @vangel76 dans https://github.com/storytold/photocraft/pull/2975</li>
+<li>Tapez le menu : Anti-Alias › Aucun en premier et cochez ; les contrôles suivent le calque édité (#2983) par @vangel76 dans https://github.com/storytold/photocraft/pull/2984</li>
+<li>correctif (ui) : Global Light s'ouvre avec des valeurs obsolètes et écrase le paramètre de document (#3054) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3217</li>
+<li>Outil Color Sampler (#1046) par @roaldosulejmani dans https://github.com/storytold/photocraft/pull/2753</li>
+<li>Clip le damier sous des échantillons de couleurs arrondis dans leurs coins (#3208) par @myangaa1 dans https://github.com/storytold/photocraft/pull/3363</li>
+<li>ci : refactoriser les workflows pour utiliser storytold/craft-common-actions par @dylanmtaylor dans https://github.com/storytold/photocraft/pull/3432</li>
+<li>Accélérez le Tilt-Shift avec le découpage du halo existant par niveau par @optimalbytee dans https://github.com/storytold/photocraft/pull/2880</li>
+<li>Sélectionner et masquer : Refine Edge Brush (#2972) par @vangel76 dans https://github.com/storytold/photocraft/pull/2989</li>
+<li>Calques : Combiner les formes fusionne les calques de forme sélectionnés (#2400) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2906</li>
+<li>Déplacez les onglets du dock entre les groupes individuellement par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3239</li>
+<li>Ajoutez des préréglages de dégradé arc-en-ciel intégrés par @Myosh1 dans https://github.com/storytold/photocraft/pull/2916</li>
+<li>Contour de pinceau natif et curseurs en croix sur macOS, X11 et Wayland (#1343) par @tanish2k09 dans https://github.com/storytold/photocraft/pull/3243</li>
+<li>Menus : un sous-menu reste ouvert pendant que le pointeur se dirige vers lui (#1218) par @brennanMKE dans https://github.com/storytold/photocraft/pull/3251</li>
+<li>i18n(pt-br) : catalogue complet en portugais brésilien (+782 chaînes d'interface utilisateur, de filtre et d'outils manquantes) par @onicafe dans https://github.com/storytold/photocraft/pull/3254</li>
+<li>Zoom et outils manuels : cliquez à droite sur click sur le canevas du menu d'affichage (#3242) par @LloydNicholson dans https://github.com/storytold/photocraft/pull/3255</li>
+<li>Masque rapide : un début vide et Select All stay apart (#2743) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/2922</li>
+<li>brut : chargez les tampons intermédiaires et de taille de segment JPEG sans perte par rapport à max_alloc (#2925) par @switch87 dans https://github.com/storytold/photocraft/pull/3194</li>
+<li>Empêcher le flash blanc lors de l'ouverture du sélecteur de couleurs d'écran par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3256</li>
+<li>Ajout de la lecture/écriture FITS (images d'astronomie) par @dmoulton dans https://github.com/storytold/photocraft/pull/2956</li>
+<li>ui : conservez le bouton du panneau Couleur dans le coin vers lequel il a été déplacé par @switch87 dans https://github.com/storytold/photocraft/pull/3275</li>
+<li>Règles : restent à niveau et entièrement cochées sur une vue pivotée ; les guides tournent avec l'image (#3233) par @vangel76 dans https://github.com/storytold/photocraft/pull/3282</li>
+<li>ui : aperçus de la poussière et des rayures en pleine résolution, tels qu'appliqués par @switch87 dans https://github.com/storytold/photocraft/pull/3287</li>
+<li>Ouvrez plusieurs fichiers dans l'ordre des noms, en les gardant pour les ouvertures en arrière-plan (#3248) par @myangaa1 dans https://github.com/storytold/photocraft/pull/3293</li>
+<li>GPU Canvas : évaluez les textures d'affichage avant de les construire (#2934) par @vangel76 dans https://github.com/storytold/photocraft/pull/3299</li>
+<li>Outil de déplacement : tapez double-click sur le canevas pour le modifier (#1132) par @LloydNicholson dans https://github.com/storytold/photocraft/pull/3300</li>
+<li>Transformation gratuite : à droite-click W ou H pour choisir leur unité (#3235) par @dhiorns15 dans https://github.com/storytold/photocraft/pull/3301</li>
+<li>Type : curseurs d'axe de police variables ; la taille optique suit la taille des caractères (#2985) par @vangel76 dans https://github.com/storytold/photocraft/pull/2996</li>
+<li>Tests : panic_hunt réexécute une commande expirée avant de l'appeler hung (#2994) par @vangel76 dans https://github.com/storytold/photocraft/pull/2997</li>
+<li>Cycle Color Lookup LUTs avec clavier et molette par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3304</li>
+<li>Barre des tâches Fix/3144 maximisée par @axlecoffee dans https://github.com/storytold/photocraft/pull/3308</li>
+<li>Gestion des fichiers : câblez les aperçus d'image pour intégrer une vignette PSD (#204) par @davidmann4 dans https://github.com/storytold/photocraft/pull/2971</li>
+<li>Sélectionner et masquer : sortie vers un nouveau document, avec ou sans masque de calque (#2998) par @vangel76 dans https://github.com/storytold/photocraft/pull/3007</li>
+<li>Inspecter : signaler le masque vectoriel de chaque calque par @KnottyDyes dans https://github.com/storytold/photocraft/pull/2980</li>
+<li>Stylo : Alt casse une poignée pendant le dessin et un glisser-déplacer extrait les poignées de la première ancre (# 3306) par @vangel76 dans https://github.com/storytold/photocraft/pull/3314.</li>
+<li>Type : Warp on live type prend les styles warp et reste modifiable, aucune invite (#3004) par @vangel76 dans https://github.com/storytold/photocraft/pull/3008</li>
+<li>feat(ui) : Le flou de mouvement et d'autres angles de filtre obtiennent le cadran d'angle (#3152) par @Kartik8Dwivedi dans https://github.com/storytold/photocraft/pull/3407</li>
+<li>Transformation gratuite : ⌘-glissez un type modifiable d'échelle de coin au lieu de le déformer (#3010) par @vangel76 dans https://github.com/storytold/photocraft/pull/3012</li>
+<li>Panneau de couleurs : HSB sur les valeurs sRGB, comme Photoshop (#3323) par @LloydNicholson dans https://github.com/storytold/photocraft/pull/3327</li>
+<li>correctif (formes) : barre d'options Remplissage/Contour modifie la forme sélectionnée par @alonfaraj dans https://github.com/storytold/photocraft/pull/3370</li>
+<li>Profils ICC installés dans les menus de profil et Mirror in Print par @Moiztermind dans https://github.com/storytold/photocraft/pull/3011</li>
+<li>Fenêtre : une fenêtre enregistrée alors qu'elle est réduite se rouvre à la taille minimale, et non 160 × 64 par @KattKnight dans https://github.com/storytold/photocraft/pull/3380</li>
+<li>i18n : traduisez les étiquettes des boîtes de dialogue Sélectionner et Masquer (#3014) par @vangel76 dans https://github.com/storytold/photocraft/pull/3015</li>
+<li>Couleur : respectez la balise EXIF sRGB à l'ouverture ; fil Ignorer la balise de profil EXIF (#204) par @timothydaly1 dans https://github.com/storytold/photocraft/pull/3026</li>
+<li>Linux : dites-le lorsqu'aucune boîte de dialogue de fichier ne peut s'ouvrir (#3354) ; lire ldconfig sur les systèmes non anglais par @DomiLuebben dans https://github.com/storytold/photocraft/pull/3397</li>
+<li>correctif (peinture) : respectez Lock All sur les masques de calque (#3094) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3111</li>
+<li>Transformation : Distorsion, Perspective et Warp maintiennent les calques de forme actifs (#3009) par @vangel76 dans https://github.com/storytold/photocraft/pull/3025</li>
+<li>correctif (dégradé) : respecter tout verrouiller sur les remplissages dégradés (#3093) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3120</li>
+<li>correctif (ui) : concentrez et sélectionnez le champ hexadécimal lorsque le sélecteur de couleurs s'ouvre (#3375) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3408</li>
+<li>Tapez : analysez les polices système à partir du fil de discussion de l'interface utilisateur (#3021) par @vangel76 dans https://github.com/storytold/photocraft/pull/3030</li>
+<li>correctif (type) : respectez Lock All sur les modifications de texte (#3092) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3132</li>
+<li>fix(type) : renvoie le curseur après l'insertion CRLF normalisée (#3074) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3138</li>
+<li>Boîte à outils : rendre la flèche d'échange de couleurs plus claire par @Jeremy8776 dans https://github.com/storytold/photocraft/pull/3416</li>
+<li>fix(type) : naviguer dans la ligne adjacente avec un grand interligne (#3066) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3141</li>
+<li>correctif (ui) : suppression des bordures doublées de la barre d'options réintroduites dans UI.9 par @rafi612 dans https://github.com/storytold/photocraft/pull/3425</li>
+<li>Transformer le chemin : Distorsion, Perspective et Warp s'appliquent aux chemins (#3027) par @vangel76 dans https://github.com/storytold/photocraft/pull/3032</li>
+<li>correctif (recadrage) : déverrouillez l'arrière-plan lors de l'extension du canevas (#3081) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3158</li>
+<li>Correction de la gestion des couleurs d'aperçu de Camera Raw par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3427</li>
+<li>correctif (mode) : restaurer les pixels indexés après avoir effacé la transparence (#3080) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3153</li>
+<li>Marquee : noms d'étapes de l'historique de sélection à une seule ligne/colonne (#3031) par @vangel76 dans https://github.com/storytold/photocraft/pull/3035</li>
+<li>correctif (cli) : ignorer la vue enregistrée et enregistrer les étapes par lots (#3058) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3143</li>
+<li>Propriétés : un nouveau calque de réglage ou de remplissage affiche ses paramètres, pas son masque (#3369) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3429</li>
+<li>correctif (filtres) : traitement intact des masques Reveal All (#3082) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3156</li>
+<li>Gardez le panneau Couleur sélectionné lors du changement de thème (# 3371) par @prekabreki dans https://github.com/storytold/photocraft/pull/3433</li>
+<li>correctif (historique) : lire les sources d'historique verrouillées (#3076) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3186</li>
+<li>automatisation : refuse edit.installedProfiles, il analyse les dossiers de profil du système d'exploitation par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3763</li>
+<li>Conserver les contrôles de transformation avec les pixels sélectionnés déplacés (#3402) par @prekabreki dans https://github.com/storytold/photocraft/pull/3436</li>
+<li>SVG : avertir lorsque le texte n'a pas de police à utiliser (corrige le test FreeBSD svg) par @diegochagas dans https://github.com/storytold/photocraft/pull/3168</li>
+<li>Outil de recadrage : le passage à un autre outil valide le recadrage en attente (#3368) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3451</li>
+<li>fix(warp) : Perspective Warp déplace uniquement la partie sélectionnée d'un lien… par @kavishkashehan726-sudo dans https://github.com/storytold/photocraft/pull/3148</li>
+<li>Chemins : tracé de trait avec n'importe quel outil basé sur un pinceau et simulation de pression (#2978) par @vangel76 dans https://github.com/storytold/photocraft/pull/3039</li>
+<li>fix(image) : la rotation arbitraire du canevas déplace les enfants verrouillés en position en groupes (#3078) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3155</li>
+<li>i18n(cs) : traduisez les étiquettes dynamiques qui manquaient au catalogue tchèque par @Losminek dans https://github.com/storytold/photocraft/pull/3454</li>
+<li>Outil Artboard : les boutons « + » ajoutent un tableau à côté de celui sélectionné ; ⇧ garde les proportions (#3033) par @vangel76 dans https://github.com/storytold/photocraft/pull/3046</li>
+<li>fix(transform) : la transformation d'identité rend les bords de sélection à plumes translucides (#3079) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3159</li>
+<li>Laissez la liste des étapes d'actions s'agrandir avec son panel de @kotulsky dans https://github.com/storytold/photocraft/pull/3460</li>
+<li>Calques : les groupes clip suivent New Layer, Arrange, Reorder and Delete (#2203) par @timothydaly1 dans https://github.com/storytold/photocraft/pull/3090</li>
+<li>Tapez Masque : Maj/Alt lors de la validation, ajoutez ou soustrayez de la sélection ; pas de ligne Layers pour le texte de travail (#3036) par @vangel76 dans https://github.com/storytold/photocraft/pull/3069</li>
+<li>Exportez rapidement chaque calque sélectionné en tant que PNG distinct par @kotulsky dans https://github.com/storytold/photocraft/pull/3462</li>
+<li>Tableau de bord : les tests du chemin de sauvegarde FILE-216-5 sont dans l'arborescence de @davidmann4 dans https://github.com/storytold/photocraft/pull/3476</li>
+<li>Actions : une commande qui exécute d'autres commandes est enregistrée une fois (#3067) par @vangel76 dans https://github.com/storytold/photocraft/pull/3072</li>
+<li>Tapez : triple-click sélectionne une ligne, quadruple un paragraphe, cinq click sélectionne tout le texte (#3493) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3496</li>
+<li>Calques : la boîte de dialogue Nouveau calque (Calque › Nouveau › Calque…, ⇧⌘N) par @timothydaly1 dans https://github.com/storytold/photocraft/pull/3104</li>
+<li>Sélecteur de couleurs : pas plus grand que celui de Photoshop (532 × 376 points, soit 682 × 437), boutons dimensionnés selon leurs étiquettes par @kayrockscreenprinting dans https://github.com/storytold/photocraft/pull/3500</li>
+<li>Plans de travail : un tableau déplacé au-delà de l'origine de la toile fait grandir la toile vers la gauche/le haut (#3070) par @vangel76 dans https://github.com/storytold/photocraft/pull/3073</li>
+<li>Optimisez la couverture de pinceau calculée et les écritures de lignes raster natives par @optimalbytee dans https://github.com/storytold/photocraft/pull/3098</li>
+<li>fix(crop) : le propre Annuler/Rétablir de la boîte de recadrage (#3145) par @dottedt dans https://github.com/storytold/photocraft/pull/3510</li>
+<li>Stylo de forme libre : Alt-clicks dessine des segments droits ; Cmd/Ctrl est une sélection directe avec les nouveaux stylos (#3085) de @vangel76 dans https://github.com/storytold/photocraft/pull/3087</li>
+<li>test (dégradé) : gardez la traînée de diamant médiane sur la toile (# 3172) par @dottedt dans https://github.com/storytold/photocraft/pull/3512</li>
+<li>Actions : le dernier filtre est enregistré comme le filtre répété (# 3089) par @vangel76 dans https://github.com/storytold/photocraft/pull/3091</li>
+<li>Content-Aware Move : Transform On Drop (#3071) par @vangel76 dans https://github.com/storytold/photocraft/pull/3095</li>
+<li>Champs numériques : unités saisies, étiquettes de nettoyage, réinitialisation double-click (#3099) par @vangel76 dans https://github.com/storytold/photocraft/pull/3100</li>
+<li>Conservez la couleur Camera Raw ajustée pendant le réglage et recadrez les bordures du Nikon D5100 par @optimalbytee dans https://github.com/storytold/photocraft/pull/3201</li>
+<li>Préserver les espaces environnants dans les noms de couches OpenRaster par @imSlicedBread dans https://github.com/storytold/photocraft/pull/3207</li>
+<li>Tests : un harnais GPU à la fois dans chaque binaire de test GPU (crash WARP) par @dhiorns15 dans https://github.com/storytold/photocraft/pull/3212</li>
+<li>Content-Aware Scale : boîte de transformation avec aperçu en direct (#3096) par @vangel76 dans https://github.com/storytold/photocraft/pull/3103</li>
+<li>automatisation : doc.place lit un fichier via la racine de lecture (#2810) par @switch87 dans https://github.com/storytold/photocraft/pull/3215</li>
+<li>Panneau Calques : modes de fusion du cycle Shift+Plus/Moins ; les effets déposés dans la Corbeille sont supprimés (#3102) par @vangel76 dans https://github.com/storytold/photocraft/pull/3106</li>
+<li>Le type mobile conserve son rendu : les plans de travail vers les fichiers ne suppriment plus le texte PSD de @fabianghe dans https://github.com/storytold/photocraft/pull/3218</li>
+<li>Raccourcis : touches de pinceau indépendantes de la mise en page, touches allemandes de Photoshop plus une solution de secours pour toutes les mises en page (#3109) par @vangel76 dans https://github.com/storytold/photocraft/pull/3112</li>
+<li>Liquify : le pinceau s'efface jusqu'à néant sur son bord à chaque densité (#2606) par @dhiorns15 dans https://github.com/storytold/photocraft/pull/3241</li>
+<li>test (peinture) : épinglez l'empreinte du tampon de retouche sur l'anneau pleine taille par @switch87 dans https://github.com/storytold/photocraft/pull/3258</li>
+<li>Panneau Calques : un masque glissé dans la Corbeille demande de l'appliquer ou de le supprimer (#3113) par @vangel76 dans https://github.com/storytold/photocraft/pull/3118</li>
+<li>Export PNG : Indexed Color conserve la résolution du document (#3047) par @vangel76 dans https://github.com/storytold/photocraft/pull/3271</li>
+<li>Panneau Calques : faire glisser le masque vectoriel vers la Corbeille demande de supprimer uniquement le masque (#3119) de @vangel76 dans https://github.com/storytold/photocraft/pull/3125</li>
+<li>Interface : une préférence Activer les animations (#3273) par @vangel76 dans https://github.com/storytold/photocraft/pull/3276</li>
+<li>Édition &gt; Copier prend un masque de calque ciblé, donc les masques voyagent entre les calques et les documents (#2928) par @vbasky dans https://github.com/storytold/photocraft/pull/3267</li>
+<li>automatisation : exporter des couches, des ensembles de données et des CSV via les racines accordées (#3216) par @switch87 dans https://github.com/storytold/photocraft/pull/3230</li>
+<li>Tapez : revenez aux polices khmères, laotiennes et birmanes installées (#218) par @RaccoonPie-314 dans https://github.com/storytold/photocraft/pull/3259</li>
+<li>Courbes : mode crayon, points Smooth et Edit (#3088) par @vangel76 dans https://github.com/storytold/photocraft/pull/3108</li>
+<li>correctif (io) : les dégradés PSD fluides ne dépassent plus leurs arrêts (#3028) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3285</li>
+<li>Codecs : décodez le PNM directement dans le tampon de sortie budgétisé (#2938) par @vangel76 dans https://github.com/storytold/photocraft/pull/3291</li>
+<li>Propriétés : les calques de réglage des courbes obtiennent les pipettes noir/gris/blanc (#3110) de @vangel76 dans https://github.com/storytold/photocraft/pull/3115</li>
+<li>Format : admettez le canevas .pcraft déclaré avant de le charger (#2935) par @vangel76 dans https://github.com/storytold/photocraft/pull/3295</li>
+<li>correctif (format) : conserver le nom de fichier Enregistrer sous dans les manifestes .pcraft (#3312) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3319</li>
+<li>Niveaux : compte-gouttes à pointe noire, grise et blanche (#3116) par @vangel76 dans https://github.com/storytold/photocraft/pull/3128</li>
+<li>Puppet Warp : le maillage suit le contour de l'objet (#3105) par @vangel76 dans https://github.com/storytold/photocraft/pull/3117</li>
+<li>Clone Source : modes de fusion lien W/H et superposition (#3298) par @vangel76 dans https://github.com/storytold/photocraft/pull/3310</li>
+<li>Vanishing Point : éditeur de plan sur toile avec Créer/Modifier un plan, grille et coller (#3122) par @vangel76 dans https://github.com/storytold/photocraft/pull/3133</li>
+<li>Laissez <code>[</code> réduire le pinceau à 1 px (#3229) par @myangaa1 dans https://github.com/storytold/photocraft/pull/3332</li>
+<li>MCP : command_batch dit que ce n'est pas atomique, et la documentation explique la récupération par @KnottyDyes dans https://github.com/storytold/photocraft/pull/3338</li>
+<li>Nouveau document : une véritable catégorie récente de documents récemment créés (#3131) par @vangel76 dans https://github.com/storytold/photocraft/pull/3135</li>
+<li>Les effets de groupe suivent les effets de leurs enfants, pas seulement leurs pixels (#3274) par @alexanderalber dans https://github.com/storytold/photocraft/pull/3326</li>
+<li>Format : la réouverture d'un .pcraft partage à nouveau des tuiles dédupliquées (#3315) par @vangel76 dans https://github.com/storytold/photocraft/pull/3339</li>
+<li>correctif (préréglages) : ne jamais écraser les fichiers de préréglages ou d'actions qui n'ont pas pu être chargés par @tms-h dans https://github.com/storytold/photocraft/pull/3346</li>
+<li>correctif (moteur) : créez de nouveaux masques de calque à la profondeur du document par @piero-83 dans https://github.com/storytold/photocraft/pull/3359</li>
+<li>feat(api) : ajouter le chemin du fichier à document.inspect par @Mr-Pearce dans https://github.com/storytold/photocraft/pull/3398</li>
+<li>Ctrl-click les vignettes de forme et de chemin pour charger les sélections de @kotulsky dans https://github.com/storytold/photocraft/pull/3449</li>
+<li>correctif (sélection) : étendue de la plage de couleurs à la sélection active (#3313) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3366</li>
+<li>Calque › Dupliquer le calque… demande le nom de la copie et le document de destination (#3348) par @prekabreki dans https://github.com/storytold/photocraft/pull/3440</li>
+<li>Copier prend chaque calque sélectionné, Coller les recrée (#2478) par @DomiLuebben dans https://github.com/storytold/photocraft/pull/3394</li>
+<li>Correction du nom et de l'emplacement du titre du trou GIMP par @philipzae dans https://github.com/storytold/photocraft/pull/3517</li>
+<li>Les commandes vérifient un &quot;calque&quot; explicite au lieu du calque actif par @fabianghe dans https://github.com/storytold/photocraft/pull/3466</li>
+<li>Curseur pinceau : les pointes en forme tracent leur contour (séparé du #2516) par @siraxe dans https://github.com/storytold/photocraft/pull/3467</li>
+<li>perf : Édition &gt; Effacer les travaux vignette par vignette sur les grandes sélections (#3463) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3482</li>
+<li>Sauvegarde automatique : nettoyage au mieux après la validation ; balayer les bundles de récupération orphelins (# 3489) par @vangel76 dans https://github.com/storytold/photocraft/pull/3502</li>
+<li>Raw : DNG LinearRaw monochromes ouverts (1 échantillon par pixel) (#3497) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3503</li>
+<li>Dégradés PSD : lisez la méthode d'interpolation écrite par Photoshop ; ajouter Smooth par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3442</li>
+<li>CI : restauration des tests, des catalogues et du portail de taille Web par @skylartaylor dans https://github.com/storytold/photocraft/pull/3923</li>
+<li>Balance des couleurs : niveaux par canal et courbes gamma de Photoshop par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3443</li>
+<li>Enregistrer : afficher la progression de l'enregistrement sous la forme Saving NN% dans la barre d'état et le titre de l'onglet (#3389) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3485</li>
+<li>Préréglages Warp : grilles de contrôle Bézier de Photoshop au lieu des approximations de @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3444</li>
+<li>Pinceau et crayon : maintenez ~ pour effacer et mode Effacer (#3439) par @itsF4LCON dans https://github.com/storytold/photocraft/pull/3465</li>
+<li>Outils Content-Aware : plus rapides, annulables immédiatement, mêmes pixels (P21, P22, P49) par @Unemars dans https://github.com/storytold/photocraft/pull/3395</li>
+<li>fix(io) : une nouvelle couche de type Metrics n'écrit aucun stub Txt2 vide (#3514) par @dottedt dans https://github.com/storytold/photocraft/pull/3529</li>
+<li>Pinceau : affiche la chaîne de lissage du pinceau au pointeur (#3479) par @vangel76 dans https://github.com/storytold/photocraft/pull/3526</li>
+<li>Sécurité : vérifiez les entrées de build AppImage par @skylartaylor dans https://github.com/storytold/photocraft/pull/2270</li>
+<li>Panneau Historique : instantanés (bouton de l'appareil photo, lignes d'instantanés, historique.*Snapshot) (#2966) par @itsF4LCON dans https://github.com/storytold/photocraft/pull/3545</li>
+<li>feat(ui) : Nouveau guide de Photoshop : unités et couleurs par @FinnNk dans https://github.com/storytold/photocraft/pull/3553</li>
+<li>Outils : la touche Maj change les outils par défaut, comme dans Photoshop (#3525) par @vangel76 dans https://github.com/storytold/photocraft/pull/3528</li>
+<li>Utilisez Fontconfig pour la découverte de polices Linux (#2330) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/2961</li>
+<li>Utilisez le profil ICC de chaque sortie XRandR dans le sélecteur d'écran de @Sir-Starch dans https://github.com/storytold/photocraft/pull/2962</li>
+<li>Prise en charge des profils ICC de surveillance automatique sur Linux X11 par @Sir-Starch dans https://github.com/storytold/photocraft/pull/2963</li>
+<li>Sécurité : renforcez les exportations de documents et les entrées d'automatisation par @skylartaylor dans https://github.com/storytold/photocraft/pull/2269</li>
+<li>GIF animé : chaque image se charge dans des calques vidéo (#572) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/2999</li>
+<li>Budget mémoire GPU : lire la RAM installée sur Windows par @dhiorns15 dans https://github.com/storytold/photocraft/pull/3189</li>
+<li>fix(ui) : correction de l'orientation de l'indicateur clipping-mask par @Skyfuller1303 dans https://github.com/storytold/photocraft/pull/3037</li>
+<li>Installateur Windows : refusez Windows 7 et 8 avec un message clair (#2310) par @dhiorns15 dans https://github.com/storytold/photocraft/pull/3261</li>
+<li>Format : indexez les entrées ZIP par nom et utilisez crc32fast (#3474) par @vangel76 dans https://github.com/storytold/photocraft/pull/3488</li>
+<li>psd : renforcement des analyseurs binaires autonomes (fuzz + tests de propriétés, correction du dégradé/échantillon) par @agent-346022 dans https://github.com/storytold/photocraft/pull/3542</li>
+<li>Ajouter la localisation vietnamienne par @duydev dans https://github.com/storytold/photocraft/pull/2636</li>
+<li>Linux : StartupWMClass est l'identifiant de l'application de la fenêtre par @atoslins dans https://github.com/storytold/photocraft/pull/3481</li>
+<li>M11 : dix autres tâches d'acceptation MCP (11-20) pour FILE-216-6 par @reynold-hu dans https://github.com/storytold/photocraft/pull/3562</li>
+<li>correctif (ui) : ne rouvrez pas les paramètres de pinceau flottants au redémarrage par @Ni-zav dans https://github.com/storytold/photocraft/pull/3570</li>
+<li>M11 : six tâches d'acceptation d'arrondi (31-36) par @reynold-hu dans https://github.com/storytold/photocraft/pull/3568</li>
+<li>Barre d'options : les commandes de l'outil Dégradé s'affichent dans chaque thème (#3601) par @vangel76 dans https://github.com/storytold/photocraft/pull/3607</li>
+<li>fix(ui) : une étiquette d'élimination pour le chrome à largeur fixe, afin que les traductions ne puissent pas être dépassées (#3580) par @dottedt dans https://github.com/storytold/photocraft/pull/3616</li>
+<li>test(ui) : marquee shift+alt avant que le glisser ne croise la sélection (#208) par @agent-346022 dans https://github.com/storytold/photocraft/pull/3624</li>
+<li>Outil de recadrage : un cadre redimensionné enclenche sa poignée, pas le pointeur (#3638) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3640</li>
+<li>correctif (transformation) : conserver les aperçus du voisin le plus proche sur les texels originaux par @Ni-zav dans https://github.com/storytold/photocraft/pull/3688</li>
+<li>correctif (moteur) : image.canvasSize rejette les ancres non répertoriées au lieu d'atterrir entre deux (#2946) par @agent-346022 dans https://github.com/storytold/photocraft/pull/3572</li>
+<li>Édition › Transformation › Inclinaison : les coins et les côtés se déplacent le long d'un axe, comme Photoshop (#3437) par @kayrockscreenprinting dans https://github.com/storytold/photocraft/pull/3590</li>
+<li>PSD : les ressources du canal alpha comptent la transparence fusionnée ; DisplayInfo 13 octets par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3577</li>
+<li>Glows : la rampe précise de Photoshop ; la source centrale brille inversée après le contour par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3578</li>
+<li>Toile : le zoom par molette/pincement sur le carton garde l'image visible (#3720) par @FredApps dans https://github.com/storytold/photocraft/pull/3731</li>
+<li>Sélectionner : ouvrez les boîtes de dialogue Enregistrer la sélection et Charger la sélection (#3713) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3738</li>
+<li>Barre d'outils : les pastilles de couleur se trouvent à nouveau juste sous les outils par @Unemars dans https://github.com/storytold/photocraft/pull/3745</li>
+<li>Correction : les images vidéo sur les calques fonctionnent à l'aide d'une demande de dialogue de dossier (#3513) par @peppepol dans https://github.com/storytold/photocraft/pull/3718</li>
+<li>Menus : restez à l'écart de la barre des tâches lorsque Wayland masque la position de la fenêtre (#3737) par @FredApps dans https://github.com/storytold/photocraft/pull/3739</li>
+<li>i18n(it) : traduire les étiquettes dynamiques qui manquaient au catalogue italien par @fabiodalez-dev dans https://github.com/storytold/photocraft/pull/3742</li>
+<li>Biseaux de burin : la pente et la rampe des facettes de Photoshop se terminent par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3595</li>
+<li>Panneau de caractères : boutons de fonctionnalité OpenType (TYPE-218-5, #3752) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3757</li>
+<li>Pinceau : les traits symétriques en direct mettent à jour uniquement ce qui a changé (#3593) par @xsvm dans https://github.com/storytold/photocraft/pull/3605</li>
+<li>Déplacement : un masque de calque non lié se déplace seul lorsqu'il est ciblé (#3604) par @vangel76 dans https://github.com/storytold/photocraft/pull/3611</li>
+<li>fix(ui) : faites glisser un onglet de document hors de la bande pour le faire flotter dans sa propre fenêtre (#3733) par @bommerts dans https://github.com/storytold/photocraft/pull/3785</li>
+<li>correctif (web) : gardez le canevas stable pendant les sauvegardes prédéfinies par @zenjabba dans https://github.com/storytold/photocraft/pull/3805</li>
+<li>Interface utilisateur : faites glisser pour réorganiser les groupes d'échantillons et les dossiers prédéfinis (#3658) par @dottedt dans https://github.com/storytold/photocraft/pull/3828</li>
+<li>Gardez l'aperçu de la transformation visible pendant le panoramique (#3610) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3843</li>
+<li>perf : dessinez des fourmis en marche comme un seul maillage au lieu d'une forme de ligne par tiret par @JameEnder dans https://github.com/storytold/photocraft/pull/3846</li>
+<li>Échec de l'exécution de CLI lorsque la lecture d'une action enregistrée échoue par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3861</li>
+<li>Guides : Maj-glisser hors d'une règle atterrit sur la graduation de règle la plus proche (#3770) par @n-delic dans https://github.com/storytold/photocraft/pull/3796</li>
+<li>correctif (moteur) : un calque de type PSD nomme la police installée, pas une police inventée (#3556) par @dottedt dans https://github.com/storytold/photocraft/pull/3564</li>
+<li>Actions : rejouer les tests de recadrage, de filtres, de sélections et de texte stylisé sur un deuxième document (AUTO-219-4) par @reynold-hu dans https://github.com/storytold/photocraft/pull/3566</li>
+<li>exploit (psd) : arrêts de la carte de dégradé en importation CMJN, Lab, Gray et HSB et aller-retour par @echelon dans https://github.com/storytold/photocraft/pull/4033</li>
+<li>feat(save) : Fichier › Enregistrer conserve la qualité d'un JPEG et l'encodage avec perte/sans perte d'un WebP (#2399) par @echelon dans https://github.com/storytold/photocraft/pull/4032</li>
+<li>PSD : les identifiants de descripteur warp, list et time sont écrits sous forme de chaînes, comme Photoshop les écrit par @echelon dans https://github.com/storytold/photocraft/pull/4039</li>
+<li>correctif (liquéfier) : la vitesse du pointeur ne modifie plus la déformation (espacement continu des touches) par @echelon dans https://github.com/storytold/photocraft/pull/4047</li>
+<li>Mise à jour des traductions japonaises par @coolvitto dans https://github.com/storytold/photocraft/pull/3892</li>
+<li>UI : unifiez les entrées de texte brut sur un widget text_field (#3789) par @dottedt dans https://github.com/storytold/photocraft/pull/3896</li>
+<li>Calque › Exporter sous exporte chaque calque ou plan de travail sélectionné (# 3629) par @fabianghe dans https://github.com/storytold/photocraft/pull/3909</li>
+<li>UI : aperçu dans la boîte de dialogue de style Photoshop pour les boîtes de dialogue de filtre génériques (#3769) par @dottedt dans https://github.com/storytold/photocraft/pull/3877</li>
+<li>correctif (ui) : permet de sélectionner des formes et de modifier la couleur avec la sélection de chemin (#3915) par @seotarek dans https://github.com/storytold/photocraft/pull/3932</li>
+<li>Calques de type PSD : limites TySh, numéros AntiAlias et informations de version écrites comme Photoshop les écrit par @echelon dans https://github.com/storytold/photocraft/pull/4041</li>
+<li>PSD : le remplissage rastérisé et les calques intelligents restent rastérisés après l'enregistrement et la réouverture par @echelon dans https://github.com/storytold/photocraft/pull/4034</li>
+<li>Ignorer l'accueil lors de la fermeture d'un onglet de document (#3981) par @vbasky dans https://github.com/storytold/photocraft/pull/3984</li>
+<li>fix(ui) : affiche un curseur de pot de peinture pour l'outil Pot de peinture (#3968) par @MarekSpodBiedry dans https://github.com/storytold/photocraft/pull/3989</li>
+<li>correctif (ui) : ouvrez les choix de couleurs de calque à partir de l'icône de visibilité par @Ni-zav dans https://github.com/storytold/photocraft/pull/4001</li>
+<li>correctif (ui) : Rendre les étiquettes des cases à cocher non sélectionnables et afficher les curseurs de pointeur par @Ni-zav dans https://github.com/storytold/photocraft/pull/4002</li>
+<li>correctif (ui) : continuez à interroger les travaux de filtrage sur Linux inactif par @rozaqabdul656 dans https://github.com/storytold/photocraft/pull/3961</li>
+<li>Ajoutez WebP et une qualité facultative aux boîtes de dialogue d'exportation par lots par @zenjabba dans https://github.com/storytold/photocraft/pull/3956</li>
+<li>exploit (composer) : les documents de laboratoire évaluent l'inversion, la postérisation, le seuil, la luminosité/contraste et la carte de dégradé sur L, a, b par @echelon dans https://github.com/storytold/photocraft/pull/4038</li>
+<li>PSD : composite_rgba8 vérifie le budget de sortie et convertit les avions de manière faillible (#3639) par @vangel76 dans https://github.com/storytold/photocraft/pull/3651</li>
+<li>PSD : ne pré-attribuez pas de nœuds à partir du nombre de longueurs de chemin non rust (# 3635) par @vangel76 dans https://github.com/storytold/photocraft/pull/3654</li>
+<li>PSD : limite le remplissage nul des canaux de motif sous-dimensionnés (#3652) par @vangel76 dans https://github.com/storytold/photocraft/pull/3686</li>
+<li>PSD : liste de descripteurs de plafond/préallocation d'objets à partir des comptes untrusted (#3636) par @vangel76 dans https://github.com/storytold/photocraft/pull/3699</li>
+<li>correctif (moteur) : le filtre intelligent Displace ignore sa carte de déplacement mapPath (#3670) par @horknfbr dans https://github.com/storytold/photocraft/pull/3676</li>
+<li>PSD : l'objet intelligent Trnf encadre les points de contrôle de la chaîne personnalisée, pas le rect source (#3671) par @horknfbr dans https://github.com/storytold/photocraft/pull/3677</li>
+<li>feat(io) : importer les filtres intelligents Photoshop Displace avec leur carte intégrée (#3673) par @horknfbr dans https://github.com/storytold/photocraft/pull/3680</li>
+<li>Carte de dégradé : modifiez les arrêts de couleur sur la rampe par @arthurdeka dans https://github.com/storytold/photocraft/pull/3982</li>
+<li>Transformation gratuite : le style d'un calque s'affiche lorsque la boîte est ouverte, tiré du calque transformé (#3653) par @kayrockscreenprinting dans https://github.com/storytold/photocraft/pull/3696</li>
+<li>correctif (algo) : les déformations du maillage filtrent leur source lors du rétrécissement, afin que les lignes fines ne soient pas alias (#3672) par @horknfbr dans https://github.com/storytold/photocraft/pull/3678</li>
+<li>feat(io) : ouvrez les composites Krita .kra en tant que documents raster modifiables (#3692) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3700</li>
+<li>correctif (psd) : les canaux alpha multicanaux restent alpha ; une sauvegarde conserve les ressources et les blocs globaux par @echelon dans https://github.com/storytold/photocraft/pull/4031</li>
+<li>fix(layers) : identifiez le Background par structure, jamais par son nom anglais par @echelon dans https://github.com/storytold/photocraft/pull/4036</li>
+<li>Codecs : refusez les en-têtes PNG/WebP invraisemblables avant de les allouer (#3691) par @vangel76 dans https://github.com/storytold/photocraft/pull/3706</li>
+<li>PSD : évitez de cloner les données de la couche lors du remplissage et prédimensionnez le tampon de sortie (#3687) par @vangel76 dans https://github.com/storytold/photocraft/pull/3707</li>
+<li>Codecs : limitez la marche TIFF IFD par un budget d'entrée de taille de fichier (#3683) par @vangel76 dans https://github.com/storytold/photocraft/pull/3711</li>
+<li>Sélectionnez le noyau de mélange RVB normal une fois par tampon par @Streetblock dans https://github.com/storytold/photocraft/pull/3715</li>
+<li>Autoriser les masques vectoriels vides dans les proxys d'aperçu sous-échantillonnés par @Streetblock dans https://github.com/storytold/photocraft/pull/3716</li>
+<li>exploit (codecs) : décoder les anciennes images et palettes PCX (#3692) par @Ni-zav dans https://github.com/storytold/photocraft/pull/3701</li>
+<li>correctif (texte) : mise à l'échelle de la dilatation en faux gras avec mise à l'échelle des glyphes (#3705) par @nicolasfalesy dans https://github.com/storytold/photocraft/pull/3719</li>
+<li>Répondez à une authentification répétée avec &quot;déjà authentifié&quot; (#3668) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3723</li>
+<li>Codecs : chemins rapides entiers pour Image::convert (#3717) par @vangel76 dans https://github.com/storytold/photocraft/pull/3729</li>
+<li>automation : dites pourquoi une commande est désactivée dans engine.commands (#3664) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3740</li>
+<li>exploit : les touches de calque et de sélection de Photoshop (Ctrl+, bascule, Ctrl+, /, Ctrl+Alt+2, Ctrl+Alt+Backspace, Tab rename, Alt-click miniature) par @FinnNk dans https://github.com/storytold/photocraft/pull/3710
+* Affichage : mémorisez les Extras, Afficher et Snap To lors des redémarrages (# 3762) par @bommerts dans https://github.com/storytold/photocraft/pull/3787</li>
+<li>correctif (automatisation) : avertir lorsque le texte revient d'une police manquante (#3391) par @buivanvu94 dans https://github.com/storytold/photocraft/pull/3630</li>
+<li>Satin : La distance 0 dessine à 1 px, comme dans Photoshop par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3744</li>
+<li>Type : l'édition du texte conserve ses ligatures et ses alternatives OpenType (#3617) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3747</li>
+<li>Pinceaux : modes Hauteur/Soustraction de texture de Photoshop, Luminosité et Contraste (#3340) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3749</li>
+<li>Ajustement des couleurs brutes de l'appareil photo : lisez un aperçu Sony Adobe RVB en tant qu'Adobe RVB, et non sRVB par @Madcat71 dans https://github.com/storytold/photocraft/pull/3760</li>
+<li>Ombres/Rehauts : Photoshop, mesurés par @Unemars dans https://github.com/storytold/photocraft/pull/3765</li>
+<li>Noir &amp; Blanc : teinte comme le mode de fusion des couleurs, comme dans Photoshop par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3780</li>
+<li>Teinte/Saturation : courbe de saturation de Photoshop, ordre de luminosité et colorisation de la luminosité par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3781</li>
+<li>Historique : ajoutez les alias history.undo et history.redo (#3675) par @dottedt dans https://github.com/storytold/photocraft/pull/3786</li>
+<li>Correction de l'insertion d'ancre à chemin droit à la position touchée par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3856</li>
+<li>Préserver les couleurs HDR signées lors des transformations de surface par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3857</li>
+<li>Pinceaux : faites glisser un dossier de pinceaux dans un autre dossier (#2014) par @davidmann4 dans https://github.com/storytold/photocraft/pull/3851</li>
+<li>Conserver les valeurs d'encre CMJN lors de l'aplatissement et de la fusion (#3778) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3855</li>
+<li>Type : fil manquantGlyphProtection (bascule de secours du script) par @reynold-hu dans https://github.com/storytold/photocraft/pull/3863</li>
+<li>io : lisez la couleur du filtre photo de la version 3 en tant que XYZ, pas Lab (#3777) par @itrycodinganditsbad dans https://github.com/storytold/photocraft/pull/3790</li>
+<li>Espace de travail : câble Activer la barre d'options étroite (#204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/3870</li>
+<li>Couleur sélective (absolue) : échelle en fonction de la pièce dans laquelle se trouve l'encre, comme dans Photoshop par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3793</li>
+<li>Shift Edge se déplace d'une fraction de pixel afin que le curseur ne s'enclenche pas par @Desayuno64 dans https://github.com/storytold/photocraft/pull/3800</li>
+<li>Image &gt; Mode &gt; 32 bits/canal : conversion en lumière linéaire, comme le fait Photoshop par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3792</li>
+<li>Moteur : Aplatir tous les effets de calque conserve les masques de calque et vectoriels (# 3804) par @dottedt dans https://github.com/storytold/photocraft/pull/3835</li>
+<li>correctif (gpu) : vider toutes les 1 000 passes afin que les piles profondes ne s'empilent pas dans un seul tampon de commande par @JameEnder dans https://github.com/storytold/photocraft/pull/3844</li>
+<li>perf(gpu) : la texture d'un calque dupliqué commence comme une copie de sa source par @JameEnder dans https://github.com/storytold/photocraft/pull/3848</li>
+<li>perf : le Navigateur redessine uniquement la zone modifiée par @JameEnder dans https://github.com/storytold/photocraft/pull/3845</li>
+<li>perf : modifie, annule et recompose uniquement là où les calques ajoutés ou supprimés sont dessinés par @JameEnder dans https://github.com/storytold/photocraft/pull/3847</li>
+<li>Outil de suppression : créez un nouveau calque et supprimez-le après chaque trait par @diegochagas dans https://github.com/storytold/photocraft/pull/3808</li>
+<li>Espace de travail : panneaux emblématiques à repli automatique (# 204) par @reynold-hu dans https://github.com/storytold/photocraft/pull/3880</li>
+<li>Camera Raw sur raw ouvre : Clarté, Texture et Dehaze en lumière linéaire, mesurés par @Unemars en https://github.com/storytold/photocraft/pull/3815</li>
+<li>Styles de calque : préréglages de contours mesurés de Photoshop ; Recherche de contour de Satin par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3803</li>
+<li>correctif (objet intelligent) : conserve les pixels lors de la rastérisation du calque d'objet intelligent par @Gotix-eg dans https://github.com/storytold/photocraft/pull/3873</li>
+<li>PSD : écrivez les blocs 8B64 conservés au format 8BIM afin que Photoshop ouvre les fichiers dérivés du PSB par @MrCloudy2 dans https://github.com/storytold/photocraft/pull/3743</li>
+<li>fix(io) : conserver les tables de couleurs BMP indexées (#3802) par @Sir-Starch dans https://github.com/storytold/photocraft/pull/3869</li>
+<li>exploit : les touches d'outils de Photoshop (les flèches font tourner le pinceau, le nouveau type Shift-click, la couleur du canevas Espace+F) par @FinnNk dans https://github.com/storytold/photocraft/pull/3725</li>
+<li>Type PSD : lisez les styles des feuilles de l'exécution et placez le texte dans son cadre Txt2 (#3795, #1317) par @FredApps dans https://github.com/storytold/photocraft/pull/3819</li>
+<li>Les calques fusionnés et estampillés conservent leurs limites de contenu en CMJN et Lab par @dgliwa dans https://github.com/storytold/photocraft/pull/3886</li>
+<li>Préserver les cibles de chaîne survivantes et la visibilité lors de la suppression par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3887</li>
+<li>Calques : fusionner un groupe pour un groupe sélectionné (#3832) par @FredApps dans https://github.com/storytold/photocraft/pull/3888</li>
+<li>test(cms) : valider les points de terminaison CMJN spécifiques au profil par @FredApps dans https://github.com/storytold/photocraft/pull/3890</li>
+<li>Comptez les séquences vidéo dans les budgets de mémoire historique par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3894</li>
+<li>Mélangez les bords de sélection filtrés avec l'alpha prémultiplié par @jonathanwxh-cell dans https://github.com/storytold/photocraft/pull/3895</li>
+<li>Couleur : convertissez les profils intégrés en entrée uniquement en espace de travail ouvert (#3876) par @HEOJUNFO dans https://github.com/storytold/photocraft/pull/3900</li>
+<li>Format : vérifier les tailles des motifs lors du chargement (#3478) par @vangel76 dans https://github.com/storytold/photocraft/pull/3484</li>
+<li>Format : décodage de blob sécurisé contre les débordements et lectures ZIP avec vérification des limites (#3486) par @vangel76 dans https://github.com/storytold/photocraft/pull/3501</li>
+<li>Fuzz : ignorez les mêmes restes de build dans chaque caisse de fuzz par @s17sh70x2jfl031ag dans https://github.com/storytold/photocraft/pull/3585</li>
+<li>HEIF : déplacez la broche heic-rs de 0.1.1 vers 0.1.4 par @s17sh70x2jfl031ag dans https://github.com/storytold/photocraft/pull/3637</li>
+<li>Codecs : décode uniquement la partie EXR demandée (#3721) par @vangel76 dans https://github.com/storytold/photocraft/pull/3722</li>
+<li>Codecs : décode les formats JPEG et TIFF compressés CCITT G3/G4 (#3712) par @vangel76 en https://github.com/storytold/photocraft/pull/3727</li>
+<li>correctif (linux) : évitez la duplication du lanceur de bureau AppImage (#3623) par @Korg1ch dans https://github.com/storytold/photocraft/pull/3641</li>
+<li>ops : comptez les masques de sélection dans le budget de pixels de l'historique par @Streetblock dans https://github.com/storytold/photocraft/pull/3614</li>
+<li>Vérifiez les archives PngSuite et les fichiers de corpus mis en cache par @zenjabba dans https://github.com/storytold/photocraft/pull/3973</li>
+<li>exploit : Alt+Annuler → Réinitialiser les boîtes de dialogue de commande opt-in par @seandellis dans https://github.com/storytold/photocraft/pull/3871</li>
+<li>i18n(tr) : ajout du catalogue de traduction de l'interface utilisateur turque par @yeniufuklar-com dans https://github.com/storytold/photocraft/pull/3809</li>
+<li>i18n : ajout d'une traduction de l'interface utilisateur en hongrois (hu) par @Skaywalker dans https://github.com/storytold/photocraft/pull/3831</li>
+<li>Workflow de publication : transmettre les secrets de signature Azure par @echelon dans https://github.com/storytold/photocraft/pull/3794</li>
+<li>Correction principale : taille majuscule wasm, test Windows Export As, fenêtre d'aperçu du filtre (portée et crash), avertissements de police en double de CLI par @echelon dans https://github.com/storytold/photocraft/pull/4147</li>
+<li>Web : wasm de retour sous la porte de 24 Mio avec une marge de ~1 Mio (25.38 → 24.17 MB) par @bommerts dans https://github.com/storytold/photocraft/pull/4253</li>
+</ul>
+<h2>Nouveaux contributeurs</h2>
+<ul>
+<li>@skylartaylor a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3097</li>
+<li>@herzer a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2660</li>
+<li>@Skyfuller1303 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2738</li>
+<li>@imSlicedBread a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3209</li>
+<li>@TheTeslak a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3206</li>
+<li>@Simonfalentinolesen a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2402</li>
+<li>@Matty-PW a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2760</li>
+<li>@ngrafton2006 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2892</li>
+<li>@KattKnight a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2510</li>
+<li>@timothydaly1 a fait sa première contribution dans https://github.com/storytold/photocraft/pull/2953</li>
+<li>@Desayuno64 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2555</li>
+<li>@peppepol a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3084</li>
+<li>@MathMattTech a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3114</li>
+<li>@paulo-vc a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3126</li>
+<li>@diegozpy a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3154</li>
+<li>@grlessa a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2592</li>
+<li>@dylanmtaylor a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3165</li>
+<li>@mjohnson7cd a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3171</li>
+<li>@myangaa1 a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3363</li>
+<li>@Myosh1 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2916</li>
+<li>@onicafe a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3254</li>
+<li>@dmoulton a fait sa première contribution dans https://github.com/storytold/photocraft/pull/2956</li>
+<li>@axlecoffee a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3308</li>
+<li>@KnottyDyes a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2980</li>
+<li>@Kartik8Dwivedi a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3407</li>
+<li>@Moiztermind a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3011</li>
+<li>@DomiLuebben a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3397</li>
+<li>@Losminek a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3454</li>
+<li>@dottedt a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3510</li>
+<li>@RaccoonPie-314 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3259</li>
+<li>@tms-h a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3346</li>
+<li>@piero-83 a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3359</li>
+<li>@Mr-Pearce a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3398</li>
+<li>@philipzae a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3517</li>
+<li>@agent-346022 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3542</li>
+<li>@duydev a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/2636</li>
+<li>@atoslins a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3481</li>
+<li>@FredApps a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3731</li>
+<li>@fabiodalez-dev a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3742</li>
+<li>@JameEnder a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3846</li>
+<li>@jonathanwxh-cell a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3861</li>
+<li>@n-delic a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3796</li>
+<li>@seotarek a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3932</li>
+<li>@horknfbr a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3676</li>
+<li>@nicolasfalesy a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3719</li>
+<li>@Madcat71 a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3760</li>
+<li>@Gotix-eg a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3873</li>
+<li>@dgliwa a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3886</li>
+<li>@s17sh70x2jfl031ag a fait sa première contribution dans https://github.com/storytold/photocraft/pull/3585</li>
+<li>@Korg1ch a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3641</li>
+<li>@seandellis a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3871</li>
+<li>@yeniufuklar-com a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3809</li>
+<li>@Skaywalker a apporté sa première contribution dans https://github.com/storytold/photocraft/pull/3831
+<strong>Changelog complet</strong> : https://github.com/storytold/photocraft/compare/v0.7.0...v0.8.2</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/storytold/photocraft">histoire racontée/photocraft</a> · <code>v0.8.2</code> · 2026-10-12 · <a href="https://github.com/storytold/photocraft/releases/tag/v0.8.2">version en amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>photocraft v0.8.2</h1>
+<h2>What's Changed</h2>
+<ul>
+<li>Adopt shared docking while preserving panel controls and workspaces by @skylartaylor in https://github.com/storytold/photocraft/pull/3097</li>
+<li>GPU composite: reuse unchanged lower-stack chunks for property edits by @Elvis33LE in https://github.com/storytold/photocraft/pull/1169</li>
+<li>Design: bounded GPU stack prefix reuse for property edits by @Elvis33LE in https://github.com/storytold/photocraft/pull/1164</li>
+<li>feat(ui): allow disabling Studio canvas background dots by @Ni-zav in https://github.com/storytold/photocraft/pull/2317</li>
+<li>File Info shows Camera Data from EXIF/XMP (#2424) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2692</li>
+<li>fix(canvas): update Move transform-control cursors on first hover by @Ni-zav in https://github.com/storytold/photocraft/pull/2887</li>
+<li>Releasing a brush stroke no longer freezes: the commit takes the pixels the live stroke already drew (P32: 136 ms → 0.8 ms) by @tanish2k09 in https://github.com/storytold/photocraft/pull/2131</li>
+<li>fix(brush): interpolate pen pressure across Shift-click connecting strokes by @Ni-zav in https://github.com/storytold/photocraft/pull/2890</li>
+<li>fix(transform): commit Free Transform on an outside click by @Ni-zav in https://github.com/storytold/photocraft/pull/2909</li>
+<li>app.save: encode on the save worker, not the UI thread (#2488) by @ahmedhosnypro in https://github.com/storytold/photocraft/pull/2517</li>
+<li>fix(shortcuts): reject malformed bindings and correctly display Plus by @Ni-zav in https://github.com/storytold/photocraft/pull/3006</li>
+<li>Favorite themes from the appearance button's right-click menu by @luniiya in https://github.com/storytold/photocraft/pull/2445</li>
+<li>Render Video: animated GIFs keep their transparency (#3061) by @fabianghe in https://github.com/storytold/photocraft/pull/3162</li>
+<li>fix(type): exclude text inside hidden groups from automatic hit testing by @Ni-zav in https://github.com/storytold/photocraft/pull/3173</li>
+<li>Enhanced Controls: wire Zoom with Trackpad Pinch (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2577</li>
+<li>Units &amp; Rulers: wire the Type units preference (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2587</li>
+<li>fix(type): use the correct line at soft-wrap caret boundaries by @Ni-zav in https://github.com/storytold/photocraft/pull/3174</li>
+<li>fix(masks): preserve off-canvas alpha in From Transparency by @Ni-zav in https://github.com/storytold/photocraft/pull/3177</li>
+<li>Rulers: keep tick marks and labels out of the origin corner by @arthurdeka in https://github.com/storytold/photocraft/pull/2617</li>
+<li>fix(psd): Improve interoperability and decoding by @reneleonhardt in https://github.com/storytold/photocraft/pull/1955</li>
+<li>fix(layers): remap linked-layer groups when copying between documents by @Ni-zav in https://github.com/storytold/photocraft/pull/3178</li>
+<li>Brush HUD: wire Vary Round Brush Hardness and Brush Preview Color (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2640</li>
+<li>fix(history): preserve an empty layer selection across undo and redo by @Ni-zav in https://github.com/storytold/photocraft/pull/3179</li>
+<li>Auto-Align Layers: register focus and exposure brackets by intensity when there is nothing to match by @ragtux in https://github.com/storytold/photocraft/pull/2065</li>
+<li>Double-clicking a mask thumbnail in the Layers panel now opens that mask's settings by @Lyraedan in https://github.com/storytold/photocraft/pull/2654</li>
+<li>fix(layers): select Shift ranges in visible panel row order (#3041) by @Ni-zav in https://github.com/storytold/photocraft/pull/3180</li>
+<li>Auto-Blend Stack Images: fuse the merged layer per pyramid level by region energy, with halo control by @ragtux in https://github.com/storytold/photocraft/pull/2044</li>
+<li>fix(io): preserve group fill opacity in OpenRaster exports by @Ni-zav in https://github.com/storytold/photocraft/pull/3181</li>
+<li>Control channel: input methods reject bad params instead of using defaults (#2449) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2656</li>
+<li>fix(vector): pivot explicit path transforms on target layer (#3062) by @Ni-zav in https://github.com/storytold/photocraft/pull/3183</li>
+<li>General: wire Beep When Done for finished background jobs (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2658</li>
+<li>fix(vector): preserve scaled live-line thickness during endpoint edits by @Ni-zav in https://github.com/storytold/photocraft/pull/3184</li>
+<li>fix(actions): avoid replaying Browse script edits twice by @Ni-zav in https://github.com/storytold/photocraft/pull/3190</li>
+<li>i18n test: scan past small test modules; translate what it was missing by @herzer in https://github.com/storytold/photocraft/pull/2660</li>
+<li>fix(masks): bake feathered coverage when applying a layer mask by @Ni-zav in https://github.com/storytold/photocraft/pull/3191</li>
+<li>Type: wire Font Preview Size for the font menu samples (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2668</li>
+<li>fix(video): retain original footage for Restore Frame and Show Altered Video by @Ni-zav in https://github.com/storytold/photocraft/pull/3192</li>
+<li>Improve zoomed Liquify preview detail by @Elvis33LE in https://github.com/storytold/photocraft/pull/2715</li>
+<li>fix(compose): preserve Dissolve coverage for adjustments, styles and clipping by @Ni-zav in https://github.com/storytold/photocraft/pull/3195</li>
+<li>Color Replacement tool on the toolbar (#1045) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2719</li>
+<li>fix(shapes): preserve transformed outline on unchanged live geometry edits by @Ni-zav in https://github.com/storytold/photocraft/pull/3197</li>
+<li>Crop tool: New / Delete Crop Preset saves and removes user presets (#1919) by @davidmann4 in https://github.com/storytold/photocraft/pull/2723</li>
+<li>Test Move layer edges across bit depths and view modes by @Skyfuller1303 in https://github.com/storytold/photocraft/pull/2738</li>
+<li>fix(type): preserve formatting for trailing empty paragraphs by @Ni-zav in https://github.com/storytold/photocraft/pull/3198</li>
+<li>Keep custom crop ratio fields editable by @imSlicedBread in https://github.com/storytold/photocraft/pull/3209</li>
+<li>raw: fit non-DNG colour to the camera's embedded JPEG by @switch87 in https://github.com/storytold/photocraft/pull/2135</li>
+<li>Add Anchor Point and Delete Anchor Point tools (#1044) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2756</li>
+<li>fix(crop): stabilize resizing and apply ratio changes immediately by @TheTeslak in https://github.com/storytold/photocraft/pull/3206</li>
+<li>Layers panel: load a fallback font for layer names in other scripts (#2275) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2758</li>
+<li>Type: ⇧⌘&gt; / ⇧⌘&lt; change the type size (and work on Nordic/German layouts) by @Simonfalentinolesen in https://github.com/storytold/photocraft/pull/2402</li>
+<li>CLI: batch plays an action from an Actions set with the whole set loaded (#2786) by @vangel76 in https://github.com/storytold/photocraft/pull/2792</li>
+<li>Droplets: carry the actions their Play Action steps call (#2794) by @vangel76 in https://github.com/storytold/photocraft/pull/2800</li>
+<li>Spot Healing: Content-Aware dab no longer scans every patch in full (#2771) by @vangel76 in https://github.com/storytold/photocraft/pull/2805</li>
+<li>Layers: double-click a shape layer's thumbnail to pick its fill colour (#2812) by @vangel76 in https://github.com/storytold/photocraft/pull/2820</li>
+<li>TGA: targa options asks for 24 or 32 bits/pixel, same as in Photoshop by @Matty-PW in https://github.com/storytold/photocraft/pull/2760</li>
+<li>Tools: remember tool options between launches (#2814) by @vangel76 in https://github.com/storytold/photocraft/pull/2822</li>
+<li>Options bar: Reset Tool and Reset All Tools (#2825) by @vangel76 in https://github.com/storytold/photocraft/pull/2830</li>
+<li>Free Transform: right-click menu with the transform modes, rotate and flip (#2832) by @vangel76 in https://github.com/storytold/photocraft/pull/2840</li>
+<li>Channels: Edit › Transform works on a targeted alpha channel (#2835) by @vangel76 in https://github.com/storytold/photocraft/pull/2845</li>
+<li>Free Transform: themed rotate cursor and live angle/size/offset readout (#1767) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2809</li>
+<li>Move tool: drag a marquee from an empty spot to select the layers it touches (#2844) by @vangel76 in https://github.com/storytold/photocraft/pull/2852</li>
+<li>View: Pattern Preview tiles the document around the canvas (#1067) by @davidmann4 in https://github.com/storytold/photocraft/pull/2803</li>
+<li>Tools: Freeform Pen and Curvature Pen (#1054) by @vangel76 in https://github.com/storytold/photocraft/pull/2856</li>
+<li>Tools: Horizontal and Vertical Type Mask (#1055) by @vangel76 in https://github.com/storytold/photocraft/pull/2861</li>
+<li>Speed up large feathered mask refreshes by @Elvis33LE in https://github.com/storytold/photocraft/pull/2417</li>
+<li>Tools: Artboard tool (#2858) by @vangel76 in https://github.com/storytold/photocraft/pull/2862</li>
+<li>Tools: Perspective Crop (#1043) by @vangel76 in https://github.com/storytold/photocraft/pull/2864</li>
+<li>Actions: toggle, reorder and delete single steps (#2855) by @vangel76 in https://github.com/storytold/photocraft/pull/2866</li>
+<li>Text fields: drag-selecting in a single-line field follows the pointer's x (#1946) by @davidmann4 in https://github.com/storytold/photocraft/pull/2821</li>
+<li>perf: repeated Select Subject answers from the last mask (#2865) by @vangel76 in https://github.com/storytold/photocraft/pull/2870</li>
+<li>Dropdowns: press, drag onto an option and release to choose it (#2735) by @LloydNicholson in https://github.com/storytold/photocraft/pull/2854</li>
+<li>perf: Select › Modify › Feather/Smooth on 24 MP within budget (#2873) by @vangel76 in https://github.com/storytold/photocraft/pull/2882</li>
+<li>Refine gradient stop controls in Properties and Gradient Editor by @Skyfuller1303 in https://github.com/storytold/photocraft/pull/2859</li>
+<li>perf: duplicating a layer recomposites only where the copy draws (#2883) by @vangel76 in https://github.com/storytold/photocraft/pull/2884</li>
+<li>Status bar: buttons sit inside the bar with centred labels (#2823) by @davidmann4 in https://github.com/storytold/photocraft/pull/2876</li>
+<li>perf: keep resident GPU tiles and convert 32-bit tiles directly for brush dabs on large documents (#2900) by @vangel76 in https://github.com/storytold/photocraft/pull/2902</li>
+<li>Themes: Photoshop's light-gray and light Pro brightness levels (#2661) by @ngrafton2006 in https://github.com/storytold/photocraft/pull/2892</li>
+<li>scorecard: twenty rows describe work that is already in the tree by @Erica4fr in https://github.com/storytold/photocraft/pull/2894</li>
+<li>perf: marquee selections on large documents are built row by row (#2888) by @vangel76 in https://github.com/storytold/photocraft/pull/2907</li>
+<li>Tools: Frame tool (#2914) by @vangel76 in https://github.com/storytold/photocraft/pull/2915</li>
+<li>Add Photoshop-style guide layout dialog and live preview by @Skyfuller1303 in https://github.com/storytold/photocraft/pull/2930</li>
+<li>perf: pasting a layer recomposites only where it draws (#2901) by @vangel76 in https://github.com/storytold/photocraft/pull/2917</li>
+<li>Image Size: Photoshop's resampling, measured by @Unemars in https://github.com/storytold/photocraft/pull/2451</li>
+<li>Toolbar: Pro themes draw tool glyphs at two thirds of the button (#2665) by @ngrafton2006 in https://github.com/storytold/photocraft/pull/2932</li>
+<li>MCP bridge: reconnect before idle sockets die, retry reads, actionable timeouts (#2487) by @ahmedhosnypro in https://github.com/storytold/photocraft/pull/2507</li>
+<li>Dropdowns: type a letter to jump to an item, Enter to choose (#1481) by @davidmann4 in https://github.com/storytold/photocraft/pull/2948</li>
+<li>Layers: right-click an effect row for the layer style menu (#2846) by @davidmann4 in https://github.com/storytold/photocraft/pull/2950</li>
+<li>Smart Objects: linked smart objects follow their files while open by @KattKnight in https://github.com/storytold/photocraft/pull/2510</li>
+<li>Place: wire Always Create Smart Objects When Placing (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/2543</li>
+<li>Preferences: wire Tools › Show Transformation Values (#204) by @timothydaly1 in https://github.com/storytold/photocraft/pull/2953</li>
+<li>Channels: keep RGB off while an alpha or mask is shown, and select from that channel. by @Desayuno64 in https://github.com/storytold/photocraft/pull/2555</li>
+<li>Tools: wire Enable Flick Panning for the Hand tool (#204) by @davidmann4 in https://github.com/storytold/photocraft/pull/2964</li>
+<li>app.open: open directory .pcraft through the automation read root (#2490) by @ahmedhosnypro in https://github.com/storytold/photocraft/pull/2581</li>
+<li>Layers: Pattern Fill dialog for new and edited pattern fill layers (#2908) by @davidmann4 in https://github.com/storytold/photocraft/pull/2979</li>
+<li>Layer Style: contour picker and Contour Editor (#2912) by @vangel76 in https://github.com/storytold/photocraft/pull/2949</li>
+<li>Type: wire Show Font Names in English (#204) by @davidmann4 in https://github.com/storytold/photocraft/pull/2981</li>
+<li>Text fields: right-click edit menu (#2921) by @vangel76 in https://github.com/storytold/photocraft/pull/2952</li>
+<li>control: allow requests that operate an open Camera Raw dialog by @harrisonoconnorhover in https://github.com/storytold/photocraft/pull/2988</li>
+<li>Pixel grid: fade the line colour across mid-tones instead of flipping at one luma by @Jeremy8776 in https://github.com/storytold/photocraft/pull/2990</li>
+<li>Tests: the marquee ellipse check walks several dash periods of the curve by @ahmedhosnypro in https://github.com/storytold/photocraft/pull/3018</li>
+<li>Fix Shape Stroke controls, popup interactions and paint colours by @optimalbytee in https://github.com/storytold/photocraft/pull/3019</li>
+<li>Fix canvas context menus closing immediately on trackpad taps by @zi-ger in https://github.com/storytold/photocraft/pull/3029</li>
+<li>8-bit documents: soft, low-flow brush strokes are dithered instead of banded by @tanish2k09 in https://github.com/storytold/photocraft/pull/3237</li>
+<li>fix(ui): reduced suffix spacing width in the value field to prevent overflow (#3040) by @peppepol in https://github.com/storytold/photocraft/pull/3084</li>
+<li>Rulers: remember View › Rulers for new documents; guides as f64 (#2918) by @vangel76 in https://github.com/storytold/photocraft/pull/2954</li>
+<li>Mirror the shell for right-to-left UI languages (DIST-220-4) by @MathMattTech in https://github.com/storytold/photocraft/pull/3114</li>
+<li>Type: Edit › Paste, Copy and Select › All work on the text being typed (#2893) by @vangel76 in https://github.com/storytold/photocraft/pull/2960</li>
+<li>New Document: presets follow Units &amp; Rulers › Preset Resolutions (#204) by @paulo-vc in https://github.com/storytold/photocraft/pull/3126</li>
+<li>Dialogs: the live dialog stays in front of older ones (stuck stacked profile prompts) by @kayrockscreenprinting in https://github.com/storytold/photocraft/pull/3140</li>
+<li>Window menu: list the open documents, the active one checked (#2991) by @brennanMKE in https://github.com/storytold/photocraft/pull/3147</li>
+<li>fix(ui): respect explicit dropdown defaults in schema dialogs (#3056) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3149</li>
+<li>PSD: don't inflate an over-budget ZIP merged image at parse time (#2926) by @vangel76 in https://github.com/storytold/photocraft/pull/2967</li>
+<li>i18n(es): native-style review of the Spanish catalog (Dodge/Burn swap, Photoshop terminology, formal register) by @diegozpy in https://github.com/storytold/photocraft/pull/3154</li>
+<li>Type tool: right-click menu while editing text (#2968) by @vangel76 in https://github.com/storytold/photocraft/pull/2969</li>
+<li>Preserve HDR range in float adjustments and stack statistics by @grlessa in https://github.com/storytold/photocraft/pull/2592</li>
+<li>Speed up large Content-Aware Scale operations by @Elvis33LE in https://github.com/storytold/photocraft/pull/2596</li>
+<li>fix(zoom): Alt-click with the Zoom tool on desktops that take Alt+cli… by @kavishkashehan726-sudo in https://github.com/storytold/photocraft/pull/3164</li>
+<li>Select and Mask: live preview in Photoshop's view modes (#1754) by @vangel76 in https://github.com/storytold/photocraft/pull/2970</li>
+<li>Five exact-output speedups: dense Extrude 160s to 0.39s by @excited-raccoon in https://github.com/storytold/photocraft/pull/2685</li>
+<li>fix(ui): respect native desktop scale under Auto UI scaling (#1278) by @dylanmtaylor in https://github.com/storytold/photocraft/pull/3165</li>
+<li>fix: macOS Monterey crash on Intel Iris Pro (disable wgpu indirect validation) by @mjohnson7cd in https://github.com/storytold/photocraft/pull/3171</li>
+<li>fix(engine): allow targeting layer mask and vector mask via channel.target (#2458) by @buivanvu94 in https://github.com/storytold/photocraft/pull/2705</li>
+<li>Tools: Convert Point tool in the Pen flyout (#3204) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3211</li>
+<li>fix(ui): unchanged Custom Proof Setup replaces active document proof profile (#3055) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3213</li>
+<li>PSD: cap the layer tree in psd_to_document; layered TIFF checks group depth (#2940) by @vangel76 in https://github.com/storytold/photocraft/pull/2975</li>
+<li>Type menu: Anti-Alias › None first and checked; checks follow the edited layer (#2983) by @vangel76 in https://github.com/storytold/photocraft/pull/2984</li>
+<li>fix(ui): Global Light opens with stale values and overwrites document setting (#3054) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3217</li>
+<li>Color Sampler tool (#1046) by @roaldosulejmani in https://github.com/storytold/photocraft/pull/2753</li>
+<li>Clip the checker under rounded colour swatches to their corners (#3208) by @myangaa1 in https://github.com/storytold/photocraft/pull/3363</li>
+<li>ci: refactor workflows to use storytold/craft-common-actions by @dylanmtaylor in https://github.com/storytold/photocraft/pull/3432</li>
+<li>Speed up Tilt-Shift with existing per-level halo trimming by @optimalbytee in https://github.com/storytold/photocraft/pull/2880</li>
+<li>Select and Mask: Refine Edge Brush (#2972) by @vangel76 in https://github.com/storytold/photocraft/pull/2989</li>
+<li>Layers: Combine Shapes merges the selected shape layers (#2400) by @davidmann4 in https://github.com/storytold/photocraft/pull/2906</li>
+<li>Move dock tabs between groups individually by @imSlicedBread in https://github.com/storytold/photocraft/pull/3239</li>
+<li>Add built-in rainbow gradient presets by @Myosh1 in https://github.com/storytold/photocraft/pull/2916</li>
+<li>Native brush outline and crosshair cursors on macOS, X11 and Wayland (#1343) by @tanish2k09 in https://github.com/storytold/photocraft/pull/3243</li>
+<li>Menus: a submenu stays open while the pointer heads for it (#1218) by @brennanMKE in https://github.com/storytold/photocraft/pull/3251</li>
+<li>i18n(pt-br): complete Brazilian Portuguese catalog (+782 missing UI, filter, and tool strings) by @onicafe in https://github.com/storytold/photocraft/pull/3254</li>
+<li>Zoom and Hand tools: right-click the canvas for the view menu (#3242) by @LloydNicholson in https://github.com/storytold/photocraft/pull/3255</li>
+<li>Quick Mask: an empty start and Select All stay apart (#2743) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/2922</li>
+<li>raw: charge the lossless-JPEG intermediate and segment-sized buffers against max_alloc (#2925) by @switch87 in https://github.com/storytold/photocraft/pull/3194</li>
+<li>Prevent white flash when opening the screen color picker by @imSlicedBread in https://github.com/storytold/photocraft/pull/3256</li>
+<li>Add FITS read/write (astronomy images) by @dmoulton in https://github.com/storytold/photocraft/pull/2956</li>
+<li>ui: keep the Color panel knob in the corner it was dragged to by @switch87 in https://github.com/storytold/photocraft/pull/3275</li>
+<li>Rulers: stay level and fully ticked on a rotated view; guides turn with the image (#3233) by @vangel76 in https://github.com/storytold/photocraft/pull/3282</li>
+<li>ui: Dust &amp; Scratches previews at full resolution, as it applies by @switch87 in https://github.com/storytold/photocraft/pull/3287</li>
+<li>Open several files in name order, keeping it for background opens (#3248) by @myangaa1 in https://github.com/storytold/photocraft/pull/3293</li>
+<li>GPU canvas: price the display textures before building them (#2934) by @vangel76 in https://github.com/storytold/photocraft/pull/3299</li>
+<li>Move tool: double-click type on the canvas to edit it (#1132) by @LloydNicholson in https://github.com/storytold/photocraft/pull/3300</li>
+<li>Free Transform: right-click W or H to pick their unit (#3235) by @dhiorns15 in https://github.com/storytold/photocraft/pull/3301</li>
+<li>Type: variable font axis sliders; optical size follows the type size (#2985) by @vangel76 in https://github.com/storytold/photocraft/pull/2996</li>
+<li>Tests: panic_hunt reruns a timed-out command before calling it hung (#2994) by @vangel76 in https://github.com/storytold/photocraft/pull/2997</li>
+<li>Cycle Color Lookup LUTs with keyboard and wheel by @imSlicedBread in https://github.com/storytold/photocraft/pull/3304</li>
+<li>Fix/3144 taskbar maximized by @axlecoffee in https://github.com/storytold/photocraft/pull/3308</li>
+<li>File Handling: wire Image Previews to embed a PSD thumbnail (#204) by @davidmann4 in https://github.com/storytold/photocraft/pull/2971</li>
+<li>Select and Mask: Output To New Document, with or without a layer mask (#2998) by @vangel76 in https://github.com/storytold/photocraft/pull/3007</li>
+<li>Inspect: report each layer's vector mask by @KnottyDyes in https://github.com/storytold/photocraft/pull/2980</li>
+<li>Pen: Alt breaks a handle while drawing, and close-drag pulls out the first anchor's handles (#3306) by @vangel76 in https://github.com/storytold/photocraft/pull/3314</li>
+<li>Type: Warp on live type takes the warp styles and stays editable, no prompt (#3004) by @vangel76 in https://github.com/storytold/photocraft/pull/3008</li>
+<li>feat(ui): Motion Blur and other filter angles get the angle dial (#3152) by @Kartik8Dwivedi in https://github.com/storytold/photocraft/pull/3407</li>
+<li>Free Transform: ⌘-drag of a corner scales editable type instead of distorting it (#3010) by @vangel76 in https://github.com/storytold/photocraft/pull/3012</li>
+<li>Color panel: HSB on sRGB values, like Photoshop (#3323) by @LloydNicholson in https://github.com/storytold/photocraft/pull/3327</li>
+<li>fix(shapes): options bar Fill/Stroke edit the selected shape by @alonfaraj in https://github.com/storytold/photocraft/pull/3370</li>
+<li>Installed ICC profiles in the profile menus, and Mirror in Print by @Moiztermind in https://github.com/storytold/photocraft/pull/3011</li>
+<li>Window: a window saved while minimized reopens at the minimum size, not 160 × 64 by @KattKnight in https://github.com/storytold/photocraft/pull/3380</li>
+<li>i18n: translate the Select and Mask dialog labels (#3014) by @vangel76 in https://github.com/storytold/photocraft/pull/3015</li>
+<li>Color: honour the EXIF sRGB tag on open; wire Ignore EXIF Profile Tag (#204) by @timothydaly1 in https://github.com/storytold/photocraft/pull/3026</li>
+<li>Linux: say so when no file dialog can open (#3354); read ldconfig on non-English systems by @DomiLuebben in https://github.com/storytold/photocraft/pull/3397</li>
+<li>fix(paint): respect Lock All on layer masks (#3094) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3111</li>
+<li>Transform: Distort, Perspective and Warp keep shape layers live (#3009) by @vangel76 in https://github.com/storytold/photocraft/pull/3025</li>
+<li>fix(gradient): respect Lock All on Gradient Fills (#3093) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3120</li>
+<li>fix(ui): focus and select hex field when color picker opens (#3375) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3408</li>
+<li>Type: scan system fonts off the UI thread (#3021) by @vangel76 in https://github.com/storytold/photocraft/pull/3030</li>
+<li>fix(type): respect Lock All on text edits (#3092) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3132</li>
+<li>fix(type): return caret after normalized CRLF insertion (#3074) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3138</li>
+<li>Toolbox: make the colour swap arrow clearer by @Jeremy8776 in https://github.com/storytold/photocraft/pull/3416</li>
+<li>fix(type): navigate adjacent line with large leading (#3066) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3141</li>
+<li>fix(ui): drop doubled options-bar borders reintroduced in UI.9 by @rafi612 in https://github.com/storytold/photocraft/pull/3425</li>
+<li>Transform Path: Distort, Perspective and Warp apply to paths (#3027) by @vangel76 in https://github.com/storytold/photocraft/pull/3032</li>
+<li>fix(crop): unlock Background when extending canvas (#3081) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3158</li>
+<li>Fix Camera Raw preview color management by @imSlicedBread in https://github.com/storytold/photocraft/pull/3427</li>
+<li>fix(mode): restore indexed pixels after clearing transparency (#3080) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3153</li>
+<li>Marquee: Single Row/Column Marquee History step names (#3031) by @vangel76 in https://github.com/storytold/photocraft/pull/3035</li>
+<li>fix(cli): skip recorded view and save steps in batch (#3058) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3143</li>
+<li>Properties: a new adjustment or fill layer shows its settings, not its mask (#3369) by @davidmann4 in https://github.com/storytold/photocraft/pull/3429</li>
+<li>fix(filters): process untouched Reveal All masks (#3082) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3156</li>
+<li>Keep the Color panel selected when switching themes (#3371) by @prekabreki in https://github.com/storytold/photocraft/pull/3433</li>
+<li>fix(history): read locked history sources (#3076) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3186</li>
+<li>automation: refuse edit.installedProfiles, it scans the OS profile folders by @Sir-Starch in https://github.com/storytold/photocraft/pull/3763</li>
+<li>Keep transform controls with moved selected pixels (#3402) by @prekabreki in https://github.com/storytold/photocraft/pull/3436</li>
+<li>SVG: warn when text has no font to use (fixes the FreeBSD svg test) by @diegochagas in https://github.com/storytold/photocraft/pull/3168</li>
+<li>Crop tool: switching to another tool commits the pending crop (#3368) by @davidmann4 in https://github.com/storytold/photocraft/pull/3451</li>
+<li>fix(warp): Perspective Warp moves only the selected part of a linked … by @kavishkashehan726-sudo in https://github.com/storytold/photocraft/pull/3148</li>
+<li>Paths: Stroke Path with any brush-based tool and Simulate Pressure (#2978) by @vangel76 in https://github.com/storytold/photocraft/pull/3039</li>
+<li>fix(image): arbitrary canvas rotation moves position-locked children in groups (#3078) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3155</li>
+<li>i18n(cs): translate the dynamic labels the Czech catalog was missing by @Losminek in https://github.com/storytold/photocraft/pull/3454</li>
+<li>Artboard tool: '+' buttons add a board beside the selected one; ⇧ keeps proportions (#3033) by @vangel76 in https://github.com/storytold/photocraft/pull/3046</li>
+<li>fix(transform): identity transform makes feathered selection edges translucent (#3079) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3159</li>
+<li>Let the Actions step list grow with its panel by @kotulsky in https://github.com/storytold/photocraft/pull/3460</li>
+<li>Layers: clip groups follow New Layer, Arrange, Reorder and Delete (#2203) by @timothydaly1 in https://github.com/storytold/photocraft/pull/3090</li>
+<li>Type Mask: Shift/Alt at commit add to or subtract from the selection; no Layers row for the working text (#3036) by @vangel76 in https://github.com/storytold/photocraft/pull/3069</li>
+<li>Quick-export each selected layer as a separate PNG by @kotulsky in https://github.com/storytold/photocraft/pull/3462</li>
+<li>scorecard: FILE-216-5 save-path tests are in the tree by @davidmann4 in https://github.com/storytold/photocraft/pull/3476</li>
+<li>Actions: a command that runs other commands is recorded once (#3067) by @vangel76 in https://github.com/storytold/photocraft/pull/3072</li>
+<li>Type: triple-click selects a line, quadruple a paragraph, five clicks all text (#3493) by @davidmann4 in https://github.com/storytold/photocraft/pull/3496</li>
+<li>Layers: the New Layer dialog (Layer › New › Layer…, ⇧⌘N) by @timothydaly1 in https://github.com/storytold/photocraft/pull/3104</li>
+<li>Color Picker: no bigger than Photoshop's (532 × 376 points, was 682 × 437), buttons sized to their labels by @kayrockscreenprinting in https://github.com/storytold/photocraft/pull/3500</li>
+<li>Artboards: a board moved past the canvas origin grows the canvas left/up (#3070) by @vangel76 in https://github.com/storytold/photocraft/pull/3073</li>
+<li>Optimise computed brush coverage and native raster row writes by @optimalbytee in https://github.com/storytold/photocraft/pull/3098</li>
+<li>fix(crop): the crop box's own Undo/Redo (#3145) by @dottedt in https://github.com/storytold/photocraft/pull/3510</li>
+<li>Freeform Pen: Alt-clicks draw straight segments; Cmd/Ctrl is Direct Selection with the new pens (#3085) by @vangel76 in https://github.com/storytold/photocraft/pull/3087</li>
+<li>test(gradient): guard the on-canvas midpoint diamond drag (#3172) by @dottedt in https://github.com/storytold/photocraft/pull/3512</li>
+<li>Actions: Last Filter is recorded as the filter it repeated (#3089) by @vangel76 in https://github.com/storytold/photocraft/pull/3091</li>
+<li>Content-Aware Move: Transform On Drop (#3071) by @vangel76 in https://github.com/storytold/photocraft/pull/3095</li>
+<li>Numeric fields: typed units, scrubby labels, double-click reset (#3099) by @vangel76 in https://github.com/storytold/photocraft/pull/3100</li>
+<li>Keep fitted Camera Raw colour during tuning and crop Nikon D5100 borders by @optimalbytee in https://github.com/storytold/photocraft/pull/3201</li>
+<li>Preserve surrounding whitespace in OpenRaster layer names by @imSlicedBread in https://github.com/storytold/photocraft/pull/3207</li>
+<li>Tests: one GPU harness at a time in every GPU test binary (WARP crash) by @dhiorns15 in https://github.com/storytold/photocraft/pull/3212</li>
+<li>Content-Aware Scale: transform box with live preview (#3096) by @vangel76 in https://github.com/storytold/photocraft/pull/3103</li>
+<li>automation: doc.place reads a file through the read root (#2810) by @switch87 in https://github.com/storytold/photocraft/pull/3215</li>
+<li>Layers panel: Shift+Plus/Minus cycle blend modes; effects dropped on the Trash are deleted (#3102) by @vangel76 in https://github.com/storytold/photocraft/pull/3106</li>
+<li>Moving type keeps its rendering: Artboards to Files no longer drops PSD text by @fabianghe in https://github.com/storytold/photocraft/pull/3218</li>
+<li>Shortcuts: layout-independent brush keys, Photoshop's German keys plus a fallback for all layouts (#3109) by @vangel76 in https://github.com/storytold/photocraft/pull/3112</li>
+<li>Liquify: the brush fades to nothing at its edge at every Density (#2606) by @dhiorns15 in https://github.com/storytold/photocraft/pull/3241</li>
+<li>test(paint): pin the retouch dab footprint to the Full Size ring by @switch87 in https://github.com/storytold/photocraft/pull/3258</li>
+<li>Layers panel: a mask dragged onto the Trash asks to apply or delete it (#3113) by @vangel76 in https://github.com/storytold/photocraft/pull/3118</li>
+<li>PNG export: Indexed Color keeps the document resolution (#3047) by @vangel76 in https://github.com/storytold/photocraft/pull/3271</li>
+<li>Layers panel: dragging the vector mask to the Trash asks to delete just the mask (#3119) by @vangel76 in https://github.com/storytold/photocraft/pull/3125</li>
+<li>Interface: an Enable Animations preference (#3273) by @vangel76 in https://github.com/storytold/photocraft/pull/3276</li>
+<li>Edit &gt; Copy takes a targeted layer mask, so masks travel between layers and documents (#2928) by @vbasky in https://github.com/storytold/photocraft/pull/3267</li>
+<li>automation: export layers, data sets and CSVs through the granted roots (#3216) by @switch87 in https://github.com/storytold/photocraft/pull/3230</li>
+<li>Type: fall back to installed Khmer, Lao and Burmese fonts (#218) by @RaccoonPie-314 in https://github.com/storytold/photocraft/pull/3259</li>
+<li>Curves: pencil mode, Smooth and Edit points (#3088) by @vangel76 in https://github.com/storytold/photocraft/pull/3108</li>
+<li>fix(io): smooth PSD gradients no longer overshoot their stops (#3028) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3285</li>
+<li>Codecs: decode PNM straight into the budgeted output buffer (#2938) by @vangel76 in https://github.com/storytold/photocraft/pull/3291</li>
+<li>Properties: Curves adjustment layers get the black/gray/white eyedroppers (#3110) by @vangel76 in https://github.com/storytold/photocraft/pull/3115</li>
+<li>Format: admit the declared .pcraft canvas before loading it (#2935) by @vangel76 in https://github.com/storytold/photocraft/pull/3295</li>
+<li>fix(format): persist the Save As filename in .pcraft manifests (#3312) by @Ni-zav in https://github.com/storytold/photocraft/pull/3319</li>
+<li>Levels: black, gray and white point eyedroppers (#3116) by @vangel76 in https://github.com/storytold/photocraft/pull/3128</li>
+<li>Puppet Warp: the mesh follows the object outline (#3105) by @vangel76 in https://github.com/storytold/photocraft/pull/3117</li>
+<li>Clone Source: W/H link and overlay blend modes (#3298) by @vangel76 in https://github.com/storytold/photocraft/pull/3310</li>
+<li>Vanishing Point: on-canvas plane editor with Create/Edit Plane, grid and paste (#3122) by @vangel76 in https://github.com/storytold/photocraft/pull/3133</li>
+<li>Let <code>[</code> shrink the brush to 1 px (#3229) by @myangaa1 in https://github.com/storytold/photocraft/pull/3332</li>
+<li>MCP: command_batch says it is not atomic, and the docs explain recovery by @KnottyDyes in https://github.com/storytold/photocraft/pull/3338</li>
+<li>New Document: a real Recent category of recently created documents (#3131) by @vangel76 in https://github.com/storytold/photocraft/pull/3135</li>
+<li>Group effects follow their children's effects, not just their pixels (#3274) by @alexanderalber in https://github.com/storytold/photocraft/pull/3326</li>
+<li>Format: reopening a .pcraft shares deduplicated tiles again (#3315) by @vangel76 in https://github.com/storytold/photocraft/pull/3339</li>
+<li>fix(presets): never overwrite preset or actions files that failed to load by @tms-h in https://github.com/storytold/photocraft/pull/3346</li>
+<li>fix(engine): create new layer masks at the document depth by @piero-83 in https://github.com/storytold/photocraft/pull/3359</li>
+<li>feat(api): add file path to document.inspect by @Mr-Pearce in https://github.com/storytold/photocraft/pull/3398</li>
+<li>Ctrl-click shape and path thumbnails to load selections by @kotulsky in https://github.com/storytold/photocraft/pull/3449</li>
+<li>fix(selection): scope Color Range to the active selection (#3313) by @Ni-zav in https://github.com/storytold/photocraft/pull/3366</li>
+<li>Layer › Duplicate Layer… asks for the copy's name and destination document (#3348) by @prekabreki in https://github.com/storytold/photocraft/pull/3440</li>
+<li>Copy takes every selected layer, Paste recreates them (#2478) by @DomiLuebben in https://github.com/storytold/photocraft/pull/3394</li>
+<li>Fix GIMP hole heading name and location by @philipzae in https://github.com/storytold/photocraft/pull/3517</li>
+<li>Commands check an explicit &quot;layer&quot; instead of whichever layer is active by @fabianghe in https://github.com/storytold/photocraft/pull/3466</li>
+<li>Brush cursor: shaped tips trace their outline (split from #2516) by @siraxe in https://github.com/storytold/photocraft/pull/3467</li>
+<li>perf: Edit &gt; Clear works tile by tile on large selections (#3463) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3482</li>
+<li>Autosave: best-effort cleanup after commit; sweep orphaned recovery bundles (#3489) by @vangel76 in https://github.com/storytold/photocraft/pull/3502</li>
+<li>Raw: open monochrome LinearRaw DNGs (1 sample per pixel) (#3497) by @davidmann4 in https://github.com/storytold/photocraft/pull/3503</li>
+<li>PSD gradients: read the interpolation method Photoshop writes; add Smooth by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3442</li>
+<li>CI: restore tests, catalogs, and web size gate by @skylartaylor in https://github.com/storytold/photocraft/pull/3923</li>
+<li>Color Balance: Photoshop's per-channel levels and gamma curves by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3443</li>
+<li>Save: show save progress as Saving NN% in the status bar and tab title (#3389) by @davidmann4 in https://github.com/storytold/photocraft/pull/3485</li>
+<li>Warp presets: Photoshop's Bezier control grids instead of approximations by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3444</li>
+<li>Brush and Pencil: hold ~ to erase, and Clear mode (#3439) by @itsF4LCON in https://github.com/storytold/photocraft/pull/3465</li>
+<li>Content-Aware tools: faster, cancellable at once, same pixels (P21, P22, P49) by @Unemars in https://github.com/storytold/photocraft/pull/3395</li>
+<li>fix(io): a fresh Metrics type layer writes no empty Txt2 stub (#3514) by @dottedt in https://github.com/storytold/photocraft/pull/3529</li>
+<li>Brush: show the smoothing string from brush to pointer (#3479) by @vangel76 in https://github.com/storytold/photocraft/pull/3526</li>
+<li>Security: verify AppImage build inputs by @skylartaylor in https://github.com/storytold/photocraft/pull/2270</li>
+<li>History panel: snapshots (camera button, snapshot rows, history.*Snapshot) (#2966) by @itsF4LCON in https://github.com/storytold/photocraft/pull/3545</li>
+<li>feat(ui): Photoshop's New Guide: units and colour by @FinnNk in https://github.com/storytold/photocraft/pull/3553</li>
+<li>Tools: Shift key switches tools by default, as in Photoshop (#3525) by @vangel76 in https://github.com/storytold/photocraft/pull/3528</li>
+<li>Use Fontconfig for Linux font discovery (#2330) by @Sir-Starch in https://github.com/storytold/photocraft/pull/2961</li>
+<li>Use each XRandR output's ICC profile in the screen picker by @Sir-Starch in https://github.com/storytold/photocraft/pull/2962</li>
+<li>Support automatic monitor ICC profiles on Linux X11 by @Sir-Starch in https://github.com/storytold/photocraft/pull/2963</li>
+<li>Security: harden document exports and automation inputs by @skylartaylor in https://github.com/storytold/photocraft/pull/2269</li>
+<li>Animated GIF: every frame loads into video layers (#572) by @Sir-Starch in https://github.com/storytold/photocraft/pull/2999</li>
+<li>GPU memory budget: read installed RAM on Windows by @dhiorns15 in https://github.com/storytold/photocraft/pull/3189</li>
+<li>fix(ui): correct the clipping-mask indicator orientation by @Skyfuller1303 in https://github.com/storytold/photocraft/pull/3037</li>
+<li>Windows installer: refuse Windows 7 and 8 with a clear message (#2310) by @dhiorns15 in https://github.com/storytold/photocraft/pull/3261</li>
+<li>Format: index ZIP entries by name and use crc32fast (#3474) by @vangel76 in https://github.com/storytold/photocraft/pull/3488</li>
+<li>psd: harden the standalone binary parsers (fuzz + property tests, gradient/swatch correctness) by @agent-346022 in https://github.com/storytold/photocraft/pull/3542</li>
+<li>Add Vietnamese localization by @duydev in https://github.com/storytold/photocraft/pull/2636</li>
+<li>Linux: StartupWMClass is the window's app id by @atoslins in https://github.com/storytold/photocraft/pull/3481</li>
+<li>M11: ten more MCP acceptance tasks (11-20) for FILE-216-6 by @reynold-hu in https://github.com/storytold/photocraft/pull/3562</li>
+<li>fix(ui): don't reopen floating Brush Settings on restart by @Ni-zav in https://github.com/storytold/photocraft/pull/3570</li>
+<li>M11: six rounding-out acceptance tasks (31-36) by @reynold-hu in https://github.com/storytold/photocraft/pull/3568</li>
+<li>Options bar: the Gradient tool's controls show in every theme (#3601) by @vangel76 in https://github.com/storytold/photocraft/pull/3607</li>
+<li>fix(ui): one eliding label for fixed-width chrome, so translations can't overrun (#3580) by @dottedt in https://github.com/storytold/photocraft/pull/3616</li>
+<li>test(ui): marquee shift+alt before the drag intersects the selection (#208) by @agent-346022 in https://github.com/storytold/photocraft/pull/3624</li>
+<li>Crop tool: a resized frame snaps its handle, not the pointer (#3638) by @davidmann4 in https://github.com/storytold/photocraft/pull/3640</li>
+<li>fix(transform): keep nearest-neighbor previews on original texels by @Ni-zav in https://github.com/storytold/photocraft/pull/3688</li>
+<li>fix(engine): image.canvasSize rejects unlisted anchors instead of landing between two (#2946) by @agent-346022 in https://github.com/storytold/photocraft/pull/3572</li>
+<li>Edit › Transform › Skew: corners and sides move along one axis, like Photoshop (#3437) by @kayrockscreenprinting in https://github.com/storytold/photocraft/pull/3590</li>
+<li>PSD: alpha channel resources count the merged transparency; 13-byte DisplayInfo by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3577</li>
+<li>Glows: Photoshop's precise ramp; centre-source glows inverted after the contour by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3578</li>
+<li>Canvas: wheel/pinch zoom over the pasteboard keeps the image in view (#3720) by @FredApps in https://github.com/storytold/photocraft/pull/3731</li>
+<li>Select: open the Save Selection and Load Selection dialogs (#3713) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3738</li>
+<li>Toolbar: the colour chips sit right under the tools again by @Unemars in https://github.com/storytold/photocraft/pull/3745</li>
+<li>Fix: video frames to layers working using folder dialog request (#3513) by @peppepol in https://github.com/storytold/photocraft/pull/3718</li>
+<li>Menus: keep clear of the taskbar when Wayland hides the window position (#3737) by @FredApps in https://github.com/storytold/photocraft/pull/3739</li>
+<li>i18n(it): translate the dynamic labels the Italian catalog was missing by @fabiodalez-dev in https://github.com/storytold/photocraft/pull/3742</li>
+<li>Chisel bevels: Photoshop's facet slope and ramp ends by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3595</li>
+<li>Character panel: OpenType feature buttons (TYPE-218-5, #3752) by @davidmann4 in https://github.com/storytold/photocraft/pull/3757</li>
+<li>Brush: symmetric live strokes update only what changed (#3593) by @xsvm in https://github.com/storytold/photocraft/pull/3605</li>
+<li>Move: an unlinked layer mask moves alone when targeted (#3604) by @vangel76 in https://github.com/storytold/photocraft/pull/3611</li>
+<li>fix(ui): drag a document tab off the strip to float it in its own window (#3733) by @bommerts in https://github.com/storytold/photocraft/pull/3785</li>
+<li>fix(web): keep the canvas steady during preset saves by @zenjabba in https://github.com/storytold/photocraft/pull/3805</li>
+<li>UI: drag to reorder swatch groups and preset folders (#3658) by @dottedt in https://github.com/storytold/photocraft/pull/3828</li>
+<li>Keep transform preview visible while panning (#3610) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3843</li>
+<li>perf: draw marching ants as one mesh instead of a line shape per dash by @JameEnder in https://github.com/storytold/photocraft/pull/3846</li>
+<li>Fail CLI run when recorded action playback fails by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3861</li>
+<li>Guides: Shift-drag out of a ruler lands on the nearest ruler tick (#3770) by @n-delic in https://github.com/storytold/photocraft/pull/3796</li>
+<li>fix(engine): a PSD type layer names the installed font, not an invented one (#3556) by @dottedt in https://github.com/storytold/photocraft/pull/3564</li>
+<li>Actions: replay tests for crop, filters, selections and styled text on a second document (AUTO-219-4) by @reynold-hu in https://github.com/storytold/photocraft/pull/3566</li>
+<li>feat(psd): Gradient Map stops in CMYK, Lab, Gray and HSB import and round-trip by @echelon in https://github.com/storytold/photocraft/pull/4033</li>
+<li>feat(save): File › Save keeps a JPEG's quality and a WebP's lossy/lossless encoding (#2399) by @echelon in https://github.com/storytold/photocraft/pull/4032</li>
+<li>PSD: descriptor ids warp, list and time are written as strings, as Photoshop writes them by @echelon in https://github.com/storytold/photocraft/pull/4039</li>
+<li>fix(liquify): pointer speed no longer changes the warp (continuous dab spacing) by @echelon in https://github.com/storytold/photocraft/pull/4047</li>
+<li>Update Japanese translations by @coolvitto in https://github.com/storytold/photocraft/pull/3892</li>
+<li>UI: unify plain text inputs on one text_field widget (#3789) by @dottedt in https://github.com/storytold/photocraft/pull/3896</li>
+<li>Layer › Export As exports every selected layer or artboard (#3629) by @fabianghe in https://github.com/storytold/photocraft/pull/3909</li>
+<li>UI: Photoshop-style in-dialog preview for the generic filter dialogs (#3769) by @dottedt in https://github.com/storytold/photocraft/pull/3877</li>
+<li>fix(ui): allow selecting shapes and editing color with path selection (#3915) by @seotarek in https://github.com/storytold/photocraft/pull/3932</li>
+<li>PSD type layers: TySh bounds, AntiAlias numbers and version info written as Photoshop writes them by @echelon in https://github.com/storytold/photocraft/pull/4041</li>
+<li>PSD: rasterized fill and smart layers stay rasterized after save and reopen by @echelon in https://github.com/storytold/photocraft/pull/4034</li>
+<li>Dismiss Home when closing a document tab (#3981) by @vbasky in https://github.com/storytold/photocraft/pull/3984</li>
+<li>fix(ui): show a paint-bucket cursor for the Paint Bucket tool (#3968) by @MarekSpodBiedry in https://github.com/storytold/photocraft/pull/3989</li>
+<li>fix(ui): Open layer color choices from the visibility icon by @Ni-zav in https://github.com/storytold/photocraft/pull/4001</li>
+<li>fix(ui): Make checkbox labels nonselectable and show pointer cursors by @Ni-zav in https://github.com/storytold/photocraft/pull/4002</li>
+<li>fix(ui): keep filter jobs polling on idle Linux by @rozaqabdul656 in https://github.com/storytold/photocraft/pull/3961</li>
+<li>Add WebP and optional quality to Batch export dialogs by @zenjabba in https://github.com/storytold/photocraft/pull/3956</li>
+<li>feat(compose): Lab documents evaluate Invert, Posterize, Threshold, Brightness/Contrast and Gradient Map on L, a, b by @echelon in https://github.com/storytold/photocraft/pull/4038</li>
+<li>PSD: composite_rgba8 checks the output budget and converts planes fallibly (#3639) by @vangel76 in https://github.com/storytold/photocraft/pull/3651</li>
+<li>PSD: don't preallocate knots from untrusted path length counts (#3635) by @vangel76 in https://github.com/storytold/photocraft/pull/3654</li>
+<li>PSD: bound the zero padding of undersized pattern channels (#3652) by @vangel76 in https://github.com/storytold/photocraft/pull/3686</li>
+<li>PSD: cap descriptor list/object preallocation from untrusted counts (#3636) by @vangel76 in https://github.com/storytold/photocraft/pull/3699</li>
+<li>fix(engine): Displace smart filter ignores its mapPath displacement map (#3670) by @horknfbr in https://github.com/storytold/photocraft/pull/3676</li>
+<li>PSD: smart object Trnf frames the custom warp's control points, not the source rect (#3671) by @horknfbr in https://github.com/storytold/photocraft/pull/3677</li>
+<li>feat(io): import Photoshop Displace smart filters with their embedded map (#3673) by @horknfbr in https://github.com/storytold/photocraft/pull/3680</li>
+<li>Gradient Map: edit color stops on the ramp by @arthurdeka in https://github.com/storytold/photocraft/pull/3982</li>
+<li>Free Transform: a layer's style shows while the box is open, drawn from the transformed layer (#3653) by @kayrockscreenprinting in https://github.com/storytold/photocraft/pull/3696</li>
+<li>fix(algo): mesh warps filter their source when shrinking, so thin lines don't alias (#3672) by @horknfbr in https://github.com/storytold/photocraft/pull/3678</li>
+<li>feat(io): open Krita .kra composites as editable raster documents (#3692) by @Ni-zav in https://github.com/storytold/photocraft/pull/3700</li>
+<li>fix(psd): Multichannel alpha channels stay alpha; a save keeps resources and global blocks by @echelon in https://github.com/storytold/photocraft/pull/4031</li>
+<li>fix(layers): identify the Background by structure, never by its English name by @echelon in https://github.com/storytold/photocraft/pull/4036</li>
+<li>Codecs: refuse implausible PNG/WebP headers before allocating (#3691) by @vangel76 in https://github.com/storytold/photocraft/pull/3706</li>
+<li>PSD: avoid cloning layer data when padding and presize the output buffer (#3687) by @vangel76 in https://github.com/storytold/photocraft/pull/3707</li>
+<li>Codecs: bound the TIFF IFD walk by a file-size entry budget (#3683) by @vangel76 in https://github.com/storytold/photocraft/pull/3711</li>
+<li>Select the Normal RGB blend kernel once per buffer by @Streetblock in https://github.com/storytold/photocraft/pull/3715</li>
+<li>Allow empty vector masks in downsampled preview proxies by @Streetblock in https://github.com/storytold/photocraft/pull/3716</li>
+<li>feat(codecs): decode legacy PCX images and palettes (#3692) by @Ni-zav in https://github.com/storytold/photocraft/pull/3701</li>
+<li>fix(text): scale faux bold dilation with glyph scaling (#3705) by @nicolasfalesy in https://github.com/storytold/photocraft/pull/3719</li>
+<li>Answer a repeat auth with &quot;already authenticated&quot; (#3668) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3723</li>
+<li>Codecs: integer fast paths for Image::convert (#3717) by @vangel76 in https://github.com/storytold/photocraft/pull/3729</li>
+<li>automation: say why a command is disabled in engine.commands (#3664) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3740</li>
+<li>feat: Photoshop's layer and selection keys (Ctrl+, toggle, Ctrl+, /, Ctrl+Alt+2, Ctrl+Alt+Backspace, Tab rename, Alt-click thumbnail) by @FinnNk in https://github.com/storytold/photocraft/pull/3710</li>
+<li>View: remember Extras, Show and Snap To across restarts (#3762) by @bommerts in https://github.com/storytold/photocraft/pull/3787</li>
+<li>fix(automation): warn when text falls back from a missing font (#3391) by @buivanvu94 in https://github.com/storytold/photocraft/pull/3630</li>
+<li>Satin: Distance 0 draws as 1 px, as in Photoshop by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3744</li>
+<li>Type: editing text keeps its ligatures and OpenType alternates (#3617) by @davidmann4 in https://github.com/storytold/photocraft/pull/3747</li>
+<li>Brushes: Photoshop's texture Height/Subtract modes, Brightness and Contrast (#3340) by @davidmann4 in https://github.com/storytold/photocraft/pull/3749</li>
+<li>Camera raw colour fit: read a Sony Adobe RGB preview as Adobe RGB, not sRGB by @Madcat71 in https://github.com/storytold/photocraft/pull/3760</li>
+<li>Shadows/Highlights: Photoshop's, measured by @Unemars in https://github.com/storytold/photocraft/pull/3765</li>
+<li>Black &amp; White: tint like the Color blend mode, as in Photoshop by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3780</li>
+<li>Hue/Saturation: Photoshop's saturation curve, lightness order and Colorize lightness by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3781</li>
+<li>History: add history.undo and history.redo aliases (#3675) by @dottedt in https://github.com/storytold/photocraft/pull/3786</li>
+<li>Fix straight-path anchor insertion at the hit position by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3856</li>
+<li>Preserve signed HDR colors during surface transforms by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3857</li>
+<li>Brushes: drag a brush folder into another folder (#2014) by @davidmann4 in https://github.com/storytold/photocraft/pull/3851</li>
+<li>Keep CMYK ink values when flattening and merging (#3778) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3855</li>
+<li>Type: wire missingGlyphProtection (script fallback toggle) by @reynold-hu in https://github.com/storytold/photocraft/pull/3863</li>
+<li>io: read version 3 Photo Filter colour as XYZ, not Lab (#3777) by @itrycodinganditsbad in https://github.com/storytold/photocraft/pull/3790</li>
+<li>Workspace: wire Enable Narrow Options Bar (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/3870</li>
+<li>Selective Color (Absolute): scale by the room the ink has, as in Photoshop by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3793</li>
+<li>Shift Edge moves by a fraction of a pixel so the slider does not snap by @Desayuno64 in https://github.com/storytold/photocraft/pull/3800</li>
+<li>Image &gt; Mode &gt; 32 Bits/Channel: convert to linear light, as Photoshop does by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3792</li>
+<li>Engine: Flatten All Layer Effects keeps layer and vector masks (#3804) by @dottedt in https://github.com/storytold/photocraft/pull/3835</li>
+<li>fix(gpu): flush every 1000 passes so deep stacks don't pile into one command buffer by @JameEnder in https://github.com/storytold/photocraft/pull/3844</li>
+<li>perf(gpu): a duplicated layer's texture starts as a copy of its source by @JameEnder in https://github.com/storytold/photocraft/pull/3848</li>
+<li>perf: the Navigator redraws only the area an edit changed by @JameEnder in https://github.com/storytold/photocraft/pull/3845</li>
+<li>perf: edits, undo and redo recomposite only where added or removed layers draw by @JameEnder in https://github.com/storytold/photocraft/pull/3847</li>
+<li>Remove tool: Create a new layer, and Remove after each stroke off by @diegochagas in https://github.com/storytold/photocraft/pull/3808</li>
+<li>Workspace: wire Auto-Collapse Iconic Panels (#204) by @reynold-hu in https://github.com/storytold/photocraft/pull/3880</li>
+<li>Camera Raw on raw opens: Clarity, Texture and Dehaze in linear light, measured by @Unemars in https://github.com/storytold/photocraft/pull/3815</li>
+<li>Layer styles: Photoshop's measured contour presets; Satin's contour lookup by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3803</li>
+<li>fix(smart-object): keep pixels when rasterizing smart object layer by @Gotix-eg in https://github.com/storytold/photocraft/pull/3873</li>
+<li>PSD: write kept 8B64 blocks as 8BIM so Photoshop opens PSB-derived files by @MrCloudy2 in https://github.com/storytold/photocraft/pull/3743</li>
+<li>fix(io): preserve indexed BMP color tables (#3802) by @Sir-Starch in https://github.com/storytold/photocraft/pull/3869</li>
+<li>feat: Photoshop's tool keys (arrows turn the brush, Shift-click new type, Space+F canvas colour) by @FinnNk in https://github.com/storytold/photocraft/pull/3725</li>
+<li>PSD type: read styles from the run's sheets and place text at its Txt2 frame (#3795, #1317) by @FredApps in https://github.com/storytold/photocraft/pull/3819</li>
+<li>Merged and stamped layers keep their content bounds in CMYK and Lab by @dgliwa in https://github.com/storytold/photocraft/pull/3886</li>
+<li>Preserve surviving channel targets and visibility on deletion by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3887</li>
+<li>Layers: Merge Group for a selected group (#3832) by @FredApps in https://github.com/storytold/photocraft/pull/3888</li>
+<li>test(cms): validate profile-specific CMYK endpoints by @FredApps in https://github.com/storytold/photocraft/pull/3890</li>
+<li>Count video footage in history memory budgets by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3894</li>
+<li>Mix filtered selection edges with premultiplied alpha by @jonathanwxh-cell in https://github.com/storytold/photocraft/pull/3895</li>
+<li>Color: convert input-only embedded profiles to the working space on open (#3876) by @HEOJUNFO in https://github.com/storytold/photocraft/pull/3900</li>
+<li>Format: check pattern sizes on load (#3478) by @vangel76 in https://github.com/storytold/photocraft/pull/3484</li>
+<li>Format: overflow-safe blob decode and bounds-checked ZIP reads (#3486) by @vangel76 in https://github.com/storytold/photocraft/pull/3501</li>
+<li>Fuzz: ignore the same build leftovers in every fuzz crate by @s17sh70x2jfl031ag in https://github.com/storytold/photocraft/pull/3585</li>
+<li>HEIF: move the heic-rs pin from 0.1.1 to 0.1.4 by @s17sh70x2jfl031ag in https://github.com/storytold/photocraft/pull/3637</li>
+<li>Codecs: decode only the requested EXR part (#3721) by @vangel76 in https://github.com/storytold/photocraft/pull/3722</li>
+<li>Codecs: decode JPEG and CCITT G3/G4 compressed TIFF (#3712) by @vangel76 in https://github.com/storytold/photocraft/pull/3727</li>
+<li>fix(linux): avoid duplicate AppImage desktop launcher (#3623) by @Korg1ch in https://github.com/storytold/photocraft/pull/3641</li>
+<li>ops: count selection masks in history pixel budget by @Streetblock in https://github.com/storytold/photocraft/pull/3614</li>
+<li>Verify PngSuite archives and cached corpus files by @zenjabba in https://github.com/storytold/photocraft/pull/3973</li>
+<li>feat: Alt+Cancel → Reset for opt-in command dialogs by @seandellis in https://github.com/storytold/photocraft/pull/3871</li>
+<li>i18n(tr): add Turkish UI translation catalog by @yeniufuklar-com in https://github.com/storytold/photocraft/pull/3809</li>
+<li>i18n: add Hungarian (hu) UI translation by @Skaywalker in https://github.com/storytold/photocraft/pull/3831</li>
+<li>Release workflow: pass the Azure signing secrets by @echelon in https://github.com/storytold/photocraft/pull/3794</li>
+<li>Fix main: wasm size cap, Windows Export As test, filter preview window (scope and a crash), CLI duplicate font warnings by @echelon in https://github.com/storytold/photocraft/pull/4147</li>
+<li>Web: wasm back under the 24 MiB gate with ~1 MiB headroom (25.38 → 24.17 MB) by @bommerts in https://github.com/storytold/photocraft/pull/4253</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@skylartaylor made their first contribution in https://github.com/storytold/photocraft/pull/3097</li>
+<li>@herzer made their first contribution in https://github.com/storytold/photocraft/pull/2660</li>
+<li>@Skyfuller1303 made their first contribution in https://github.com/storytold/photocraft/pull/2738</li>
+<li>@imSlicedBread made their first contribution in https://github.com/storytold/photocraft/pull/3209</li>
+<li>@TheTeslak made their first contribution in https://github.com/storytold/photocraft/pull/3206</li>
+<li>@Simonfalentinolesen made their first contribution in https://github.com/storytold/photocraft/pull/2402</li>
+<li>@Matty-PW made their first contribution in https://github.com/storytold/photocraft/pull/2760</li>
+<li>@ngrafton2006 made their first contribution in https://github.com/storytold/photocraft/pull/2892</li>
+<li>@KattKnight made their first contribution in https://github.com/storytold/photocraft/pull/2510</li>
+<li>@timothydaly1 made their first contribution in https://github.com/storytold/photocraft/pull/2953</li>
+<li>@Desayuno64 made their first contribution in https://github.com/storytold/photocraft/pull/2555</li>
+<li>@peppepol made their first contribution in https://github.com/storytold/photocraft/pull/3084</li>
+<li>@MathMattTech made their first contribution in https://github.com/storytold/photocraft/pull/3114</li>
+<li>@paulo-vc made their first contribution in https://github.com/storytold/photocraft/pull/3126</li>
+<li>@diegozpy made their first contribution in https://github.com/storytold/photocraft/pull/3154</li>
+<li>@grlessa made their first contribution in https://github.com/storytold/photocraft/pull/2592</li>
+<li>@dylanmtaylor made their first contribution in https://github.com/storytold/photocraft/pull/3165</li>
+<li>@mjohnson7cd made their first contribution in https://github.com/storytold/photocraft/pull/3171</li>
+<li>@myangaa1 made their first contribution in https://github.com/storytold/photocraft/pull/3363</li>
+<li>@Myosh1 made their first contribution in https://github.com/storytold/photocraft/pull/2916</li>
+<li>@onicafe made their first contribution in https://github.com/storytold/photocraft/pull/3254</li>
+<li>@dmoulton made their first contribution in https://github.com/storytold/photocraft/pull/2956</li>
+<li>@axlecoffee made their first contribution in https://github.com/storytold/photocraft/pull/3308</li>
+<li>@KnottyDyes made their first contribution in https://github.com/storytold/photocraft/pull/2980</li>
+<li>@Kartik8Dwivedi made their first contribution in https://github.com/storytold/photocraft/pull/3407</li>
+<li>@Moiztermind made their first contribution in https://github.com/storytold/photocraft/pull/3011</li>
+<li>@DomiLuebben made their first contribution in https://github.com/storytold/photocraft/pull/3397</li>
+<li>@Losminek made their first contribution in https://github.com/storytold/photocraft/pull/3454</li>
+<li>@dottedt made their first contribution in https://github.com/storytold/photocraft/pull/3510</li>
+<li>@RaccoonPie-314 made their first contribution in https://github.com/storytold/photocraft/pull/3259</li>
+<li>@tms-h made their first contribution in https://github.com/storytold/photocraft/pull/3346</li>
+<li>@piero-83 made their first contribution in https://github.com/storytold/photocraft/pull/3359</li>
+<li>@Mr-Pearce made their first contribution in https://github.com/storytold/photocraft/pull/3398</li>
+<li>@philipzae made their first contribution in https://github.com/storytold/photocraft/pull/3517</li>
+<li>@agent-346022 made their first contribution in https://github.com/storytold/photocraft/pull/3542</li>
+<li>@duydev made their first contribution in https://github.com/storytold/photocraft/pull/2636</li>
+<li>@atoslins made their first contribution in https://github.com/storytold/photocraft/pull/3481</li>
+<li>@FredApps made their first contribution in https://github.com/storytold/photocraft/pull/3731</li>
+<li>@fabiodalez-dev made their first contribution in https://github.com/storytold/photocraft/pull/3742</li>
+<li>@JameEnder made their first contribution in https://github.com/storytold/photocraft/pull/3846</li>
+<li>@jonathanwxh-cell made their first contribution in https://github.com/storytold/photocraft/pull/3861</li>
+<li>@n-delic made their first contribution in https://github.com/storytold/photocraft/pull/3796</li>
+<li>@seotarek made their first contribution in https://github.com/storytold/photocraft/pull/3932</li>
+<li>@horknfbr made their first contribution in https://github.com/storytold/photocraft/pull/3676</li>
+<li>@nicolasfalesy made their first contribution in https://github.com/storytold/photocraft/pull/3719</li>
+<li>@Madcat71 made their first contribution in https://github.com/storytold/photocraft/pull/3760</li>
+<li>@Gotix-eg made their first contribution in https://github.com/storytold/photocraft/pull/3873</li>
+<li>@dgliwa made their first contribution in https://github.com/storytold/photocraft/pull/3886</li>
+<li>@s17sh70x2jfl031ag made their first contribution in https://github.com/storytold/photocraft/pull/3585</li>
+<li>@Korg1ch made their first contribution in https://github.com/storytold/photocraft/pull/3641</li>
+<li>@seandellis made their first contribution in https://github.com/storytold/photocraft/pull/3871</li>
+<li>@yeniufuklar-com made their first contribution in https://github.com/storytold/photocraft/pull/3809</li>
+<li>@Skaywalker made their first contribution in https://github.com/storytold/photocraft/pull/3831</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/storytold/photocraft/compare/v0.7.0...v0.8.2</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/storytold/photocraft">storytold/photocraft</a> · <code>v0.8.2</code> · 2026-10-12 · <a href="https://github.com/storytold/photocraft/releases/tag/v0.8.2">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/photocraft/0.9.0"> <span class="k">← Suivant</span> <span class="t">v0.9.0</span> </a> <a href="/releases/photocraft/0.7.0"> <span class="k">Précédent →</span> <span class="t">v0.7.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/storytold/photocraft/releases/tag/v0.8.2" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/storytold/photocraft" target="_blank" rel="noopener"> <span>storytold/photocraft</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/photocraft/0.23.1"> <span class="v">v0.23.1</span> <span class="d">26-11-12</span> </a> </li><li> <a href="/releases/photocraft/0.23.0"> <span class="v">v0.23.0</span> <span class="d">26-11-11</span> </a> </li><li> <a href="/releases/photocraft/0.22.0"> <span class="v">v0.22.0</span> <span class="d">26-11-09</span> </a> </li><li> <a href="/releases/photocraft/0.21.0"> <span class="v">v0.21.0</span> <span class="d">26-11-06</span> </a> </li><li> <a href="/releases/photocraft/0.20.2"> <span class="v">v0.20.2</span> <span class="d">26-11-05</span> </a> </li><li> <a href="/releases/photocraft/0.20.1"> <span class="v">v0.20.1</span> <span class="d">26-11-03</span> </a> </li><li> <a href="/releases/photocraft/0.19.0"> <span class="v">v0.19.0</span> <span class="d">26-11-01</span> </a> </li><li> <a href="/releases/photocraft/0.18.0"> <span class="v">v0.18.0</span> <span class="d">26-10-31</span> </a> </li> </ul> <a href="/fr/releases/photocraft" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

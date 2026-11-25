@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>accelerate v1.14.0 — STAGS NextStack</title><meta name="description" content="This release brings a large batch of FSDP2 fixes and quality-of-life improvements: correct dtype handling on load, sharding of embeddings/norms, QLoRA crash prevention, and a more robust auto-wrap policy."><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/accelerate/1.14.0/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/accelerate/1.14.0/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/accelerate/1.14.0/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/accelerate/1.14.0/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="accelerate v1.14.0 — STAGS NextStack"><meta property="og:description" content="This release brings a large batch of FSDP2 fixes and quality-of-life improvements: correct dtype handling on load, sharding of embeddings/norms, QLoRA crash prevention, and a more robust auto-wrap policy."><meta property="og:url" content="https://www.stags.cn/fr/releases/accelerate/1.14.0/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/accelerate/1.14.0/#article","headline":"accelerate v1.14.0 release notes","datePublished":"2026-06-11","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/huggingface/accelerate"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/accelerate/1.14.0/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/accelerate/accelerate_v1.14.0" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/accelerate/1.14.0/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/accelerate/1.14.0/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/accelerate/1.14.0/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/accelerate/1.14.0/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/accelerate/1.14.0/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/accelerate">accelerate</a> </nav> <h1 class="detail-title"> <span class="p">accelerate</span> v1.14.0 </h1> <div class="detail-meta"> <span class="chip chip--minor">Mineure</span> <span><span class="k">Publié</span>11 juin 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/huggingface/accelerate" target="_blank" rel="noopener"> <span class="k">Source</span>huggingface/accelerate </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/accelerate/1.14.0/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/accelerate/1.14.0/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>accélérer v1.14.0</h1>
+<h2>Améliorations FSDP2</h2>
+<p>Cette version apporte un grand nombre de correctifs FSDP2 et d'améliorations de la qualité de vie : gestion correcte des types au chargement, partitionnement des intégrations/normes, prévention des crashs QLoRA et politique d'auto-enveloppement plus robuste.</p>
+<ul>
+<li>Intégration et norme Fsdp2 Fully_shard par @SunMarc dans #4015</li>
+<li>Correction d'une incompatibilité de type de dict d'état complet de chargement fsdp2 par @SunMarc dans #4021</li>
+<li>Correction de la compilation de régions fsdpv2 par @SunMarc dans #4022</li>
+<li>[FSDP2] Convertissez le modèle en type uniforme avant Fully_shard pour corriger AssertionError de type mixte par @roycho96 dans #3985</li>
+<li>[FSDP2] Exclure automatiquement Params4bit gelé non flottant de Fully_shard pour empêcher le crash de QLoRA par @roycho96 dans #3987</li>
+<li>correctif (FSDP2) : politique d'enveloppement automatique ignorant le repli de _no_split_modules par @JohnGiorgi dans #3999</li>
+<li>correctif : utiliser la correspondance basée sur les clés dans fsdp2_load_full_state_dict par @roycho96 dans #3982</li>
+<li>correctif : ajout du garde model_has_params4bit manquant à l'appel fsdp2_load_full_state_dict par @roycho96 dans #3981</li>
+<li>Correction de to-fsdp2 : supprimez les clés FSDP1 REMOVED / NOT_YET_IMPLEMENTED au lieu de les divulguer par @lollinng dans #4065</li>
+<li>Empêcher le double emballage des modèles dans prepare_model() par @joshuaswanson dans #3977</li>
+</ul>
+<h2>Prise en charge d'AMD ROCm</h2>
+<p>Accelerate fonctionne désormais de bout en bout sur les appareils AMD ROCm. Merci @Abdennacer-Badaoui !</p>
+<ul>
+<li>Faire accélérer le travail de bout en bout sur AMD ROCm par @Abdennacer-Badaoui dans #4025</li>
+</ul>
+<h2>Neurone</h2>
+<p>Autres améliorations de Neuron pour réduire la recompilation et couvrir les cas d'appareils manquants.</p>
+<ul>
+<li>Ajout d'une collecte et d'une diffusion rembourrées pour les appareils Neuron afin de réduire la recompilation par @czkkkkkk dans #4000</li>
+<li>correctif : ajout du boîtier du dispositif neuronal manquant par @michaelbenayoun dans #4042</li>
+</ul>
+<h2>Quantification et déchargement</h2>
+<p>Nous avons amélioré la prise en charge du déchargement pour les modèles quantifiés, notamment Torchao, int8 et la gestion du poids lié.</p>
+<ul>
+<li>Déchargement de Torchao par @SunMarc dans #3973</li>
+<li>Correction de la restauration des statistiques de détachement du crochet de déchargement int8 par @jiqing-feng dans #4044</li>
+<li>Correction de keep_in_fp32_modules ne fonctionnant pas pour les poids liés dans load_and_quantize_model par @jiqing-feng dans #4043</li>
+<li>Correction de dtype_byte_size pour les dtypes FP8 fnuz / e8m0fnu par @lollinng dans #4063</li>
+</ul>
+<h2>Chargement des données</h2>
+<ul>
+<li>Exploit : prise en charge de la taille de lot dynamique dans BatchSamplerShard avec even_batches par @yuxinyuan dans #3969</li>
+<li>Correction de la condition de partitionnement de l'ensemble de données itérable lorsque n_shards == num_processes par @SunMarc dans #3958</li>
+<li>Correction du remplissage implicite dans split_between_processes lorsque apply_padding=False et num_samples &lt; num_processes par @3manifold dans #4052</li>
+</ul>
+<h2>Corrections mineures</h2>
+<ul>
+<li>[DeepSpeed] autorise le flash-attn des noyaux dans SP par @kashif dans #3959</li>
+<li>Correction : importer conditionnellement torch.distributed.algorithms.join dans accelerator.py par @0xDELUXA dans #3962</li>
+<li>Correction de l'attribut is_hf_initialized par @SunMarc dans #3976</li>
+<li>feat(utils) : ajout du type de réduction maximale par @imstevenpmwork dans #4027</li>
+<li>fix(state) : intégrer le backend MLU à la chaîne elif _prepare_backend par @Anai-Guo dans #4057</li>
+<li>Correction du lanceur de notebook cuda init par @SunMarc dans #4059</li>
+<li>pytorch-triton-xpu renommé triton-xpu par @sywangyi dans #4007</li>
+<li>Assouplir la tolérance numérique pour XPU dans test_big_modeling par @YangKai0616 dans #4001</li>
+<li>Correction d'une erreur backend Gloo dans test_load_checkpoint_and_dispatch_with_broadcast sur XPU par @kaixuanliu dans #4056</li>
+<li>Augmentez ValueError au lieu d'une chaîne nue dans ParallelismConfig.get_device_mesh par @lollinng dans #4064</li>
+<li>tests : Gérez gracieusement set_device manquant pour les mps par @booxter dans #4028</li>
+<li>test : ajout d'un test de régression pour no_split_module_classes acceptant le type défini par @UFO0506 dans #4048</li>
+<li>Correction de tous les tests de @SunMarc dans #4072
+<ul>
+<li>docs : ajout d'un exemple de mémoire de profileur agrégé par @aryanputta dans #4054</li>
+<li>DOC : documentez les paramètres manquants dans load_accelerator_state, find_executable_batch_size et send_to_device par @kratos0718 dans #4051</li>
+<li>docs : Correction de la docstring de fsdp2_prepare_auto_wrap_policy par @slocoro dans #4037</li>
+<li>Correction de la documentation DistributedType par @3manifold dans #3980</li>
+<li>Correction des problèmes de grammaire, d'orthographe et de cohérence dans les documents et exemples par @cihandemir dans #3961</li>
+<li>docs : correction de fautes de frappe dans les docstrings, les commentaires et les documents utilisateur par @mokashang dans #4040</li>
+<li>corvée : mise à jour du workflow doc-builder SHA par @rtrompier dans #4009</li>
+<li>corvée : bump doc-builder SHA pour le flux de travail principal de création de doc par @rtrompier dans #4018</li>
+<li>[CI] Bump style-bot SHA + passage à l'application GitHub par @paulinebm dans #4031</li>
+<li>Correction de TrackioTracker.log() ignorant le paramètre step par @joshuaswanson dans #3975</li>
+<li>correctif : passer le paramètre step dans TrackioTracker.log() par @liuyun7345 dans #3970</li>
+<li>correctif (suivi) : étape par défaut = None sur tracker.log et accepter les kwargs supplémentaires dans MLflowTracker par @1fanwang dans #4039</li>
+<li>Correction de MLflowTracker.store_init_configuration mutant le dict de configuration de l'appelant par @ATOM00blue dans #4046</li>
+<li>fix(tracker) : garde init_trackers et se connecte contre None kwargs par @xodn348 dans #4026</li>
+<li>🔒 Épinglez les actions GitHub pour valider les SHA par @paulinebm dans #3992</li>
+<li>corvée : mise à jour build-docker-images-release.yml par @hf-security-analysis[bot] dans #4069</li>
+<li>corvée : activez les actions hebdomadaires GitHub de Dependabot par @hf-dependantbot-rollout[bot] dans #4049</li>
+<li>Renforcez le groupe d'actions avec 8 mises à jour par @dependabot[bot] dans #4068
+Changelog complet : https://github.com/huggingface/accelerate/compare/v1.13.0...v1.14.0</li>
+</ul>
+</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/huggingface/accelerate">huggingface/accelerate</a> · <code>v1.14.0</code> · 2026-06-11 · <a href="https://github.com/huggingface/accelerate/releases/tag/v1.14.0">version en amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>accelerate v1.14.0</h1>
+<h2>Highlights</h2>
+<ul>
+<li><strong>FSDP2 training correctness</strong> — FSDP2 now casts models to a uniform dtype before sharding, fully shards embeddings and normalization layers, and excludes frozen non-floating <code>Params4bit</code> from wrapping (#3985, #4015, #3987). Mixed-precision training and QLoRA should avoid these known sharding assertions and crashes without manual workarounds.</li>
+<li><strong>FSDP2 loading and conversion</strong> — Full-state loading now uses key-based matching with corrected dtype and <code>Params4bit</code> handling (#3982, #4021, #3981). Auto-wrap respects <code>_no_split_modules</code>, and <code>prepare_model()</code> prevents double-wrapping (#3999, #3977). The <code>to-fsdp2</code> conversion drops unsupported FSDP1-only keys instead of leaking them into FSDP2 (#4065), so those options are no longer forwarded.</li>
+<li><strong>Expanded hardware support</strong> — Accelerate now supports end-to-end AMD ROCm workflows (#4025), while Neuron pads all-gather and broadcast operations to reduce recompilation (#4000). For XPU, <code>pytorch-triton-xpu</code> is renamed to <code>triton-xpu</code> (#4007); update any explicit dependency references.</li>
+<li><strong>Quantized offloading</strong> — TorchAO offloading is now supported (#3973), int8 offload-hook statistics are restored correctly (#4044), and <code>keep_in_fp32_modules</code> works with tied weights in <code>load_and_quantize_model</code> (#4043). This reduces precision surprises when offloading quantized models with shared parameters.</li>
+<li><strong>Distributed data edge cases</strong> — <code>BatchSamplerShard</code> supports dynamic batch sizes with <code>even_batches</code> (#3969). Fixes also remove unintended padding when processes outnumber samples (#4052) and correct iterable-dataset sharding when shard and process counts match (#3958). Pipelines using workarounds should recheck sample counts and padding assumptions.</li>
+<li><strong>Breaking changes</strong> — None declared upstream.</li>
+</ul>
+<h2>FSDP2 Improvements</h2>
+<p>This release brings a large batch of FSDP2 fixes and quality-of-life improvements: correct dtype handling on load, sharding of embeddings/norms, QLoRA crash prevention, and a more robust auto-wrap policy.</p>
+<ul>
+<li>Fsdp2 fully_shard embedding and norm by @SunMarc in #4015</li>
+<li>Fix fsdp2 load full state dict dtype mismatch by @SunMarc in #4021</li>
+<li>Fix region compilation fsdpv2 by @SunMarc in #4022</li>
+<li>[FSDP2] Cast model to uniform dtype before fully_shard to fix mixed-dtype AssertionError by @roycho96 in #3985</li>
+<li>[FSDP2] Auto-exclude non-floating frozen Params4bit from fully_shard to prevent QLoRA crash by @roycho96 in #3987</li>
+<li>fix(FSDP2): auto-wrap policy ignoring _no_split_modules fallback by @JohnGiorgi in #3999</li>
+<li>fix: use key-based matching in fsdp2_load_full_state_dict by @roycho96 in #3982</li>
+<li>fix: add missing model_has_params4bit guard to fsdp2_load_full_state_dict call by @roycho96 in #3981</li>
+<li>Fix to-fsdp2: drop REMOVED / NOT_YET_IMPLEMENTED FSDP1 keys instead of leaking them by @lollinng in #4065</li>
+<li>Prevent double-wrapping models in prepare_model() by @joshuaswanson in #3977</li>
+</ul>
+<h2>AMD ROCm support</h2>
+<p>Accelerate now works end-to-end on AMD ROCm devices. Thanks @Abdennacer-Badaoui!</p>
+<ul>
+<li>Make accelerate work end-to-end on AMD ROCm by @Abdennacer-Badaoui in #4025</li>
+</ul>
+<h2>Neuron</h2>
+<p>Further Neuron improvements to reduce recompilation and cover missing device cases.</p>
+<ul>
+<li>Add padded allgather and broadcast for Neuron devices to reduce recompilation by @czkkkkkk in #4000</li>
+<li>fix: add missing neuron device case by @michaelbenayoun in #4042</li>
+</ul>
+<h2>Quantization &amp; Offloading</h2>
+<p>We improved offloading support for quantized models, including Torchao, int8, and tied-weight handling.</p>
+<ul>
+<li>Torchao offload by @SunMarc in #3973</li>
+<li>Fix int8 offload hook detachment statistics restoration by @jiqing-feng in #4044</li>
+<li>Fix keep_in_fp32_modules not working for tied weights in load_and_quantize_model by @jiqing-feng in #4043</li>
+<li>Fix dtype_byte_size for FP8 fnuz / e8m0fnu dtypes by @lollinng in #4063</li>
+</ul>
+<h2>Data Loading</h2>
+<ul>
+<li>Feat: Support dynamic batch size in BatchSamplerShard with even_batches by @yuxinyuan in #3969</li>
+<li>Fix iterable dataset sharding condition when n_shards == num_processes by @SunMarc in #3958</li>
+<li>Fix implicit padding in split_between_processes when apply_padding=False and num_samples &lt; num_processes by @3manifold in #4052</li>
+</ul>
+<h2>Minor fixes</h2>
+<ul>
+<li>[DeepSpeed] allow kernels flash-attn in SP by @kashif in #3959</li>
+<li>Fix: Conditionally import torch.distributed.algorithms.join in accelerator.py by @0xDELUXA in #3962</li>
+<li>Fix is_hf_initialized attribute by @SunMarc in #3976</li>
+<li>feat(utils): add max reduction type by @imstevenpmwork in #4027</li>
+<li>fix(state): make MLU backend part of the _prepare_backend elif chain by @Anai-Guo in #4057</li>
+<li>fix notebook launcher cuda init by @SunMarc in #4059</li>
+<li>pytorch-triton-xpu rename to triton-xpu by @sywangyi in #4007</li>
+<li>Relax numerical tolerance for XPU in test_big_modeling by @YangKai0616 in #4001</li>
+<li>Fix gloo backend error in test_load_checkpoint_and_dispatch_with_broadcast on XPU by @kaixuanliu in #4056</li>
+<li>Raise ValueError instead of a bare string in ParallelismConfig.get_device_mesh by @lollinng in #4064</li>
+<li>tests: Gracefully handle missing set_device for mps by @booxter in #4028</li>
+<li>test: add regression test for no_split_module_classes accepting set type by @UFO0506 in #4048</li>
+<li>Fix all tests by @SunMarc in #4072</li>
+<li>docs: add aggregate profiler memory example by @aryanputta in #4054</li>
+<li>DOC: document missing parameters in load_accelerator_state, find_executable_batch_size, and send_to_device by @kratos0718 in #4051</li>
+<li>docs: Fix docstring of fsdp2_prepare_auto_wrap_policy by @slocoro in #4037</li>
+<li>Fix DistributedType documentation by @3manifold in #3980</li>
+<li>Fix grammar, spelling, and consistency issues across docs and examples by @cihandemir in #3961</li>
+<li>docs: fix typos in docstrings, comments, and user docs by @mokashang in #4040</li>
+<li>chore: update doc-builder workflow SHA by @rtrompier in #4009</li>
+<li>chore: bump doc-builder SHA for main doc build workflow by @rtrompier in #4018</li>
+<li>[CI] Bump style-bot SHA + switch to GitHub App by @paulinebm in #4031</li>
+<li>Fix TrackioTracker.log() ignoring step parameter by @joshuaswanson in #3975</li>
+<li>fix: pass step parameter in TrackioTracker.log() by @liuyun7345 in #3970</li>
+<li>fix(tracking): default step=None on tracker.log and accept extra kwargs in MLflowTracker by @1fanwang in #4039</li>
+<li>Fix MLflowTracker.store_init_configuration mutating the caller's config dict by @ATOM00blue in #4046</li>
+<li>fix(tracker): guard init_trackers and log against None kwargs by @xodn348 in #4026</li>
+<li>🔒 Pin GitHub Actions to commit SHAs by @paulinebm in #3992</li>
+<li>chore: update build-docker-images-release.yml by @hf-security-analysis[bot] in #4069</li>
+<li>chore: enable Dependabot weekly GitHub Actions bumps by @hf-dependantbot-rollout[bot] in #4049</li>
+<li>Bump the actions group with 8 updates by @dependabot[bot] in #4068</li>
+</ul>
+<p>Full Changelog: https://github.com/huggingface/accelerate/compare/v1.13.0...v1.14.0</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/huggingface/accelerate">huggingface/accelerate</a> · <code>v1.14.0</code> · 2026-06-11 · <a href="https://github.com/huggingface/accelerate/releases/tag/v1.14.0">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/accelerate/1.15.0"> <span class="k">← Suivant</span> <span class="t">v1.15.0</span> </a> <a href="/releases/accelerate/1.13.0"> <span class="k">Précédent →</span> <span class="t">v1.13.0</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/huggingface/accelerate/releases/tag/v1.14.0" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/huggingface/accelerate" target="_blank" rel="noopener"> <span>huggingface/accelerate</span> <span class="d">↗</span> </a> </li> </ul> </div> <div class="rail-card rail-toc"> <div class="rail-title">Sur cette page</div> <nav> <a href="#" class>Améliorations FSDP2</a><a href="#" class>Prise en charge d&#39;AMD ROCm</a><a href="#" class>Neurone</a><a href="#" class>Quantification et déchargement</a><a href="#" class>Chargement des données</a><a href="#" class>Corrections mineures</a> </nav> </div> <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/accelerate/1.16.0"> <span class="v">v1.16.0</span> <span class="d">26-11-16</span> </a> </li><li> <a href="/releases/accelerate/1.15.0"> <span class="v">v1.15.0</span> <span class="d">26-09-09</span> </a> </li><li> <a href="/releases/accelerate/1.14.0" aria-current="true"> <span class="v">v1.14.0</span> <span class="d">26-06-11</span> </a> </li><li> <a href="/releases/accelerate/1.13.0"> <span class="v">v1.13.0</span> <span class="d">26-03-04</span> </a> </li><li> <a href="/releases/accelerate/1.12.0"> <span class="v">v1.12.0</span> <span class="d">25-11-21</span> </a> </li><li> <a href="/releases/accelerate/1.11.0"> <span class="v">v1.11.0</span> <span class="d">25-10-20</span> </a> </li><li> <a href="/releases/accelerate/1.10.1"> <span class="v">v1.10.1</span> <span class="d">25-08-25</span> </a> </li><li> <a href="/releases/accelerate/1.10.0"> <span class="v">v1.10.0</span> <span class="d">25-08-07</span> </a> </li> </ul> <a href="/fr/releases/accelerate" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>

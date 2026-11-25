@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="fr" dir="ltr"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DeepSpeed v0.19.3 — STAGS NextStack</title><meta name="description" content="Update version post release · Validate fp16 dynamic loss scaling parameters are positive · Add merge queue DCO workflow · Stop obsolete CI jobs on workflow cancellation"><meta name="keywords" content="release note open source, suivi des versions, agrégateur changelog, dernières modifications, suivi des dépréciations, versions Kafka, versions Spring Boot, versions Kubernetes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.stags.cn/fr/releases/deepspeed/0.19.3/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="STAGS NextStack — releases" href="/fr/releases.xml"><link rel="alternate" hreflang="en" href="https://www.stags.cn/releases/deepspeed/0.19.3/"><link rel="alternate" hreflang="zh-Hans" href="https://www.stags.cn/releases/deepspeed/0.19.3/"><link rel="alternate" hreflang="x-default" href="https://www.stags.cn/releases/deepspeed/0.19.3/"><meta property="og:site_name" content="STAGS"><meta property="og:type" content="article"><meta property="og:title" content="DeepSpeed v0.19.3 — STAGS NextStack"><meta property="og:description" content="Update version post release · Validate fp16 dynamic loss scaling parameters are positive · Add merge queue DCO workflow · Stop obsolete CI jobs on workflow cancellation"><meta property="og:url" content="https://www.stags.cn/fr/releases/deepspeed/0.19.3/"><meta property="og:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><meta property="og:locale" content="fr_FR"><meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="zh_CN"><meta property="og:locale:alternate" content="ja_JP"><meta property="og:locale:alternate" content="de_DE"><meta property="og:locale:alternate" content="es_ES"><meta property="og:locale:alternate" content="pt_BR"><meta property="og:locale:alternate" content="ko_KR"><meta property="og:locale:alternate" content="it_IT"><meta property="og:locale:alternate" content="ru_RU"><meta property="og:locale:alternate" content="tr_TR"><meta property="og:locale:alternate" content="id_ID"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:locale:alternate" content="ar_SA"><meta property="og:locale:alternate" content="sv_SE"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.stags.cn/img/stags-tracker-icon.png"><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.stags.cn/#website","name":"STAGS","url":"https://www.stags.cn/","inLanguage":"fr","description":"NextStack indexe les notes de version des projets d'infrastructure et d'IA – changements incompatibles, dépréciations et migrations – dans un flux unique en anglais.","publisher":{"@id":"https://www.stags.cn/#org"}},{"@type":"Organization","@id":"https://www.stags.cn/#org","name":"STAGS","alternateName":"NextStack","url":"https://www.stags.cn/"},{"@type":"TechArticle","@id":"https://www.stags.cn/fr/releases/deepspeed/0.19.3/#article","headline":"DeepSpeed v0.19.3 release notes","datePublished":"2026-07-23","inLanguage":"en","isPartOf":{"@id":"https://www.stags.cn/#website"},"about":{"@type":"SoftwareSourceCode","codeRepository":"https://github.com/deepspeedai/DeepSpeed"}}]}</script><!-- 第三方脚本的连接预热：这两个域名几乎每页都要连，
+         提前建连能省掉 DNS + TCP + TLS 一个往返（移动网络 100~300ms）。
+         AdSense 只在开关打开时预热——关掉广告后连这个域名都没必要。 --><link rel="preconnect" href="https://www.googletagmanager.com"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://pagead2.googlesyndication.com"><!-- Google AdSense：站点所有权校验与广告投放共用同一段脚本，全站只加载一次。
+         未创建广告单元时页面上不渲染任何广告容器，站点保持干净。
+         fetchpriority=low：它不参与首屏渲染，不该跟正文抢带宽。 --><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4184355057086168" crossorigin="anonymous" fetchpriority="low"></script><!-- Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-RFRF1TVRMP" fetchpriority="low"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-RFRF1TVRMP");
+    </script><!-- 百度统计（国内流量统计）。官方标准片段，is:inline 原样输出，
+         hm.js 动态插到首个 script 前，异步不阻塞首屏渲染。 --><script>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?299e5b4e65b86ed16879bdcbe70531d6";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script><link rel="stylesheet" href="/assets/index.DQGt3qLZ.css">
+<style>.ad-slot[data-astro-cid-fgwukgf6]{margin:var(--s10) 0 0;padding-top:var(--s5);border-top:1px solid var(--line)}.ad-slot-label[data-astro-cid-fgwukgf6]{margin-bottom:var(--s3);font-size:11px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4)}.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{display:block;min-height:100px}@media(min-width:640px){.ad-slot[data-astro-cid-fgwukgf6] ins.adsbygoogle{min-height:250px}}
+</style></head> <body> <a class="skip" href="#main">Aller au contenu</a> <header class="hdr" data-header> <div class="wrap hdr-inner"> <a href="/fr/" class="brand" aria-label="STAGS NextStack — Veille des versions open source"> <span class="brand-mark" aria-hidden="true">S</span> <span class="brand-main">STAGS</span> <span class="brand-sub" aria-hidden="true">NextStack</span> </a> <nav class="nav" aria-label="Primary"> <a href="/fr/releases">Versions</a><a href="/fr/projects">Projets</a><a href="/fr/method">Méthode</a> </nav>  <details class="navmenu" data-navmenu> <summary class="navmenu-btn" aria-label="Open menu"> <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M4 7h16M4 12h16M4 17h16"></path> </svg> </summary> <div class="navmenu-panel" role="group" aria-label="Primary"> <a href="/fr/releases" class="navmenu-item">Versions</a><a href="/fr/projects" class="navmenu-item">Projets</a><a href="/fr/method" class="navmenu-item">Méthode</a> </div> </details> <div class="hdr-tools"> <button class="searchbtn" type="button" data-search-open aria-label="Rechercher des versions"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <span class="lbl">Recherche</span> <span class="kbd">⌘K</span> </button> <details class="langmenu" data-langmenu> <summary class="langmenu-btn" aria-label="Langue"> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"> <circle cx="12" cy="12" r="9"></circle> <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path> </svg> <span class="langmenu-cur">FR</span> <svg class="langmenu-chev" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2 4 4 4 4-4"></path></svg> </summary> <div class="langmenu-panel" role="group" aria-label="Langue"> <p class="langmenu-head">Langue</p> <a class="langmenu-item" href="/releases/deepspeed/0.19.3/" hreflang="en" lang="en" data-on="false"> <span class="langmenu-label">English</span> <span class="langmenu-code">EN</span> </a><a class="langmenu-item" href="/zh/release_note/DeepSpeed/DeepSpeed_v0.19.3" hreflang="zh-Hans" lang="zh-CN" data-on="false"> <span class="langmenu-label">中文</span> <span class="langmenu-code">中</span> </a><a class="langmenu-item" href="/ja/releases/deepspeed/0.19.3/" hreflang="ja" lang="ja" data-on="false"> <span class="langmenu-label">日本語</span> <span class="langmenu-code">日</span> </a><a class="langmenu-item" href="/de/releases/deepspeed/0.19.3/" hreflang="de" lang="de" data-on="false"> <span class="langmenu-label">Deutsch</span> <span class="langmenu-code">DE</span> </a><a class="langmenu-item" href="/fr/releases/deepspeed/0.19.3/" hreflang="fr" lang="fr" aria-current="true" data-on="true"> <span class="langmenu-label">Français</span> <span class="langmenu-code">FR</span> </a><a class="langmenu-item" href="/es/releases/deepspeed/0.19.3/" hreflang="es" lang="es" data-on="false"> <span class="langmenu-label">Español</span> <span class="langmenu-code">ES</span> </a><a class="langmenu-item" href="/pt/releases/deepspeed/0.19.3/" hreflang="pt-BR" lang="pt-BR" data-on="false"> <span class="langmenu-label">Português</span> <span class="langmenu-code">PT</span> </a><a class="langmenu-item" href="/ko/releases" hreflang="ko" lang="ko" data-on="false"> <span class="langmenu-label">한국어</span> <span class="langmenu-code">한</span> </a><a class="langmenu-item" href="/it/releases" hreflang="it" lang="it" data-on="false"> <span class="langmenu-label">Italiano</span> <span class="langmenu-code">IT</span> </a><a class="langmenu-item" href="/ru/releases" hreflang="ru" lang="ru" data-on="false"> <span class="langmenu-label">Русский</span> <span class="langmenu-code">RU</span> </a><a class="langmenu-item" href="/tr/releases" hreflang="tr" lang="tr" data-on="false"> <span class="langmenu-label">Türkçe</span> <span class="langmenu-code">TR</span> </a><a class="langmenu-item" href="/id/releases" hreflang="id" lang="id" data-on="false"> <span class="langmenu-label">Bahasa Indonesia</span> <span class="langmenu-code">ID</span> </a><a class="langmenu-item" href="/vi/releases" hreflang="vi" lang="vi" data-on="false"> <span class="langmenu-label">Tiếng Việt</span> <span class="langmenu-code">VI</span> </a><a class="langmenu-item" href="/ar/releases" hreflang="ar" lang="ar" data-on="false"> <span class="langmenu-label">العربية</span> <span class="langmenu-code">ع</span> </a><a class="langmenu-item" href="/sv/releases" hreflang="sv" lang="sv" data-on="false"> <span class="langmenu-label">Svenska</span> <span class="langmenu-code">SV</span> </a> </div> </details> <a class="iconlink" href="/releases.xml" aria-label="RSS"> <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"> <path d="M2 12.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM2 7.5a6.5 6.5 0 0 1 6.5 6.5h-2A4.5 4.5 0 0 0 2 9.5v-2ZM2 2.5A11.5 11.5 0 0 1 13.5 14h-2A9.5 9.5 0 0 0 2 4.5v-2Z"></path> </svg> </a> </div> </div> </header> <main id="main">  <div class="wrap"> <div class="detail"> <article> <header class="detail-hd"> <nav class="crumbs" aria-label="Breadcrumb"> <a href="/fr/">Accueil</a> <span class="sep">/</span> <a href="/fr/releases">Versions</a> <span class="sep">/</span> <a href="/fr/releases/deepspeed">DeepSpeed</a> </nav> <h1 class="detail-title"> <span class="p">DeepSpeed</span> v0.19.3 </h1> <div class="detail-meta"> <span class="chip chip--patch">Correctif</span> <span><span class="k">Publié</span>23 juil. 2026</span>  <span class="sep" aria-hidden="true"></span> <a href="https://github.com/deepspeedai/DeepSpeed" target="_blank" rel="noopener"> <span class="k">Source</span>deepspeedai/DeepSpeed </a>   <span class="sep" aria-hidden="true"></span> <a href="/releases/deepspeed/0.19.3/"> Anglais original </a>  <span class="sep" aria-hidden="true"></span> <button class="btn btn--ghost btn--sm" type="button" data-copy="https://www.stags.cn/fr/releases/deepspeed/0.19.3/">Copier le lien</button> </div> </header> <div class="prose" style="margin-top:var(--s8)"> <p class="mt-notice" role="note">Cette page est traduite automatiquement. Le texte anglais original fait foi.</p>  <div><h1>DeepSpeed v0.19.3</h1>
+<h2>Ce qui a changé</h2>
+<ul>
+<li>Mise à jour de la version post-sortie par @loadams dans https://github.com/deepspeedai/DeepSpeed/pull/8070</li>
+<li>Valider les paramètres de mise à l'échelle de perte dynamique fp16 sont positifs par @aryanputta dans https://github.com/deepspeedai/DeepSpeed/pull/8050</li>
+<li>Ajouter le workflow DCO de la file d'attente de fusion par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8086</li>
+<li>Arrêtez les tâches CI obsolètes lors de l'annulation du flux de travail par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8034</li>
+<li>Correction de ZeRO-3 : utilisation du type par paramètre pour les tampons de sortie dans _allgather_params_coalesced par @albertvillanova dans https://github.com/deepspeedai/DeepSpeed/pull/8073</li>
+<li>correctif : fermez le descripteur de fichier dans deepspeed_io_handle_t::wait() pour empêcher la fuite de fd par @MarkCLChang dans https://github.com/deepspeedai/DeepSpeed/pull/8075</li>
+<li>Ajoutez des indices de type aux fonctions publiques de haut niveau de API par @arunshar dans https://github.com/deepspeedai/DeepSpeed/pull/8079</li>
+<li>Dégradé_cli par défaut vers 1.0 par @sfc-gh-truwase dans https://github.com/deepspeedai/DeepSpeed/pull/8068</li>
+<li>activation_checkpointing : num_layers par défaut sur None, donc configure() affirme les incendies par @Kymi808 dans https://github.com/deepspeedai/DeepSpeed/pull/8041</li>
+<li>Ajouter un niveau de journalisation du moteur configurable par @sfc-gh-truwase dans https://github.com/deepspeedai/DeepSpeed/pull/8067</li>
+<li>[CI] sélection de test pilotée par différence par @stas00 dans https://github.com/deepspeedai/DeepSpeed/pull/8077</li>
+<li>Activer bf16 check_grad_overflow par défaut (correspondant à fp16) par @yongzhe-wang dans https://github.com/deepspeedai/DeepSpeed/pull/8035</li>
+<li>Prise en charge d'AutoEP avec les modules sources ZeRO-3 zero.Init par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8060</li>
+<li>Mettre à jour la liste des publications dans README.md par @PKUWZP dans https://github.com/deepspeedai/DeepSpeed/pull/8095</li>
+<li>correctif : AutoTP partition_config utilise le chemin hiérarchique complet du module par @delock dans https://github.com/deepspeedai/DeepSpeed/pull/8088</li>
+<li>Rejeter l'optimiseur de Muon avec réduire_scatter dans ZeRO-1/2 par @whycoming dans https://github.com/deepspeedai/DeepSpeed/pull/8090</li>
+<li>Correction du remplissage des métadonnées du profil DeepCompile par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8094</li>
+<li>Ajout d'un test d'exactitude numérique pour Muon sous ZeRO-1/2 par @whycoming dans https://github.com/deepspeedai/DeepSpeed/pull/8091</li>
+<li>N'avalez pas KeyboardInterrupt/SystemExit dans NPUOpBuilder par @ajinkyajawale14499 dans https://github.com/deepspeedai/DeepSpeed/pull/8096</li>
+<li>Évitez l'initialisation du contexte CUDA lors des vérifications de compatibilité des opérations lors de l'importation par @Achyuthan-S dans https://github.com/deepspeedai/DeepSpeed/pull/8078</li>
+<li>[DeepCompile] corrige la collecte des paramètres dans les images ignorées par la dynamo pour ZeRO3 par @XAheli dans https://github.com/deepspeedai/DeepSpeed/pull/8059</li>
+<li>Feat : Zero3 déprécie le point de contrôle élastique par @nathon-lee dans https://github.com/deepspeedai/DeepSpeed/pull/8099</li>
+<li>Correction de l'analyse des valeurs propres pour les configurations de quantification en compression uniquement par @sowndappan5 dans https://github.com/deepspeedai/DeepSpeed/pull/8057</li>
+<li>Correction : enregistrer les valeurs du moniteur de valeurs propres par @he-yufeng dans https://github.com/deepspeedai/DeepSpeed/pull/8049</li>
+<li>Correction du nettoyage de la mémoire de profilage DeepCompile par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8106</li>
+<li>Ajoutez un backend RoPE torchembed facultatif à apply_rotary_pos_emb par @py-ai-dev dans https://github.com/deepspeedai/DeepSpeed/pull/8052</li>
+<li>Correction de fautes de frappe mineures dans les commentaires/docstrings dans les modules d'exécution et d'inférence par @nathon-lee dans https://github.com/deepspeedai/DeepSpeed/pull/8046</li>
+<li>feat(zenflow) : exécutez l'optimiseur de CPU superposé dans un processus natif par @Antlera dans https://github.com/deepspeedai/DeepSpeed/pull/8058</li>
+<li>correctif : ajout d'une vérification de la longueur du tampon dans shm.cpp par @orbisai0security dans https://github.com/deepspeedai/DeepSpeed/pull/8082</li>
+<li>Correction du crash de FlopsProfiler lorsque dp_world_size est None sous parallélisme de séquence par @vineethsaivs dans https://github.com/deepspeedai/DeepSpeed/pull/8122</li>
+<li>Correction de TypeError au moment de l'importation de Python 3.9 dans AutoEP ep_router par @vineethsaivs dans https://github.com/deepspeedai/DeepSpeed/pull/8119</li>
+<li>Ajout d'une validation d'entrée pour les planificateurs save_checkpoint et warmup LR par @jahnavi-yelamanchi dans https://github.com/deepspeedai/DeepSpeed/pull/8126</li>
+<li>Correction de ZeRO-3 : utilisez le type par paramètre pour le tampon d'échelle de quantification dans _allgather_params_coalesced par @roycho96 dans https://github.com/deepspeedai/DeepSpeed/pull/8128</li>
+<li>Correction de la collecte automatique de ZeRO-3 avec des types de paramètres mixtes par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8113</li>
+<li>doc : Suppression de la suggestion de créer des extensions en parallèle par @Flamefire dans https://github.com/deepspeedai/DeepSpeed/pull/7899</li>
+<li>feat(types) : ajout d'indices de type aux fonctions de communication publique API par @NovusEdge dans https://github.com/deepspeedai/DeepSpeed/pull/8118</li>
+<li>Ajoutez le déploiement du moteur hybride dans DeepSpeed pour prendre en charge le formateur de distillation sur politique (OPSD) par @PKUWZP dans https://github.com/deepspeedai/DeepSpeed/pull/8027</li>
+<li>Ajoutez le pliage parallèle AutoEP + AutoTP par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8064</li>
+<li>Rendre le workflow DCO compatible Probot par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8110</li>
+<li>ZeRO 1/2 : attendez tous les flux de producteurs IPG-bucket dans Average_tensor (#8061) par @arunshar dans https://github.com/deepspeedai/DeepSpeed/pull/8080</li>
+<li>Correction de CommsLogger.stop_profiling_comms ne désactivant pas le profilage global par @vineethsaivs dans https://github.com/deepspeedai/DeepSpeed/pull/8137</li>
+<li>Protégez WarmupCosineLR contre total_num_steps == warmup_num_steps (ZeroDivisionError) par @vineethsaivs dans https://github.com/deepspeedai/DeepSpeed/pull/8142</li>
+<li>Ajout de la prise en charge du modèle EXAONE 4.5 pour Inference V2 par @Bias92 dans https://github.com/deepspeedai/DeepSpeed/pull/8121</li>
+<li>fix(autotp) : lors de l'utilisation d'autotp, ignorer la cohérence de certaines données au sein du tp_group. par @1787648106 dans https://github.com/deepspeedai/DeepSpeed/pull/8125</li>
+<li>Réduisez blockDim dans fake_quantize_kernel pour une occupation SM améliorée par @flutist dans https://github.com/deepspeedai/DeepSpeed/pull/8115</li>
+<li>Correction d'un crash de DeepSpeedInferenceConfig sur la valeur de compatibilité ascendante de bool moe par @winklemad dans https://github.com/deepspeedai/DeepSpeed/pull/8145</li>
+<li>correctif (exceptions) : limiter les clauses d'exception larges à des types spécifiques par @sowndappan5 dans https://github.com/deepspeedai/DeepSpeed/pull/8136</li>
+<li>correctif (muon) : prise en charge de ZeRO-1/2 pour réduire la dispersion par @Micuks dans https://github.com/deepspeedai/DeepSpeed/pull/8141</li>
+<li>[DeepCompile] Ajout de contrats de passes légers pour les passes d'optimisation par @jahnavi-yelamanchi dans https://github.com/deepspeedai/DeepSpeed/pull/8139</li>
+<li>Correction de la gestion de repli de DeepCompile pour les sorties scalaires par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8149</li>
+<li>Utiliser les données synthétiques CIFAR dans les tests AlexNet par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8143</li>
+<li>Mise à jour du badge CI par @tohtana dans https://github.com/deepspeedai/DeepSpeed/pull/8150</li>
+<li>Mettre à jour l'affiliation de Zhipeng Wang à Google dans COMMITTERS.md par @PKUWZP dans https://github.com/deepspeedai/DeepSpeed/pull/8153</li>
+<li>Correction des hooks ZeRO-3 pour les modules de délégation d'attributs par @Functionhx dans https://github.com/deepspeedai/DeepSpeed/pull/8144</li>
+<li>Correction de la mise à l'échelle répétée des gradients à travers les étapes du pipeline par @Functionhx dans https://github.com/deepspeedai/DeepSpeed/pull/8154</li>
+<li>Z3 : Prise en charge du ckpt d'activation avec paramètres gelés par @sfc-gh-truwase dans https://github.com/deepspeedai/DeepSpeed/pull/8148</li>
+<li>Adoptez le code de conduite PTF par @sfc-gh-truwase dans https://github.com/deepspeedai/DeepSpeed/pull/8165</li>
+</ul>
+<h2>Nouveaux contributeurs</h2>
+<ul>
+<li>@aryanputta a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8050</li>
+<li>@albertvillanova a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8073</li>
+<li>@MarkCLChange a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8075</li>
+<li>@arunshar a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8079</li>
+<li>@Kymi808 a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8041</li>
+<li>@yongzhe-wang a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8035</li>
+<li>@whycoming a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8090</li>
+<li>@ajinkyajawale14499 a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8096</li>
+<li>@Achyuthan-S a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8078</li>
+<li>@XAheli a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8059</li>
+<li>@he-yufeng a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8049</li>
+<li>@py-ai-dev a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8052</li>
+<li>@vineethsaivs a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8122</li>
+<li>@jahnavi-yelamanchi a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8126</li>
+<li>@NovusEdge a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8118</li>
+<li>@1787648106 a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8125</li>
+<li>@winklemad a fait sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8145</li>
+<li>@Micuks a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8141</li>
+<li>@Functionhx a apporté sa première contribution dans https://github.com/deepspeedai/DeepSpeed/pull/8144
+<strong>Changelog complet</strong> : https://github.com/deepspeedai/DeepSpeed/compare/v0.19.2...v0.19.3</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/deepspeedai/DeepSpeed">deepspeedai/DeepSpeed</a> · <code>v0.19.3</code> · 2026-07-23 · <a href="https://github.com/deepspeedai/DeepSpeed/releases/tag/v0.19.3">version amont</a>
+<em>Verbatim reflété pour l'indexation. Tous les droits appartiennent au projet en amont.</em></p>
+</blockquote></div>  <details class="mt-original"> <summary>Anglais original / English original</summary> <div class="prose mt-original-body"><h1>DeepSpeed v0.19.3</h1>
+<h2>What's Changed</h2>
+<ul>
+<li>Update version post release by @loadams in https://github.com/deepspeedai/DeepSpeed/pull/8070</li>
+<li>Validate fp16 dynamic loss scaling parameters are positive by @aryanputta in https://github.com/deepspeedai/DeepSpeed/pull/8050</li>
+<li>Add merge queue DCO workflow by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8086</li>
+<li>Stop obsolete CI jobs on workflow cancellation by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8034</li>
+<li>Fix ZeRO-3: Use per-param dtype for output buffers in _allgather_params_coalesced by @albertvillanova in https://github.com/deepspeedai/DeepSpeed/pull/8073</li>
+<li>fix: close file descriptor in deepspeed_io_handle_t::wait() to prevent fd leak by @MarkCLChang in https://github.com/deepspeedai/DeepSpeed/pull/8075</li>
+<li>Add type hints to top-level public API functions by @arunshar in https://github.com/deepspeedai/DeepSpeed/pull/8079</li>
+<li>Default gradient_clipping to 1.0 by @sfc-gh-truwase in https://github.com/deepspeedai/DeepSpeed/pull/8068</li>
+<li>activation_checkpointing: default num_layers to None so configure() assert fires by @Kymi808 in https://github.com/deepspeedai/DeepSpeed/pull/8041</li>
+<li>Add configurable engine log level by @sfc-gh-truwase in https://github.com/deepspeedai/DeepSpeed/pull/8067</li>
+<li>[CI] diff driven test selection by @stas00 in https://github.com/deepspeedai/DeepSpeed/pull/8077</li>
+<li>Enable bf16 check_grad_overflow by default (matching fp16) by @yongzhe-wang in https://github.com/deepspeedai/DeepSpeed/pull/8035</li>
+<li>Support AutoEP with ZeRO-3 zero.Init source modules by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8060</li>
+<li>Update publication list in README.md by @PKUWZP in https://github.com/deepspeedai/DeepSpeed/pull/8095</li>
+<li>fix: AutoTP partition_config uses full hierarchical module path by @delock in https://github.com/deepspeedai/DeepSpeed/pull/8088</li>
+<li>Reject Muon optimizer with reduce_scatter in ZeRO-1/2 by @whycoming in https://github.com/deepspeedai/DeepSpeed/pull/8090</li>
+<li>Fix DeepCompile profile metadata backfill by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8094</li>
+<li>Add numerical-correctness test for Muon under ZeRO-1/2 by @whycoming in https://github.com/deepspeedai/DeepSpeed/pull/8091</li>
+<li>Don't swallow KeyboardInterrupt/SystemExit in NPUOpBuilder by @ajinkyajawale14499 in https://github.com/deepspeedai/DeepSpeed/pull/8096</li>
+<li>Avoid CUDA context initialization during op compatibility checks at import by @Achyuthan-S in https://github.com/deepspeedai/DeepSpeed/pull/8078</li>
+<li>[DeepCompile] fix gather params in dynamo skipped frames for ZeRO3 by @XAheli in https://github.com/deepspeedai/DeepSpeed/pull/8059</li>
+<li>Feat: zero3 deprecate elastic checkpoint by @nathon-lee in https://github.com/deepspeedai/DeepSpeed/pull/8099</li>
+<li>Fix eigenvalue parsing for compression-only quantize configs by @sowndappan5 in https://github.com/deepspeedai/DeepSpeed/pull/8057</li>
+<li>fix: log eigenvalue monitor values by @he-yufeng in https://github.com/deepspeedai/DeepSpeed/pull/8049</li>
+<li>Fix DeepCompile profiling memory cleanup by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8106</li>
+<li>Add optional torchembed RoPE backend to apply_rotary_pos_emb by @py-ai-dev in https://github.com/deepspeedai/DeepSpeed/pull/8052</li>
+<li>Fix minor comment/docstring typos in runtime and inference modules by @nathon-lee in https://github.com/deepspeedai/DeepSpeed/pull/8046</li>
+<li>feat(zenflow): run the overlapped CPU optimizer in a native process by @Antlera in https://github.com/deepspeedai/DeepSpeed/pull/8058</li>
+<li>fix: add buffer-length check in shm.cpp by @orbisai0security in https://github.com/deepspeedai/DeepSpeed/pull/8082</li>
+<li>Fix FlopsProfiler crash when dp_world_size is None under sequence parallelism by @vineethsaivs in https://github.com/deepspeedai/DeepSpeed/pull/8122</li>
+<li>Fix Python 3.9 import-time TypeError in AutoEP ep_router by @vineethsaivs in https://github.com/deepspeedai/DeepSpeed/pull/8119</li>
+<li>Add input validation for save_checkpoint and warmup LR schedulers by @jahnavi-yelamanchi in https://github.com/deepspeedai/DeepSpeed/pull/8126</li>
+<li>Fix ZeRO-3: use per-param dtype for quantize-scale buffer in _allgather_params_coalesced by @roycho96 in https://github.com/deepspeedai/DeepSpeed/pull/8128</li>
+<li>Fix ZeRO-3 autocast gather with mixed parameter dtypes by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8113</li>
+<li>doc: Remove suggestion to build extensions in parallel by @Flamefire in https://github.com/deepspeedai/DeepSpeed/pull/7899</li>
+<li>feat(types): add type hints to public comm API functions by @NovusEdge in https://github.com/deepspeedai/DeepSpeed/pull/8118</li>
+<li>Add Hybrid Engine rollout in DeepSpeed to support On-Policy Distillation (OPSD) Trainer by @PKUWZP in https://github.com/deepspeedai/DeepSpeed/pull/8027</li>
+<li>Add AutoEP + AutoTP parallel folding by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8064</li>
+<li>Make DCO workflow Probot compatible by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8110</li>
+<li>ZeRO 1/2: wait on all IPG-bucket producer streams in average_tensor (#8061) by @arunshar in https://github.com/deepspeedai/DeepSpeed/pull/8080</li>
+<li>Fix CommsLogger.stop_profiling_comms not disabling global profiling by @vineethsaivs in https://github.com/deepspeedai/DeepSpeed/pull/8137</li>
+<li>Guard WarmupCosineLR against total_num_steps == warmup_num_steps (ZeroDivisionError) by @vineethsaivs in https://github.com/deepspeedai/DeepSpeed/pull/8142</li>
+<li>Add EXAONE 4.5 model support for Inference V2 by @Bias92 in https://github.com/deepspeedai/DeepSpeed/pull/8121</li>
+<li>fix(autotp): when using autotp, ignore the consistency of certain data within the tp_group. by @1787648106 in https://github.com/deepspeedai/DeepSpeed/pull/8125</li>
+<li>Reduce blockDim in fake_quantize_kernel for improved SM occupancy by @flutist in https://github.com/deepspeedai/DeepSpeed/pull/8115</li>
+<li>Fix DeepSpeedInferenceConfig crash on bool moe backward-compat value by @winklemad in https://github.com/deepspeedai/DeepSpeed/pull/8145</li>
+<li>fix(exceptions): narrow broad Exception clauses to specific types by @sowndappan5 in https://github.com/deepspeedai/DeepSpeed/pull/8136</li>
+<li>fix(muon): support ZeRO-1/2 reduce scatter by @Micuks in https://github.com/deepspeedai/DeepSpeed/pull/8141</li>
+<li>[DeepCompile] Add lightweight pass contracts for optimization passes by @jahnavi-yelamanchi in https://github.com/deepspeedai/DeepSpeed/pull/8139</li>
+<li>Fix DeepCompile fallback handling for scalar outputs by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8149</li>
+<li>Use synthetic CIFAR data in AlexNet tests by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8143</li>
+<li>Update CI badge by @tohtana in https://github.com/deepspeedai/DeepSpeed/pull/8150</li>
+<li>Update Zhipeng Wang affiliation to Google in COMMITTERS.md by @PKUWZP in https://github.com/deepspeedai/DeepSpeed/pull/8153</li>
+<li>Fix ZeRO-3 hooks for attribute-delegating modules by @Functionhx in https://github.com/deepspeedai/DeepSpeed/pull/8144</li>
+<li>Fix repeated gradient scaling across pipeline stages by @Functionhx in https://github.com/deepspeedai/DeepSpeed/pull/8154</li>
+<li>Z3: Support for activation ckpt with frozen params by @sfc-gh-truwase in https://github.com/deepspeedai/DeepSpeed/pull/8148</li>
+<li>Adopt PTF Code of Conduct by @sfc-gh-truwase in https://github.com/deepspeedai/DeepSpeed/pull/8165</li>
+</ul>
+<h2>New Contributors</h2>
+<ul>
+<li>@aryanputta made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8050</li>
+<li>@albertvillanova made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8073</li>
+<li>@MarkCLChang made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8075</li>
+<li>@arunshar made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8079</li>
+<li>@Kymi808 made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8041</li>
+<li>@yongzhe-wang made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8035</li>
+<li>@whycoming made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8090</li>
+<li>@ajinkyajawale14499 made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8096</li>
+<li>@Achyuthan-S made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8078</li>
+<li>@XAheli made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8059</li>
+<li>@he-yufeng made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8049</li>
+<li>@py-ai-dev made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8052</li>
+<li>@vineethsaivs made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8122</li>
+<li>@jahnavi-yelamanchi made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8126</li>
+<li>@NovusEdge made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8118</li>
+<li>@1787648106 made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8125</li>
+<li>@winklemad made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8145</li>
+<li>@Micuks made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8141</li>
+<li>@Functionhx made their first contribution in https://github.com/deepspeedai/DeepSpeed/pull/8144</li>
+</ul>
+<p><strong>Full Changelog</strong>: https://github.com/deepspeedai/DeepSpeed/compare/v0.19.2...v0.19.3</p>
+<hr />
+<blockquote>
+<p><strong>Source</strong> <a href="https://github.com/deepspeedai/DeepSpeed">deepspeedai/DeepSpeed</a> · <code>v0.19.3</code> · 2026-07-23 · <a href="https://github.com/deepspeedai/DeepSpeed/releases/tag/v0.19.3">upstream release</a></p>
+</blockquote>
+<p><em>Mirrored verbatim for indexing. All rights belong to the upstream project.</em></p></div> </details> </div> <p class="muted" style="margin-top:var(--s8);font-size:12.5px;border-top:1px solid var(--line);padding-top:var(--s4)"> Les Release note sont publiés par le projet en amont et mis en miroir ici pour l&#39;indexation. Tous les droits appartiennent à leurs auteurs. </p> <nav class="pager" aria-label="Release navigation"> <a href="/releases/deepspeed/0.19.4"> <span class="k">← Suivant</span> <span class="t">v0.19.4</span> </a> <a href="/releases/deepspeed/0.19.2"> <span class="k">Précédent →</span> <span class="t">v0.19.2</span> </a> </nav> <aside class="ad-slot" aria-label="Advertisement" data-astro-cid-fgwukgf6><div class="ad-slot-label" data-astro-cid-fgwukgf6>Advertisement</div><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4184355057086168" data-ad-slot="9133765584" data-ad-format="auto" data-full-width-responsive="true" data-astro-cid-fgwukgf6></ins><script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script></aside> </article> <aside class="rail"> <div class="rail-card"> <div class="rail-title">Source</div> <ul class="rail-list"> <li> <a href="https://github.com/deepspeedai/DeepSpeed/releases/tag/v0.19.3" target="_blank" rel="noopener"> <span>Original sur GitHub</span> <span class="d">↗</span> </a> </li> <li> <a href="https://github.com/deepspeedai/DeepSpeed" target="_blank" rel="noopener"> <span>deepspeedai/DeepSpeed</span> <span class="d">↗</span> </a> </li> </ul> </div>  <div class="rail-card"> <div class="rail-title">Historique des versions</div> <ul class="rail-list"> <li> <a href="/releases/deepspeed/0.20.0"> <span class="v">v0.20.0</span> <span class="d">26-11-12</span> </a> </li><li> <a href="/releases/deepspeed/0.19.9"> <span class="v">v0.19.9</span> <span class="d">26-10-29</span> </a> </li><li> <a href="/releases/deepspeed/0.19.8"> <span class="v">v0.19.8</span> <span class="d">26-10-20</span> </a> </li><li> <a href="/releases/deepspeed/0.19.7"> <span class="v">v0.19.7</span> <span class="d">26-09-16</span> </a> </li><li> <a href="/releases/deepspeed/0.19.6"> <span class="v">v0.19.6</span> <span class="d">26-08-27</span> </a> </li><li> <a href="/releases/deepspeed/0.19.5"> <span class="v">v0.19.5</span> <span class="d">26-08-10</span> </a> </li><li> <a href="/releases/deepspeed/0.19.4"> <span class="v">v0.19.4</span> <span class="d">26-08-06</span> </a> </li><li> <a href="/releases/deepspeed/0.19.3" aria-current="true"> <span class="v">v0.19.3</span> <span class="d">26-07-23</span> </a> </li> </ul> <a href="/fr/releases/deepspeed" class="mono" style="display:inline-block;margin-top:var(--s3);font-size:11.5px;color:var(--ink-3)"> Tout afficher 20 →
+</a> </div> </aside> </div> </div>  </main> <footer class="site-footer"> <div class="wrap"> <div class="footer-grid"> <div class="footer-brand"> <a href="/fr/" class="brand" aria-label="STAGS NextStack"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-main">STAGS</span><span class="brand-sub" aria-hidden="true">NextStack</span></a> <p>Informations sur les versions open source, publiées quotidiennement.</p> </div> <div class="footer-col"> <h3>Suivre</h3> <ul> <li><a href="/fr/releases">Versions</a></li> <li><a href="/fr/projects">Projets</a></li> <li><a href="/fr/releases.xml">Flux RSS</a></li> </ul> </div> <div class="footer-col"> <h3>Archives</h3> <ul> <li><a href="/zh/release_note" hreflang="zh-Hans">Archives chinoises</a></li> <li><a href="/zh/chapters/" hreflang="zh-Hans">Notes techniques</a></li> <li><a href="/zh/downloads/">Stags Tracker</a></li> </ul> </div> <div class="footer-col"> <h3>À propos</h3> <ul> <li><a href="/fr/method">Méthode</a></li> <li><a href="/privacy">Privacy policy</a></li> <li><a href="/releases.xml">RSS</a></li> <li><a href="/sitemap-index.xml">Sitemap</a></li> </ul> </div> </div> <div class="footer-btm"> <span>© 2026 STAGS</span> <span>Les Release note appartiennent à leurs projets en amont.</span> </div> </div> </footer> <!-- 搜索面板 --> <div class="palette-bg" data-palette-bg data-open="false"> <div class="palette" role="dialog" aria-modal="true" aria-label="Rechercher des versions"> <div class="palette-in"> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-4);flex:none"> <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path> </svg> <input type="search" data-palette-input placeholder="Rechercher des versions, des projets, des versions…" autocomplete="off" spellcheck="false"> <span class="kbd">esc</span> </div> <ul class="palette-res" data-palette-res></ul> <div class="palette-ft"> <span>↑↓ navigate</span> <span>↵ open</span> <span style="margin-left:auto" data-palette-count></span> </div> </div> </div> <script type="module" src="/assets/Shell.astro_astro_type_script_index_0_lang.0ZkKXV47.js"></script> </body> </html>
